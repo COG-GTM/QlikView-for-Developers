@@ -1,0 +1,397 @@
+{
+ "app": "Chapter09__Solution_Chapter 9_Concatenated tables",
+ "generated_by": "powerbi/tools/build_ch09_concatenated_tables.py",
+ "derived_from": "powerbi/tools/build_airline_base.py",
+ "measures": [
+  {
+   "name": "# of Flights",
+   "parity_key": "1baea265cccd",
+   "kpis": [
+    "CH01#1",
+    "CH02#1",
+    "CH04#3"
+   ],
+   "dax": "SUM('Main Data'[# Departures Performed])"
+  },
+  {
+   "name": "# of Enplanned Passengers",
+   "parity_key": "7f15ad08b3bb",
+   "kpis": [
+    "CH01#2",
+    "CH02#2",
+    "CH04#2",
+    "CH15#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Passengers])"
+  },
+  {
+   "name": "Transported Freight",
+   "parity_key": "aea8a21aee5f",
+   "kpis": [
+    "CH01#3",
+    "CH02#3"
+   ],
+   "dax": "SUM('Main Data'[# Transported Freight])"
+  },
+  {
+   "name": "Transported Mail",
+   "parity_key": "e0ca719214a7",
+   "kpis": [
+    "CH01#4",
+    "CH02#4",
+    "CH04#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Mail])"
+  },
+  {
+   "name": "# of Passengers (millions)",
+   "parity_key": "0c8ca154aacf",
+   "kpis": [
+    "CH03#1",
+    "CH22#1",
+    "CH24#1",
+    "CH25#1",
+    "CH26#1",
+    "CH27#1",
+    "CH28#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000)"
+  },
+  {
+   "name": "# of Available Seats (millions)",
+   "parity_key": "8dfad31060e3",
+   "kpis": [
+    "CH03#2"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Available Seats]), 1000000)"
+  },
+  {
+   "name": "Load Factor",
+   "parity_key": "213681cc0d2a",
+   "kpis": [
+    "CH03#3",
+    "CH05#1",
+    "CH21#1",
+    "CH38#1",
+    "CH38#2",
+    "CH41#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))"
+  },
+  {
+   "name": "Performed vs Scheduled",
+   "parity_key": "7588bff24d2c",
+   "kpis": [
+    "CH06#1",
+    "CH21#2",
+    "CH38#3",
+    "CH38#4"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Departures Performed]), SUM('Main Data'[# Departures Scheduled]))"
+  },
+  {
+   "name": "Air Time %",
+   "parity_key": "cd4c4a3c94f4",
+   "kpis": [
+    "CH07#1",
+    "CH08#1",
+    "CH09#1",
+    "CH11#1",
+    "CH12#1",
+    "CH13#1",
+    "CH14#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Carrier",
+   "parity_key": "90777bd5df7f",
+   "kpis": [
+    "CH15#2"
+   ],
+   "dax": "IF(DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]) = 1, MAX('Main Data'[Carrier Name]), \"Others\")"
+  },
+  {
+   "name": "Air Time % (CH21)",
+   "parity_key": "a1ec8a2cb5ee",
+   "kpis": [
+    "CH21#3",
+    "CH38#5",
+    "CH38#6"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Departures Performed (thousands)",
+   "parity_key": "072410d4365a",
+   "kpis": [
+    "CH22#2"
+   ],
+   "dax": "DIVIDE([# of Flights], 1000)"
+  }
+ ],
+ "calculated_dimensions": [
+  {
+   "table": "Flight Types",
+   "column": "Deal Status",
+   "parity_key": "caa19c70b731",
+   "qlik": "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))",
+   "dax": "SWITCH([Flight Type], \"Domestic, US Carriers Only\", \"Open\", \"International, Foreign Carriers\", \"Negotiating\", \"Closed\")"
+  }
+ ],
+ "slicers": [
+  {
+   "page": "Dashboard",
+   "list_box": "LB32",
+   "field": "Main Data.Year"
+  },
+  {
+   "page": "Dashboard",
+   "list_box": "LB30",
+   "field": "Main Data.Month"
+  },
+  {
+   "page": "Dashboard",
+   "list_box": "LB31",
+   "field": "Main Data.Quarter"
+  },
+  {
+   "page": "Dashboard",
+   "list_box": "LB27",
+   "field": "Flight Types.Flight Type"
+  },
+  {
+   "page": "Dashboard",
+   "list_box": "LB33",
+   "field": "Main Data.Carrier Name"
+  },
+  {
+   "page": "Dashboard",
+   "list_box": "LB28",
+   "field": "Carrier Operating Region.Carrier's Operating Region"
+  },
+  {
+   "page": "Dashboard",
+   "list_box": "LB29",
+   "field": "Carrier Groups.Carrier Group"
+  },
+  {
+   "page": "Analysis",
+   "list_box": "LB29",
+   "field": "Carrier Groups.Carrier Group"
+  },
+  {
+   "page": "Analysis",
+   "list_box": "LB27",
+   "field": "Flight Types.Flight Type"
+  },
+  {
+   "page": "Analysis",
+   "list_box": "LB33",
+   "field": "Main Data.Carrier Name"
+  },
+  {
+   "page": "Analysis",
+   "list_box": "LB28",
+   "field": "Carrier Operating Region.Carrier's Operating Region"
+  },
+  {
+   "page": "Analysis",
+   "list_box": "LB32",
+   "field": "Main Data.Year"
+  },
+  {
+   "page": "Analysis",
+   "list_box": "LB31",
+   "field": "Main Data.Quarter"
+  },
+  {
+   "page": "Analysis",
+   "list_box": "LB30",
+   "field": "Main Data.Month"
+  },
+  {
+   "page": "Reports",
+   "list_box": "LB29",
+   "field": "Carrier Groups.Carrier Group"
+  },
+  {
+   "page": "Reports",
+   "list_box": "LB27",
+   "field": "Flight Types.Flight Type"
+  },
+  {
+   "page": "Reports",
+   "list_box": "LB33",
+   "field": "Main Data.Carrier Name"
+  },
+  {
+   "page": "Reports",
+   "list_box": "LB31",
+   "field": "Main Data.Quarter"
+  },
+  {
+   "page": "Reports",
+   "list_box": "LB30",
+   "field": "Main Data.Month"
+  },
+  {
+   "page": "Reports",
+   "list_box": "LB28",
+   "field": "Carrier Operating Region.Carrier's Operating Region"
+  },
+  {
+   "page": "Reports",
+   "list_box": "LB32",
+   "field": "Main Data.Year"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB09",
+   "field": "Distance Groups.Distance Interval"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB12",
+   "field": "Flight Types.Flight Type"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB15",
+   "field": "Carrier Groups.Carrier Group"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB03",
+   "field": "Main Data.Destination City"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB05",
+   "field": "Main Data.Origin State"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB06",
+   "field": "Main Data.Origin City"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB02",
+   "field": "Main Data.Destination State"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB07",
+   "field": "Main Data.Carrier Name"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB13",
+   "field": "Carrier Operating Region.Carrier's Operating Region"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB01",
+   "field": "Main Data.Destination Country"
+  },
+  {
+   "page": "Associations",
+   "list_box": "LB04",
+   "field": "Main Data.Origin Country"
+  },
+  {
+   "page": "Other Charts",
+   "list_box": "LB30",
+   "field": "Main Data.Month"
+  },
+  {
+   "page": "Other Charts",
+   "list_box": "LB31",
+   "field": "Main Data.Quarter"
+  },
+  {
+   "page": "Other Charts",
+   "list_box": "LB28",
+   "field": "Carrier Operating Region.Carrier's Operating Region"
+  },
+  {
+   "page": "Other Charts",
+   "list_box": "LB33",
+   "field": "Main Data.Carrier Name"
+  },
+  {
+   "page": "Other Charts",
+   "list_box": "LB27",
+   "field": "Flight Types.Flight Type"
+  },
+  {
+   "page": "Other Charts",
+   "list_box": "LB29",
+   "field": "Carrier Groups.Carrier Group"
+  },
+  {
+   "page": "Other Charts",
+   "list_box": "LB32",
+   "field": "Main Data.Year"
+  },
+  {
+   "page": "Other representations",
+   "list_box": "LB32",
+   "field": "Main Data.Year"
+  },
+  {
+   "page": "Other representations",
+   "list_box": "LB29",
+   "field": "Carrier Groups.Carrier Group"
+  },
+  {
+   "page": "Other representations",
+   "list_box": "LB27",
+   "field": "Flight Types.Flight Type"
+  },
+  {
+   "page": "Other representations",
+   "list_box": "LB33",
+   "field": "Main Data.Carrier Name"
+  },
+  {
+   "page": "Other representations",
+   "list_box": "LB28",
+   "field": "Carrier Operating Region.Carrier's Operating Region"
+  },
+  {
+   "page": "Other representations",
+   "list_box": "LB31",
+   "field": "Main Data.Quarter"
+  },
+  {
+   "page": "Other representations",
+   "list_box": "LB30",
+   "field": "Main Data.Month"
+  },
+  {
+   "page": "Data Consistency",
+   "list_box": "LB34",
+   "field": "Aircraft Types.Aircraft Name"
+  },
+  {
+   "page": "Data Consistency",
+   "list_box": "LB35",
+   "field": "Main Data.Year"
+  }
+ ],
+ "semantic_gaps": [
+  "$(Include=config.qvs) / $(Include=tracerowcount.qvs) are not in the repo: vFolderSourceData is the repo's Data Files folder (DataRoot parameter + relative Parquet paths); the row-count trace has no Power BI counterpart.",
+  "QVD, CSV and Access (Dimension Tables.mdb, OLEDB CONNECT32) sources -> Parquet converted by tools/convert_sources.py.",
+  "STORE [Aircraft Types] INTO Aircraft Types Transformed.qvd is a file side effect of the reload; the model has no equivalent (Power Query does not write files) and nothing in this document reads it back.",
+  "WHERE Exists(key) and Left Keep ([Main Data]) -> rows kept when their key is in [Main Data] (fnFactKeys, the distinct values of both concatenated fact sources).",
+  "Null-key 'Unknown' members the script adds for null fact keys (the Employment rows have no region or market: Carrier Operating Region 8 and Origin / Destination Markets 1,860 / 1,918 rows in QlikView) are not loaded: they associate with nothing in QlikView and would wrongly match blank keys in Power BI.",
+  "COMMENT TABLES / FIELDS USING the Comments.xls maps -> TMDL descriptions on the table and on every column of the commented field (a Qlik field comment applies to the field in every table).",
+  "Synthetic keys / $$SysTables: none in the model; every dimension relates to [Main Data] on its single key.",
+  "Month is a dual -> Month text sorted by the hidden Month__num column.",
+  "Drill-down group Time (Year > Month) and cyclic group Airline / Origin Country / Destination Country: report-level choices in Power BI (visual drill / field parameters); the parity grains cover each level.",
+  "The row-level Flight Type deal status (Funnel Chart) -> calculated column on Flight Types.",
+  "List boxes -> slicers on one page per QlikView sheet (Gauge Styles has none), matched by caption since the field bindings are unreadable. QlikView selections are document-wide; a Power BI slicer filters its own page unless synced. Multi boxes, statistics box, table box and search object are not rebuilt. No model field for: LB11 'Aircraft Group', LB10 'Aircraft Type'."
+ ]
+}
