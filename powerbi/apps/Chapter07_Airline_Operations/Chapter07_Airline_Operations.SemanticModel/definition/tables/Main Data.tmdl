@@ -1,0 +1,606 @@
+table 'Main Data'
+	lineageTag: 7129a059-d498-5505-b0fb-947b262f7e87
+
+	measure '# of Flights' = SUM('Main Data'[# Departures Performed])
+		formatString: #,0
+		lineageTag: a85549aa-79d1-5ddd-a6e9-01bc9dcaff0d
+
+		annotation ParityKey = 1baea265cccd
+		annotation QlikExpression = Sum ([# Departures Performed])
+		annotation QlikObjects = CH01#1, CH02#1, CH04#3
+
+	measure '# of Enplanned Passengers' = SUM('Main Data'[# Transported Passengers])
+		formatString: #,0
+		lineageTag: aeec0ca6-815e-545a-85dc-be673e235f65
+
+		annotation ParityKey = 7f15ad08b3bb
+		annotation QlikExpression = Sum ([# Transported Passengers])
+		annotation QlikObjects = CH01#2, CH02#2, CH04#2, CH15#1
+
+	measure 'Transported Freight' = SUM('Main Data'[# Transported Freight])
+		formatString: #,0
+		lineageTag: b314c682-10b1-5709-989c-c47515dedeea
+
+		annotation ParityKey = aea8a21aee5f
+		annotation QlikExpression = Sum ([# Transported Freight])
+		annotation QlikObjects = CH01#3, CH02#3
+
+	measure 'Transported Mail' = SUM('Main Data'[# Transported Mail])
+		formatString: #,0
+		lineageTag: edeb4ca6-f7b2-5432-b049-9eb8fcf81b99
+
+		annotation ParityKey = e0ca719214a7
+		annotation QlikExpression = Sum ([# Transported Mail])
+		annotation QlikObjects = CH01#4, CH02#4, CH04#1
+
+	measure '# of Passengers (millions)' = DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000)
+		formatString: #,0.00
+		lineageTag: 6620e373-0d5c-550b-8da1-32898e83b7b4
+
+		annotation ParityKey = 0c8ca154aacf
+		annotation QlikExpression = ((Sum ([# Transported Passengers]) / 1000000))
+		annotation QlikObjects = CH03#1, CH22#1, CH24#1, CH25#1, CH26#1, CH27#1, CH28#1
+
+	measure '# of Available Seats (millions)' = DIVIDE(SUM('Main Data'[# Available Seats]), 1000000)
+		formatString: #,0.00
+		lineageTag: 117b5a56-75f9-5b19-8ecf-34d2117d43c9
+
+		annotation ParityKey = 8dfad31060e3
+		annotation QlikExpression = ((Sum ([# Available Seats]) / 1000000))
+		annotation QlikObjects = CH03#2
+
+	measure 'Load Factor' = DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))
+		formatString: 0.00%
+		lineageTag: 1fa26d99-708a-58ea-9e6c-e3f3ea6251a6
+
+		annotation ParityKey = 213681cc0d2a
+		annotation QlikExpression = =((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))
+		annotation QlikObjects = CH03#3, CH05#1, CH21#1, CH38#1, CH38#2
+
+	measure 'Performed vs Scheduled' = DIVIDE(SUM('Main Data'[# Departures Performed]), SUM('Main Data'[# Departures Scheduled]))
+		formatString: 0.00%
+		lineageTag: 3fa5c062-cecf-5b22-a76e-e3cc811a9451
+
+		annotation ParityKey = 7588bff24d2c
+		annotation QlikExpression = ((Sum([# Departures Performed]) / Sum([# Departures Scheduled])))
+		annotation QlikObjects = CH06#1, CH21#2, CH38#3, CH38#4
+
+	measure 'Air Time %' = DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))
+		formatString: 0.00%
+		lineageTag: 88f6e10f-e339-52c7-a454-0d549a489ab3
+
+		annotation ParityKey = cd4c4a3c94f4
+		annotation QlikExpression = Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])
+		annotation QlikObjects = CH07#1, CH08#1, CH09#1, CH11#1, CH12#1, CH13#1, CH14#1
+
+	measure Carrier = IF(DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]) = 1, MAX('Main Data'[Carrier Name]), "Others")
+		lineageTag: e0dd8b75-dcbd-5405-bf5e-ac05ea9fbb3f
+
+		annotation ParityKey = 90777bd5df7f
+		annotation QlikExpression = if(count(distinct [Carrier Name]) = 1, [Carrier Name], 'Others')
+		annotation QlikObjects = CH15#2
+
+	measure 'Air Time % (CH21)' = DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))
+		formatString: 0.00%
+		lineageTag: 3a2bf3f4-c3e9-5613-a219-f37bcf6fc22e
+
+		annotation ParityKey = a1ec8a2cb5ee
+		annotation QlikExpression = ((Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])))
+		annotation QlikObjects = CH21#3, CH38#5, CH38#6
+
+	measure 'Departures Performed (thousands)' = DIVIDE([# of Flights], 1000)
+		formatString: #,0.00
+		lineageTag: 47bfe9a4-1dd8-577a-b6ca-5f5ba887b5d2
+
+		annotation ParityKey = 072410d4365a
+		annotation QlikExpression = ((Sum ([# Departures Performed]) / 1000))
+		annotation QlikObjects = CH22#2
+
+	column '%Airline ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 37d8fdba-76b1-5bfd-8300-4966e831b737
+		summarizeBy: none
+		sourceColumn: %Airline ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Carrier Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e6efc2ff-52f1-5480-87d1-36683a78008d
+		summarizeBy: none
+		sourceColumn: %Carrier Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Unique Carrier Code'
+		dataType: string
+		lineageTag: f4476a46-68c3-5856-9a51-bcbd3370d18a
+		summarizeBy: none
+		sourceColumn: %Unique Carrier Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Unique Carrier Entity Code'
+		dataType: string
+		lineageTag: 3c02aff9-68a8-5b57-ba97-79bbbfa23074
+		summarizeBy: none
+		sourceColumn: %Unique Carrier Entity Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Region Code'
+		dataType: string
+		isHidden
+		lineageTag: d533af25-9de7-5cc7-9f5e-b21c4fc3b03f
+		summarizeBy: none
+		sourceColumn: %Region Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Origin Airport ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e090e827-e3ec-5166-9c28-756d677fc87b
+		summarizeBy: none
+		sourceColumn: %Origin Airport ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Origin Airport Sequence ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: b26ae25a-6f7f-5514-b823-b4e7bf40de5d
+		summarizeBy: none
+		sourceColumn: %Origin Airport Sequence ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Origin Airport Market ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ea7f3dd4-e746-5c79-a846-d2c22caa5b31
+		summarizeBy: none
+		sourceColumn: %Origin Airport Market ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Origin World Area Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0bd5060c-9deb-5909-8c5d-6f89d1ff766a
+		summarizeBy: none
+		sourceColumn: %Origin World Area Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Destination Airport ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b074b124-7ed3-5c51-aea5-f04b1e092e6c
+		summarizeBy: none
+		sourceColumn: %Destination Airport ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Destination Airport Sequence ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0093ac0d-7ec7-570a-9b0e-4e7685bf6cb9
+		summarizeBy: none
+		sourceColumn: %Destination Airport Sequence ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Destination Airport Market ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 363ff951-7a08-59b8-83a4-6b5ad4bd2cfc
+		summarizeBy: none
+		sourceColumn: %Destination Airport Market ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Destination World Area Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: d7ecaff2-2047-508f-93da-89293f2f4cf3
+		summarizeBy: none
+		sourceColumn: %Destination World Area Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Aircraft Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 889753e4-89a5-57c2-8764-b1a681456302
+		summarizeBy: none
+		sourceColumn: %Aircraft Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Aircraft Type ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ea4321f9-61b6-543d-8dee-1f13055db265
+		summarizeBy: none
+		sourceColumn: %Aircraft Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Aircraft Configuration ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: f3802368-93af-5a89-bd68-4d5399c543a1
+		summarizeBy: none
+		sourceColumn: %Aircraft Configuration ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Distance Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 441faac7-4cdf-5c7c-a8af-5faf71296f54
+		summarizeBy: none
+		sourceColumn: %Distance Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Service Class ID'
+		dataType: string
+		lineageTag: b2beade3-097f-5e24-b7e1-154a3ecea327
+		summarizeBy: none
+		sourceColumn: %Service Class ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Datasource ID'
+		dataType: string
+		isHidden
+		lineageTag: 70317fec-2de5-5ebf-b31b-3c1c59bbc19a
+		summarizeBy: none
+		sourceColumn: %Datasource ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Departures Scheduled'
+		dataType: int64
+		formatString: 0
+		lineageTag: 63596333-bf8c-5bb3-9b49-b9d1bd73ded2
+		summarizeBy: sum
+		sourceColumn: # Departures Scheduled
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Departures Performed'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ced0711-ca97-54d9-b403-cddc1d062f82
+		summarizeBy: sum
+		sourceColumn: # Departures Performed
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Payload'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a133284-7fa7-5453-b2f5-705d3531acd5
+		summarizeBy: sum
+		sourceColumn: # Payload
+
+		annotation SummarizationSetBy = Automatic
+
+	column Distance
+		dataType: int64
+		formatString: 0
+		lineageTag: 5880eaaf-0796-5156-849f-1d01cea765b5
+		summarizeBy: none
+		sourceColumn: Distance
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Available Seats'
+		dataType: int64
+		formatString: 0
+		lineageTag: 409ca8f2-157f-526c-95c0-f0d27688a4d3
+		summarizeBy: sum
+		sourceColumn: # Available Seats
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Transported Passengers'
+		dataType: int64
+		formatString: 0
+		lineageTag: fef3b65c-3902-5a17-a0dd-ffa8653171f4
+		summarizeBy: sum
+		sourceColumn: # Transported Passengers
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Transported Freight'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8faaa2e2-399e-528b-bc58-d867f2273b17
+		summarizeBy: sum
+		sourceColumn: # Transported Freight
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Transported Mail'
+		dataType: int64
+		formatString: 0
+		lineageTag: 524bce3a-731e-513d-91b1-067d83759530
+		summarizeBy: sum
+		sourceColumn: # Transported Mail
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Ramp-To-Ramp Time'
+		dataType: int64
+		formatString: 0
+		lineageTag: b2f08823-95a4-5015-b94f-43b0585e279e
+		summarizeBy: sum
+		sourceColumn: # Ramp-To-Ramp Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Air Time'
+		dataType: int64
+		formatString: 0
+		lineageTag: 49e893c8-7f0b-5ebb-a5b6-be1b3dcbf7de
+		summarizeBy: sum
+		sourceColumn: # Air Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unique Carrier'
+		dataType: string
+		lineageTag: b49c8d34-2a37-5f00-8454-bde762f6192a
+		summarizeBy: none
+		sourceColumn: Unique Carrier
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier Code'
+		dataType: string
+		lineageTag: df40b6ab-349e-547d-be28-6406e6c57bda
+		summarizeBy: none
+		sourceColumn: Carrier Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier Name'
+		dataType: string
+		lineageTag: f5d4509e-874d-5662-98db-68ae45a3db0d
+		summarizeBy: none
+		sourceColumn: Carrier Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin Airport Code'
+		dataType: string
+		lineageTag: c86f5418-75aa-5507-a916-9274149d3bf6
+		summarizeBy: none
+		sourceColumn: Origin Airport Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin City'
+		dataType: string
+		lineageTag: a1d1ebbd-588d-59f3-8472-1d8b86b221de
+		summarizeBy: none
+		sourceColumn: Origin City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin State Code'
+		dataType: string
+		lineageTag: e7b33842-eadc-5cba-ad3e-ea5cd0143f8f
+		summarizeBy: none
+		sourceColumn: Origin State Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin State FIPS'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2da9f948-3866-540b-9b67-c96918c4f4ef
+		summarizeBy: none
+		sourceColumn: Origin State FIPS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin State'
+		dataType: string
+		lineageTag: 1a944321-9c98-593f-aec7-7729ad674ac1
+		summarizeBy: none
+		sourceColumn: Origin State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin Country Code'
+		dataType: string
+		lineageTag: dd54d267-7844-5453-9e8d-d304a34cf35d
+		summarizeBy: none
+		sourceColumn: Origin Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin Country'
+		dataType: string
+		lineageTag: f8ca78f1-edbf-5cdb-b781-89e1efb13b17
+		summarizeBy: none
+		sourceColumn: Origin Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Airport Code'
+		dataType: string
+		lineageTag: d5757e16-0cd4-5b5b-b864-0b75ae2706a8
+		summarizeBy: none
+		sourceColumn: Destination Airport Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination City'
+		dataType: string
+		lineageTag: 323a54f2-42e1-565a-9e2e-a67398fcb82a
+		summarizeBy: none
+		sourceColumn: Destination City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination State Code'
+		dataType: string
+		lineageTag: 28bf791d-5dae-5c44-9836-461131fc453d
+		summarizeBy: none
+		sourceColumn: Destination State Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination State FIPS'
+		dataType: int64
+		formatString: 0
+		lineageTag: 16cddd61-aa79-57af-91aa-615e1ec9a3f9
+		summarizeBy: none
+		sourceColumn: Destination State FIPS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination State'
+		dataType: string
+		lineageTag: 61c80601-cae6-5826-8396-198cbe14bda9
+		summarizeBy: none
+		sourceColumn: Destination State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Country Code'
+		dataType: string
+		lineageTag: f3f9a0f2-e802-516a-9a8b-fab4e49a26a7
+		summarizeBy: none
+		sourceColumn: Destination Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Country'
+		dataType: string
+		lineageTag: b5654aff-e237-5ac5-8363-8e0893b1806e
+		summarizeBy: none
+		sourceColumn: Destination Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 106e1865-a3d5-5a34-a324-f78e2e094a67
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Period
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f07b0b1-9058-50e4-a3a4-869e282e6f85
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: 1f2e0f5d-1fc0-5bdf-840c-d4221acf406c
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month (#)'
+		dataType: int64
+		formatString: 0
+		lineageTag: 23f52afd-a0c7-5b6b-9b19-cc6be24f5923
+		summarizeBy: none
+		sourceColumn: Month (#)
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		sortByColumn: Month__num
+		lineageTag: 9b025691-efab-5e17-a1b8-50d8810dd491
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month__num
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 45034119-d574-5631-b02b-4359e5a4d234
+		summarizeBy: none
+		sourceColumn: Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To Airport Code'
+		dataType: string
+		lineageTag: ad450698-1a86-5e8f-8736-d9015ceec43b
+		summarizeBy: none
+		sourceColumn: From - To Airport Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To Airport ID'
+		dataType: string
+		lineageTag: 5e1c802b-1629-5bf8-854f-7a67124373bb
+		summarizeBy: none
+		sourceColumn: From - To Airport ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To City'
+		dataType: string
+		lineageTag: 9cec63e0-537a-5887-bf34-10b6c6b565de
+		summarizeBy: none
+		sourceColumn: From - To City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To State Code'
+		dataType: string
+		lineageTag: 0de28bde-6008-5ceb-9bf3-4ffe41a8ad0d
+		summarizeBy: none
+		sourceColumn: From - To State Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To State'
+		dataType: string
+		lineageTag: 34512aca-d3b4-5e63-ae83-e91cc0c47952
+		summarizeBy: none
+		sourceColumn: From - To State
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Main Data' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/QVDs/Flight Data.parquet"),
+				    Selected = Table.SelectColumns(Source, {"%Airline ID", "%Carrier Group ID", "%Unique Carrier Code", "%Unique Carrier Entity Code", "%Region Code", "%Origin Airport ID", "%Origin Airport Sequence ID", "%Origin Airport Market ID", "%Origin World Area Code", "%Destination Airport ID", "%Destination Airport Sequence ID", "%Destination Airport Market ID", "%Destination World Area Code", "%Aircraft Group ID", "%Aircraft Type ID", "%Aircraft Configuration ID", "%Distance Group ID", "%Service Class ID", "%Datasource ID", "# Departures Scheduled", "# Departures Performed", "# Payload", "Distance", "# Available Seats", "# Transported Passengers", "# Transported Freight", "# Transported Mail", "# Ramp-To-Ramp Time", "# Air Time", "Unique Carrier", "Carrier Code", "Carrier Name", "Origin Airport Code", "Origin City", "Origin State Code", "Origin State FIPS", "Origin State", "Origin Country Code", "Origin Country", "Destination Airport Code", "Destination City", "Destination State Code", "Destination State FIPS", "Destination State", "Destination Country Code", "Destination Country", "Year", "Period", "Quarter", "Month (#)", "Month", "Month__num", "From - To Airport Code", "From - To Airport ID", "From - To City", "From - To State Code", "From - To State"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Airline ID", Int64.Type}, {"%Carrier Group ID", Int64.Type}, {"%Unique Carrier Code", type text}, {"%Unique Carrier Entity Code", type text}, {"%Region Code", type text}, {"%Origin Airport ID", Int64.Type}, {"%Origin Airport Sequence ID", Int64.Type}, {"%Origin Airport Market ID", Int64.Type}, {"%Origin World Area Code", Int64.Type}, {"%Destination Airport ID", Int64.Type}, {"%Destination Airport Sequence ID", Int64.Type}, {"%Destination Airport Market ID", Int64.Type}, {"%Destination World Area Code", Int64.Type}, {"%Aircraft Group ID", Int64.Type}, {"%Aircraft Type ID", Int64.Type}, {"%Aircraft Configuration ID", Int64.Type}, {"%Distance Group ID", Int64.Type}, {"%Service Class ID", type text}, {"%Datasource ID", type text}, {"# Departures Scheduled", Int64.Type}, {"# Departures Performed", Int64.Type}, {"# Payload", Int64.Type}, {"Distance", Int64.Type}, {"# Available Seats", Int64.Type}, {"# Transported Passengers", Int64.Type}, {"# Transported Freight", Int64.Type}, {"# Transported Mail", Int64.Type}, {"# Ramp-To-Ramp Time", Int64.Type}, {"# Air Time", Int64.Type}, {"Unique Carrier", type text}, {"Carrier Code", type text}, {"Carrier Name", type text}, {"Origin Airport Code", type text}, {"Origin City", type text}, {"Origin State Code", type text}, {"Origin State FIPS", Int64.Type}, {"Origin State", type text}, {"Origin Country Code", type text}, {"Origin Country", type text}, {"Destination Airport Code", type text}, {"Destination City", type text}, {"Destination State Code", type text}, {"Destination State FIPS", Int64.Type}, {"Destination State", type text}, {"Destination Country Code", type text}, {"Destination Country", type text}, {"Year", Int64.Type}, {"Period", Int64.Type}, {"Quarter", type text}, {"Month (#)", Int64.Type}, {"Month", type text}, {"Month__num", type number}, {"From - To Airport Code", type text}, {"From - To Airport ID", type text}, {"From - To City", type text}, {"From - To State Code", type text}, {"From - To State", type text}})
+				in
+				    Typed
