@@ -91,7 +91,9 @@ GAPS = [
     "Time (drill-down Year > Month) -> Year, Month hierarchy on the axis; Airline_Origin_Destination (cyclic) -> "
     "Airline on the KPIs per Airline table (Origin/Destination Country are columns of Main Data for re-pivoting).",
     "Radar, Mekko, Grid and Block charts have no native visual: line chart, stacked column, matrix and treemap.",
-    "List boxes -> slicers on the same sheet, field = list box caption (all 22 map). Objects with no Power BI "
+    "List boxes -> slicers on the same sheet, field = list box caption (all 22 map). QlikView selections are "
+    "document-wide, so each of the 16 list box fields is a sync-slicer group on every page (hidden where the sheet "
+    "has no list box for it): a selection on Main filters every page. Objects with no Power BI "
     "counterpart are listed under unmapped_objects; the container CT01 (CH01-CH03) becomes three visuals on one page.",
     "Chart presentation (Top 10 routes, gauge bands, traffic lights, mini charts) is not reproduced; the full result "
     "sets are, and parity compares them.",
@@ -115,6 +117,12 @@ def report(sm_tables: set[str]) -> dict:
             sx, sy = (20 + (j % 7) * 180, 20 + (j // 7) * 350) if not n else (20 + (j % cols) * 150,
                                                                                20 + (j // cols) * (sh + 10))
             visuals.append(("slicer", {"Values": [LIST_BOXES[lb]]}, sx, sy, 170 if not n else 140 * (2 // cols), sh))
+        # QlikView selections are global: every list box field is a sync group present on every page,
+        # hidden where the sheet has no list box for it
+        shown = {LIST_BOXES[lb] for lb in slicers}
+        for field in dict.fromkeys(LIST_BOXES.values()):
+            if field not in shown:
+                visuals.append(("slicer", {"Values": [field]}, 0, 0, 140, 90))
         for j, ch in enumerate(charts):
             vt, roles = CHARTS[ch]
             per_row = 3 if n > 4 else 2 if n > 1 else 1
@@ -135,11 +143,16 @@ def report(sm_tables: set[str]) -> dict:
                     proj.setdefault(role, []).append({"queryRef": qref})
             name = tag(SLUG, "visual", page, str(z))
             pos = {"x": x, "y": y, "z": z, "width": w, "height": h}
+            single = {"visualType": vt, "projections": proj, "prototypeQuery": {
+                "Version": 2, "From": [{"Name": a, "Entity": t, "Type": 0} for t, a in frm.items()],
+                "Select": sel}, "drillFilterOtherVisuals": True}
+            if vt == "slicer":
+                field = roles["Values"][0]
+                single["syncGroup"] = {"groupName": field, "fieldChanges": True, "filterChanges": True}
+                if field not in shown:
+                    single["display"] = {"mode": "hidden"}
             containers.append({**pos, "config": json.dumps({
-                "name": name, "layouts": [{"id": 0, "position": pos}],
-                "singleVisual": {"visualType": vt, "projections": proj, "prototypeQuery": {
-                    "Version": 2, "From": [{"Name": a, "Entity": t, "Type": 0} for t, a in frm.items()],
-                    "Select": sel}, "drillFilterOtherVisuals": True}}), "filters": "[]"})
+                "name": name, "layouts": [{"id": 0, "position": pos}], "singleVisual": single}), "filters": "[]"})
         sections.append({"name": f"ReportSection{i}", "displayName": page, "displayOption": 1, "ordinal": i,
                          "width": 1280, "height": 720, "config": "{}", "filters": "[]",
                          "visualContainers": containers})

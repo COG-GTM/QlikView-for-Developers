@@ -287,7 +287,7 @@
   "$$SysTable 12-14 (synthetic keys) are not reproduced; the %-keys are single-column relationships.",
   "Time (drill-down Year > Month) -> Year, Month hierarchy on the axis; Airline_Origin_Destination (cyclic) -> Airline on the KPIs per Airline table (Origin/Destination Country are columns of Main Data for re-pivoting).",
   "Radar, Mekko, Grid and Block charts have no native visual: line chart, stacked column, matrix and treemap.",
-  "List boxes -> slicers on the same sheet, field = list box caption (all 22 map). Objects with no Power BI counterpart are listed under unmapped_objects; the container CT01 (CH01-CH03) becomes three visuals on one page.",
+  "List boxes -> slicers on the same sheet, field = list box caption (all 22 map). QlikView selections are document-wide, so each of the 16 list box fields is a sync-slicer group on every page (hidden where the sheet has no list box for it): a selection on Main filters every page. Objects with no Power BI counterpart are listed under unmapped_objects; the container CT01 (CH01-CH03) becomes three visuals on one page.",
   "Chart presentation (Top 10 routes, gauge bands, traffic lights, mini charts) is not reproduced; the full result sets are, and parity compares them."
  ]
 }

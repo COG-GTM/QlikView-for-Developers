@@ -73,4 +73,10 @@ def test_report_has_one_page_per_sheet():
     columns = {c["name"] for c in read_tmdl(PBIP)["columns"]}
     assert set(list_boxes.values()) <= columns
     slicers = [json.loads(v["config"])["singleVisual"] for s in report["sections"] for v in s["visualContainers"]]
-    assert sum(v["visualType"] == "slicer" for v in slicers) == sum(len(p["slicers"]) for p in model["pages"])
+    shown = [v for v in slicers if v["visualType"] == "slicer" and "display" not in v]
+    assert len(shown) == sum(len(p["slicers"]) for p in model["pages"])
+    fields = set(list_boxes.values())
+    for section in report["sections"]:
+        sync = {json.loads(v["config"])["singleVisual"].get("syncGroup", {}).get("groupName")
+                for v in section["visualContainers"]}
+        assert fields <= sync, section["displayName"]

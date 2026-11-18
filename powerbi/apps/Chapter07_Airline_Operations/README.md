@@ -15,7 +15,7 @@ Chapter 15 base model (`tools/build_airline_base.py`) by ParityKey, keeping only
 | Funnel calculated dimension on `[Flight Type]` | `Flight Types[Deal Status]` calculated column |
 | Groups `Time` (drill-down) / `Airline_Origin_Destination` (cyclic) | Year > Month axis hierarchy / Airline (see gaps) |
 | Sheets Main, Dashboard, Analysis, Reports, Gauge Styles, Other Charts, Other representations | one report page each, with the sheet's charts |
-| 22 list boxes (13 on Main, 9 linked on five sheets) | slicers on the same pages; field = list box caption, all 22 map to model columns |
+| 22 list boxes (13 on Main, 9 linked on five sheets) | slicers on the same pages; field = list box caption, all 22 map to model columns. Each field is a sync-slicer group on every page (hidden where the sheet has none), so selections are document-wide as in QlikView |
 | Container CT01 (CH01-CH03) on Analysis | three visuals side by side on the Analysis page |
 
 ## Semantic gaps
