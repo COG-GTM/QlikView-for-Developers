@@ -19,6 +19,7 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import build_airline_base as base  # noqa: E402
 from build_airline_base import CALC_DIMS, DEFAULT_ROOT, MEASURES, catalog_types, m_let, m_list, m_types  # noqa: E402
 
 from scaffold_pbip import APPS, POWERBI, REPO, TYPE_MAP, show, tag, tname  # noqa: E402
@@ -91,12 +92,11 @@ GAPS = [
     "Month (Flight Data dual) -> text column sorted by the hidden Month__num.",
     "Calculated dimension (Flight Type deal status) -> calculated column 'Deal Status' on Flight Types.",
     "Synthetic keys ($$SysTable 11-13) are not reproduced: every dimension joins Main Data on its one % key.",
-    "Report: one page per Qlik sheet; list boxes -> slicers on their sheet's page (field from the .qvw's "
-    "DocumentSummary, sheet from the .qvw's object storage order). QlikView selections are document-wide, so every "
-    "slicer is in a sync group per field and each page carries hidden synced slicers for the fields it does not show. "
-    "Charts, QlikView-only sheet objects (multi boxes, "
-    "current selections, bookmark object, buttons, search object, container, statistics box, text objects) and layout "
-    "are not migrated yet.",
+    "Report: one page per Qlik sheet from the base model's per-sheet generator (report_sections: sheet objects from "
+    "the .qvw's document block): every chart with its measures, list boxes as slicers (captions checked against the "
+    ".qvw's DocumentSummary fields). QlikView selections are document-wide, so slicers are synced per field and each "
+    "page carries hidden synced slicers for the fields it does not show. QlikView-only objects (multi boxes, current "
+    "selections, bookmark object, buttons, search object, statistics box, text objects) and layout are not migrated.",
 ]
 
 
@@ -271,34 +271,39 @@ def slicer(box: dict, table: str, column: str, i: int, hidden: bool = False) -> 
     return {**pos, "config": json.dumps(config), "filters": "[]"}
 
 
-def report(manifest: dict, specs: dict) -> tuple[dict, list[dict], list[dict]]:
-    """One page per Qlik sheet; each list box becomes a slicer on the model column of its field."""
-    columns = {}
-    for table, spec in specs.items():
-        for col, _ in spec["cols"]:
-            if not col.startswith("%") and not col.endswith("__num"):
-                columns.setdefault(col, table)
-    mapped, unmapped, sections = [], [], []
-    boxes = list_boxes(manifest)
-    for box in boxes:
-        if box["field"] in columns:
-            mapped.append({**box, "table": columns[box["field"]], "column": box["field"]})
-        else:
-            unmapped.append({**box, "reason": f"field {box['field']!r} is not in this app's data model"})
-    shared = list(dict.fromkeys((b["table"], b["column"], b["caption"]) for b in mapped))
-    for n, sheet in enumerate(manifest["sheets"]):
-        mine = [b for b in mapped if b["sheet"] == sheet["id"]]
-        visuals = [slicer(b, b["table"], b["column"], i) for i, b in enumerate(mine)]
-        # QlikView selections are document-wide: every other slicer field gets a hidden synced slicer on this page.
-        shown = {(b["table"], b["column"]) for b in mine}
-        for t, col, cap in (x for x in shared if (x[0], x[1]) not in shown):
-            box = {"id": f"{sheet['id']}_sync_{len(visuals)}", "caption": cap}
-            visuals.append(slicer(box, t, col, len(visuals), hidden=True))
-        sections.append({"name": f"ReportSection{n}", "displayName": sheet["name"], "displayOption": 1, "ordinal": n,
-                         "width": PAGE_W, "height": PAGE_H, "config": "{}", "filters": "[]",
-                         "visualContainers": visuals})
+def report(manifest: dict, specs: dict, measures: dict) -> tuple[dict, list[dict], list[dict]]:
+    """Pages, charts and list-box slicers from the base model's per-sheet generator (.qvw document block), plus hidden
+    synced slicers so every slicer field filters every page, as QlikView selections do."""
+    base.SLUG = SLUG  # lineage tags of the generated pages / visuals are per app
+    sections, unmapped_boxes = base.report_sections(manifest, specs, measures)
+    fields = {b["id"]: b["field"] for b in list_boxes(manifest)}
+    if bad := {o: c for o, c in base.list_box_captions(base.qvw_doc(manifest)).items()
+               if o in fields and c != fields[o]}:
+        raise SystemExit(f"list box captions differ from their DocumentSummary fields: {bad}")
+    slicers, shared = [], {}
+    for sec in sections:
+        sheet = json.loads(sec["config"])["QlikSheet"]
+        for v in sec["visualContainers"]:
+            sv = json.loads(v["config"])["singleVisual"]
+            if sv["visualType"] == "slicer":
+                table, column = sv["projections"]["Values"][0]["queryRef"].split(".", 1)
+                caption = sv["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"][1:-1]
+                slicers.append({"sheet": sheet, "caption": caption.replace("''", "'"), "table": table, "column": column})
+                shared.setdefault((table, column), slicers[-1]["caption"])
+    for sec in sections:
+        sheet = json.loads(sec["config"])["QlikSheet"]
+        shown = {(b["table"], b["column"]) for b in slicers if b["sheet"] == sheet}
+        z = len(sec["visualContainers"])
+        for i, ((table, column), caption) in enumerate(x for x in shared.items() if x[0] not in shown):
+            hidden = slicer({"id": tag(SLUG, "sync", sheet, table, column), "caption": caption}, table, column, i,
+                            hidden=True)
+            hidden["z"] = z + i
+            sec["visualContainers"].append(hidden)
+    unmapped = [{"id": o, "caption": c, "field": fields.get(o, c),
+                 "reason": f"field {fields.get(o, c)!r} is not in this app's data model"}
+                for o, c in sorted(unmapped_boxes.items()) if o.startswith("LB")]
     return ({"config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
-             "layoutOptimization": 0, "resourcePackages": [], "sections": sections}, mapped, unmapped)
+             "layoutOptimization": 0, "resourcePackages": [], "sections": sections}, slicers, unmapped)
 
 
 def relationships() -> list[tuple[str, str, str, str]]:
@@ -368,7 +373,7 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
     (sm / "definition.pbism").write_text(json.dumps({"version": "4.0", "settings": {}}, indent=2) + "\n")
     (rp / "definition.pbir").write_text(json.dumps(
         {"version": "4.0", "datasetReference": {"byPath": {"path": f"../{SLUG}.SemanticModel"}}}, indent=2) + "\n")
-    report_json, slicers, unmapped = report(manifest, specs)
+    report_json, slicers, unmapped = report(manifest, specs, measures)
     (rp / "report.json").write_text(json.dumps(report_json, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (root / f"{SLUG}.pbip").write_text(json.dumps(
         {"version": "1.0", "artifacts": [{"report": {"path": f"{SLUG}.Report"}}], "settings": {"enableAutoRecovery": True}},
@@ -383,7 +388,7 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
                                    for t, col, q, d, _ in calc_dims],
          "descriptions": {"tables": table_comments, "fields": field_comments},
          "slicers": slicers, "unmapped_list_boxes": unmapped,
-         "semantic_gaps": GAPS + [f"List box {b['id']} ({b['caption']}, sheet {b['sheet']}): {b['reason']}; not "
+         "semantic_gaps": GAPS + [f"List box {b['id']} ({b['caption']}): {b['reason']}; not "
                                   "migrated." for b in unmapped]}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(measures)} measures, "
           f"{len(calc_dims)} calculated columns, {len(slicers)} slicers ({len(unmapped)} list boxes unmapped)")
