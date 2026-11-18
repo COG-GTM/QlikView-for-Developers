@@ -15,7 +15,7 @@
    "grain": [
     "Year"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], \"value\", [# of Flights])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [# of Flights])"
   },
   {
    "id": "CH01#1@Year+Month",
@@ -24,7 +24,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], 'Group A'[Month], \"value\", [# of Flights])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [# of Flights])"
   },
   {
    "id": "CH01#2@total",
@@ -38,7 +38,7 @@
    "grain": [
     "Year"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], \"value\", [# of Enplanned Passengers])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [# of Enplanned Passengers])"
   },
   {
    "id": "CH01#2@Year+Month",
@@ -47,7 +47,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], 'Group A'[Month], \"value\", [# of Enplanned Passengers])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [# of Enplanned Passengers])"
   },
   {
    "id": "CH01#3@total",
@@ -61,7 +61,7 @@
    "grain": [
     "Year"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], \"value\", [Transported Freight])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [Transported Freight])"
   },
   {
    "id": "CH01#3@Year+Month",
@@ -70,7 +70,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], 'Group A'[Month], \"value\", [Transported Freight])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Transported Freight])"
   },
   {
    "id": "CH01#4@total",
@@ -84,7 +84,7 @@
    "grain": [
     "Year"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], \"value\", [Transported Mail])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [Transported Mail])"
   },
   {
    "id": "CH01#4@Year+Month",
@@ -93,7 +93,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], 'Group A'[Month], \"value\", [Transported Mail])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Transported Mail])"
   },
   {
    "id": "CH02#1@total",
@@ -422,7 +422,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Group A'[Year], 'Group A'[Month], \"value\", [# of Passengers (millions)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [# of Passengers (millions)])"
   },
   {
    "id": "CH22#2@total",
@@ -439,7 +439,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Group A'[Year], 'Group A'[Month], \"value\", [Departures Performed (thousands)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Departures Performed (thousands)])"
   },
   {
    "id": "CH24#1@total",
@@ -453,7 +453,7 @@
    "grain": [
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Month], \"value\", [# of Passengers (millions)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Month], \"value\", [# of Passengers (millions)])"
   },
   {
    "id": "CH25#1@total",
@@ -468,7 +468,7 @@
     "Flight Type",
     "Year"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Group A'[Year], \"value\", [# of Passengers (millions)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Master Calendar'[Year], \"value\", [# of Passengers (millions)])"
   },
   {
    "id": "CH26#1@total",
@@ -484,7 +484,7 @@
     "Quarter",
     "Flight Type"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], 'Master Calendar'[Quarter], 'Flight Types'[Flight Type], \"value\", [# of Passengers (millions)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Quarter], 'Flight Types'[Flight Type], \"value\", [# of Passengers (millions)])"
   },
   {
    "id": "CH27#1@total",
@@ -618,7 +618,7 @@
     "Flight Type",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Group A'[Month], \"value\", [Load Factor])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Master Calendar'[Month], \"value\", [Load Factor])"
   },
   {
    "id": "CH42#1@total",
@@ -733,7 +733,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Group A'[Year], 'Group A'[Month], \"value\", [# of Passengers (millions)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [# of Passengers (millions)])"
   },
   {
    "id": "CH47#2@total",
@@ -750,7 +750,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Group A'[Year], 'Group A'[Month], \"value\", [Departures Performed (thousands)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Departures Performed (thousands)])"
   },
   {
    "id": "CH47#3@total",
@@ -767,7 +767,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Group A'[Year], 'Group A'[Month], \"value\", [Participation to the whole])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Participation to the whole])"
   },
   {
    "id": "CH47#4@total",
@@ -784,7 +784,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Group A'[Year], 'Group A'[Month], \"value\", [% vs the Carrier's whole])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [% vs the Carrier's whole])"
   },
   {
    "id": "CH47#5@total",
@@ -801,7 +801,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Group A'[Year], 'Group A'[Month], \"value\", [% vs the Carrier's whole per year])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [% vs the Carrier's whole per year])"
   },
   {
    "id": "CH48#1@total",
@@ -815,7 +815,7 @@
    "grain": [
     "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier State Count], \"value\", [# of Carriers])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier State Count'[Carrier State Count], \"value\", [# of Carriers])"
   },
   {
    "id": "CH49#1@total",
@@ -859,7 +859,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], 'Group A'[Year], 'Group A'[Month], \"value\", [Load Factor])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Load Factor])"
   },
   {
    "id": "CH51#1@total",
@@ -875,7 +875,7 @@
     "Year",
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], 'Group A'[Year], 'Group A'[Month], \"value\", [Load Factor])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Load Factor])"
   },
   {
    "id": "CH52#1@total",
@@ -889,7 +889,7 @@
    "grain": [
     "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier State Count Band], \"value\", [# of Carriers])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier State Count Band'[Carrier State Count Band], \"value\", [# of Carriers])"
   },
   {
    "id": "CH53#1@total",
@@ -903,7 +903,7 @@
    "grain": [
     "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Load Factor Band], \"value\", [# of Carriers])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Load Factor Band'[Carrier Load Factor Band], \"value\", [# of Carriers])"
   },
   {
    "id": "CH54#1@total",
@@ -917,7 +917,7 @@
    "grain": [
     "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Load Factor Band], \"value\", [# of Carriers])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Load Factor Band'[Carrier Load Factor Band], \"value\", [# of Carriers])"
   },
   {
    "id": "CH55#1@total",
@@ -1100,7 +1100,7 @@
    "grain": [
     "Year"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Year], \"value\", [Flights in excluded years])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [Flights in excluded years])"
   },
   {
    "id": "CH60#1@total",
@@ -1188,7 +1188,7 @@
    "grain": [
     "Period"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Period], \"value\", [Group A Flights])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Group A Flights])"
   },
   {
    "id": "CH66#2@total",
@@ -1202,7 +1202,7 @@
    "grain": [
     "Period"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Period], \"value\", [Group B Flights])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Group B Flights])"
   },
   {
    "id": "CH67#1@total",
@@ -1216,7 +1216,7 @@
    "grain": [
     "Period"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Period], \"value\", [Group A Flights])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Group A Flights])"
   },
   {
    "id": "CH67#2@total",
@@ -1230,7 +1230,7 @@
    "grain": [
     "Period"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Period], \"value\", [Group B Flights])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Group B Flights])"
   },
   {
    "id": "CH68#1@total",
@@ -1244,7 +1244,7 @@
    "grain": [
     "Period"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Period], \"value\", [Full Time HC Change])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Full Time HC Change])"
   },
   {
    "id": "CH68#2@total",
@@ -1258,7 +1258,7 @@
    "grain": [
     "Period"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Period], \"value\", [Part Time HC Change])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Part Time HC Change])"
   },
   {
    "id": "CH68#3@total",
@@ -1272,7 +1272,7 @@
    "grain": [
     "Period"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A'[Period], \"value\", [Total HC Change])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Total HC Change])"
   },
   {
    "id": "CH69#1@total",

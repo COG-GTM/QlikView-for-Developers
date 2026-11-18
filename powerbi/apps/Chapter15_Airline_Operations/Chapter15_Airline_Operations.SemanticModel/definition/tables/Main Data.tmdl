@@ -168,7 +168,7 @@ table 'Main Data'
 		annotation QlikExpression = Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])
 		annotation QlikObjects = CH47#5
 
-	measure '# of Carriers' = DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name])
+	measure '# of Carriers' = SWITCH(TRUE(), ISINSCOPE('Carrier State Count'[Carrier State Count]), VAR lo = SELECTEDVALUE('Carrier State Count'[Carrier State Count]) RETURN COUNTROWS(FILTER(VALUES('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]) && CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code])) = lo)), ISINSCOPE('Carrier State Count Band'[Carrier State Count Band]), VAR lo = SELECTEDVALUE('Carrier State Count Band'[Low]) RETURN COUNTROWS(FILTER(VALUES('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]) && FLOOR(CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code])), 100) = lo)), ISINSCOPE('Carrier Load Factor Band'[Carrier Load Factor Band]), VAR lo = SELECTEDVALUE('Carrier Load Factor Band'[Low]) RETURN COUNTROWS(FILTER(VALUES('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]) && VAR lf = CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))) RETURN NOT ISBLANK(lf) && FLOOR(lf * 100, 10) = lo)), DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]))
 		formatString: #,0
 		lineageTag: b82973f1-e756-5105-a7d0-08d939292226
 
@@ -320,7 +320,7 @@ table 'Main Data'
 		annotation QlikExpression = Sum({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])
 		annotation QlikObjects = CH65#4
 
-	measure 'Group A Flights' = CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group A'[Period]), 'Master Calendar'[Period])))
+	measure 'Group A Flights' = CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group A'[Group A Period]), 'Master Calendar'[Period])))
 		formatString: #,0
 		lineageTag: eff86e06-cedd-580d-a224-4f19a911fa56
 
@@ -328,7 +328,7 @@ table 'Main Data'
 		annotation QlikExpression = Sum({[Group A] * $} [# Departures Performed])
 		annotation QlikObjects = CH66#1, CH67#1
 
-	measure 'Group B Flights' = CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group B'[Period]), 'Master Calendar'[Period])))
+	measure 'Group B Flights' = CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group B'[Group B Period]), 'Master Calendar'[Period])))
 		formatString: #,0
 		lineageTag: 6571f19c-05c0-5cf1-88de-cb4e0d7defc1
 
@@ -989,30 +989,6 @@ table 'Main Data'
 		sourceColumn: # Equivalent FTEs
 
 		annotation SummarizationSetBy = Automatic
-
-	column 'Carrier State Count' = IF(ISBLANK([Carrier Name]), BLANK(), CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code]), ALLEXCEPT('Main Data', 'Main Data'[Carrier Name])))
-		dataType: int64
-		lineageTag: a4a0a0a2-9976-5446-b7a0-9fa1a358daeb
-		summarizeBy: none
-
-		annotation ParityKey = 32b8cdc84f9b
-		annotation QlikDimension = =Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])
-
-	column 'Carrier State Count Band' = IF(ISBLANK([Carrier Name]), BLANK(), VAR lo = FLOOR(CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code]), ALLEXCEPT('Main Data', 'Main Data'[Carrier Name])), 100) RETURN lo & "  -  " & (lo + 100))
-		dataType: string
-		lineageTag: e040f61c-0bb4-5f96-8e03-2f91a8fbef76
-		summarizeBy: none
-
-		annotation ParityKey = 7cf1cba465ab
-		annotation QlikDimension = =Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')
-
-	column 'Carrier Load Factor Band' = VAR lf = IF(ISBLANK([Carrier Name]), BLANK(), DIVIDE(CALCULATE(SUM('Main Data'[# Transported Passengers]), ALLEXCEPT('Main Data', 'Main Data'[Carrier Name])), CALCULATE(SUM('Main Data'[# Available Seats]), ALLEXCEPT('Main Data', 'Main Data'[Carrier Name])))) RETURN IF(ISBLANK(lf), BLANK(), VAR lo = FLOOR(lf * 100, 10) RETURN lo & "  -  " & (lo + 10))
-		dataType: string
-		lineageTag: 54445fca-a069-549a-ada9-29ace286c35b
-		summarizeBy: none
-
-		annotation ParityKey = d741ad9eb585
-		annotation QlikDimension = =Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')
 
 	partition 'Main Data' = m
 		mode: import

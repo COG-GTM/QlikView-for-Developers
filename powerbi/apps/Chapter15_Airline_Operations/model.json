@@ -217,7 +217,7 @@
     "CH53#1",
     "CH54#1"
    ],
-   "dax": "DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name])"
+   "dax": "SWITCH(TRUE(), ISINSCOPE('Carrier State Count'[Carrier State Count]), VAR lo = SELECTEDVALUE('Carrier State Count'[Carrier State Count]) RETURN COUNTROWS(FILTER(VALUES('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]) && CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code])) = lo)), ISINSCOPE('Carrier State Count Band'[Carrier State Count Band]), VAR lo = SELECTEDVALUE('Carrier State Count Band'[Low]) RETURN COUNTROWS(FILTER(VALUES('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]) && FLOOR(CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code])), 100) = lo)), ISINSCOPE('Carrier Load Factor Band'[Carrier Load Factor Band]), VAR lo = SELECTEDVALUE('Carrier Load Factor Band'[Low]) RETURN COUNTROWS(FILTER(VALUES('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]) && VAR lf = CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))) RETURN NOT ISBLANK(lf) && FLOOR(lf * 100, 10) = lo)), DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]))"
   },
   {
    "name": "Average Load Factor per Route",
@@ -370,7 +370,7 @@
     "CH66#1",
     "CH67#1"
    ],
-   "dax": "CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group A'[Period]), 'Master Calendar'[Period])))"
+   "dax": "CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group A'[Group A Period]), 'Master Calendar'[Period])))"
   },
   {
    "name": "Group B Flights",
@@ -379,7 +379,7 @@
     "CH66#2",
     "CH67#2"
    ],
-   "dax": "CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group B'[Period]), 'Master Calendar'[Period])))"
+   "dax": "CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group B'[Group B Period]), 'Master Calendar'[Period])))"
   },
   {
    "name": "Full Time HC Change",
@@ -440,25 +440,25 @@
    "dax": "SWITCH([Flight Type], \"Domestic, US Carriers Only\", \"Open\", \"International, Foreign Carriers\", \"Negotiating\", \"Closed\")"
   },
   {
-   "table": "Main Data",
+   "table": "Carrier State Count",
    "column": "Carrier State Count",
    "parity_key": "32b8cdc84f9b",
    "qlik": "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])",
-   "dax": "IF(ISBLANK([Carrier Name]), BLANK(), CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code]), ALLEXCEPT('Main Data', 'Main Data'[Carrier Name])))"
+   "dax": "segment table + '# of Carriers'"
   },
   {
-   "table": "Main Data",
+   "table": "Carrier State Count Band",
    "column": "Carrier State Count Band",
    "parity_key": "7cf1cba465ab",
    "qlik": "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')",
-   "dax": "IF(ISBLANK([Carrier Name]), BLANK(), VAR lo = FLOOR(CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code]), ALLEXCEPT('Main Data', 'Main Data'[Carrier Name])), 100) RETURN lo & \"  -  \" & (lo + 100))"
+   "dax": "segment table + '# of Carriers'"
   },
   {
-   "table": "Main Data",
+   "table": "Carrier Load Factor Band",
    "column": "Carrier Load Factor Band",
    "parity_key": "d741ad9eb585",
    "qlik": "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')",
-   "dax": "VAR lf = IF(ISBLANK([Carrier Name]), BLANK(), DIVIDE(CALCULATE(SUM('Main Data'[# Transported Passengers]), ALLEXCEPT('Main Data', 'Main Data'[Carrier Name])), CALCULATE(SUM('Main Data'[# Available Seats]), ALLEXCEPT('Main Data', 'Main Data'[Carrier Name])))) RETURN IF(ISBLANK(lf), BLANK(), VAR lo = FLOOR(lf * 100, 10) RETURN lo & \"  -  \" & (lo + 10))"
+   "dax": "segment table + '# of Carriers'"
   }
  ],
  "roles": {
@@ -502,7 +502,7 @@
   "Set analysis value modifiers use KEEPFILTERS: identical to QlikView with no selections (the parity baseline); with a slicer selection on the same field Power BI intersects where QlikView replaces the selection.",
   "Point-in-time sets (vSetYTD, vSetLYYTD, vSetMTD, vSetLYMTD, vSetPreviousMonth, vSetPreviousNMonth) are defined in ..\\0.Includes\\SetVariables.txt, which is not in the repo; their definitions are reconstructed (see parity/models/<app>.overlay.json) and the measures implement the same reconstruction.",
   "Alternate states Group A / Group B -> disconnected 'Group A' / 'Group B' period tables used as slicers; the measures intersect the main selection with the group's periods ({[Group A] * $}).",
-  "Calculated dimensions (Aggr()/Class() buckets, the Flight Type deal status) -> calculated columns computed at refresh over all rows, so they do not react to selections as QlikView's Aggr() does; identical with no selections.",
+  "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the carriers whose value falls in the segment at query time, so RLS and selections apply as in QlikView. The row-level Flight Type deal status -> calculated column on Flight Types.",
   "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
   "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion."
  ]

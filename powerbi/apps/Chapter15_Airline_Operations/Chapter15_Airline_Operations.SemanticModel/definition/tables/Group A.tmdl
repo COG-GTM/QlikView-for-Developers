@@ -1,57 +1,59 @@
 table 'Group A'
 	lineageTag: 2d5ad8f3-a56d-59db-85cd-08788119c91b
 
-	column Period
+	column 'Group A Period'
 		dataType: int64
-		lineageTag: 06bea8f1-6ffc-5c37-bd08-a25a24f54873
+		formatString: 0
+		lineageTag: ede79635-7d8e-5dfd-8dd6-ef46b1bab5f4
 		summarizeBy: none
-		sourceColumn: Period
+		sourceColumn: Group A Period
 
 		annotation SummarizationSetBy = Automatic
 
-	column Year
+	column 'Group A Year'
 		dataType: int64
-		lineageTag: 944c63ba-6aca-5620-b492-1e2ee97f05f2
+		formatString: 0
+		lineageTag: b47b5a25-792e-5dfe-b328-dbc5d11c0177
 		summarizeBy: none
-		sourceColumn: Year
+		sourceColumn: Group A Year
 
 		annotation SummarizationSetBy = Automatic
 
-	column Month
+	column 'Group A Month'
 		dataType: string
-		sortByColumn: Month__num
-		lineageTag: 2a674fd7-ef82-5487-b25c-94bf405d7851
+		sortByColumn: 'Group A Month__num'
+		lineageTag: 8647996b-37e1-5a7b-8369-198d9a80c149
 		summarizeBy: none
-		sourceColumn: Month
+		sourceColumn: Group A Month
 
 		annotation SummarizationSetBy = Automatic
 
-	column Month__num
+	column 'Group A Month__num'
 		dataType: double
 		isHidden
 		formatString: #,0.00
-		lineageTag: c1dfd14c-4e85-5a66-a37f-0bf5e17a6c07
+		lineageTag: 9d6022c9-e5c6-5b14-99cf-316eae3bff75
 		summarizeBy: none
-		sourceColumn: Month__num
+		sourceColumn: Group A Month__num
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Year - Month'
+	column 'Group A Year - Month'
 		dataType: string
-		sortByColumn: 'Year - Month__num'
-		lineageTag: 9e77de40-385b-5775-814e-1ddd21cfcb8e
+		sortByColumn: 'Group A Year - Month__num'
+		lineageTag: fbad9c07-af0a-54fe-9c64-b5c3b6266289
 		summarizeBy: none
-		sourceColumn: Year - Month
+		sourceColumn: Group A Year - Month
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Year - Month__num'
+	column 'Group A Year - Month__num'
 		dataType: double
 		isHidden
 		formatString: #,0.00
-		lineageTag: c3c1a6f8-6e56-5a15-8c61-347973c70533
+		lineageTag: 5826314a-73d4-598a-af27-62262ef99a5f
 		summarizeBy: none
-		sourceColumn: Year - Month__num
+		sourceColumn: Group A Year - Month__num
 
 		annotation SummarizationSetBy = Automatic
 
@@ -59,6 +61,7 @@ table 'Group A'
 		mode: import
 		source =
 				let
-				    Source = Table.SelectColumns(#"Master Calendar", {"Period", "Year", "Month", "Month__num", "Year - Month", "Year - Month__num"})
+				    Source = Table.SelectColumns(#"Master Calendar", {"Period", "Year", "Month", "Month__num", "Year - Month", "Year - Month__num"}),
+				    Renamed = Table.RenameColumns(Source, {{"Period", "Group A Period"}, {"Year", "Group A Year"}, {"Month", "Group A Month"}, {"Month__num", "Group A Month__num"}, {"Year - Month", "Group A Year - Month"}, {"Year - Month__num", "Group A Year - Month__num"}})
 				in
-				    Source
+				    Renamed

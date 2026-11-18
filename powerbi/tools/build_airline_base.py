@@ -158,7 +158,7 @@ MEASURES = {
     "599355404d68": ("% vs the Carrier's whole", f"DIVIDE({FLIGHTS}, {total_dax(FLIGHTS, [CG, CN])})", PCT),
     "624bbb57c7a7": ("% vs the Carrier's whole per year",
                      f"DIVIDE({FLIGHTS}, {total_dax(FLIGHTS, [CG, CN, c(CAL, 'Year')])})", PCT),
-    "0a66033bf9d0": ("# of Carriers", f"DISTINCTCOUNTNOBLANK({CN})", NUM),
+    "0a66033bf9d0": ("# of Carriers", "CARRIERS", NUM),  # filled in below from SEGMENTS
     "cdd5b20db14b": ("Average Load Factor per Route", avg_route_lf(c("Airlines", "Airline"), ROUTE), PCT),
     "527a7b7f9d77": ("Dimensionality",
                      f"IF(NOT ISEMPTY({MD}), " + " + ".join(
@@ -195,9 +195,9 @@ MEASURES = {
     "f81b30295d5f": ("Flights Previous Month", pit(FLIGHTS, period_back="1"), NUM),
     "c61bbcf8a5bc": ("Flights Two Months Ago", pit(FLIGHTS, period_back="2"), NUM),
     "233f869eae9d": ("Group A Flights",
-                     f"CALCULATE({FLIGHTS}, KEEPFILTERS(TREATAS(VALUES('Group A'[Period]), {c(CAL, 'Period')})))", NUM),
+                     f"CALCULATE({FLIGHTS}, KEEPFILTERS(TREATAS(VALUES('Group A'[Group A Period]), {c(CAL, 'Period')})))", NUM),
     "6ba2cbf5d1e6": ("Group B Flights",
-                     f"CALCULATE({FLIGHTS}, KEEPFILTERS(TREATAS(VALUES('Group B'[Period]), {c(CAL, 'Period')})))", NUM),
+                     f"CALCULATE({FLIGHTS}, KEEPFILTERS(TREATAS(VALUES('Group B'[Group B Period]), {c(CAL, 'Period')})))", NUM),
     "97885edb520e": ("Full Time HC Change", f"SUM({m('# M-Delta Full Time Employees')})", NUM),
     "bebebe28ced0": ("Part Time HC Change", f"SUM({m('# M-Delta Part Time Employees')})", NUM),
     "53f3fabda737": ("Total HC Change", f"SUM({m('# M-Delta Total Employees')})", NUM),
@@ -206,25 +206,39 @@ MEASURES = {
     "d76da9774b00": ("FTEs MTD", pit(f"SUM({m('# Equivalent FTEs')})", 0, "mtd"), NUM),
 }
 
-_STATES = f"CALCULATE(DISTINCTCOUNTNOBLANK({m('From - To State Code')}), ALLEXCEPT({MD}, {CN}))"
-_CARRIER_LF = (f"DIVIDE(CALCULATE(SUM({m('# Transported Passengers')}), ALLEXCEPT({MD}, {CN})), "
-               f"CALCULATE(SUM({m('# Available Seats')}), ALLEXCEPT({MD}, {CN})))")
-# Qlik calculated dimensions -> calculated columns: (table, column, Qlik dimension text, DAX, dataType)
+_STATES = f"CALCULATE(DISTINCTCOUNTNOBLANK({m('From - To State Code')}))"
+# Qlik Aggr() calculated dimensions over [Carrier Name] -> disconnected segment tables; '# of Carriers' counts the carriers
+# whose per-carrier value falls in the segment in scope, at query time, so RLS and selections apply as in QlikView.
+# (table, label column, Qlik dimension text, segment values (M list), label (M, from [Low]), carrier test (DAX, uses lo))
+SEGMENTS = [
+    ("Carrier State Count", "Carrier State Count", "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])",
+     "List.Numbers(0, 5001)", None, f"{_STATES} = lo"),
+    ("Carrier State Count Band", "Carrier State Count Band",
+     "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')",
+     "List.Numbers(0, 51, 100)", 'Text.From([Low]) & "  -  " & Text.From([Low] + 100)', f"FLOOR({_STATES}, 100) = lo"),
+    ("Carrier Load Factor Band", "Carrier Load Factor Band",
+     "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')",
+     "List.Numbers(0, 101, 10)", 'Text.From([Low]) & "  -  " & Text.From([Low] + 10)',
+     f"VAR lf = CALCULATE({LF}) RETURN NOT ISBLANK(lf) && FLOOR(lf * 100, 10) = lo"),
+]
+
+
+def carriers_dax() -> str:
+    out = "SWITCH(TRUE()"
+    for table, col, _, _, label, test in SEGMENTS:
+        low = c(table, "Low" if label else col)
+        out += (f", ISINSCOPE({c(table, col)}), VAR lo = SELECTEDVALUE({low}) RETURN "
+                f"COUNTROWS(FILTER(VALUES({CN}), NOT ISBLANK({CN}) && {test}))")
+    return out + f", DISTINCTCOUNTNOBLANK({CN}))"
+
+
+MEASURES["0a66033bf9d0"] = ("# of Carriers", carriers_dax(), NUM)
+
 CALC_DIMS = [
     ("Flight Types", "Deal Status",
      "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))",
      "SWITCH([Flight Type], \"Domestic, US Carriers Only\", \"Open\", \"International, Foreign Carriers\", \"Negotiating\", \"Closed\")",
      "string"),
-    ("Main Data", "Carrier State Count", "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])",
-     f"IF(ISBLANK([Carrier Name]), BLANK(), {_STATES})", "int64"),
-    ("Main Data", "Carrier State Count Band",
-     "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')",
-     f"IF(ISBLANK([Carrier Name]), BLANK(), VAR lo = FLOOR({_STATES}, 100) RETURN lo & \"  -  \" & (lo + 100))",
-     "string"),
-    ("Main Data", "Carrier Load Factor Band",
-     "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')",
-     f"VAR lf = IF(ISBLANK([Carrier Name]), BLANK(), {_CARRIER_LF}) RETURN "
-     f"IF(ISBLANK(lf), BLANK(), VAR lo = FLOOR(lf * 100, 10) RETURN lo & \"  -  \" & (lo + 10))", "string"),
 ]
 
 GAPS = [
@@ -249,8 +263,9 @@ GAPS = [
     "parity/models/<app>.overlay.json) and the measures implement the same reconstruction.",
     "Alternate states Group A / Group B -> disconnected 'Group A' / 'Group B' period tables used as slicers; the measures "
     "intersect the main selection with the group's periods ({[Group A] * $}).",
-    "Calculated dimensions (Aggr()/Class() buckets, the Flight Type deal status) -> calculated columns computed at refresh "
-    "over all rows, so they do not react to selections as QlikView's Aggr() does; identical with no selections.",
+    "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the "
+    "carriers whose value falls in the segment at query time, so RLS and selections apply as in QlikView. The row-level "
+    "Flight Type deal status -> calculated column on Flight Types.",
     "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
     "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, "
     "like QlikView's empty expansion.",
@@ -327,10 +342,23 @@ def table_specs(types: dict) -> dict[str, dict]:
     specs["INLFED-1"] = {"cols": [("Metric Name", "string"), ("eMetric", "string")], "m": m_let([
         "Source = #table(type table [#\"Metric Name\" = text, eMetric = text], {"
         + ", ".join(f'{{"{a}", "{b}"}}' for a, b in METRICS) + "})"], "Source")}
-    for state in ("Group A", "Group B"):
+    for table, col, qlik, values, label, _ in SEGMENTS:
+        if label:
+            specs[table] = {"cols": [(col, "string"), ("Low", "int64")], "sort": {col: "Low"}, "qlik": {col: qlik},
+                            "m": m_let([f'Source = Table.FromList({values}, Splitter.SplitByNothing(), {{"Low"}})',
+                                        f'Labeled = Table.AddColumn(Source, "{col}", each {label})',
+                                        f'Typed = Table.TransformColumnTypes(Labeled, {{{{"{col}", type text}}, {{"Low", Int64.Type}}}})'],
+                                       "Typed")}
+        else:
+            specs[table] = {"cols": [(col, "int64")], "qlik": {col: qlik},
+                            "m": m_let([f'Source = Table.FromList({values}, Splitter.SplitByNothing(), {{"{col}"}})',
+                                        f'Typed = Table.TransformColumnTypes(Source, {{{{"{col}", Int64.Type}}}})'], "Typed")}
+    for state in ("Group A", "Group B"):  # own column names: Qlik's calendar fields must resolve to Master Calendar
         gcols = cal_cols[:6]
-        specs[state] = {"cols": gcols, "m": m_let([
-            f'Source = Table.SelectColumns(#"Master Calendar", {m_list(n for n, _ in gcols)})'], "Source")}
+        renames = "{" + ", ".join(f'{{"{n}", "{state} {n}"}}' for n, _ in gcols) + "}"
+        specs[state] = {"cols": [(f"{state} {n}", t) for n, t in gcols], "m": m_let([
+            f'Source = Table.SelectColumns(#"Master Calendar", {m_list(n for n, _ in gcols)})',
+            f"Renamed = Table.RenameColumns(Source, {renames})"], "Renamed")}
     return specs
 
 
@@ -348,16 +376,21 @@ def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: l
     for col, typ in spec["cols"]:
         dtype, _, fmt = TYPE_MAP[typ]
         lines += [f"\tcolumn {tname(col)}", f"\t\tdataType: {dtype}"]
+        sort = spec.get("sort", {}).get(col) or (f"{col}__num" if f"{col}__num" in names else None)
         if (col.startswith("%") and name not in ("INLFED",)) or col.endswith("__num") or \
-                (col == "Period" and name == "Main Data"):
+                (col == "Period" and name == "Main Data") or col in spec.get("sort", {}).values():
             lines.append("\t\tisHidden")
-        if f"{col}__num" in names:
-            lines.append(f"\t\tsortByColumn: {tname(col + '__num')}")
+        if sort:
+            lines.append(f"\t\tsortByColumn: {tname(sort)}")
         if fmt and col not in ("Period", "Year"):
             lines.append(f"\t\tformatString: {fmt}")
         lines += [f"\t\tlineageTag: {tag(SLUG, name, 'c', col)}",
                   f"\t\tsummarizeBy: {'sum' if col.startswith('#') else 'none'}", f"\t\tsourceColumn: {col}", "",
                   "\t\tannotation SummarizationSetBy = Automatic", ""]
+        if col in spec.get("qlik", {}):
+            qlik = spec["qlik"][col]
+            lines[-1:-1] = [f"\t\tannotation ParityKey = {parity_key(qlik)}",
+                            f"\t\tannotation QlikDimension = {' '.join(qlik.split())}"]
     for _, col, qlik, dax, typ in calc:
         lines += [f"\tcolumn {tname(col)} = {dax}", f"\t\tdataType: {typ}",
                   f"\t\tlineageTag: {tag(SLUG, name, 'c', col)}", "\t\tsummarizeBy: none", "",
@@ -404,7 +437,7 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
                                       "fmt": MEASURES[pk][2], "kpis": [], "qlik": " ".join(k["expression"].split())})
         mz["kpis"].append(k["kpi"])
         for d in k["dims"]:
-            if d.startswith("=") and d not in {x[2] for x in CALC_DIMS}:
+            if d.startswith("=") and d not in {x[2] for x in CALC_DIMS} | {x[2] for x in SEGMENTS}:
                 raise SystemExit(f"{k['kpi']}: no calculated column for dimension {d!r}")
     if unused := set(MEASURES) - set(measures):
         raise SystemExit(f"measures without a KPI: {sorted(unused)}")
@@ -468,7 +501,9 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
          "measures": [{"name": x["name"], "parity_key": x["parity_key"], "kpis": x["kpis"], "dax": x["dax"]}
                       for x in measures.values()],
          "calculated_dimensions": [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q, "dax": d}
-                                   for t, col, q, d, _ in CALC_DIMS],
+                                   for t, col, q, d, _ in CALC_DIMS]
+                                  + [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q,
+                                      "dax": "segment table + '# of Carriers'"} for t, col, q, _, _, _ in SEGMENTS],
          "roles": {u: {"flight_types": v, "omit": o} for u, (v, o) in SECTION_ACCESS.items()},
          "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(SECTION_ACCESS)} roles, "
