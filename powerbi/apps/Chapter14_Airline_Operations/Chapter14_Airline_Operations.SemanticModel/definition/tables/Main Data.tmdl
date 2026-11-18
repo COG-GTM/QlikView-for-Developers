@@ -1,0 +1,1002 @@
+table 'Main Data'
+	lineageTag: 1d690bca-09f5-5623-bac6-f3a3d12982ed
+
+	measure '# of Flights' = SUM('Main Data'[# Departures Performed])
+		formatString: #,0
+		lineageTag: 039b6439-e8e2-546f-862f-c4d32f09d7b5
+
+		annotation ParityKey = 1baea265cccd
+		annotation QlikExpression = Sum ([# Departures Performed])
+		annotation QlikObjects = CH01#1, CH02#1, CH04#3, CH42#1
+
+	measure '# of Enplanned Passengers' = SUM('Main Data'[# Transported Passengers])
+		formatString: #,0
+		lineageTag: 45119486-e91c-5d0d-a583-44d0c0cf6331
+
+		annotation ParityKey = 7f15ad08b3bb
+		annotation QlikExpression = Sum ([# Transported Passengers])
+		annotation QlikObjects = CH01#2, CH02#2, CH04#2, CH15#1
+
+	measure 'Transported Freight' = SUM('Main Data'[# Transported Freight])
+		formatString: #,0
+		lineageTag: dd75f8d0-ba94-563c-b694-eb1969a39958
+
+		annotation ParityKey = aea8a21aee5f
+		annotation QlikExpression = Sum ([# Transported Freight])
+		annotation QlikObjects = CH01#3, CH02#3
+
+	measure 'Transported Mail' = SUM('Main Data'[# Transported Mail])
+		formatString: #,0
+		lineageTag: 1adc27cd-f5ad-55f1-bb78-f626771f761b
+
+		annotation ParityKey = e0ca719214a7
+		annotation QlikExpression = Sum ([# Transported Mail])
+		annotation QlikObjects = CH01#4, CH02#4, CH04#1
+
+	measure '# of Passengers (millions)' = DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000)
+		formatString: #,0.00
+		lineageTag: ac1e09b4-2bb5-581a-9d87-ba091b8318ac
+
+		annotation ParityKey = 0c8ca154aacf
+		annotation QlikExpression = ((Sum ([# Transported Passengers]) / 1000000))
+		annotation QlikObjects = CH03#1, CH22#1, CH24#1, CH25#1, CH26#1, CH27#1, CH28#1, CH47#1
+
+	measure '# of Available Seats (millions)' = DIVIDE(SUM('Main Data'[# Available Seats]), 1000000)
+		formatString: #,0.00
+		lineageTag: 0709fc09-acb1-5e85-b7ce-4f76a5ebd2fa
+
+		annotation ParityKey = 8dfad31060e3
+		annotation QlikExpression = ((Sum ([# Available Seats]) / 1000000))
+		annotation QlikObjects = CH03#2
+
+	measure 'Load Factor' = DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))
+		formatString: 0.00%
+		lineageTag: e2188017-cdf3-5fc9-82fd-29c24677d7ad
+
+		annotation ParityKey = 213681cc0d2a
+		annotation QlikExpression = =((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))
+		annotation QlikObjects = CH03#3, CH05#1, CH21#1, CH38#1, CH38#2, CH41#1, CH49#2, CH50#1, CH51#1, CH56#2
+
+	measure 'Performed vs Scheduled' = DIVIDE(SUM('Main Data'[# Departures Performed]), SUM('Main Data'[# Departures Scheduled]))
+		formatString: 0.00%
+		lineageTag: 4216b6e6-23b5-54c4-bdac-e6d35483e889
+
+		annotation ParityKey = 7588bff24d2c
+		annotation QlikExpression = ((Sum([# Departures Performed]) / Sum([# Departures Scheduled])))
+		annotation QlikObjects = CH06#1, CH21#2, CH38#3, CH38#4
+
+	measure 'Air Time %' = DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))
+		formatString: 0.00%
+		lineageTag: 1240bf64-b569-5d83-ba14-511ad3939335
+
+		annotation ParityKey = cd4c4a3c94f4
+		annotation QlikExpression = Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])
+		annotation QlikObjects = CH07#1, CH08#1, CH09#1, CH11#1, CH12#1, CH13#1, CH14#1
+
+	measure Carrier = IF(DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]) = 1, MAX('Main Data'[Carrier Name]), "Others")
+		lineageTag: 089a1fdc-89a1-5724-90f5-8b30a39abeca
+
+		annotation ParityKey = 90777bd5df7f
+		annotation QlikExpression = if(count(distinct [Carrier Name]) = 1, [Carrier Name], 'Others')
+		annotation QlikObjects = CH15#2
+
+	measure 'Air Time % (CH21)' = DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))
+		formatString: 0.00%
+		lineageTag: 3f8dff63-8224-5b1b-bbba-11feb3b69aab
+
+		annotation ParityKey = a1ec8a2cb5ee
+		annotation QlikExpression = ((Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])))
+		annotation QlikObjects = CH21#3, CH38#5, CH38#6
+
+	measure 'Departures Performed (thousands)' = DIVIDE([# of Flights], 1000)
+		formatString: #,0.00
+		lineageTag: 5a3e7b9a-19fd-5de5-87f1-5265fea03a1c
+
+		annotation ParityKey = 072410d4365a
+		annotation QlikExpression = ((Sum ([# Departures Performed]) / 1000))
+		annotation QlikObjects = CH22#2, CH47#2, CH55#1
+
+	measure 'FTE % to Total' = DIVIDE(SUM('Main Data'[# Equivalent FTEs]), SUM('Main Data'[# Equivalent FTEs]))
+		formatString: 0.00%
+		lineageTag: cfe579c0-2fe4-51dc-82bf-0103a315aacd
+
+		annotation ParityKey = f0af66ad7007
+		annotation QlikExpression = Sum([# Equivalent FTEs]) / ( Sum([# Equivalent FTEs]))
+		annotation QlikObjects = CH43#1
+
+	measure FTEs = SUM('Main Data'[# Equivalent FTEs])
+		formatString: #,0
+		lineageTag: 1a7232b4-19cd-5a0e-9ced-24444a6d953d
+
+		annotation ParityKey = db52d6494b27
+		annotation QlikExpression = (Sum([# Equivalent FTEs]))
+		annotation QlikObjects = CH44#1
+
+	measure '# of Flights (units)' = DIVIDE([# of Flights], 1)
+		formatString: #,0
+		lineageTag: c5d5c393-8ea7-50d9-a68c-9bf3d0837990
+
+		annotation ParityKey = a8d240d462f9
+		annotation QlikExpression = (Sum([# Departures Performed]) / 1)
+		annotation QlikObjects = CH45#1
+
+	measure '# of Flights (thousands)' = DIVIDE([# of Flights], 1000)
+		formatString: #,0.00
+		lineageTag: a4bbed71-469d-536f-a4b3-b9cdb8278ed5
+
+		annotation ParityKey = f72a33049af9
+		annotation QlikExpression = (Sum([# Departures Performed]) / 1000)
+		annotation QlikObjects = CH45#2
+
+	measure '# of Flights (millions)' = DIVIDE([# of Flights], 1000000)
+		formatString: #,0.00
+		lineageTag: 7167d56d-6944-5edd-843c-963b5b1be351
+
+		annotation ParityKey = 0437729d9522
+		annotation QlikExpression = (Sum([# Departures Performed]) / 1000000)
+		annotation QlikObjects = CH45#3
+
+	measure 'Selected Metric' = SWITCH(SELECTEDVALUE(INLFED[eMetric]), "eDeparturesPerformed", DIVIDE([# of Flights], 1000), "eEnplanedPassengers", DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000), "eAirTime", DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time])))
+		formatString: #,0.00
+		lineageTag: 1387a975-43ad-571f-874d-8c9933e23d65
+
+		annotation ParityKey = b8cda7856288
+		annotation QlikExpression = $($(=eMetric))
+		annotation QlikObjects = CH46#1
+
+	measure 'Participation to the whole' = DIVIDE([# of Flights], CALCULATE([# of Flights], ALLSELECTED()))
+		formatString: 0.00%
+		lineageTag: c878c4f8-25a7-5509-b132-754337e9a578
+
+		annotation ParityKey = 2727aeae83d4
+		annotation QlikExpression = Sum([# Departures Performed]) / Sum(TOTAL [# Departures Performed])
+		annotation QlikObjects = CH47#3
+
+	measure '% vs the Carrier''s whole' = DIVIDE([# of Flights], IF(ISINSCOPE('Carrier Groups'[Carrier Group]), IF(ISINSCOPE('Main Data'[Carrier Name]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]), VALUES('Main Data'[Carrier Name])), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]))), IF(ISINSCOPE('Main Data'[Carrier Name]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Main Data'[Carrier Name])), CALCULATE([# of Flights], ALLSELECTED()))))
+		formatString: 0.00%
+		lineageTag: 765d37b6-a567-5d55-b8d3-bbe50c5cb8c3
+
+		annotation ParityKey = 599355404d68
+		annotation QlikExpression = Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])
+		annotation QlikObjects = CH47#4
+
+	measure '% vs the Carrier''s whole per year' = DIVIDE([# of Flights], IF(ISINSCOPE('Carrier Groups'[Carrier Group]), IF(ISINSCOPE('Main Data'[Carrier Name]), IF(ISINSCOPE('Master Calendar'[Year]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]), VALUES('Main Data'[Carrier Name]), VALUES('Master Calendar'[Year])), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]), VALUES('Main Data'[Carrier Name]))), IF(ISINSCOPE('Master Calendar'[Year]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]), VALUES('Master Calendar'[Year])), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group])))), IF(ISINSCOPE('Main Data'[Carrier Name]), IF(ISINSCOPE('Master Calendar'[Year]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Main Data'[Carrier Name]), VALUES('Master Calendar'[Year])), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Main Data'[Carrier Name]))), IF(ISINSCOPE('Master Calendar'[Year]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Master Calendar'[Year])), CALCULATE([# of Flights], ALLSELECTED())))))
+		formatString: 0.00%
+		lineageTag: 30918be1-5789-54e9-a0c9-4b791a3ee7e9
+
+		annotation ParityKey = 624bbb57c7a7
+		annotation QlikExpression = Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])
+		annotation QlikObjects = CH47#5
+
+	measure '# of Carriers' = IF((ISFILTERED('Carrier State Count'[Carrier State Count]) || ISFILTERED('Carrier State Count'[Carrier State Count])) || (ISFILTERED('Carrier State Count Band'[Carrier State Count Band]) || ISFILTERED('Carrier State Count Band'[Low])) || (ISFILTERED('Carrier Load Factor Band'[Carrier Load Factor Band]) || ISFILTERED('Carrier Load Factor Band'[Low])), COUNTROWS(FILTER(VALUES('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]) && (NOT (ISFILTERED('Carrier State Count'[Carrier State Count]) || ISFILTERED('Carrier State Count'[Carrier State Count])) || (CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code])) + 0) IN VALUES('Carrier State Count'[Carrier State Count])) && (NOT (ISFILTERED('Carrier State Count Band'[Carrier State Count Band]) || ISFILTERED('Carrier State Count Band'[Low])) || (FLOOR(CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code])) + 0, 100)) IN VALUES('Carrier State Count Band'[Low])) && (NOT (ISFILTERED('Carrier Load Factor Band'[Carrier Load Factor Band]) || ISFILTERED('Carrier Load Factor Band'[Low])) || (VAR lf = CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))) RETURN IF(ISBLANK(lf), BLANK(), FLOOR(lf * 100, 10))) IN VALUES('Carrier Load Factor Band'[Low])))), DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]))
+		formatString: #,0
+		lineageTag: 025cfb97-38de-5e6b-966b-46c7f0ca6706
+
+		annotation ParityKey = 0a66033bf9d0
+		annotation QlikExpression = Count(DISTINCT [Carrier Name])
+		annotation QlikObjects = CH48#1, CH52#1, CH53#1, CH54#1
+
+	measure 'Average Load Factor per Route' = AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', Airlines[Airline], 'Main Data'[From - To Airport ID]), "@lf", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf])
+		formatString: 0.00%
+		lineageTag: 294b5ec3-32a1-57a9-b97f-e9dd35320379
+
+		annotation ParityKey = cdd5b20db14b
+		annotation QlikExpression = Avg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), Airline, [From - To Airport ID]))
+		annotation QlikObjects = CH49#1
+
+	measure Dimensionality = IF(NOT ISEMPTY('Main Data'), INT(ISINSCOPE('Carrier Groups'[Carrier Group])) + INT(ISINSCOPE(Airlines[Airline])) + INT(ISINSCOPE('Main Data'[Origin Country])) + INT(ISINSCOPE('Main Data'[Destination Country])) + INT(ISINSCOPE('Aircraft Types'[Aircraft Name])))
+		formatString: 0
+		lineageTag: 5614defa-2319-5db2-bdf3-e23f3860604a
+
+		annotation ParityKey = 527a7b7f9d77
+		annotation QlikExpression = Dimensionality()
+		annotation QlikObjects = CH55#2
+
+	measure 'Avg Load Factor per Route (by level)' = SWITCH(INT(ISINSCOPE('Flight Types'[Flight Type])) + INT(ISINSCOPE('Carrier Groups'[Carrier Group])) + INT(ISINSCOPE('Main Data'[Carrier Name])), 0, AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[From - To Airport ID]), "@lf", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf]), 1, AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[From - To Airport ID], 'Flight Types'[Flight Type]), "@lf", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf]), 2, AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[From - To Airport ID], 'Flight Types'[Flight Type], 'Carrier Groups'[Carrier Group]), "@lf", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf]), 3, AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[From - To Airport ID], 'Carrier Groups'[Carrier Group], 'Flight Types'[Flight Type], 'Main Data'[Carrier Name]), "@lf", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf]))
+		formatString: 0.00%
+		lineageTag: 39298472-6d11-5559-8687-9a559e056f2b
+
+		annotation ParityKey = 18b5ee2089a0
+		annotation QlikExpression = Pick(Dimensionality() + 1, Avg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), [From - To Airport ID])), Avg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), [From - To Airport ID], [Flight Type])), Avg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), [From - To Airport ID], [Flight Type], [Carrier Group])), Avg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), [From - To Airport ID], [Carrier Group], [Flight Type], [Carrier Name])))
+		annotation QlikObjects = CH56#1
+
+	measure 'Foreign Carriers'' flights' = CALCULATE([# of Flights], KEEPFILTERS('Carrier Groups'[Carrier Group] = "Foreign Carriers"))
+		formatString: #,0
+		lineageTag: ef0950de-4392-5b6b-a676-e2c4a75b4835
+
+		annotation ParityKey = 4a285b15d9d8
+		annotation QlikExpression = Sum({$<[Carrier Group] = {'Foreign Carriers'}>} [# Departures Performed])
+		annotation QlikObjects = CH57#1
+
+	measure 'Domestic and Latin America (2010)' = CALCULATE([# of Flights], KEEPFILTERS('Carrier Operating Region'[Carrier's Operating Region] IN {"Domestic", "Latin America"}), KEEPFILTERS('Master Calendar'[Year] = 2010))
+		formatString: #,0
+		lineageTag: f55e9bad-5a93-56a5-82c8-a523fecf2d2a
+
+		annotation ParityKey = e6f0f64c372a
+		annotation QlikExpression = Sum({$<[Carrier's Operating Region] = {'Domestic', 'Latin America'}, Year = {2010}>} [# Departures Performed])
+		annotation QlikObjects = CH57#2
+
+	measure '2010 Flights' = CALCULATE([# of Flights], KEEPFILTERS('Master Calendar'[Year] = 2010))
+		formatString: #,0
+		lineageTag: 0ffba9ac-44bd-5485-b579-23ea4bd1766a
+
+		annotation ParityKey = 5960f0d975e3
+		annotation QlikExpression = Sum({$<Year = {2010}>} [# Departures Performed])
+		annotation QlikObjects = CH57#3
+
+	measure '2011 Flights' = CALCULATE([# of Flights], KEEPFILTERS('Master Calendar'[Year] = 2011))
+		formatString: #,0
+		lineageTag: 01723846-17a1-5d1c-8736-dc7370858e95
+
+		annotation ParityKey = 12972176d425
+		annotation QlikExpression = Sum({$<Year = {2011}>} [# Departures Performed])
+		annotation QlikObjects = CH57#4
+
+	measure 'Current Year Flights' = VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) RETURN CALCULATE([# of Flights], KEEPFILTERS('Master Calendar'[Year] = y))
+		formatString: #,0
+		lineageTag: b6c6ab9e-1be9-5080-897c-9dd3d0dc98fa
+
+		annotation ParityKey = 674eb51e60d5
+		annotation QlikExpression = Sum({$<Year = {$(=Max(Year))}>} [# Departures Performed])
+		annotation QlikObjects = CH57#5
+
+	measure 'Previous Year Flights' = VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 1 RETURN CALCULATE([# of Flights], KEEPFILTERS('Master Calendar'[Year] = y))
+		formatString: #,0
+		lineageTag: 34f75347-4a01-5036-b644-950d2ccf3d86
+
+		annotation ParityKey = e483b68667ee
+		annotation QlikExpression = Sum({$<Year = {$(=Max(Year)-1)}>} [# Departures Performed])
+		annotation QlikObjects = CH57#6
+
+	measure 'Latin America 2011 + Domestic 2010 excl. Foreign' = CALCULATE([# of Flights], KEEPFILTERS(FILTER(SUMMARIZE('Main Data', 'Carrier Operating Region'[Carrier's Operating Region], 'Master Calendar'[Year], 'Carrier Groups'[Carrier Group]), ((('Carrier Operating Region'[Carrier's Operating Region] = "Latin America" && 'Master Calendar'[Year] = 2011) || ('Carrier Operating Region'[Carrier's Operating Region] = "Domestic" && 'Master Calendar'[Year] = 2010)) && NOT ('Carrier Groups'[Carrier Group] = "Foreign Carrier")))))
+		formatString: #,0
+		lineageTag: 502316af-8a4d-5314-be27-9e94d0b41295
+
+		annotation ParityKey = c4c3691d5d18
+		annotation QlikExpression = Sum({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> + <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}> - <[Carrier Group] = {'Foreign Carrier'}>} [# Departures Performed])
+		annotation QlikObjects = CH58#1
+
+	measure 'Flights in excluded years' = VAR excluded = EXCEPT(ALL('Master Calendar'[Year]), ALLSELECTED('Master Calendar'[Year])) RETURN CALCULATE([# of Flights], KEEPFILTERS(excluded))
+		formatString: #,0
+		lineageTag: 2400e37c-3557-5ef3-9abc-abe4fb08a9d4
+
+		annotation ParityKey = 86cbdcf06a0d
+		annotation QlikExpression = Sum({1<Year = e(Year)>} [# Departures Performed])
+		annotation QlikObjects = CH59#1
+
+	measure 'YTD Flights Var %' = VAR r = DIVIDE(VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 0 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] <= mo), VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 1 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] <= mo)) RETURN IF(ISBLANK(r), BLANK(), r - 1)
+		formatString: 0.00%
+		lineageTag: e96a85ac-8249-5ea8-8243-ee93be7285c6
+
+		annotation ParityKey = faf40071dfd3
+		annotation QlikExpression = (Sum({$<$(vSetYTD)> } [# Departures Performed]) / Sum({$<$(vSetLYYTD)> } [# Departures Performed])) - 1
+		annotation QlikObjects = CH60#1
+
+	measure 'MTD Flights Var % vs LY' = VAR r = DIVIDE(VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 0 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] = mo), VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 1 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] = mo)) RETURN IF(ISBLANK(r), BLANK(), r - 1)
+		formatString: 0.00%
+		lineageTag: 2066ee30-7602-5ce1-941a-e533ee20f261
+
+		annotation ParityKey = bbaa93b98827
+		annotation QlikExpression = (Sum({$<$(vSetMTD)> } [# Departures Performed]) / Sum({$<$(vSetLYMTD)> } [# Departures Performed])) - 1
+		annotation QlikObjects = CH61#1
+
+	measure 'MTD Flights Var % vs Previous Month' = VAR r = DIVIDE(VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 0 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] = mo), VAR p = CALCULATE(MAX('Master Calendar'[PeriodID]), ALLSELECTED()) - 1 RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[PeriodID] = p)) RETURN IF(ISBLANK(r), BLANK(), r - 1)
+		formatString: 0.00%
+		lineageTag: 49e8e44c-0d25-5f0c-a30f-df18f6fc6b2b
+
+		annotation ParityKey = 0001ae6d8196
+		annotation QlikExpression = (Sum({$<$(vSetMTD)> } [# Departures Performed]) / Sum({$<$(vSetPreviousMonth)> } [# Departures Performed])) - 1
+		annotation QlikObjects = CH62#1
+
+	measure 'YTD Flights' = VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 0 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] <= mo)
+		formatString: #,0
+		lineageTag: 59f750f7-fa79-5d44-a5bd-d4a9326fd22d
+
+		annotation ParityKey = b200807bf073
+		annotation QlikExpression = Sum({$<$(vSetYTD)>} [# Departures Performed])
+		annotation QlikObjects = CH65#1
+
+	measure 'Current Month Flights' = VAR p = CALCULATE(MAX('Master Calendar'[PeriodID]), ALLSELECTED()) - 0 RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[PeriodID] = p)
+		formatString: #,0
+		lineageTag: fa133b8d-72c4-54da-be0e-e0b6f83e59f2
+
+		annotation ParityKey = b45172e8680e
+		annotation QlikExpression = Sum({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])
+		annotation QlikObjects = CH65#2
+
+	measure 'Flights Previous Month' = VAR p = CALCULATE(MAX('Master Calendar'[PeriodID]), ALLSELECTED()) - 1 RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[PeriodID] = p)
+		formatString: #,0
+		lineageTag: bea1e3a4-3fe5-56f6-b5c1-47e5fb606390
+
+		annotation ParityKey = f81b30295d5f
+		annotation QlikExpression = Sum({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])
+		annotation QlikObjects = CH65#3
+
+	measure 'Flights Two Months Ago' = VAR p = CALCULATE(MAX('Master Calendar'[PeriodID]), ALLSELECTED()) - 2 RETURN CALCULATE([# of Flights], REMOVEFILTERS('Master Calendar'), 'Master Calendar'[PeriodID] = p)
+		formatString: #,0
+		lineageTag: 9d25d76e-9430-51a7-a712-dbd0e2a34b6f
+
+		annotation ParityKey = c61bbcf8a5bc
+		annotation QlikExpression = Sum({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])
+		annotation QlikObjects = CH65#4
+
+	measure 'Group A Flights' = CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group A'[Group A Period]), 'Master Calendar'[Period])))
+		formatString: #,0
+		lineageTag: 1fa4fb88-5435-5c49-a954-d0dc85da4253
+
+		annotation ParityKey = 233f869eae9d
+		annotation QlikExpression = Sum({[Group A] * $} [# Departures Performed])
+		annotation QlikObjects = CH66#1, CH67#1
+
+	measure 'Group B Flights' = CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group B'[Group B Period]), 'Master Calendar'[Period])))
+		formatString: #,0
+		lineageTag: b755c152-9a85-5d8d-99e0-0dc5671167ce
+
+		annotation ParityKey = 6ba2cbf5d1e6
+		annotation QlikExpression = Sum({[Group B] * $} [# Departures Performed])
+		annotation QlikObjects = CH66#2, CH67#2
+
+	measure 'Full Time HC Change' = SUM('Main Data'[# M-Delta Full Time Employees])
+		formatString: #,0
+		lineageTag: 70caa4de-7d3b-5958-aeee-b0ac76b40754
+
+		annotation ParityKey = 97885edb520e
+		annotation QlikExpression = Sum([# M-Delta Full Time Employees])
+		annotation QlikObjects = CH68#1
+
+	measure 'Part Time HC Change' = SUM('Main Data'[# M-Delta Part Time Employees])
+		formatString: #,0
+		lineageTag: d7fa269c-e994-54e4-945f-57980501a8ac
+
+		annotation ParityKey = bebebe28ced0
+		annotation QlikExpression = Sum([# M-Delta Part Time Employees])
+		annotation QlikObjects = CH68#2
+
+	measure 'Total HC Change' = SUM('Main Data'[# M-Delta Total Employees])
+		formatString: #,0
+		lineageTag: 0cfc40fc-e085-5a4b-9d78-75d6e660d305
+
+		annotation ParityKey = 53f3fabda737
+		annotation QlikExpression = Sum([# M-Delta Total Employees])
+		annotation QlikObjects = CH68#3, CH69#3
+
+	measure 'Total HC Change MTD' = VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 0 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE(SUM('Main Data'[# M-Delta Total Employees]), REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] = mo)
+		formatString: #,0
+		lineageTag: f55d4911-02e6-5ed6-b474-5c234075d672
+
+		annotation ParityKey = bdf635c244a3
+		annotation QlikExpression = Sum({$<$(vSetMTD)>} [# M-Delta Total Employees])
+		annotation QlikObjects = CH69#1
+
+	measure 'Total HC Change YTD' = VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 0 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE(SUM('Main Data'[# M-Delta Total Employees]), REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] <= mo)
+		formatString: #,0
+		lineageTag: 7abbbd91-a661-5c52-afa1-e5ab37403b94
+
+		annotation ParityKey = 04c961e41f32
+		annotation QlikExpression = Sum({$<$(vSetYTD)>} [# M-Delta Total Employees])
+		annotation QlikObjects = CH69#2
+
+	measure 'FTEs MTD' = VAR y = CALCULATE(MAX('Master Calendar'[Year]), ALLSELECTED()) - 0 VAR mo = CALCULATE(MAX('Master Calendar'[Month__num]), ALLSELECTED()) RETURN CALCULATE(SUM('Main Data'[# Equivalent FTEs]), REMOVEFILTERS('Master Calendar'), 'Master Calendar'[Year] = y, 'Master Calendar'[Month__num] = mo)
+		formatString: #,0
+		lineageTag: 258cd24b-2aeb-515c-a615-415b6118ba3b
+
+		annotation ParityKey = d76da9774b00
+		annotation QlikExpression = Sum({$<$(vSetMTD)>} [# Equivalent FTEs])
+		annotation QlikObjects = CH70#1
+
+	column '%Airline ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8b962d97-499c-5dee-a6a3-d190c336bcf7
+		summarizeBy: none
+		sourceColumn: %Airline ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Carrier Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3f0b4f00-9cca-5c6c-bec3-7af77671599c
+		summarizeBy: none
+		sourceColumn: %Carrier Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Unique Carrier Code'
+		dataType: string
+		isHidden
+		lineageTag: d3d07055-26a4-5571-bf7e-cb426f018d90
+		summarizeBy: none
+		sourceColumn: %Unique Carrier Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Unique Carrier Entity Code'
+		dataType: string
+		isHidden
+		lineageTag: ba6f8b07-df1d-5180-8374-0fbea0e322f8
+		summarizeBy: none
+		sourceColumn: %Unique Carrier Entity Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Region Code'
+		dataType: string
+		isHidden
+		lineageTag: d52fdf7c-a5d2-5636-ab3c-d3044113f042
+		summarizeBy: none
+		sourceColumn: %Region Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Origin Airport ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 94835de5-7b84-5669-93f9-d63f8eda5722
+		summarizeBy: none
+		sourceColumn: %Origin Airport ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Origin Airport Sequence ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 00138c35-4e38-518e-b326-b4686977e399
+		summarizeBy: none
+		sourceColumn: %Origin Airport Sequence ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Origin Airport Market ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ec136423-a465-53ca-b9a5-d01d1686a66a
+		summarizeBy: none
+		sourceColumn: %Origin Airport Market ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Origin World Area Code'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 122c54d2-df3e-5e4a-956c-8c7740f1e94e
+		summarizeBy: none
+		sourceColumn: %Origin World Area Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Destination Airport ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 763aaba1-48f6-57b8-a22c-5012720ad15b
+		summarizeBy: none
+		sourceColumn: %Destination Airport ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Destination Airport Sequence ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7429ae8a-d768-5430-9ec6-1d5a745854aa
+		summarizeBy: none
+		sourceColumn: %Destination Airport Sequence ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Destination Airport Market ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 554547d3-3af0-5bfa-a73c-0fdcde7d59af
+		summarizeBy: none
+		sourceColumn: %Destination Airport Market ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Destination World Area Code'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 924a0168-8c40-5661-8539-d85fd51d91ad
+		summarizeBy: none
+		sourceColumn: %Destination World Area Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Aircraft Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 265928b1-ab12-5f13-983e-da980952db33
+		summarizeBy: none
+		sourceColumn: %Aircraft Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Aircraft Type ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5519b906-3b2b-5da0-8e3a-de49d3b66502
+		summarizeBy: none
+		sourceColumn: %Aircraft Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Aircraft Configuration ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 63d9cabe-d490-5f67-bf35-0bea684fe468
+		summarizeBy: none
+		sourceColumn: %Aircraft Configuration ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Distance Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f28b102d-ae84-5728-9d61-cfa188ba2306
+		summarizeBy: none
+		sourceColumn: %Distance Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Service Class ID'
+		dataType: string
+		isHidden
+		lineageTag: c7cfe0fb-3a21-5a44-967b-01a40e4a501b
+		summarizeBy: none
+		sourceColumn: %Service Class ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Datasource ID'
+		dataType: string
+		isHidden
+		lineageTag: 117c0b94-1073-599a-9b60-d95451572e52
+		summarizeBy: none
+		sourceColumn: %Datasource ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Departures Scheduled'
+		dataType: int64
+		formatString: 0
+		lineageTag: 39c98995-0530-51a3-bf4c-4fad49600e9c
+		summarizeBy: sum
+		sourceColumn: # Departures Scheduled
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Departures Performed'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1aef3fd9-e006-569e-a364-8bb78717de55
+		summarizeBy: sum
+		sourceColumn: # Departures Performed
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Payload'
+		dataType: int64
+		formatString: 0
+		lineageTag: a10b2f8a-1272-5026-8141-13be0e79a48f
+		summarizeBy: sum
+		sourceColumn: # Payload
+
+		annotation SummarizationSetBy = Automatic
+
+	column Distance
+		dataType: int64
+		formatString: 0
+		lineageTag: b2e69e08-dbde-5ac1-8153-2a4d808c8a48
+		summarizeBy: none
+		sourceColumn: Distance
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Available Seats'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7910e907-d16e-52fc-83ca-9944fcbb8b04
+		summarizeBy: sum
+		sourceColumn: # Available Seats
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Transported Passengers'
+		dataType: int64
+		formatString: 0
+		lineageTag: c02c94fa-8156-5149-8f0f-f47e7e9bbd33
+		summarizeBy: sum
+		sourceColumn: # Transported Passengers
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Transported Freight'
+		dataType: int64
+		formatString: 0
+		lineageTag: a9f22e2a-9899-596f-99bf-8e42ba0fba92
+		summarizeBy: sum
+		sourceColumn: # Transported Freight
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Transported Mail'
+		dataType: int64
+		formatString: 0
+		lineageTag: d2cdce75-0f5d-5f5b-a6ef-123596b9b92f
+		summarizeBy: sum
+		sourceColumn: # Transported Mail
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Ramp-To-Ramp Time'
+		dataType: int64
+		formatString: 0
+		lineageTag: c1b037dd-605a-5dd5-9fd7-e29e280cecac
+		summarizeBy: sum
+		sourceColumn: # Ramp-To-Ramp Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Air Time'
+		dataType: int64
+		formatString: 0
+		lineageTag: ff30e045-b9d1-504a-857d-cad73179b9b9
+		summarizeBy: sum
+		sourceColumn: # Air Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unique Carrier'
+		dataType: string
+		lineageTag: 6f75cc1b-02f8-5cef-903b-ac748e30b658
+		summarizeBy: none
+		sourceColumn: Unique Carrier
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier Code'
+		dataType: string
+		lineageTag: 5f9448d0-725a-5622-8f15-f919adebb4ce
+		summarizeBy: none
+		sourceColumn: Carrier Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier Name'
+		dataType: string
+		lineageTag: 6b9b28c2-adc3-568a-8609-ae4f9651b55a
+		summarizeBy: none
+		sourceColumn: Carrier Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin Airport Code'
+		dataType: string
+		lineageTag: c54ca9b9-bf77-5341-b651-a4676eb49a81
+		summarizeBy: none
+		sourceColumn: Origin Airport Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin City'
+		dataType: string
+		lineageTag: 2e81d4bf-0a9a-50f3-8917-dc4ea3a1b8b3
+		summarizeBy: none
+		sourceColumn: Origin City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin State Code'
+		dataType: string
+		lineageTag: 2e275675-23a0-5b11-b369-9cd7a2767f90
+		summarizeBy: none
+		sourceColumn: Origin State Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin State FIPS'
+		dataType: int64
+		formatString: 0
+		lineageTag: b8f5fb56-1747-52ca-b707-74b075656701
+		summarizeBy: none
+		sourceColumn: Origin State FIPS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin State'
+		dataType: string
+		lineageTag: 57d5eba1-e9bb-5c8f-9f7c-5d9b2a608dc5
+		summarizeBy: none
+		sourceColumn: Origin State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin Country Code'
+		dataType: string
+		lineageTag: 7b83d49f-f462-59b8-b747-a8f542abe215
+		summarizeBy: none
+		sourceColumn: Origin Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin Country'
+		dataType: string
+		lineageTag: 8f00776c-226a-5f14-b664-aae085077533
+		summarizeBy: none
+		sourceColumn: Origin Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Airport Code'
+		dataType: string
+		lineageTag: d6ff2dd9-98c1-5f45-ae84-6e0092703183
+		summarizeBy: none
+		sourceColumn: Destination Airport Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination City'
+		dataType: string
+		lineageTag: 4b150c3a-62f9-5ba8-8c1a-23e671eb1dfa
+		summarizeBy: none
+		sourceColumn: Destination City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination State Code'
+		dataType: string
+		lineageTag: 48ce3bae-65b7-53f3-b4fc-7ab857b55b1d
+		summarizeBy: none
+		sourceColumn: Destination State Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination State FIPS'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b86d67d-0112-561f-9a1a-b48300744a65
+		summarizeBy: none
+		sourceColumn: Destination State FIPS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination State'
+		dataType: string
+		lineageTag: 957b7d03-28fb-5334-9da5-a47557a64c50
+		summarizeBy: none
+		sourceColumn: Destination State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Country Code'
+		dataType: string
+		lineageTag: bd1c007b-cba5-5616-a3e8-7e1cecc2c2f6
+		summarizeBy: none
+		sourceColumn: Destination Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Country'
+		dataType: string
+		lineageTag: 7a444246-78fd-5eca-b95d-79259f029fe6
+		summarizeBy: none
+		sourceColumn: Destination Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Period
+		dataType: int64
+		isHidden
+		lineageTag: fb5b9972-3e2d-52af-a177-2b3a807494fa
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To Airport Code'
+		dataType: string
+		lineageTag: dbcb4a73-ab6b-52f2-9368-85df3e15db22
+		summarizeBy: none
+		sourceColumn: From - To Airport Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To Airport ID'
+		dataType: string
+		lineageTag: 189c6674-2845-5cad-aff2-3b900f16f8ab
+		summarizeBy: none
+		sourceColumn: From - To Airport ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To City'
+		dataType: string
+		lineageTag: ba9eb7cf-1053-513a-b995-3dd83238f663
+		summarizeBy: none
+		sourceColumn: From - To City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To State Code'
+		dataType: string
+		lineageTag: 44778182-0b80-551c-ba95-780396d29333
+		summarizeBy: none
+		sourceColumn: From - To State Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'From - To State'
+		dataType: string
+		lineageTag: 1ea49d3e-4d76-5bc3-915e-c6a91599fde5
+		summarizeBy: none
+		sourceColumn: From - To State
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# M-Delta Total Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7e11c5b8-433f-5837-933f-a1aa1aa92bf8
+		summarizeBy: sum
+		sourceColumn: # M-Delta Total Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# M-Delta Full Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: a52699d6-301c-53a7-bf43-14d819770192
+		summarizeBy: sum
+		sourceColumn: # M-Delta Full Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# M-Delta Part Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e0ad249-8230-5769-a17b-20c5fe48b850
+		summarizeBy: sum
+		sourceColumn: # M-Delta Part Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# M-Delta Equivalent FTEs'
+		dataType: int64
+		formatString: 0
+		lineageTag: a9454dc6-ca78-57e0-9e72-2520a4f8b8ab
+		summarizeBy: sum
+		sourceColumn: # M-Delta Equivalent FTEs
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Q-Delta Total Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2930e0e8-fcb9-5d8b-ab2d-29b6b4ecd9ea
+		summarizeBy: sum
+		sourceColumn: # Q-Delta Total Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Q-Delta Full Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: b7c45c84-f3a7-5851-9d55-7a1480543c42
+		summarizeBy: sum
+		sourceColumn: # Q-Delta Full Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Q-Delta Part Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: e1d33fbe-e9d6-51b6-ba39-5755ed4b1a73
+		summarizeBy: sum
+		sourceColumn: # Q-Delta Part Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Q-Delta Equivalent FTEs'
+		dataType: int64
+		formatString: 0
+		lineageTag: 331ba800-848e-5d77-91b1-2893f50f9487
+		summarizeBy: sum
+		sourceColumn: # Q-Delta Equivalent FTEs
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Y-Delta Total Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3fa11cc0-5798-5da8-9f0e-57de20f05e6d
+		summarizeBy: sum
+		sourceColumn: # Y-Delta Total Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Y-Delta Full Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d01adeb-cf2b-570d-8ff2-633c31badcf1
+		summarizeBy: sum
+		sourceColumn: # Y-Delta Full Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Y-Delta Part Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: b4011f26-1da9-5750-abed-6b2dfe206a87
+		summarizeBy: sum
+		sourceColumn: # Y-Delta Part Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Y-Delta Equivalent FTEs'
+		dataType: int64
+		formatString: 0
+		lineageTag: fc217b58-a8bb-5260-a376-057a843f9c55
+		summarizeBy: sum
+		sourceColumn: # Y-Delta Equivalent FTEs
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Total Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: a305c92a-2dfa-5d0d-a292-4413a35814e0
+		summarizeBy: sum
+		sourceColumn: # Total Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Full Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: ee4133eb-4939-5aae-9b16-b382d0ea289b
+		summarizeBy: sum
+		sourceColumn: # Full Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Part Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 84797b5c-df0e-5a1a-a6ef-59c996004d95
+		summarizeBy: sum
+		sourceColumn: # Part Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Equivalent FTEs'
+		dataType: int64
+		formatString: 0
+		lineageTag: a70899b8-3d5e-5f80-99c5-661bc6adc144
+		summarizeBy: sum
+		sourceColumn: # Equivalent FTEs
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Main Data' = m
+		mode: import
+		source =
+				let
+				    Flight = Table.SelectColumns(fnReadParquet("QVD/Source/Flight Data.parquet"), {"%Airline ID", "%Carrier Group ID", "%Unique Carrier Code", "%Unique Carrier Entity Code", "%Region Code", "%Origin Airport ID", "%Origin Airport Sequence ID", "%Origin Airport Market ID", "%Origin World Area Code", "%Destination Airport ID", "%Destination Airport Sequence ID", "%Destination Airport Market ID", "%Destination World Area Code", "%Aircraft Group ID", "%Aircraft Type ID", "%Aircraft Configuration ID", "%Distance Group ID", "%Service Class ID", "%Datasource ID", "# Departures Scheduled", "# Departures Performed", "# Payload", "Distance", "# Available Seats", "# Transported Passengers", "# Transported Freight", "# Transported Mail", "# Ramp-To-Ramp Time", "# Air Time", "Unique Carrier", "Carrier Code", "Carrier Name", "Origin Airport Code", "Origin City", "Origin State Code", "Origin State FIPS", "Origin State", "Origin Country Code", "Origin Country", "Destination Airport Code", "Destination City", "Destination State Code", "Destination State FIPS", "Destination State", "Destination Country Code", "Destination Country", "Period", "From - To Airport Code", "From - To Airport ID", "From - To City", "From - To State Code", "From - To State"}),
+				    Employment = Table.SelectColumns(fnReadParquet("QVD/Transformed/Employment Statistics.parquet"), {"# M-Delta Total Employees", "# M-Delta Full Time Employees", "# M-Delta Part Time Employees", "# M-Delta Equivalent FTEs", "# Q-Delta Total Employees", "# Q-Delta Full Time Employees", "# Q-Delta Part Time Employees", "# Q-Delta Equivalent FTEs", "# Y-Delta Total Employees", "# Y-Delta Full Time Employees", "# Y-Delta Part Time Employees", "# Y-Delta Equivalent FTEs", "%Airline ID", "# Total Employees", "Period", "%Unique Carrier Code", "Unique Carrier", "Carrier Code", "Carrier Name", "%Carrier Group ID", "# Full Time Employees", "# Part Time Employees", "# Equivalent FTEs"}),
+				    Combined = Table.Combine({Flight, Employment}),
+				    Typed = Table.TransformColumnTypes(Combined, {{"%Airline ID", Int64.Type}, {"%Carrier Group ID", Int64.Type}, {"%Unique Carrier Code", type text}, {"%Unique Carrier Entity Code", type text}, {"%Region Code", type text}, {"%Origin Airport ID", Int64.Type}, {"%Origin Airport Sequence ID", Int64.Type}, {"%Origin Airport Market ID", Int64.Type}, {"%Origin World Area Code", Int64.Type}, {"%Destination Airport ID", Int64.Type}, {"%Destination Airport Sequence ID", Int64.Type}, {"%Destination Airport Market ID", Int64.Type}, {"%Destination World Area Code", Int64.Type}, {"%Aircraft Group ID", Int64.Type}, {"%Aircraft Type ID", Int64.Type}, {"%Aircraft Configuration ID", Int64.Type}, {"%Distance Group ID", Int64.Type}, {"%Service Class ID", type text}, {"%Datasource ID", type text}, {"# Departures Scheduled", Int64.Type}, {"# Departures Performed", Int64.Type}, {"# Payload", Int64.Type}, {"Distance", Int64.Type}, {"# Available Seats", Int64.Type}, {"# Transported Passengers", Int64.Type}, {"# Transported Freight", Int64.Type}, {"# Transported Mail", Int64.Type}, {"# Ramp-To-Ramp Time", Int64.Type}, {"# Air Time", Int64.Type}, {"Unique Carrier", type text}, {"Carrier Code", type text}, {"Carrier Name", type text}, {"Origin Airport Code", type text}, {"Origin City", type text}, {"Origin State Code", type text}, {"Origin State FIPS", Int64.Type}, {"Origin State", type text}, {"Origin Country Code", type text}, {"Origin Country", type text}, {"Destination Airport Code", type text}, {"Destination City", type text}, {"Destination State Code", type text}, {"Destination State FIPS", Int64.Type}, {"Destination State", type text}, {"Destination Country Code", type text}, {"Destination Country", type text}, {"Period", Int64.Type}, {"From - To Airport Code", type text}, {"From - To Airport ID", type text}, {"From - To City", type text}, {"From - To State Code", type text}, {"From - To State", type text}, {"# M-Delta Total Employees", Int64.Type}, {"# M-Delta Full Time Employees", Int64.Type}, {"# M-Delta Part Time Employees", Int64.Type}, {"# M-Delta Equivalent FTEs", Int64.Type}, {"# Q-Delta Total Employees", Int64.Type}, {"# Q-Delta Full Time Employees", Int64.Type}, {"# Q-Delta Part Time Employees", Int64.Type}, {"# Q-Delta Equivalent FTEs", Int64.Type}, {"# Y-Delta Total Employees", Int64.Type}, {"# Y-Delta Full Time Employees", Int64.Type}, {"# Y-Delta Part Time Employees", Int64.Type}, {"# Y-Delta Equivalent FTEs", Int64.Type}, {"# Total Employees", Int64.Type}, {"# Full Time Employees", Int64.Type}, {"# Part Time Employees", Int64.Type}, {"# Equivalent FTEs", Int64.Type}})
+				in
+				    Typed

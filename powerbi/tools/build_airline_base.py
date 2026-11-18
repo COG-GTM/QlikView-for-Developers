@@ -5,7 +5,10 @@ members, inline tables, Section Access), so scaffold_pbip.py cannot generate it.
 PBIP layout with hand-written Power Query, relationships, RLS/OLS roles and DAX measures. Every measure carries
 the ParityKey of the Qlik expression(s) it replaces; build() fails if a KPI with source-side parity has none.
 
-    python powerbi/tools/build_airline_base.py [--data-root C:\\path\\to\\powerbi\\data\\parquet\\]
+Chapter 14 (and 13) run the same script without the hidden Section Access tab, so they are built from the same
+definitions without roles, with the metric picker as INLFED; VARIANTS lists the apps built from this base.
+
+    python powerbi/tools/build_airline_base.py [--app <manifest name>] [--data-root C:\\path\\to\\powerbi\\data\\parquet\\]
 """
 from __future__ import annotations
 
@@ -27,6 +30,14 @@ DEFAULT_ROOT = "C:\\QlikView-for-Developers\\powerbi\\data\\parquet\\"
 FLIGHT = "QVD/Source/Flight Data.parquet"
 EMPLOYMENT = "QVD/Transformed/Employment Statistics.parquet"
 MD = "'Main Data'"
+# manifest name -> PBIP folder, whether the hidden script's Section Access applies, the metric picker inline table
+VARIANTS = {
+    APP: {"slug": SLUG, "section_access": True, "metric_table": "INLFED-1"},
+    "Chapter14__Solution_Chapter 14_Airline Operations": {
+        "slug": "Chapter14_Airline_Operations", "section_access": False, "metric_table": "INLFED"},
+}
+SECTION = True
+METRIC_TABLE = "INLFED-1"
 
 FLIGHT_COLS = [
     "%Airline ID", "%Carrier Group ID", "%Unique Carrier Code", "%Unique Carrier Entity Code", "%Region Code",
@@ -150,7 +161,7 @@ MEASURES = {
     "f72a33049af9": ("# of Flights (thousands)", f"DIVIDE({FLIGHTS}, 1000)", DEC),
     "0437729d9522": ("# of Flights (millions)", f"DIVIDE({FLIGHTS}, 1000000)", DEC),
     "b8cda7856288": ("Selected Metric",
-                     "SWITCH(SELECTEDVALUE('INLFED-1'[eMetric]), "
+                     "SWITCH(SELECTEDVALUE(<METRIC>[eMetric]), "
                      f"\"eDeparturesPerformed\", DIVIDE({FLIGHTS}, 1000), "
                      f"\"eEnplanedPassengers\", DIVIDE(SUM({m('# Transported Passengers')}), 1000000), "
                      f"\"eAirTime\", DIVIDE(SUM({m('# Air Time')}), SUM({m('# Ramp-To-Ramp Time')})))", DEC),
@@ -275,6 +286,19 @@ GAPS = [
     "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, "
     "like QlikView's empty expansion.",
 ]
+NO_SECTION_DIMENSION_GAP = (
+    "Dimension rows: Null-key 'Unknown' members the script adds for null fact keys are not loaded (Carrier Groups and "
+    "Carrier Operating Region 8 -> 7, Origin / Destination Markets 1,860 / 1,918 -> 1,859 / 1,917 rows): they associate with nothing in "
+    "QlikView and would wrongly match blank keys in Power BI, where the fact rows with a null key (the 2,688 "
+    "Employment Statistics rows of Main Data, 12 flight rows for Carrier Groups) sit under the blank member instead.")
+
+
+def gaps() -> list[str]:
+    out = list(GAPS)
+    if not SECTION:
+        out = [x.replace("so RLS and selections apply", "so selections apply") for x in out[2:]]
+        out[1] = NO_SECTION_DIMENSION_GAP
+    return [x.replace("'INLFED-1'", tname(METRIC_TABLE)) for x in out]
 
 
 def catalog_types() -> dict[str, dict[str, str]]:
@@ -341,10 +365,11 @@ def table_specs(types: dict) -> dict[str, dict]:
             last = "Combined"
         steps.append(f"Typed = Table.TransformColumnTypes({last}, {m_types(cols)})")
         specs[name] = {"cols": cols, "m": m_let(steps, "Typed")}
-    specs["INLFED"] = {"cols": [("Flight Type", "string"), ("%FLIGHTTYPE", "string")], "m": m_let([
-        "Source = #table(type table [#\"Flight Type\" = text, #\"%FLIGHTTYPE\" = text], {"
-        + ", ".join(f'{{"{v}", "{k}"}}' for k, v in FLIGHT_TYPES.items()) + "})"], "Source")}
-    specs["INLFED-1"] = {"cols": [("Metric Name", "string"), ("eMetric", "string")], "m": m_let([
+    if SECTION:
+        specs["INLFED"] = {"cols": [("Flight Type", "string"), ("%FLIGHTTYPE", "string")], "m": m_let([
+            "Source = #table(type table [#\"Flight Type\" = text, #\"%FLIGHTTYPE\" = text], {"
+            + ", ".join(f'{{"{v}", "{k}"}}' for k, v in FLIGHT_TYPES.items()) + "})"], "Source")}
+    specs[METRIC_TABLE] = {"cols": [("Metric Name", "string"), ("eMetric", "string")], "m": m_let([
         "Source = #table(type table [#\"Metric Name\" = text, eMetric = text], {"
         + ", ".join(f'{{"{a}", "{b}"}}' for a, b in METRICS) + "})"], "Source")}
     for table, col, qlik, values, label, _ in SEGMENTS:
@@ -409,7 +434,8 @@ def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: l
 def relationships() -> list[tuple[str, str, str, str]]:
     rels = [("Main Data", key, name, key) for name, _, key, _, _ in DIMENSIONS]
     rels.append(("Main Data", "Period", "Master Calendar", "Period"))
-    rels.append(("Flight Types", "Flight Type", "INLFED", "Flight Type"))  # Section Access reduction path
+    if SECTION:
+        rels.append(("Flight Types", "Flight Type", "INLFED", "Flight Type"))  # Section Access reduction path
     return rels
 
 
@@ -437,7 +463,11 @@ def role_tmdl(user: str) -> str:
     return "\n".join(lines)
 
 
-def build(data_root: str = DEFAULT_ROOT) -> Path:
+def build(data_root: str = DEFAULT_ROOT, app: str = APP) -> Path:
+    global APP, SLUG, SECTION, METRIC_TABLE
+    APP, variant = app, VARIANTS[app]
+    SLUG, SECTION, METRIC_TABLE = variant["slug"], variant["section_access"], variant["metric_table"]
+    users = list(SECTION_ACCESS) if SECTION else []
     manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
     root = APPS / SLUG
     sm, rp = root / f"{SLUG}.SemanticModel", root / f"{SLUG}.Report"
@@ -450,7 +480,7 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
         pk = k["parity_key"]
         if pk not in MEASURES:
             raise SystemExit(f"{k['kpi']}: no measure for ParityKey {pk}: {k['expression']}")
-        mz = measures.setdefault(pk, {"parity_key": pk, "name": MEASURES[pk][0], "dax": MEASURES[pk][1],
+        mz = measures.setdefault(pk, {"parity_key": pk, "name": MEASURES[pk][0], "dax": MEASURES[pk][1].replace("<METRIC>", tname(METRIC_TABLE)),
                                       "fmt": MEASURES[pk][2], "kpis": [], "qlik": " ".join(k["expression"].split())})
         mz["kpis"].append(k["kpi"])
         for d in k["dims"]:
@@ -468,11 +498,13 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
         rels += [f"relationship {tag(SLUG, 'rel', ft, fc, tt)}", f"\tfromColumn: {tname(ft)}.{tname(fc)}",
                  f"\ttoColumn: {tname(tt)}.{tname(tc)}", ""]
     (sm / "definition" / "relationships.tmdl").write_text("\n".join(rels), encoding="utf-8")
-    for user in SECTION_ACCESS:
+    for user in users:
         (sm / "definition" / "roles" / f"{user}.tmdl").write_text(role_tmdl(user), encoding="utf-8")
     (sm / "definition" / "database.tmdl").write_text("database\n\tcompatibilityLevel: 1567\n\n", encoding="utf-8")
-    refs = "\n".join(f"ref table {tname(t)}" for t in specs) + "\n\n" + \
-        "\n".join(f"ref role {tname(u)}" for u in SECTION_ACCESS)
+    refs = "\n".join(f"ref table {tname(t)}" for t in specs) + \
+        ("\n\n" + "\n".join(f"ref role {tname(u)}" for u in users) if users else "")
+    if not users:
+        (sm / "definition" / "roles").rmdir()
     order = ["DataRoot", "fnReadParquet", "fnFactKeys", *specs]
     (sm / "definition" / "model.tmdl").write_text(
         "model Model\n\tculture: en-US\n\tdefaultPowerBIDataSourceVersion: powerBI_V3\n\tsourceQueryCulture: en-US\n"
@@ -521,9 +553,9 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
                                    for t, col, q, d, _ in CALC_DIMS]
                                   + [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q,
                                       "dax": "segment table + '# of Carriers'"} for t, col, q, _, _, _ in SEGMENTS],
-         "roles": {u: {"flight_types": v, "omit": o} for u, (v, o) in SECTION_ACCESS.items()},
-         "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
-    print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(SECTION_ACCESS)} roles, "
+         "roles": {u: {"flight_types": SECTION_ACCESS[u][0], "omit": SECTION_ACCESS[u][1]} for u in users},
+         "semantic_gaps": gaps()}, indent=1, ensure_ascii=False) + "\n")
+    print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(users)} roles, "
           f"{len(measures)} measures, {len(CALC_DIMS)} calculated columns")
     return root
 
@@ -531,7 +563,10 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data-root", default=DEFAULT_ROOT)
-    build(ap.parse_args(argv).data_root)
+    ap.add_argument("--app", choices=sorted(VARIANTS), action="append", help="default: every app in VARIANTS")
+    args = ap.parse_args(argv)
+    for app in args.app or VARIANTS:
+        build(args.data_root, app)
     return 0
 
 

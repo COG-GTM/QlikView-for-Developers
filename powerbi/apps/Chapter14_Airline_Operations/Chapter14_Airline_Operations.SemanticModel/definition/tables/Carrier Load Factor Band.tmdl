@@ -1,0 +1,33 @@
+table 'Carrier Load Factor Band'
+	lineageTag: f926268d-47bf-517a-905a-d61fa1dabd80
+
+	column 'Carrier Load Factor Band'
+		dataType: string
+		sortByColumn: Low
+		lineageTag: b1f08b27-4c21-50e6-a576-7c6e60072eb5
+		summarizeBy: none
+		sourceColumn: Carrier Load Factor Band
+
+		annotation SummarizationSetBy = Automatic
+		annotation ParityKey = d741ad9eb585
+		annotation QlikDimension = =Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')
+
+	column Low
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0a425932-8a3d-5de2-8326-3f8776e1df00
+		summarizeBy: none
+		sourceColumn: Low
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Carrier Load Factor Band' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromList(List.Numbers(0, 101, 10) & {null}, Splitter.SplitByNothing(), {"Low"}),
+				    Labeled = Table.AddColumn(Source, "Carrier Load Factor Band", each if [Low] = null then null else Text.From([Low]) & "  -  " & Text.From([Low] + 10)),
+				    Typed = Table.TransformColumnTypes(Labeled, {{"Carrier Load Factor Band", type text}, {"Low", Int64.Type}})
+				in
+				    Typed
