@@ -109,3 +109,8 @@ def test_compare_reports_relationship_integrity(expected):
     assert report["relationship_summary"] == {"pass": 1, "warn": 1, "fail": 1}
     assert [r["status"] for r in report["relationships"]] == ["pass", "warn", "fail"]
     assert report["relationships"][1]["unmatched_rows"] == 12
+
+
+def test_compare_flags_missing_relationship_results(expected):
+    report = compare.compare(expected, _as_dax_results(expected), relationship_ids=["REL:a -> b"])
+    assert report["relationship_summary"] == {"missing": 1}

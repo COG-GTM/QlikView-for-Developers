@@ -68,7 +68,7 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 * Values: `rel_tol=1e-9`, `abs_tol=1e-6` by default (`--rel-tol`, `--abs-tol`).
 * Exit code 0 only when every evaluated result passes and no relationship check fails;
   `fail` lists up to 5 example rows.
-* Relationships: `fail` on duplicated one-side keys or a missing result, `warn` on unmatched
+* Relationships: `fail` on duplicated one-side keys, `missing` when a check listed in the queries file has no result, `warn` on unmatched
   many-side keys (those rows sit under the blank member, as Qlik keeps them unassociated).
 
 ## 4. Known semantic gaps to keep in mind

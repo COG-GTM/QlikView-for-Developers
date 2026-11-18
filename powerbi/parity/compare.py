@@ -15,7 +15,7 @@ import math
 import re
 from pathlib import Path
 
-from harness import REPORTS, load_expected, show
+from harness import DAX, REPORTS, load_expected, show
 
 
 def norm_dim(v):
@@ -91,7 +91,7 @@ def compare_rowset(expected: dict, actual: dict | None) -> dict:
             "mismatches": len(diffs), "examples": diffs[:5]}
 
 
-def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6) -> dict:
+def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6, relationship_ids=()) -> dict:
     if results_doc.get("app") != expected_doc["app"]:
         raise ValueError(f"results are for app {results_doc.get('app')!r}, expected {expected_doc['app']!r}")
     actual = {r["id"]: r for r in results_doc.get("results", [])}
@@ -112,6 +112,9 @@ def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6) -> dict:
     for r in out:
         summary[r["status"]] = summary.get(r["status"], 0) + 1
     rels = [check_relationship(r) for r in results_doc.get("results", []) if str(r.get("id", "")).startswith("REL:")]
+    seen = {r["id"] for r in rels}
+    rels += [{"id": i, "status": "missing", "unmatched_keys": 0, "unmatched_rows": 0, "duplicate_keys": 0}
+             for i in relationship_ids if i not in seen]
     rel_summary = {}
     for r in rels:
         rel_summary[r["status"]] = rel_summary.get(r["status"], 0) + 1
@@ -121,7 +124,10 @@ def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6) -> dict:
 
 def compare_files(app: str, results: Path, rel: float, abs_: float) -> int:
     expected = load_expected(app)
-    report = compare(expected, json.loads(results.read_text(encoding="utf-8-sig")), rel, abs_)
+    spec = DAX / f"{app}.queries.json"
+    listed = json.loads(spec.read_text(encoding="utf-8")).get("relationships", []) if spec.exists() else []
+    rel_ids = [r["id"] for r in listed]
+    report = compare(expected, json.loads(results.read_text(encoding="utf-8-sig")), rel, abs_, rel_ids)
     REPORTS.mkdir(exist_ok=True)
     (REPORTS / f"{app}.json").write_text(json.dumps(report, indent=1, ensure_ascii=False) + "\n")
     lines = [f"# Parity: {app}", "", f"DAX results: {report['produced_by']}", "",
@@ -140,4 +146,4 @@ def compare_files(app: str, results: Path, rel: float, abs_: float) -> int:
     md.write_text("\n".join(lines) + "\n")
     print(f"{report['summary']} relationships {report['relationship_summary']} -> {show(md)}")
     ok = set(report["summary"]) <= {"pass", "unsupported", "model_unavailable"}
-    return 0 if ok and "fail" not in report["relationship_summary"] else 1
+    return 0 if ok and set(report["relationship_summary"]) <= {"pass", "warn"} else 1
