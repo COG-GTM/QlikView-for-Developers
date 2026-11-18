@@ -158,7 +158,10 @@ def write_queries(app: str, pbip: Path) -> str:
                 if None in cols:
                     unmapped.append({"id": r["id"], "reason": f"no column for {r['grain']}"})
                     continue
-                query = f"EVALUATE SUMMARIZECOLUMNS({', '.join(dax_col(c['table'], c['name']) for c in cols)})"
+                refs = [dax_col(c["table"], c["name"]) for c in cols]
+                query = f"EVALUATE SUMMARIZECOLUMNS({', '.join(refs)})"
+                if o["type"] == "list box":  # a list box never shows null, e.g. the blank member of unmatched keys
+                    query = f"EVALUATE FILTER(SUMMARIZECOLUMNS({refs[0]}), NOT ISBLANK({refs[0]}))"
             queries.append({"id": r["id"], "object": o["object"], "grain": r["grain"], "query": query})
     DAX.mkdir(exist_ok=True)
     out = DAX / f"{app}.queries.json"
