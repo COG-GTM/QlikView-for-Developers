@@ -39,12 +39,17 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 * `queries` reads the app's TMDL: KPI → measure by `annotation ParityKey`; Qlik field →
   column by `sourceColumn`. Each result id becomes
   `EVALUATE ROW("value", [M])` or `EVALUATE SUMMARIZECOLUMNS('T'[c1], …, "value", [M])`.
-  KPIs without an annotated measure are listed under `unmapped`.
+  KPIs without an annotated measure are listed under `unmapped`. Each relationship in
+  `relationships.tmdl` also gets an integrity query (`REL:<from> -> <to>`, under
+  `relationships`): many-side keys with no one-side match, the rows they cover, and
+  duplicated one-side keys.
 * `run_dax.ps1` (Windows PowerShell 5.1+) runs the queries with ADOMD.NET against the model
   open in Power BI Desktop (port from `msmdsrv.port.txt` under
   `%LOCALAPPDATA%\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces`), or against any
   XMLA endpoint via `-Server`/`-Database` (Premium/Fabric workspace, or Analysis Services).
-  It writes `{"app", "produced_by", "executed_at", "results": [{"id", "columns", "rows"}]}`.
+  It writes `{"app", "produced_by", "role", "executed_at", "results": [{"id", "columns", "rows"}]}`.
+  A top-level `"role"` in the queries file (or `-Role`) connects with `Roles=<role>`, so the
+  queries run under that RLS role (apps whose baseline is Section Access reduced for a user).
 * Procedure on the Windows machine: get the Parquet (convert under WSL or download the CI
   artifact) → open `apps/<Slug>/<Slug>.pbip` → set `DataRoot` → Refresh → run `queries`
   then `run_dax.ps1` → run `compare` → commit `reports/<app>.md` with the app's PR.
@@ -56,7 +61,10 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 * Rows are matched on dimension values (numbers compared numerically, dates by ISO date,
   text exactly). Blank and 0 are equal (Qlik hides zero rows, DAX drops blank rows).
 * Values: `rel_tol=1e-9`, `abs_tol=1e-6` by default (`--rel-tol`, `--abs-tol`).
-* Exit code 0 only when every evaluated result passes; `fail` lists up to 5 example rows.
+* Exit code 0 only when every evaluated result passes and no relationship check fails;
+  `fail` lists up to 5 example rows.
+* Relationships: `fail` on duplicated one-side keys or a missing result, `warn` on unmatched
+  many-side keys (those rows sit under the blank member, as Qlik keeps them unassociated).
 
 ## 4. Known semantic gaps to keep in mind
 
