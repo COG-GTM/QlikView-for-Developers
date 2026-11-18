@@ -44,6 +44,8 @@ jobs:
           python powerbi/parity/harness.py queries --app "Chapter15__Solution_Chapter 15_Airline Operations" --pbip powerbi/apps/Chapter15_Airline_Operations
           python powerbi/tools/build_airline_ch09.py
           python powerbi/parity/harness.py queries --app "Chapter09__Solution_Chapter 9_Airline Operations" --pbip powerbi/apps/Chapter09_Airline_Operations
+          python powerbi/tools/build_ch07_airline.py
+          python powerbi/parity/harness.py queries --app "Chapter07__Solution_Chapter 7_Airline Operations" --pbip powerbi/apps/Chapter07_Airline_Operations
           python powerbi/tools/build_airline_ch08.py
           python powerbi/parity/harness.py queries --app "Chapter08__Solution_Chapter 8_Airline Operations" --pbip powerbi/apps/Chapter08_Airline_Operations
           python powerbi/tools/build_ch09_concatenated_tables.py
