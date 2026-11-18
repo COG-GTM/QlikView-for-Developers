@@ -1,0 +1,33 @@
+table 'Carrier Operating Region'
+	lineageTag: 52612978-2359-5483-ba58-21f295379107
+
+	column '%Region Code'
+		dataType: string
+		isHidden
+		lineageTag: a9299413-9f8d-5881-a9b2-cc8a6fad622a
+		summarizeBy: none
+		sourceColumn: %Region Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier''s Operating Region'
+		dataType: string
+		lineageTag: a3d22c16-6936-54af-8241-314931d3afda
+		summarizeBy: none
+		sourceColumn: Carrier's Operating Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Carrier Operating Region' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(fnReadParquet("Data Files/QVDs/Carrier Operating Region.parquet"), {"%Region Code", "Carrier's Operating Region"}),
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Region Code"))),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Region Code"])),
+				    Missing = List.Difference(FactKeys, Table.Column(Kept, "%Region Code")),
+				    Unknown = Table.FromColumns({Missing, List.Repeat({"Unknown"}, List.Count(Missing))}, {"%Region Code", "Carrier's Operating Region"}),
+				    Combined = Table.Combine({Kept, Unknown}),
+				    Typed = Table.TransformColumnTypes(Combined, {{"%Region Code", type text}, {"Carrier's Operating Region", type text}})
+				in
+				    Typed

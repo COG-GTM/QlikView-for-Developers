@@ -1,0 +1,23 @@
+expression DataRoot = "C:\QlikView-for-Developers\powerbi\data\parquet\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 14e287e0-6e66-5040-a3f4-44f65106c4be
+
+expression fnReadParquet =
+		(relativePath as text) as table =>
+		let
+		    FullPath = DataRoot & Text.Replace(relativePath, "/", "\"),
+		    Source = Parquet.Document(File.Contents(FullPath))
+		in
+		    Source
+	lineageTag: 67cb10d9-ab43-5b72-bddf-898602ec2426
+
+expression fnFactKeys =
+		// Distinct values of a [Main Data] field: QlikView's Exists() / LEFT KEEP after the fact loads
+		(column as text) as list =>
+		let
+		    Flight = fnReadParquet("Data Files/QVDs/Flight Data.parquet"),
+		    Employment = fnReadParquet("Data Files/QVDs/T_F41SCHEDULE_P1A_EMP.parquet"),
+		    FromTable = (t as table) => if Table.HasColumns(t, column) then Table.Column(t, column) else {},
+		    Values = List.Distinct(FromTable(Flight) & FromTable(Employment))
+		in
+		    Values
+	lineageTag: 62d58fc9-5fcf-5f15-9a9b-dc927bb6bec3
