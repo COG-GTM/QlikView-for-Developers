@@ -305,7 +305,7 @@
    "kpis": [
     "CH59#1"
    ],
-   "dax": "VAR excluded = EXCEPT(ALL('Master Calendar'[Year]), ALLSELECTED('Master Calendar'[Year])) RETURN CALCULATE([# of Flights], KEEPFILTERS(excluded))"
+   "dax": "VAR possible = CALCULATETABLE(SUMMARIZE('Main Data', 'Master Calendar'[Year]), ALLSELECTED()) VAR excluded = EXCEPT(ALL('Master Calendar'[Year]), possible) VAR rowYears = IF(ISFILTERED('Excluded Years'[Excluded Year]), TREATAS(VALUES('Excluded Years'[Excluded Year]), 'Master Calendar'[Year]), IF(ISINSCOPE('Master Calendar'[Year]), VALUES('Master Calendar'[Year]), excluded)) VAR picked = INTERSECT(excluded, rowYears) RETURN IF(NOT ISEMPTY(picked), CALCULATE([# of Flights], REMOVEFILTERS(), picked))"
   },
   {
    "name": "YTD Flights Var %",

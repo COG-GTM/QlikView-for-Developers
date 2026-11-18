@@ -119,6 +119,14 @@ def m(col: str) -> str:
 
 
 CAL = "'Master Calendar'"
+# {1<Year = e(Year)>} lists years the selection excludes, so its rows cannot come from the (selection-filtered) calendar:
+# a disconnected copy of the calendar years is the row axis of the charts that use it.
+EXCLUDED_YEARS, EXCLUDED_YEAR = "Excluded Years", "Excluded Year"
+EXCLUDED_YEAR_MEASURES = {"86cbdcf06a0d"}
+# QlikView 'Always One Selected' list boxes: the value selected on open (the first value the script loads)
+ALWAYS_ONE_DEFAULTS = {"Metric Name": METRICS[0][0]}
+SLICER_DEFAULTS: dict[tuple[str, str], str] = {}  # (table, column) -> value; set per app by report_sections
+DISPLAY_NAMES = {(EXCLUDED_YEARS, EXCLUDED_YEAR): "Year"}
 LF = f"DIVIDE(SUM({m('# Transported Passengers')}), SUM({m('# Available Seats')}))"
 FLIGHTS = "[# of Flights]"
 MAX_YEAR = f"CALCULATE(MAX({c(CAL, 'Year')}), ALLSELECTED())"
@@ -217,8 +225,13 @@ MEASURES = {
                      f"|| ({COR} = \"Domestic\" && {c(CAL, 'Year')} = 2010)) "
                      f"&& NOT ({CG} = \"Foreign Carrier\")))))", NUM),
     "86cbdcf06a0d": ("Flights in excluded years",
-                     f"VAR excluded = EXCEPT(ALL({c(CAL, 'Year')}), ALLSELECTED({c(CAL, 'Year')})) "
-                     f"RETURN CALCULATE({FLIGHTS}, KEEPFILTERS(excluded))", NUM),
+                     f"VAR possible = CALCULATETABLE(SUMMARIZE({MD}, {c(CAL, 'Year')}), ALLSELECTED()) "
+                     f"VAR excluded = EXCEPT(ALL({c(CAL, 'Year')}), possible) "
+                     f"VAR rowYears = IF(ISFILTERED({c(EXCLUDED_YEARS, EXCLUDED_YEAR)}), "
+                     f"TREATAS(VALUES({c(EXCLUDED_YEARS, EXCLUDED_YEAR)}), {c(CAL, 'Year')}), "
+                     f"IF(ISINSCOPE({c(CAL, 'Year')}), VALUES({c(CAL, 'Year')}), excluded)) "
+                     f"VAR picked = INTERSECT(excluded, rowYears) "
+                     f"RETURN IF(NOT ISEMPTY(picked), CALCULATE({FLIGHTS}, REMOVEFILTERS(), picked))", NUM),
     "faf40071dfd3": ("YTD Flights Var %", var_pct(pit(FLIGHTS, 0, "ytd"), pit(FLIGHTS, 1, "ytd")), PCT),
     "bbaa93b98827": ("MTD Flights Var % vs LY", var_pct(pit(FLIGHTS, 0, "mtd"), pit(FLIGHTS, 1, "mtd")), PCT),
     "0001ae6d8196": ("MTD Flights Var % vs Previous Month", var_pct(pit(FLIGHTS, 0, "mtd"), pit(FLIGHTS, period_back="1")), PCT),
@@ -467,6 +480,21 @@ def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: l
     (path / f"{fname}.tmdl").write_text("\n".join(lines), encoding="utf-8")
 
 
+def excluded_years_spec(specs: dict) -> dict:
+    typ = dict(specs["Master Calendar"]["cols"])["Year"]
+    return {"cols": [(EXCLUDED_YEAR, typ)], "m": m_let([
+        "Source = Table.Distinct(Table.SelectColumns(#\"Master Calendar\", {\"Year\"}))",
+        f'Renamed = Table.RenameColumns(Source, {{{{"Year", "{EXCLUDED_YEAR}"}}}})',
+        f'Typed = Table.TransformColumnTypes(Renamed, {{{{"{EXCLUDED_YEAR}", Int64.Type}}}})'], "Typed"),
+        "description": "Disconnected calendar years: the rows of e(Year) charts (the years the selection excludes)."}
+
+
+def always_one_selected(doc: bytes) -> set[str]:
+    """Fields whose document properties set 'Always One Selected' (flag byte after the name in the field record)."""
+    return {m.group(2).decode("latin-1") for m in re.finditer(rb"\x00\x00\x00([\x03-\x7f])([ -~]{2,40}?)\x01\x03\x03\t", doc)
+            if m.group(1)[0] == len(m.group(2))}
+
+
 def hidden_column(name: str, col: str, spec: dict) -> bool:
     return (col.startswith("%") and name not in ("INLFED",)) or col.endswith("__num") or \
         (col == "Period" and name == "Main Data") or col in spec.get("sort", {}).values()
@@ -565,6 +593,9 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict],
     types = {ch["id"].split(" ")[0]: ch.get("type") for ch in manifest["charts"]}
     doc = qvw_doc(manifest)
     boxes = list_box_captions(doc)
+    SLICER_DEFAULTS.clear()
+    SLICER_DEFAULTS.update({fields[f]: v for f in always_one_selected(doc) if f in fields
+                            and (v := ALWAYS_ONE_DEFAULTS.get(f)) is not None})
     pages, unmapped = [], {}
     for sheet, object_ids in sheet_objects(manifest, doc).items():
         sheet_name = static_title(next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet))
@@ -590,6 +621,8 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict],
                 if d not in fields:
                     raise SystemExit(f"{oid}: no model field for dimension {d!r}")
                 dims.append(fields[d])
+            if EXCLUDED_YEARS in specs and EXCLUDED_YEAR_MEASURES & {k["parity_key"] for k in ks}:
+                dims = [(EXCLUDED_YEARS, EXCLUDED_YEAR) if f == fields["Year"] else f for f in dims]
             names = list(dict.fromkeys(measures[k["parity_key"]]["name"] for k in ks))
             text = [mz["name"] for mz in measures.values() if mz["name"] in names and mz["fmt"] is None]
             visual, drole, mrole, most = VISUALS.get(types[oid], ("tableEx", "Values", "Values", None))
@@ -698,6 +731,11 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hi
                       **({"syncGroup": {"groupName": select[0]["Name"], "fieldChanges": True, "filterChanges": True}}
                          if visual == "slicer" else {}),
                       **({"display": {"mode": "hidden"}} if vid in hidden_ids else {}),
+                      **({"columnProperties": {f"{t}.{col}": {"displayName": DISPLAY_NAMES[(t, col)]}
+                                               for refs in roles.values() for t, col in refs
+                                               if (t, col) in DISPLAY_NAMES}}
+                         if any(r in DISPLAY_NAMES for refs in roles.values() for r in refs) else {}),
+                      **slicer_objects(visual, roles),
                       # numeric fields (Period, Year) on a chart axis are categories, not a continuous scale
                       **({"objects": {"categoryAxis": [{"properties": {"axisType": {
                           "expr": {"Literal": {"Value": "'Categorical'"}}}}}]}}
@@ -708,6 +746,24 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hi
                           "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]}}}
         out.append({**pos, "config": json.dumps(config), "filters": json.dumps(filters)})
     return out
+
+
+def slicer_objects(visual: str, roles: dict) -> dict:
+    """An 'Always One Selected' list box: a single-select slicer that opens with its default value selected."""
+    if visual != "slicer" or (ref := roles["Values"][0]) not in SLICER_DEFAULTS:
+        return {}
+
+    def lit(v: str) -> dict:
+        return {"expr": {"Literal": {"Value": v}}}
+    table, col = ref
+    value = SLICER_DEFAULTS[ref].replace("'", "''")
+    where = {"Condition": {"In": {"Expressions": [{"Column": {"Expression": {"SourceRef": {"Source": "d"}},
+                                                              "Property": col}}],
+                                  "Values": [[{"Literal": {"Value": f"'{value}'"}}]]}}}
+    return {"objects": {
+        "general": [{"properties": {"filter": {"filter": {
+            "Version": 2, "From": [{"Name": "d", "Entity": table, "Type": 0}], "Where": [where]}}}}],
+        "selection": [{"properties": {"singleSelect": lit("true"), "strictSingleSelect": lit("true")}}]}}
 
 
 def table_objects(visual: str, refs: list[str], width: int) -> dict:
@@ -778,6 +834,8 @@ def build(data_root: str = DEFAULT_ROOT, cfg: AirlineApp = CH15) -> Path:
     if unused := set(MEASURES) - set(measures):
         raise SystemExit(f"measures without a KPI: {sorted(unused)}")
     specs = table_specs(catalog_types())
+    if EXCLUDED_YEAR_MEASURES & set(measures):
+        specs[EXCLUDED_YEARS] = excluded_years_spec(specs)
     for name, spec in specs.items():
         write_table(sm / "definition" / "tables", name, spec,
                     list(measures.values()) if name == "Main Data" else [],

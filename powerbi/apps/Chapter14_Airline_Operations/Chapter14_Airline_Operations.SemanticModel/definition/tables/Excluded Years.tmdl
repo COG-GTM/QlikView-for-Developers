@@ -1,0 +1,22 @@
+/// Disconnected calendar years: the rows of e(Year) charts (the years the selection excludes).
+table 'Excluded Years'
+	lineageTag: 333ef0fc-aab1-53aa-b2b7-75f228858cff
+
+	column 'Excluded Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 71cd490e-8cef-5bb4-b0f6-fe31fa9801f5
+		summarizeBy: none
+		sourceColumn: Excluded Year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Excluded Years' = m
+		mode: import
+		source =
+				let
+				    Source = Table.Distinct(Table.SelectColumns(#"Master Calendar", {"Year"})),
+				    Renamed = Table.RenameColumns(Source, {{"Year", "Excluded Year"}}),
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Excluded Year", Int64.Type}})
+				in
+				    Typed

@@ -256,7 +256,7 @@ table 'Main Data'
 		annotation QlikExpression = Sum({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> + <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}> - <[Carrier Group] = {'Foreign Carrier'}>} [# Departures Performed])
 		annotation QlikObjects = CH58#1
 
-	measure 'Flights in excluded years' = VAR excluded = EXCEPT(ALL('Master Calendar'[Year]), ALLSELECTED('Master Calendar'[Year])) RETURN CALCULATE([# of Flights], KEEPFILTERS(excluded))
+	measure 'Flights in excluded years' = VAR possible = CALCULATETABLE(SUMMARIZE('Main Data', 'Master Calendar'[Year]), ALLSELECTED()) VAR excluded = EXCEPT(ALL('Master Calendar'[Year]), possible) VAR rowYears = IF(ISFILTERED('Excluded Years'[Excluded Year]), TREATAS(VALUES('Excluded Years'[Excluded Year]), 'Master Calendar'[Year]), IF(ISINSCOPE('Master Calendar'[Year]), VALUES('Master Calendar'[Year]), excluded)) VAR picked = INTERSECT(excluded, rowYears) RETURN IF(NOT ISEMPTY(picked), CALCULATE([# of Flights], REMOVEFILTERS(), picked))
 		formatString: #,0
 		lineageTag: 2400e37c-3557-5ef3-9abc-abe4fb08a9d4
 
