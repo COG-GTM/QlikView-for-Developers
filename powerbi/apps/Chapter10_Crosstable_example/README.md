@@ -1,6 +1,6 @@
 # Chapter10 / Crosstable example
 
-Source: `Chapter10/Crosstable example.qvw` (one sheet, `Main`, no charts). Hand-written PBIP; the
+Source: `Chapter10/Crosstable example.qvw` (one sheet, `Main`, with no sheet objects). Hand-written PBIP; the
 load script uses `CROSSTABLE`, which `tools/scaffold_pbip.py` does not translate.
 
 | QlikView | Power BI |
@@ -8,7 +8,7 @@ load script uses `CROSSTABLE`, which `tools/scaffold_pbip.py` does not translate
 | `CrossTable(Month, Sales) LOAD Department, Jan, …, Dec FROM [Crosstable example.xls] (… Sheet1$)` | table `Sheet1$`: `fnReadParquet("Chapter10/Crosstable example/Sheet1.parquet")` → `Table.SelectColumns` → `Table.UnpivotOtherColumns({"Department"}, "Month", "Sales")` |
 | `Month` text values in load order (Jan … Dec) | `Month` sorted by hidden `Month__num` (column position in the LOAD) |
 | `$$SysTable 1-3` | not reproduced (QlikView system tables) |
-| sheet `Main` (empty) | report page `Main` (empty) |
+| sheet `Main` (no objects: the QVW holds only `SH01`) | report page `Main`: slicers on `Department` and `Month`, a matrix `Total Sales` by Department × Month, a table of `Department, Month, Sales` and a column chart `Total Sales` by Month. These show the CROSSTABLE output and the parity checks, since the QVW has no objects to copy |
 
 The QlikView format variables (`DD/MM/YY`, Spanish month/day names) are not used by any field
 or object of this app, so they have no Power BI counterpart.

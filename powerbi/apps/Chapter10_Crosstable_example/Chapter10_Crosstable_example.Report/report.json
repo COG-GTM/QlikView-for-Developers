@@ -12,7 +12,53 @@
       "height": 720,
       "config": "{}",
       "filters": "[]",
-      "visualContainers": []
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 200,
+          "config": "{\"name\": \"26a19203-3195-5381-9983-4c9a3c318a3e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 200}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Sheet1$.Department\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"s\", \"Entity\": \"Sheet1$\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Department\"}, \"Name\": \"Sheet1$.Department\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 240,
+          "z": 1,
+          "width": 200,
+          "height": 460,
+          "config": "{\"name\": \"a11495f6-d6be-599b-94dc-d0b0f017d57e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 240, \"z\": 1, \"width\": 200, \"height\": 460}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Sheet1$.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"s\", \"Entity\": \"Sheet1$\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Month\"}, \"Name\": \"Sheet1$.Month\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 240,
+          "y": 20,
+          "z": 2,
+          "width": 1020,
+          "height": 200,
+          "config": "{\"name\": \"c7dc95c7-c64a-5f45-9616-20ec85ec8b65\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 240, \"y\": 20, \"z\": 2, \"width\": 1020, \"height\": 200}}], \"singleVisual\": {\"visualType\": \"pivotTable\", \"projections\": {\"Rows\": [{\"queryRef\": \"Sheet1$.Department\"}], \"Columns\": [{\"queryRef\": \"Sheet1$.Month\"}], \"Values\": [{\"queryRef\": \"Sheet1$.Total Sales\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"s\", \"Entity\": \"Sheet1$\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Department\"}, \"Name\": \"Sheet1$.Department\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Month\"}, \"Name\": \"Sheet1$.Month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Total Sales\"}, \"Name\": \"Sheet1$.Total Sales\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 240,
+          "y": 240,
+          "z": 3,
+          "width": 500,
+          "height": 460,
+          "config": "{\"name\": \"1266a80d-69c3-5c56-90f5-2b9def0edcf6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 240, \"y\": 240, \"z\": 3, \"width\": 500, \"height\": 460}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Sheet1$.Department\"}, {\"queryRef\": \"Sheet1$.Month\"}, {\"queryRef\": \"Sheet1$.Sales\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"s\", \"Entity\": \"Sheet1$\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Department\"}, \"Name\": \"Sheet1$.Department\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Month\"}, \"Name\": \"Sheet1$.Month\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Sales\"}, \"Name\": \"Sheet1$.Sales\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 760,
+          "y": 240,
+          "z": 4,
+          "width": 500,
+          "height": 460,
+          "config": "{\"name\": \"cf8c686a-5d7b-54e1-a1ed-d5da0c641eac\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 760, \"y\": 240, \"z\": 4, \"width\": 500, \"height\": 460}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Sheet1$.Month\"}], \"Y\": [{\"queryRef\": \"Sheet1$.Total Sales\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"s\", \"Entity\": \"Sheet1$\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Month\"}, \"Name\": \"Sheet1$.Month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"s\"}}, \"Property\": \"Total Sales\"}, \"Name\": \"Sheet1$.Total Sales\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
     }
   ]
 }

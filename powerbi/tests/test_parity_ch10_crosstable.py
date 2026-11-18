@@ -120,3 +120,25 @@ def test_compare_against_melt_shaped_like_dax_output(expected, melted):
     broken = melted.copy()
     broken.loc[0, "Sales"] += 1
     assert compare.compare(expected, results(broken))["summary"]["fail"] >= 1
+
+
+def test_report_page_visuals_bind_to_model_fields():
+    report = json.loads((PBIP / "Chapter10_Crosstable_example.Report/report.json").read_text(encoding="utf-8"))
+    tmdl = TMDL.read_text(encoding="utf-8")
+    columns = set(re.findall(r"^\tcolumn (\S+)", tmdl, re.M))
+    measures = set(re.findall(r"^\tmeasure '([^']+)'", tmdl, re.M))
+    (page,) = report["sections"]
+    assert page["displayName"] == "Main"
+    types = []
+    for container in page["visualContainers"]:
+        visual = json.loads(container["config"])["singleVisual"]
+        types.append(visual["visualType"])
+        selected = {}
+        for item in visual["prototypeQuery"]["Select"]:
+            kind = "Column" if "Column" in item else "Measure"
+            ref = item[kind]
+            assert ref["Property"] in (columns if kind == "Column" else measures), ref["Property"]
+            selected[item["Name"]] = ref["Property"]
+        for refs in visual["projections"].values():
+            assert all(r["queryRef"] in selected for r in refs)
+    assert sorted(types) == ["clusteredColumnChart", "pivotTable", "slicer", "slicer", "tableEx"]
