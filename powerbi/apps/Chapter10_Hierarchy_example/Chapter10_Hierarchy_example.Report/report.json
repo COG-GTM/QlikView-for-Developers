@@ -1,0 +1,46 @@
+{
+  "config": "{\"version\": \"5.59\", \"themeCollection\": {}, \"activeSectionIndex\": 0}",
+  "layoutOptimization": 0,
+  "resourcePackages": [],
+  "sections": [
+    {
+      "name": "ReportSection",
+      "displayName": "Main",
+      "displayOption": 1,
+      "ordinal": 0,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 16,
+          "y": 16,
+          "z": 0,
+          "width": 300,
+          "height": 330,
+          "config": "{\"name\": \"LB01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 16, \"width\": 300, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Sheet1$-ExpandedNodes.Path\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Sheet1$-ExpandedNodes\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Path\"}, \"Name\": \"Sheet1$-ExpandedNodes.Path\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Path'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 16,
+          "y": 362,
+          "z": 0,
+          "width": 300,
+          "height": 342,
+          "config": "{\"name\": \"LB02\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 362, \"width\": 300, \"height\": 342}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Sheet1$-ExpandedNodes.Child1\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child2\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child3\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child4\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Sheet1$-ExpandedNodes\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child1\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child1\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child2\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child2\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child3\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child3\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child4\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child4\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Path (tree)'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 332,
+          "y": 16,
+          "z": 0,
+          "width": 932,
+          "height": 688,
+          "config": "{\"name\": \"TB01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 332, \"y\": 16, \"width\": 932, \"height\": 688}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Sheet1$-ExpandedNodes.Parent_ID\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child_ID\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Parent\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child1\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child2\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child3\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Child4\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.ParentName\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Path\"}, {\"queryRef\": \"Sheet1$-ExpandedNodes.Depth\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Sheet1$-ExpandedNodes\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Parent_ID\"}, \"Name\": \"Sheet1$-ExpandedNodes.Parent_ID\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child_ID\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child_ID\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Parent\"}, \"Name\": \"Sheet1$-ExpandedNodes.Parent\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child1\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child1\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child2\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child2\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child3\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child3\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Child4\"}, \"Name\": \"Sheet1$-ExpandedNodes.Child4\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"ParentName\"}, \"Name\": \"Sheet1$-ExpandedNodes.ParentName\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Path\"}, \"Name\": \"Sheet1$-ExpandedNodes.Path\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Depth\"}, \"Name\": \"Sheet1$-ExpandedNodes.Depth\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Expanded nodes'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ]
+    }
+  ]
+}
