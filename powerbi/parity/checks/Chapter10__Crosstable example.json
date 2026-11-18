@@ -1,0 +1,10 @@
+{
+ "app": "Chapter10__Crosstable example",
+ "why": "The app's only sheet (Main) has no charts, so there are no Qlik expressions to compare. These checks pin the CROSSTABLE output itself: every Department x Month cell, the totals per Department and per Month, and the row count per Department.",
+ "checks": [
+  {"object": "CHK01", "label": "Sales by Department and Month", "expression": "Sum(Sales)", "dims": ["Department", "Month"]},
+  {"object": "CHK02", "label": "Sales by Department", "expression": "Sum(Sales)", "dims": ["Department"]},
+  {"object": "CHK03", "label": "Sales by Month", "expression": "Sum(Sales)", "dims": ["Month"]},
+  {"object": "CHK04", "label": "Rows by Department", "expression": "Count(Sales)", "dims": ["Department"]}
+ ]
+}

@@ -27,6 +27,7 @@ from engine import INVENTORY, REPO, Evaluator, ModelUnavailable, SourceModel  # 
 
 HERE = Path(__file__).resolve().parent
 EXPECTED, DAX, REPORTS = HERE / "expected", HERE / "dax", HERE / "reports"
+CHECKS = HERE / "checks"
 
 
 def show(path) -> str:
@@ -82,10 +83,22 @@ def grains(dims: list[str], groups: dict[str, dict]) -> list[list[str]]:
     return uniq
 
 
-def kpi_list(manifest: dict) -> list[dict]:
+def parity_checks(app: str | None) -> list[dict]:
+    """Data checks for apps whose QlikView sheets have no chart expressions (``checks/<app>.json``).
+
+    Same shape as manifest KPIs, so they flow through source, queries and compare unchanged.
+    """
+    path = CHECKS / f"{app}.json"
+    if not app or not path.exists():
+        return []
+    return [{"object": c["object"], "caption": c.get("caption"), "label": c["label"], "expanded": c["expression"],
+             "dims": c["dims"]} for c in json.loads(path.read_text(encoding="utf-8"))["checks"]]
+
+
+def kpi_list(manifest: dict, app: str | None = None) -> list[dict]:
     groups = {g["name"]: g for g in manifest["data_model"].get("groups", [])}
     counter, out = {}, []
-    for k in manifest["kpis"]:
+    for k in manifest["kpis"] + parity_checks(app):
         obj = k["object"].split(" ")[0]
         counter[obj] = counter.get(obj, 0) + 1
         out.append({"kpi": f"{obj}#{counter[obj]}", "object": k["object"], "caption": k.get("caption"),
@@ -125,11 +138,11 @@ def cmd_source(app: str) -> dict:
         model = SourceModel(app)
     except ModelUnavailable as e:
         result.update(status="model_unavailable", reason=str(e),
-                      kpis=[{**k, "status": "model_unavailable"} for k in kpi_list(manifest)])
+                      kpis=[{**k, "status": "model_unavailable"} for k in kpi_list(manifest, app)])
         return result
     ev = Evaluator(model)
     result.update(status="ok", model_source=model.model_source, model_tables=model.table_check)
-    for k in kpi_list(manifest):
+    for k in kpi_list(manifest, app):
         entry = {**k, "results": []}
         try:
             if any(d.startswith("=") for d in k["dims"]):
