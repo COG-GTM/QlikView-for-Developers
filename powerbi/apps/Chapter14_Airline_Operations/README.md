@@ -2,7 +2,7 @@
 
 Power BI version of `Chapter14/Solution_Chapter 14_Airline Operations.qvw`. Its load script is Chapter 15's without
 the hidden Section Access tab, and its 15 sheets and 92 chart expressions are the same, so it is generated from the
-Chapter 15 base by `powerbi/tools/build_airline_base.py` (`--app "Chapter14__Solution_Chapter 14_Airline Operations"`;
+Chapter 15 base by `powerbi/tools/build_airline_base.py` (`--app Chapter14`;
 do not edit the TMDL by hand; change the builder and rerun it).
 
 | Qlik | Power BI |
@@ -15,7 +15,7 @@ do not edit the TMDL by hand; change the builder and rerun it).
 | Alternate states Group A / Group B | disconnected `Group A` / `Group B` period tables |
 | Calculated dimensions (Aggr/Class buckets, deal status) | calculated columns with `annotation ParityKey` |
 | 92 chart expressions (48 distinct) | 48 measures with `annotation ParityKey` |
-| 15 sheets, 32 list boxes | 15 report pages; list boxes whose caption is a model field -> slicers (`model.json` `report`; sheet objects from `tools/extract_sheet_objects.py`) |
+| 15 sheets (32 list boxes, 50 charts) | 15 report pages: list boxes whose caption is a model field -> slicers synced across pages, a visual per chart (`model.json` `unmapped_list_boxes`) |
 
 Semantic differences are listed in `model.json` (`semantic_gaps`). Parity: source side in
 `powerbi/parity/expected/` (`parity/models/Chapter14__Solution_Chapter 14_Airline Operations.sql`), DAX queries

@@ -12,6 +12,7 @@ import pytest
 import harness
 from dax import read_tmdl
 from engine import SourceModel
+from scaffold_pbip import tag
 
 APP = "Chapter14__Solution_Chapter 14_Airline Operations"
 POWERBI = Path(__file__).resolve().parents[1]
@@ -87,20 +88,27 @@ def test_pbip_covers_every_kpi_without_roles(expected):
     assert "VAR Levels" not in json.dumps(queries) + (SM / "tables" / "Main Data.tmdl").read_text()
 
 
-def test_report_pages_rebuild_list_boxes_as_slicers():
-    inv = json.loads((POWERBI / "inventory" / "sheet_objects" / f"{APP}.json").read_text())
+def test_report_pages_list_boxes_as_synced_slicers_and_a_visual_per_chart():
+    manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
     report = json.loads((PBIP / "Chapter14_Airline_Operations.Report" / "report.json").read_text())
+    assert [p["displayName"] for p in report["sections"]] == [s["name"] for s in manifest["sheets"]]
+    pages = {p["displayName"]: [json.loads(c["config"]) for c in p["visualContainers"]] for p in report["sections"]}
+
+    def slicers(page):
+        return {v["singleVisual"]["projections"]["Values"][0]["queryRef"] for v in pages[page]
+                if v["singleVisual"]["visualType"] == "slicer"}
+    assert {"Master Calendar.Year", "Main Data.Carrier Name", "Flight Types.Flight Type"} <= slicers("Dashboard")
+    assert slicers("Data Consistency") == {"Aircraft Types.Aircraft Name", "Master Calendar.Year"}
+    assert "INLFED.Metric Name" in slicers("Variables")
+    for visuals in pages.values():
+        for v in visuals:
+            if v["singleVisual"]["visualType"] == "slicer":  # QlikView selections are global
+                assert v["singleVisual"]["syncGroup"]["groupName"] == v["singleVisual"]["projections"]["Values"][0]["queryRef"]
+                assert "display" not in v["singleVisual"] and "display" not in v["layouts"][0]
     model = json.loads((PBIP / "model.json").read_text())
-    assert [s["displayName"] for s in report["sections"]][:3] == ["Dashboard", "Analysis", "Reports"]
-    assert len(report["sections"]) == len(inv["sheets"]) == 15
-    slicers = [json.loads(v["config"])["singleVisual"] for s in report["sections"] for v in s["visualContainers"]]
-    assert all(v["visualType"] == "slicer" for v in slicers)
-    groups = {}  # QlikView selections are global: every page carries every synced field, visible or hidden
-    for sec in report["sections"]:
-        for v in sec["visualContainers"]:
-            groups.setdefault(json.loads(v["config"])["singleVisual"]["syncGroup"]["groupName"], set()).add(sec["name"])
-    assert "Master Calendar.Year" in groups and all(len(p) == 15 for p in groups.values())
-    dashboard = model["report"][0]["slicers"]
-    assert dashboard["LB33"] == "Main Data[Carrier Name]" and dashboard["LB32"] == "Master Calendar[Year]"
-    assert model["report"][9]["slicers"]["LB36"] == "INLFED[Metric Name]"
-    assert any("LB10 'Aircraft Type', LB11 'Aircraft Group'" in g for g in model["semantic_gaps"])
+    assert model["unmapped_list_boxes"] == {"MB01": "Flight Information", "MB02": "Aircraft",
+                                            "LB10": "Aircraft Type", "LB11": "Aircraft Group"}
+    charts = {c["id"].split(" ")[0] for c in manifest["charts"]}
+    names = {v["name"] for vs in pages.values() for v in vs}
+    assert {cid for page in manifest["sheets"] for cid in charts
+            if tag(PBIP.name, "visual", page["id"], cid) in names} == charts

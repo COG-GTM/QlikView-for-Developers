@@ -50,6 +50,9 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
 * Chapter 14 (Airline Operations, `apps/Chapter14_Airline_Operations`, built from the Chapter 15
   base without Section Access): its 13 unreduced source-model tables match the inventory, all 92
   KPI expressions evaluate, and 182 DAX queries (no role) are generated.
+* Chapter 11 (Airline Operations, `apps/Chapter11_Airline_Operations`, built by
+  `tools/build_airline_ch11.py` from the Chapter 15 base): its 13 source-model tables match the
+  inventory, all 66 KPI expressions evaluate, and 133 DAX queries are generated (no Section Access).
 * Chapter 09 Concatenated tables (`apps/Chapter09_Concatenated_tables`, derived from the
   Chapter 15 base): its 11 source-model tables match the inventory, all 42 KPI expressions
   evaluate, and 85 DAX queries are generated.
@@ -59,3 +62,9 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   match pyqvd + pandas on the original QVD, and 20 DAX queries plus 11 relationship checks
   are generated. Origin/Destination Airports differ from the inventory only by the
   documented superset exceptions.
+* Chapter 13 (Airline Operations, `apps/Chapter13_Airline_Operations`, built from the Chapter 15
+  base by `tools/build_airline_base.py`): no Section Access, so its 13 source-model tables match
+  the unreduced inventory (Main Data keeps the Employment Statistics rows), all 92 KPI expressions
+  evaluate, 182 DAX queries are generated, and the report has one page per QlikView sheet (14)
+  with a visual per chart and slicers for the list boxes (4 boxes without a model field are listed
+  in `model.json`).
