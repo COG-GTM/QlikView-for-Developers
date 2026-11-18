@@ -83,11 +83,12 @@ GAPS = [
     "Field and table comments from Comments.xls (COMMENT ... USING) are not migrated; config.qvs / tracerowcount.qvs "
     "are not in the repo and only set paths / log row counts.",
     "Calculated dimension: the Flight Type deal status -> calculated column on Flight Types.",
-    "List boxes -> slicers. The .qvw's list-box field bindings and captions are not recoverable from the file, so the "
-    "slicers use the model fields the document's objects reference (a list box's caption is normally its field): Year, "
-    "Quarter, Month, Carrier Group, Flight Type, Carrier Name on every page (LB27-LB33) and 13 dimension fields on the "
-    "Associations page (LB01-LB15). LB34 / LB35 (Data Consistency) are not mapped to a field.",
-    "Multi boxes (MB01, MB02), text objects, search object, buttons, bookmark object, current selections box, "
+    "List boxes -> slicers on the field named by the list box's caption: Year, Quarter, Month, Flight Type, Carrier's "
+    "Operating Region, Carrier Group, Carrier Name (Dashboard, Analysis, Reports); 11 origin / destination / carrier / "
+    "distance fields (Associations); Aircraft Name, Year (Data Consistency). Associations' 'Aircraft Type' (LB10) and "
+    "'Aircraft Group' (LB11) name no field of this model and are not migrated.",
+    "Multi boxes (MB01 'Flight Information', MB02 'Aircraft'; fields not recoverable), text objects, search "
+    "object, buttons, bookmark object, current selections box, "
     "container, statistics box and table box have no Power BI equivalent and are not migrated; gauges become cards "
     "and the radar, mekko, grid, funnel and block charts are not rebuilt (their measures are in the model).",
 ]
@@ -255,18 +256,18 @@ def C(table, name):  # noqa: N802
     return (table, name, False)
 
 
-# QlikView list boxes -> slicers. The .qvw's list-box field bindings are not recoverable; a list box's caption is
-# normally its field, and these are the model fields the document's objects reference besides the field list.
-# The list boxes shared by every sheet (LB27-LB33):
-SLICERS = [C(LT, "Year"), C(LT, "Quarter"), C(LT, "Month"), C("Carrier Groups", "Carrier Group"),
-           C("Flight Types", "Flight Type"), C(LT, "Carrier Name")]
-# The Associations sheet's list boxes (LB01-LB15; LB09 is captioned Distance Interval):
-ASSOCIATIONS = [C("Carrier Groups", "Carrier Group"), C("Airlines", "Airline"), C(LT, "Unique Carrier"),
-                C(LT, "Carrier Code"), C("Carrier Operating Region", "Carrier's Operating Region"),
-                C("Flight Types", "Flight Type"), C("Aircraft Types", "Aircraft Name"),
-                C("Aircraft Types", "Aircraft Manufacturer"), C("Aircraft Types", "Aircraft Manufacturer Country"),
-                C("Aircraft Types", "Aircraft Engine Type"), C("Aircraft Types", "Aircraft Number Of Engines"),
-                C("Aircraft Types", "Aircraft Age Classification"), C("Distance Groups", "Distance Interval")]
+# QlikView list boxes -> slicers, by caption (font, font, caption, object id in the .qvw document block).
+# LB27-LB33 sit on the Dashboard, Analysis and Reports sheets:
+SLICERS = [C(LT, "Year"), C(LT, "Quarter"), C(LT, "Month"), C("Flight Types", "Flight Type"),
+           C("Carrier Operating Region", "Carrier's Operating Region"), C("Carrier Groups", "Carrier Group"),
+           C(LT, "Carrier Name")]
+# Associations sheet LB01-LB15 (LB10 'Aircraft Type' and LB11 'Aircraft Group' name no model field):
+ASSOCIATIONS = [C(MD, "Destination Country"), C(MD, "Destination State"), C(MD, "Destination City"),
+                C(MD, "Origin Country"), C(MD, "Origin State"), C(MD, "Origin City"), C(LT, "Carrier Name"),
+                C("Distance Groups", "Distance Interval"), C("Flight Types", "Flight Type"),
+                C("Carrier Operating Region", "Carrier's Operating Region"), C("Carrier Groups", "Carrier Group")]
+# Data Consistency sheet LB34 / LB35:
+CONSISTENCY = [C("Aircraft Types", "Aircraft Name"), C(LT, "Year")]
 PAGES = [
     ("Dashboard", [
         ("columnChart", (240, 20, 500, 220), {"Category": [C(LT, "Year"), C(LT, "Month")], "Y": [M("# of Flights")]},
@@ -317,11 +318,11 @@ def report() -> dict:
     sections = []
     for n, (page, visuals) in enumerate(PAGES):
         if page == "Associations":
-            vcs = [visual(page, i, "slicer", (20 + (i % 5) * 250, 20 + (i // 5) * 235, 240, 225), {"Values": [f]})
+            vcs = [visual(page, i, "slicer", (20 + (i % 4) * 315, 20 + (i // 4) * 235, 305, 225), {"Values": [f]})
                    for i, f in enumerate(ASSOCIATIONS)]
         else:
-            vcs = [visual(page, i, "slicer", (20, 20 + i * 115, 200, 110), {"Values": [f]})
-                   for i, f in enumerate(SLICERS)]
+            fields = CONSISTENCY if page == "Data Consistency" else SLICERS
+            vcs = [visual(page, i, "slicer", (20, 20 + i * 98, 200, 92), {"Values": [f]}) for i, f in enumerate(fields)]
         vcs += [visual(page, len(vcs) + i, vt, pos, roles, title) for i, (vt, pos, roles, title) in enumerate(visuals)]
         sections.append({"name": f"ReportSection{n}", "displayName": page, "displayOption": 1, "ordinal": n,
                          "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": vcs})
