@@ -209,26 +209,28 @@ MEASURES = {
 _STATES = f"CALCULATE(DISTINCTCOUNTNOBLANK({m('From - To State Code')}))"
 # Qlik Aggr() calculated dimensions over [Carrier Name] -> disconnected segment tables; '# of Carriers' counts the carriers
 # whose per-carrier value falls in the segment in scope, at query time, so RLS and selections apply as in QlikView.
-# (table, label column, Qlik dimension text, segment values (M list), label (M, from [Low]), carrier test (DAX, uses lo))
+# (table, label column, Qlik dimension text, segment values (M list), label (M, from [Low]), carrier's value (DAX);
+# a null segment holds the carriers whose value is blank, like QlikView's null dimension row)
 SEGMENTS = [
     ("Carrier State Count", "Carrier State Count", "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])",
-     "List.Numbers(0, 5001)", None, f"{_STATES} = lo"),
+     "List.Numbers(0, 5001)", None, f"{_STATES} + 0"),
     ("Carrier State Count Band", "Carrier State Count Band",
      "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')",
-     "List.Numbers(0, 51, 100)", 'Text.From([Low]) & "  -  " & Text.From([Low] + 100)', f"FLOOR({_STATES}, 100) = lo"),
+     "List.Numbers(0, 51, 100)", 'Text.From([Low]) & "  -  " & Text.From([Low] + 100)', f"FLOOR({_STATES} + 0, 100)"),
     ("Carrier Load Factor Band", "Carrier Load Factor Band",
      "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')",
-     "List.Numbers(0, 101, 10)", 'Text.From([Low]) & "  -  " & Text.From([Low] + 10)',
-     f"VAR lf = CALCULATE({LF}) RETURN NOT ISBLANK(lf) && FLOOR(lf * 100, 10) = lo"),
+     "List.Numbers(0, 101, 10) & {null}", 'if [Low] = null then null else Text.From([Low]) & "  -  " & Text.From([Low] + 10)',
+     f"VAR lf = CALCULATE({LF}) RETURN IF(ISBLANK(lf), BLANK(), FLOOR(lf * 100, 10))"),
 ]
 
 
 def carriers_dax() -> str:
     out = "SWITCH(TRUE()"
-    for table, col, _, _, label, test in SEGMENTS:
+    for table, col, _, _, label, value in SEGMENTS:
         low = c(table, "Low" if label else col)
-        out += (f", ISINSCOPE({c(table, col)}), VAR lo = SELECTEDVALUE({low}) RETURN "
-                f"COUNTROWS(FILTER(VALUES({CN}), NOT ISBLANK({CN}) && {test}))")
+        # ISFILTERED, not ISINSCOPE: a slicer on the segment table selects carriers too; IN compares BLANK strictly
+        out += (f", ISFILTERED({c(table, col)}) || ISFILTERED({low}), "
+                f"COUNTROWS(FILTER(VALUES({CN}), NOT ISBLANK({CN}) && ({value}) IN VALUES({low})))")
     return out + f", DISTINCTCOUNTNOBLANK({CN}))"
 
 

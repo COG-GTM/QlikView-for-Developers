@@ -26,8 +26,8 @@ table 'Carrier Load Factor Band'
 		mode: import
 		source =
 				let
-				    Source = Table.FromList(List.Numbers(0, 101, 10), Splitter.SplitByNothing(), {"Low"}),
-				    Labeled = Table.AddColumn(Source, "Carrier Load Factor Band", each Text.From([Low]) & "  -  " & Text.From([Low] + 10)),
+				    Source = Table.FromList(List.Numbers(0, 101, 10) & {null}, Splitter.SplitByNothing(), {"Low"}),
+				    Labeled = Table.AddColumn(Source, "Carrier Load Factor Band", each if [Low] = null then null else Text.From([Low]) & "  -  " & Text.From([Low] + 10)),
 				    Typed = Table.TransformColumnTypes(Labeled, {{"Carrier Load Factor Band", type text}, {"Low", Int64.Type}})
 				in
 				    Typed
