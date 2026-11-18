@@ -16,7 +16,7 @@ Chapter 12's sources and scope (do not edit the TMDL by hand; change the builder
 | Calculated dimensions (Aggr/Class buckets, deal status) | segment tables / calculated column with `annotation ParityKey` |
 | 85 chart expressions (42 distinct) | 42 measures with `annotation ParityKey` |
 
-One report page per sheet; list boxes whose caption is a model field are slicers (`model.json` `slicers`). The Comparative Analysis
+One report page per sheet with its charts and its list boxes as slicers (base `report_sections`). The Comparative Analysis
 Group A / Group B list boxes are slicers on the disconnected `Group A Route` / `Group B Route` tables, applied by `Group A/B Flights`.
 No Section Access in this chapter, so no roles. Semantic differences are listed in `model.json` (`semantic_gaps`).
 Parity: source side in `powerbi/parity/expected/`, DAX queries in `powerbi/parity/dax/`.

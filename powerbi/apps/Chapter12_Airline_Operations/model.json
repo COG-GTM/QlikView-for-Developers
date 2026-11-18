@@ -412,6 +412,12 @@
    "dax": "segment table + '# of Carriers'"
   }
  ],
+ "unmapped_list_boxes": {
+  "MB02": "Aircraft",
+  "MB01": "Flight Information",
+  "LB10": "Aircraft Type",
+  "LB11": "Aircraft Group"
+ },
  "semantic_gaps": [
   "Aircraft Types: ApplyMap('Map_Manufacturer_Country', MANUFACTURER, 'Unknown') -> left merge with Aircraft_Manufacturers + 'Unknown' default; LEFT JOIN Aircraft_Group -> left merge on AC_GROUP; the 2010 update's SubField(AC_GROUPNAME, ', ', n) -> Text.Split. Qlik trims unquoted text-file fields and keeps empty ones as '', so group texts are trimmed and an empty MANUFACTURER is ''. STORE ... Aircraft Types Transformed.qvd is dropped.",
   "Origin / Destination Airports: OLEDB (Jet) SQL SELECT from Dimension Tables.mdb with LEFT KEEP ([Main Data]) -> Parquet exported from the .mdb, filtered to the airport keys Main Data uses (LEFT KEEP keeps no other rows).",
@@ -422,544 +428,101 @@
   "Alternate states Group A / Group B -> disconnected 'Group A' / 'Group B' period tables used as slicers; the measures intersect the main selection with the group's periods ({[Group A] * $}).",
   "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the carriers whose value falls in the segment at query time, so selections apply as in QlikView. The row-level Flight Type deal status -> calculated column on Flight Types.",
   "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
-  "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED'[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion.",
-  "List boxes -> one report page per sheet with a slicer per list box whose caption is a model field. The Comparative Analysis From / To list boxes (LB37-LB45, alternate states Group A / Group B) are slicers on the disconnected 'Group A Route' / 'Group B Route' tables, which 'Group A/B Flights' apply with TREATAS like the Group A / B periods ({[Group A] * $}); with a route slicer set, a route field left unselected still drops flights without an airport / flight type match. Not rebuilt: Associations' 'Aircraft Type' / 'Aircraft Group' (LB10 / LB11): this script loads neither field (Aircraft Name is SSD_NAME, which matches the old Aircraft Type text for 50 of 180 types, and the group text is split into Aircraft Engine Type / Number Of Engines). Charts and other sheet objects are not laid out on the pages.",
+  "$($(=eMetric)) -> SWITCH over SELECTEDVALUE(INLFED[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion.",
+  "List boxes -> slicers on the field named by the box caption, on the page of the box's sheet (one per field and page). Boxes whose caption is no model field are not rebuilt (see unmapped_list_boxes): MB02 'Aircraft'; MB01 'Flight Information'; LB10 'Aircraft Type'; LB11 'Aircraft Group'. Their captions name no model field (multi boxes list several fields under one caption). Objects inside containers (on no sheet's object list) are placed on the first sheet with a container.",
+  "Comparative Analysis list boxes LB37-LB45 sit in the 'Origin and Destination - Group A / B' containers in the alternate states: slicers on the disconnected 'Group A Route' / 'Group B Route' tables (route_slicers), which 'Group A/B Flights' apply with TREATAS like the Group A / B periods ({[Group A] * $}); with a route slicer set, a route field left unselected still drops flights without an airport / flight type match. LB10 'Aircraft Type' / LB11 'Aircraft Group': this script loads neither field (Aircraft Name is SSD_NAME, which matches the old Aircraft Type text for 50 of 180 types; the group text is split into Aircraft Engine Type / Number Of Engines).",
   "FTE % to Total (CH43): $(vTotalFTEs) is '= Sum([# Equivalent FTEs])', evaluated once over the selection, so the denominator is the selection-wide total -> CALCULATE(..., ALLSELECTED()); the inventory expansion had dropped the '=' (each carrier divided by itself) and is corrected to Sum(TOTAL ...) in the manifest."
  ],
- "slicers": [
+ "route_slicers": [
   {
-   "sheet": "Dashboard",
-   "object": "LB28",
-   "caption": "Carrier's Operating Region",
-   "table": "Carrier Operating Region"
-  },
-  {
-   "sheet": "Dashboard",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Dashboard",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Dashboard",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Dashboard",
-   "object": "LB27",
-   "caption": "Flight Type",
-   "table": "Flight Types"
-  },
-  {
-   "sheet": "Dashboard",
-   "object": "LB33",
-   "caption": "Carrier Name",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Dashboard",
-   "object": "LB29",
-   "caption": "Carrier Group",
-   "table": "Carrier Groups"
-  },
-  {
-   "sheet": "Analysis",
-   "object": "LB29",
-   "caption": "Carrier Group",
-   "table": "Carrier Groups"
-  },
-  {
-   "sheet": "Analysis",
-   "object": "LB27",
-   "caption": "Flight Type",
-   "table": "Flight Types"
-  },
-  {
-   "sheet": "Analysis",
-   "object": "LB33",
-   "caption": "Carrier Name",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Analysis",
-   "object": "LB28",
-   "caption": "Carrier's Operating Region",
-   "table": "Carrier Operating Region"
-  },
-  {
-   "sheet": "Analysis",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Analysis",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Analysis",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Reports",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Reports",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Reports",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Reports",
-   "object": "LB29",
-   "caption": "Carrier Group",
-   "table": "Carrier Groups"
-  },
-  {
-   "sheet": "Reports",
-   "object": "LB27",
-   "caption": "Flight Type",
-   "table": "Flight Types"
-  },
-  {
-   "sheet": "Reports",
-   "object": "LB33",
-   "caption": "Carrier Name",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Reports",
-   "object": "LB28",
-   "caption": "Carrier's Operating Region",
-   "table": "Carrier Operating Region"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB04",
-   "caption": "Origin Country",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB01",
-   "caption": "Destination Country",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB13",
-   "caption": "Carrier's Operating Region",
-   "table": "Carrier Operating Region"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB07",
-   "caption": "Carrier Name",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB02",
-   "caption": "Destination State",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB06",
-   "caption": "Origin City",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB05",
-   "caption": "Origin State",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB03",
-   "caption": "Destination City",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB15",
-   "caption": "Carrier Group",
-   "table": "Carrier Groups"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB12",
-   "caption": "Flight Type",
-   "table": "Flight Types"
-  },
-  {
-   "sheet": "Associations",
-   "object": "LB09",
-   "caption": "Distance Interval",
-   "table": "Distance Groups"
-  },
-  {
-   "sheet": "Other Charts",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Other Charts",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Other Charts",
-   "object": "LB28",
-   "caption": "Carrier's Operating Region",
-   "table": "Carrier Operating Region"
-  },
-  {
-   "sheet": "Other Charts",
-   "object": "LB33",
-   "caption": "Carrier Name",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Other Charts",
-   "object": "LB27",
-   "caption": "Flight Type",
-   "table": "Flight Types"
-  },
-  {
-   "sheet": "Other Charts",
-   "object": "LB29",
-   "caption": "Carrier Group",
-   "table": "Carrier Groups"
-  },
-  {
-   "sheet": "Other Charts",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Other representations",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Other representations",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Other representations",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Other representations",
-   "object": "LB29",
-   "caption": "Carrier Group",
-   "table": "Carrier Groups"
-  },
-  {
-   "sheet": "Other representations",
-   "object": "LB27",
-   "caption": "Flight Type",
-   "table": "Flight Types"
-  },
-  {
-   "sheet": "Other representations",
-   "object": "LB33",
-   "caption": "Carrier Name",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Other representations",
-   "object": "LB28",
-   "caption": "Carrier's Operating Region",
-   "table": "Carrier Operating Region"
-  },
-  {
-   "sheet": "Data Consistency",
-   "object": "LB34",
-   "caption": "Aircraft Name",
-   "table": "Aircraft Types"
-  },
-  {
-   "sheet": "Data Consistency",
-   "object": "LB35",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Variables",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Variables",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Variables",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Variables",
-   "object": "LB36",
-   "caption": "Metric Name",
-   "table": "INLFED"
-  },
-  {
-   "sheet": "Advanced Expressions",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Advanced Expressions",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Advanced Expressions",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Set Analysis",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Set Analysis",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Set Analysis",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Point In Time Reporting",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Point In Time Reporting",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Point In Time Reporting",
-   "object": "LB33",
-   "caption": "Carrier Name",
-   "table": "Main Data"
-  },
-  {
-   "sheet": "Point In Time Reporting",
-   "object": "LB28",
-   "caption": "Carrier's Operating Region",
-   "table": "Carrier Operating Region"
-  },
-  {
-   "sheet": "Point In Time Reporting",
-   "object": "LB27",
-   "caption": "Flight Type",
-   "table": "Flight Types"
-  },
-  {
-   "sheet": "Point In Time Reporting",
-   "object": "LB29",
-   "caption": "Carrier Group",
-   "table": "Carrier Groups"
-  },
-  {
-   "sheet": "Point In Time Reporting",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB30",
-   "caption": "Month",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB32",
-   "caption": "Year",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB31",
-   "caption": "Quarter",
-   "table": "Master Calendar"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB37",
-   "caption": "Destination Airport",
-   "table": "Group A Route",
-   "state": "Group A"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB37",
-   "caption": "Destination Airport",
-   "table": "Group B Route",
-   "state": "Group B"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB42",
-   "caption": "Destination City",
-   "table": "Group A Route",
-   "state": "Group A"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB42",
-   "caption": "Destination City",
-   "table": "Group B Route",
-   "state": "Group B"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB41",
-   "caption": "Destination State Code",
-   "table": "Group A Route",
-   "state": "Group A"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB41",
-   "caption": "Destination State Code",
-   "table": "Group B Route",
-   "state": "Group B"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB40",
-   "caption": "Destination Country",
-   "table": "Group A Route",
-   "state": "Group A"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB40",
-   "caption": "Destination Country",
-   "table": "Group B Route",
-   "state": "Group B"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB38",
-   "caption": "Origin Airport",
-   "table": "Group A Route",
-   "state": "Group A"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB38",
-   "caption": "Origin Airport",
-   "table": "Group B Route",
-   "state": "Group B"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB45",
-   "caption": "Origin City",
-   "table": "Group A Route",
-   "state": "Group A"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB45",
-   "caption": "Origin City",
-   "table": "Group B Route",
-   "state": "Group B"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB44",
-   "caption": "Origin State Code",
-   "table": "Group A Route",
-   "state": "Group A"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB44",
-   "caption": "Origin State Code",
-   "table": "Group B Route",
-   "state": "Group B"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB43",
-   "caption": "Origin Country",
-   "table": "Group A Route",
-   "state": "Group A"
-  },
-  {
-   "sheet": "Comparative Analysis",
-   "object": "LB43",
-   "caption": "Origin Country",
-   "table": "Group B Route",
-   "state": "Group B"
-  },
-  {
-   "sheet": "Comparative Analysis",
    "object": "LB39",
-   "caption": "Flight Type",
    "table": "Group A Route",
-   "state": "Group A"
+   "column": "Group A Flight Type"
   },
   {
-   "sheet": "Comparative Analysis",
+   "object": "LB43",
+   "table": "Group A Route",
+   "column": "Group A Origin Country"
+  },
+  {
+   "object": "LB44",
+   "table": "Group A Route",
+   "column": "Group A Origin State Code"
+  },
+  {
+   "object": "LB45",
+   "table": "Group A Route",
+   "column": "Group A Origin City"
+  },
+  {
+   "object": "LB38",
+   "table": "Group A Route",
+   "column": "Group A Origin Airport"
+  },
+  {
+   "object": "LB40",
+   "table": "Group A Route",
+   "column": "Group A Destination Country"
+  },
+  {
+   "object": "LB41",
+   "table": "Group A Route",
+   "column": "Group A Destination State Code"
+  },
+  {
+   "object": "LB42",
+   "table": "Group A Route",
+   "column": "Group A Destination City"
+  },
+  {
+   "object": "LB37",
+   "table": "Group A Route",
+   "column": "Group A Destination Airport"
+  },
+  {
    "object": "LB39",
-   "caption": "Flight Type",
    "table": "Group B Route",
-   "state": "Group B"
+   "column": "Group B Flight Type"
+  },
+  {
+   "object": "LB43",
+   "table": "Group B Route",
+   "column": "Group B Origin Country"
+  },
+  {
+   "object": "LB44",
+   "table": "Group B Route",
+   "column": "Group B Origin State Code"
+  },
+  {
+   "object": "LB45",
+   "table": "Group B Route",
+   "column": "Group B Origin City"
+  },
+  {
+   "object": "LB38",
+   "table": "Group B Route",
+   "column": "Group B Origin Airport"
+  },
+  {
+   "object": "LB40",
+   "table": "Group B Route",
+   "column": "Group B Destination Country"
+  },
+  {
+   "object": "LB41",
+   "table": "Group B Route",
+   "column": "Group B Destination State Code"
+  },
+  {
+   "object": "LB42",
+   "table": "Group B Route",
+   "column": "Group B Destination City"
+  },
+  {
+   "object": "LB37",
+   "table": "Group B Route",
+   "column": "Group B Destination Airport"
   }
  ]
 }

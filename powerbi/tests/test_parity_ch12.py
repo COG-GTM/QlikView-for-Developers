@@ -108,21 +108,24 @@ def test_pbip_covers_every_kpi_without_section_access(expected):
     assert "Levels" not in re.findall(r"VAR (\w+)", dax) and "INLFED-1" not in dax
 
 
-def test_report_pages_rebuild_list_boxes_as_slicers():
+def test_report_pages_carry_the_sheet_charts_and_list_box_slicers(expected):
     report = json.loads((PBIP / "Chapter12_Airline_Operations.Report" / "report.json").read_text())
-    pages = {s["displayName"]: [json.loads(v["config"]) for v in s["visualContainers"]] for s in report["sections"]}
-    assert len(pages) == 13 and len(pages["Dashboard"]) == 7
-    model = read_tmdl(PBIP)
-    fields = {(c["table"], c["name"]) for c in model["columns"]}
+    pages = {s["displayName"]: [json.loads(v["config"])["singleVisual"] for v in s["visualContainers"]]
+             for s in report["sections"]}
+    assert len(pages) == 13
+    fields = {(c["table"], c["name"]) for c in read_tmdl(PBIP)["columns"]}
     for visuals in pages.values():
+        assert any(v["visualType"] != "slicer" for v in visuals)
         for v in visuals:
-            assert v["singleVisual"]["visualType"] == "slicer"
-            (sel,) = v["singleVisual"]["prototypeQuery"]["Select"]
-            entity = v["singleVisual"]["prototypeQuery"]["From"][0]["Entity"]
-            assert (entity, sel["Column"]["Property"]) in fields
-            title = v["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"]
-            prop = sel["Column"]["Property"]
-            assert title == "'" + prop.replace("'", "''") + "'" or title == f"'{prop[8:]} ({prop[:7]})'"
+            if v["visualType"] == "slicer":
+                (sel,) = v["prototypeQuery"]["Select"]
+                assert (v["prototypeQuery"]["From"][0]["Entity"], sel["Column"]["Property"]) in fields
+    charts = {k["object"] for k in expected["kpis"]}
+    placed = sum(v["visualType"] not in ("slicer",) for visuals in pages.values() for v in visuals)
+    assert placed >= len(charts) == 47
+    analysis = {v["prototypeQuery"]["Select"][0]["Column"]["Property"] for v in pages["Analysis"]
+                if v["visualType"] == "slicer"}
+    assert not analysis & {"Origin Country", "Destination Airport"}
 
 
 def test_comparative_analysis_route_slicers_feed_the_group_measures():
