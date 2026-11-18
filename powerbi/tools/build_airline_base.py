@@ -544,9 +544,9 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> t
     types = {ch["id"].split(" ")[0]: ch.get("type") for ch in manifest["charts"]}
     doc = qvw_doc(manifest)
     boxes = list_box_captions(doc)
-    sections, unmapped = [], {}
-    for ordinal, (sheet, object_ids) in enumerate(sheet_objects(manifest, doc).items()):
-        sheet_name = next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet)
+    pages, unmapped = [], {}
+    for sheet, object_ids in sheet_objects(manifest, doc).items():
+        sheet_name = static_title(next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet))
         visuals, slicers = [], []
         for oid in object_ids:
             if oid in boxes:
@@ -590,11 +590,28 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> t
             visuals.append((f"{sheet}-table", sheet_name, "tableEx",
                             {"Values": [fields["Carrier Group"], fields["Carrier Name"], ("Main Data", "# of Flights")]},
                             {"# of Flights"}))
+        pages.append((sheet, sheet_name, slicers, visuals))
+    # QlikView selections are global: every page gets a hidden synced copy of each list-box slicer it lacks, so a
+    # selection made on any page filters all pages (Group A / B period slicers are per state, not copied).
+    shared = list({s_[3]["Values"][0]: s_ for _, _, slicers, _ in pages for s_ in slicers
+                   if s_[0] in boxes}.values())
+    sections = []
+    for ordinal, (sheet, sheet_name, slicers, visuals) in enumerate(pages):
+        present = {s_[3]["Values"][0] for s_ in slicers}
+        hidden = [(f"{s_[0]}_sync", *s_[1:]) for s_ in shared if s_[3]["Values"][0] not in present]
         sections.append({"name": "ReportSection" + tag(SLUG, "page", sheet).replace("-", "")[:20],
                          "displayName": sheet_name, "displayOption": 1, "ordinal": ordinal, "width": 1280,
                          "height": 720, "config": json.dumps({"QlikSheet": sheet}), "filters": "[]",
-                         "visualContainers": visual_containers(sheet, slicers, visuals)})
+                         "visualContainers": visual_containers(sheet, slicers, visuals, hidden)})
     return sections, unmapped
+
+
+def static_title(name: str) -> str:
+    """A calculated sheet title (="'Details for ' & [Carrier Name]") as static text: 'Details for Carrier Name'."""
+    if not name.startswith("="):
+        return name
+    text = re.sub(r"'([^']*)'|\[([^\]]*)\]", lambda m: m.group(1) if m.group(1) is not None else m.group(2), name[1:])
+    return " ".join(text.replace("&", " ").split())
 
 
 def grid(items: list, x0: int, width: int, cols: int) -> list[tuple]:
@@ -603,11 +620,14 @@ def grid(items: list, x0: int, width: int, cols: int) -> list[tuple]:
     return [(item, x0 + 10 + (i % cols) * (w + 10), 10 + (i // cols) * (h + 10), w, h) for i, item in enumerate(items)]
 
 
-def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple]) -> list[dict]:
-    """Slicers in a left panel (up to 6 per column), the charts in a grid filling the rest of the page."""
+def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hidden: list[tuple] = ()) -> list[dict]:
+    """Slicers in a left panel (up to 6 per column), the charts in a grid filling the rest of the page; hidden synced
+    slicers are parked in a strip along the bottom edge."""
     panel = 170 * math.ceil(len(slicers) / 6) if slicers else 0
     placed = grid(slicers, 0, panel + 10, max(1, math.ceil(len(slicers) / 6))) if slicers else []
     placed += grid(visuals, panel, 1280 - panel, min(len(visuals), 3 if len(visuals) <= 6 else 4))
+    placed += [(item, (i * 40) % 1240, 700, 40, 20) for i, item in enumerate(hidden)]
+    hidden_ids = {h[0] for h in hidden}
     out = []
     for z, ((vid, title, visual, roles, measure_names), x, y, w, h) in enumerate(placed):
         aliases, select, projections = {}, [], {}
@@ -627,6 +647,11 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple]) ->
                       # QlikView selections are global: slicers on the same field are synced across pages
                       **({"syncGroup": {"groupName": select[0]["Name"], "fieldChanges": True, "filterChanges": True}}
                          if visual == "slicer" else {}),
+                      **({"display": {"mode": "hidden"}} if vid in hidden_ids else {}),
+                      # numeric fields (Period, Year) on a chart axis are categories, not a continuous scale
+                      **({"objects": {"categoryAxis": [{"properties": {"axisType": {
+                          "expr": {"Literal": {"Value": "'Categorical'"}}}}}]}}
+                         if "Category" in roles and visual not in ("pieChart", "funnel", "scatterChart") else {}),
                       "vcObjects": {"title": [{"properties": {
                           "show": {"expr": {"Literal": {"Value": "true"}}},
                           "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]}}}
