@@ -77,22 +77,55 @@ LIST_BOXES = {
     "LB07": "Carrier Name", "LB09": "Distance Interval", "LB10": "Aircraft Type", "LB11": "Aircraft Group",
     "LB12": "Flight Type", "LB13": "Carrier's Operating Region", "LB15": "Carrier Group", "LB34": "Aircraft Name",
     "LB35": "Year", "LB36": "Metric Name",
-    # Comparative Analysis: list boxes in alternate states Group A / Group B, captioned by their position
-    "LB37": None, "LB38": "To Country", "LB39": "From Coutry", "LB40": "To State", "LB41": "To City",
-    "LB42": "To Airport", "LB43": "From State", "LB44": "From City", "LB45": "From Airport",
+    # Comparative Analysis: the 'Origin and Destination - Group A / Group B' containers (CT03 / CT02) show these in
+    # the alternate states (titles From Coutry / From State / ... / To Airport)
+    "LB39": "Flight Type", "LB43": "Origin Country", "LB44": "Origin State Code", "LB45": "Origin City",
+    "LB38": "Origin Airport", "LB40": "Destination Country", "LB41": "Destination State Code", "LB42": "Destination City",
+    "LB37": "Destination Airport",
 }
+STATES = ("Group A", "Group B")
+STATE_LBS = ["LB39", "LB43", "LB44", "LB45", "LB38", "LB40", "LB41", "LB42", "LB37"]
+ROUTE_MD = ["Origin Country", "Origin State Code", "Origin City", "Destination Country", "Destination State Code",
+            "Destination City"]
+ROUTE_DIMS = [("Origin Airports", "%Origin Airport ID", "Origin Airport"),
+              ("Destination Airports", "%Destination Airport ID", "Destination Airport"),
+              ("Flight Types", "%Datasource ID", "Flight Type")]
+ROUTE_TARGETS = [("Main Data", c) for c in ROUTE_MD] + [(t, c) for t, _, c in ROUTE_DIMS]
 
 
-def slicer(lb: str, table: str, field: str, x: int, y: int, z: int) -> dict:
+def route_spec() -> dict:
+    keys = [k for _, k, _ in ROUTE_DIMS]
+    steps = [f"Source = Table.Distinct(Table.SelectColumns(#\"Main Data\", {base.m_list(keys + ROUTE_MD)}))"]
+    last = "Source"
+    for i, (table, key, col) in enumerate(ROUTE_DIMS):
+        steps += [f'J{i} = Table.NestedJoin({last}, {{"{key}"}}, #"{table}", {{"{key}"}}, "D{i}", JoinKind.LeftOuter)',
+                  f'E{i} = Table.ExpandTableColumn(J{i}, "D{i}", {{"{col}"}})']
+        last = f"E{i}"
+    cols = [(c, "string") for _, c in ROUTE_TARGETS]
+    steps += [f"Selected = Table.Distinct(Table.SelectColumns({last}, {base.m_list(c for c, _ in cols)}))",
+              f"Typed = Table.TransformColumnTypes(Selected, {base.m_types(cols)})"]
+    return {"cols": cols, "m": base.m_let(steps, "Typed")}
+
+
+def state_measure(state: str, flights: str, cal: str) -> str:
+    period = f"KEEPFILTERS(TREATAS(VALUES('{state}'[{state} Period]), {cal}))"
+    route = ", ".join(f"KEEPFILTERS(TREATAS(VALUES('{state} Route'[{c}]), {base.tname(t)}[{c}]))"
+                      for t, c in ROUTE_TARGETS)
+    return (f"IF(ISFILTERED('{state} Route'), CALCULATE({flights}, {period}, {route}), "
+            f"CALCULATE({flights}, {period}))")
+
+
+def slicer(lb: str, table: str, field: str, x: int, y: int, z: int, title: str | None = None) -> dict:
     ref = f"{table}.{field}"
-    config = {"name": f"{SLUG}_{lb}", "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": 200, "height": 160}}],
+    title = title or field
+    config = {"name": f"{SLUG}_{lb}" + ("" if title == field else "_" + table.replace(" ", "")), "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": 200, "height": 160}}],
               "singleVisual": {"visualType": "slicer", "projections": {"Values": [{"queryRef": ref, "active": True}]},
                                "prototypeQuery": {"Version": 2, "From": [{"Name": "t", "Entity": table, "Type": 0}],
                                                   "Select": [{"Column": {"Expression": {"SourceRef": {"Source": "t"}},
                                                                          "Property": field}, "Name": ref}]},
                                "objects": {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Basic'"}}}}}]},
                                "vcObjects": {"title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}},
-                                                                       "text": {"expr": {"Literal": {"Value": "'" + field.replace("'", "''") + "'"}}}}}]}}}
+                                                                       "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]}}}
     return {"x": x, "y": y, "z": z, "width": 200, "height": 160, "config": json.dumps(config), "filters": "[]"}
 
 
@@ -106,7 +139,14 @@ def write_report(root: Path, specs: dict) -> list[dict]:
         visuals = []
         for lb in lbs:
             field = LIST_BOXES[lb]
-            if field in fields:
+            if lb in STATE_LBS:
+                for state in STATES:
+                    n = len(visuals)
+                    visuals.append(slicer(lb, f"{state} Route", field, 10 + (n % 6) * 210, 10 + (n // 6) * 170, n,
+                                          f"{field} ({state})"))
+                    mapped.append({"sheet": title, "object": lb, "caption": field, "table": f"{state} Route",
+                                   "state": state})
+            elif field in fields:
                 n = len(visuals)
                 visuals.append(slicer(lb, fields[field], field, 10 + (n % 6) * 210, 10 + (n // 6) * 170, n))
                 mapped.append({"sheet": title, "object": lb, "caption": field, "table": fields[field]})
@@ -151,6 +191,11 @@ def table_specs(types: dict) -> dict[str, dict]:
     specs = _base_table_specs(types)
     specs["Aircraft Types"]["m"] = aircraft_m(specs["Aircraft Types"]["cols"])
     del specs["INLFED"]
+    md = specs["Main Data"]["m"]
+    specs["Main Data"]["m"] = "\n".join(x for x in md.split("\n") if "Placeholder = " not in x).replace(
+        "TransformColumnTypes(Placeholder", "TransformColumnTypes(Combined")
+    for state in STATES:
+        specs[f"{state} Route"] = route_spec()
     return {("INLFED" if k == "INLFED-1" else k): v for k, v in specs.items()}
 
 
@@ -170,6 +215,11 @@ def configure() -> None:
     base.SECTION_ACCESS = {}
     base.MEASURES = {k: (n, d.replace("'INLFED-1'", "INLFED"), f) for k, (n, d, f) in base.MEASURES.items()
                      if k not in HC_DELTA_MEASURES}
+    base.NULL_KEY_FIELDS = []
+    cal = base.c(base.CAL, "Period")
+    for pk, state in (("233f869eae9d", "Group A"), ("6ba2cbf5d1e6", "Group B")):
+        name, _, fmt = base.MEASURES[pk]
+        base.MEASURES[pk] = (name, state_measure(state, base.FLIGHTS, cal), fmt)
     base.GAPS = GAPS
     base.table_specs, base.relationships = table_specs, relationships
 
@@ -182,11 +232,14 @@ def build(data_root: str = base.DEFAULT_ROOT) -> Path:
     data = json.loads(model.read_text())
     data["slicers"] = slicers
     data["semantic_gaps"].append(
-        "List boxes -> one report page per sheet with a slicer per list box whose caption is a model field. Not "
-        "rebuilt: Associations' 'Aircraft Type' / 'Aircraft Group' (LB10 / LB11; no such field in the model) and the "
-        "Comparative Analysis list boxes LB37-LB45 (alternate states Group A / Group B, captions From / To ... that "
-        "are not field names; Power BI slicers have no alternate states). Charts and other sheet objects are not "
-        "laid out on the pages.")
+        "List boxes -> one report page per sheet with a slicer per list box whose caption is a model field. The "
+        "Comparative Analysis From / To list boxes (LB37-LB45, alternate states Group A / Group B) are slicers on the "
+        "disconnected 'Group A Route' / 'Group B Route' tables, which 'Group A/B Flights' apply with TREATAS like the "
+        "Group A / B periods ({[Group A] * $}); with a route slicer set, a route field left unselected still drops "
+        "flights without an airport / flight type match. Not rebuilt: Associations' 'Aircraft Type' / 'Aircraft Group' "
+        "(LB10 / LB11): this script loads neither field (Aircraft Name is SSD_NAME, which matches the old Aircraft "
+        "Type text for 50 of 180 types, and the group text is split into Aircraft Engine Type / Number Of Engines). "
+        "Charts and other sheet objects are not laid out on the pages.")
     data["generated_by"] = "powerbi/tools/build_airline_ch12.py"
     del data["roles"]
     model.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n")

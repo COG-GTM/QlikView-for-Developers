@@ -320,7 +320,7 @@ table 'Main Data'
 		annotation QlikExpression = Sum({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])
 		annotation QlikObjects = CH65#4
 
-	measure 'Group A Flights' = CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group A'[Group A Period]), 'Master Calendar'[Period])))
+	measure 'Group A Flights' = IF(ISFILTERED('Group A Route'), CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group A'[Group A Period]), 'Master Calendar'[Period])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Origin Country]), 'Main Data'[Origin Country])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Origin State Code]), 'Main Data'[Origin State Code])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Origin City]), 'Main Data'[Origin City])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Destination Country]), 'Main Data'[Destination Country])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Destination State Code]), 'Main Data'[Destination State Code])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Destination City]), 'Main Data'[Destination City])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Origin Airport]), 'Origin Airports'[Origin Airport])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Destination Airport]), 'Destination Airports'[Destination Airport])), KEEPFILTERS(TREATAS(VALUES('Group A Route'[Flight Type]), 'Flight Types'[Flight Type]))), CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group A'[Group A Period]), 'Master Calendar'[Period]))))
 		formatString: #,0
 		lineageTag: 516ffd35-e5bc-5638-a331-7dd46b555f76
 
@@ -328,7 +328,7 @@ table 'Main Data'
 		annotation QlikExpression = Sum({[Group A] * $} [# Departures Performed])
 		annotation QlikObjects = CH66#1, CH67#1
 
-	measure 'Group B Flights' = CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group B'[Group B Period]), 'Master Calendar'[Period])))
+	measure 'Group B Flights' = IF(ISFILTERED('Group B Route'), CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group B'[Group B Period]), 'Master Calendar'[Period])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Origin Country]), 'Main Data'[Origin Country])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Origin State Code]), 'Main Data'[Origin State Code])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Origin City]), 'Main Data'[Origin City])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Destination Country]), 'Main Data'[Destination Country])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Destination State Code]), 'Main Data'[Destination State Code])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Destination City]), 'Main Data'[Destination City])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Origin Airport]), 'Origin Airports'[Origin Airport])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Destination Airport]), 'Destination Airports'[Destination Airport])), KEEPFILTERS(TREATAS(VALUES('Group B Route'[Flight Type]), 'Flight Types'[Flight Type]))), CALCULATE([# of Flights], KEEPFILTERS(TREATAS(VALUES('Group B'[Group B Period]), 'Master Calendar'[Period]))))
 		formatString: #,0
 		lineageTag: b7889b98-a15c-5602-a5cc-52963d1f608e
 

@@ -121,4 +121,16 @@ def test_report_pages_rebuild_list_boxes_as_slicers():
             entity = v["singleVisual"]["prototypeQuery"]["From"][0]["Entity"]
             assert (entity, sel["Column"]["Property"]) in fields
             title = v["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"]
-            assert title == "'" + sel["Column"]["Property"].replace("'", "''") + "'"
+            assert title.startswith("'" + sel["Column"]["Property"].replace("'", "''"))
+
+
+def test_comparative_analysis_route_slicers_feed_the_group_measures():
+    report = json.loads((PBIP / "Chapter12_Airline_Operations.Report" / "report.json").read_text())
+    (page,) = [s for s in report["sections"] if s["displayName"] == "Comparative Analysis"]
+    entities = [json.loads(v["config"])["singleVisual"]["prototypeQuery"]["From"][0]["Entity"]
+                for v in page["visualContainers"]]
+    assert entities.count("Group A Route") == entities.count("Group B Route") == 9
+    tmdl = (SM / "tables" / "Main Data.tmdl").read_text()
+    for state in ("Group A", "Group B"):
+        (dax,) = [x for x in tmdl.splitlines() if x.startswith(f"\tmeasure '{state} Flights' = ")]
+        assert f"ISFILTERED('{state} Route')" in dax and f"TREATAS(VALUES('{state}'[{state} Period])" in dax
