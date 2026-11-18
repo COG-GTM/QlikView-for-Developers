@@ -28,13 +28,16 @@ from build_airline_base import (  # noqa: E402
     DEFAULT_ROOT,
     FLIGHT_COLS,
     METRICS,
+    PCT,
     SEGMENTS,
     catalog_types,
     kpi_list,
+    m,
     m_let,
     m_list,
     m_types,
     parity_key,
+    total_dax,
     write_table,
 )
 
@@ -53,6 +56,14 @@ AIRCRAFT_COLS = ["Aircraft Name", "Aircraft Manufacturer", "Aircraft Manufacture
                  "Aircraft Name Abbreviated", "Aircraft Begin Date", "Aircraft End Date", "Aircraft Age Classification",
                  "Aircraft Engine Type", "Aircraft Number Of Engines"]
 COMMENTS = "Data Files/Excel/Comments/"
+# CH43 divides by $(vTotalFTEs), defined '= Sum([# Equivalent FTEs])': a '=' variable is evaluated once in the current
+# selection before expansion, so it is the selection-wide total (Sum(TOTAL ...)), not the per-row Sum the base
+# model's measure (inventory expansion without the '=') repeats. The manifest's expansion is corrected to TOTAL.
+_FTE = f"SUM({m('# Equivalent FTEs')})"
+CH11_MEASURES = {
+    parity_key("Sum([# Equivalent FTEs]) / Sum(TOTAL [# Equivalent FTEs])"):
+        ("FTE % to Total", f"DIVIDE({_FTE}, {total_dax(_FTE, [])})", PCT),
+}
 METRIC_TABLE = "INLFED"
 
 # (table, parquet, key, label columns, add 'Unknown' members for fact keys missing from the dimension)
@@ -76,6 +87,9 @@ GAPS = [
     "Derived from the Chapter 15 base model: Chapter 11's 66 chart expressions are 26 distinct Qlik expressions, all of "
     "which the base model already migrates, so the measures, segment tables and calculated column are shared (the metric "
     "picker reads INLFED, Chapter 11's name for that inline table).",
+    "FTE % to Total (CH43): $(vTotalFTEs) is '= Sum([# Equivalent FTEs])', evaluated once in the selection, so the "
+    "denominator is the selection-wide total -> CALCULATE(..., ALLSELECTED()); the inventory expansion had dropped the "
+    "'=' (each carrier divided by itself) and is corrected to Sum(TOTAL ...) in the manifest.",
     "No Section Access in Chapter 11: no roles; Main Data keeps the Employment rows and Carrier Groups / Airlines / "
     "Carrier Operating Region / Markets keep every member the script loads (inventory: Main Data 1,258,763, Airlines 337).",
     "Aircraft Types: Aircraft_Base_File.csv WHERE Exists, LEFT JOIN Aircraft_Group.csv on the group, then CONCATENATE "
@@ -152,6 +166,7 @@ PAGES = {
         ("CH43", "FTE % to Total", "tableEx", (640, 410, 630, 300), [(MD_NAME, "Carrier Name")], ["FTE % to Total"]),
     ],
 }
+TOP_N = {"CH02": 10}  # Qlik 'Top 10 Routes': max dimension values by the first expression
 # List boxes whose caption is not a field of the model (Chapter 11 drops %Aircraft Group Type and has no Aircraft Type)
 UNMAPPED_LIST_BOXES = {"LB10": "Aircraft Type", "LB11": "Aircraft Group"}
 
@@ -162,6 +177,9 @@ def measures_for_ch11() -> dict[str, tuple]:
     keys = {k["parity_key"] for k in kpi_list(manifest)}
     out = {}
     for pk in keys:
+        if pk in CH11_MEASURES:
+            out[pk] = CH11_MEASURES[pk]
+            continue
         if pk not in base.MEASURES:
             raise SystemExit(f"ParityKey {pk} has no measure in the base model")
         name, dax, fmt = base.MEASURES[pk]
@@ -280,8 +298,36 @@ def relationships() -> list[tuple[str, str, str, str]]:
     return rels
 
 
+def top_n_filter(table: str, col: str, measure: str, n: int) -> list[dict]:
+    """Visual-level Top N filter: keep the n values of table[col] with the highest measure."""
+    ref = {"Column": {"Expression": {"SourceRef": {"Source": "m"}}, "Property": col}}
+    sub = {"Version": 2, "From": [{"Name": "m", "Entity": table, "Type": 0}], "Select": [{**ref, "Name": "field"}],
+           "OrderBy": [{"Direction": 2, "Expression": {"Measure": {"Expression": {"SourceRef": {"Source": "m"}},
+                                                                   "Property": measure}}}], "Top": n}
+    return [{"name": tag(SLUG, "topn", table, col), "type": "TopN", "howCreated": 1,
+             "expression": {"Column": {"Expression": {"SourceRef": {"Entity": table}}, "Property": col}},
+             "filter": {"Version": 2, "From": [{"Name": "subquery", "Expression": {"Subquery": {"Query": sub}}, "Type": 2},
+                                               {"Name": "m", "Entity": table, "Type": 0}],
+                        "Where": [{"Condition": {"In": {"Expressions": [ref],
+                                                        "Table": {"SourceRef": {"Source": "subquery"}}}}}]}}]
+
+
+def with_synced_slicers(pages: dict[str, list[tuple]]) -> dict[str, list[tuple]]:
+    """QlikView selections are global: every list-box field gets a slicer on every page, in one sync group (hidden
+    where the sheet had no list box for it), so a selection on any page filters every page."""
+    fields = list(dict.fromkeys(v[4][0] for page in pages.values() for v in page if v[2] == "slicer"))
+    out = {}
+    for page, visuals in pages.items():
+        shown = {v[4][0] for v in visuals if v[2] == "slicer"}
+        out[page] = visuals + [(f"sync:{t}.{col}", col, "slicer:hidden", (0, 0, 120, 60), [(t, col)], [])
+                               for t, col in fields if (t, col) not in shown]
+    return out
+
+
 def visual(oid: str, title: str, vtype: str, pos: tuple, cats: list[tuple[str, str]], measures: list[str],
            z: int) -> dict:
+    hidden = vtype.endswith(":hidden")
+    vtype = vtype.removesuffix(":hidden")
     x, y, w, h = pos
     tables = list(dict.fromkeys(([MD_NAME] if measures else []) + [t for t, _ in cats]))
     alias = {t: f"t{i}" for i, t in enumerate(tables)}
@@ -305,7 +351,14 @@ def visual(oid: str, title: str, vtype: str, pos: tuple, cats: list[tuple[str, s
         "x": x, "y": y, "z": z, "width": w, "height": h}}],
         "singleVisual": {"visualType": vtype, "projections": projections, "prototypeQuery": query,
                          "drillFilterOtherVisuals": True, "vcObjects": {"title": title_obj}}}
-    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
+    if vtype == "slicer":
+        t, col = cats[0]
+        config["singleVisual"]["syncGroup"] = {"groupName": f"{t}.{col}", "fieldChanges": True, "filterChanges": True}
+        if hidden:
+            config["singleVisual"]["display"] = {"mode": "hidden"}
+    filters = top_n_filter(*cats[0], measures[0], TOP_N[oid]) if oid in TOP_N else []
+    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config),
+            "filters": json.dumps(filters)}
 
 
 def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "parquet") -> Path:
@@ -374,7 +427,7 @@ def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "par
     sections = [{"name": f"ReportSection{n}" if n else "ReportSection", "displayName": page, "displayOption": 1,
                  "ordinal": n, "width": 1280, "height": 720, "config": "{}", "filters": "[]",
                  "visualContainers": [visual(*v, z=i) for i, v in enumerate(visuals)]}
-                for n, (page, visuals) in enumerate(PAGES.items())]
+                for n, (page, visuals) in enumerate(with_synced_slicers(PAGES).items())]
     (rp / "report.json").write_text(json.dumps({
         "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
         "layoutOptimization": 0, "resourcePackages": [],

@@ -61,6 +61,9 @@ def test_kpis_match_pandas(expected, flights):
     emp = pd.read_parquet(PARQUET / "Data Files/QVDs/T_F41SCHEDULE_P1A_EMP.parquet")
     assert _total(expected, "CH44#1") == emp["# Equivalent FTEs"].sum()  # no Section Access: Employment rows stay
     assert _results(expected, "CH46#1") == {"total": [], "Carrier Group": []}  # no Metric Name selected
+    shares = {r[0]: r[1] for r in _results(expected, "CH43#1")["Carrier Name"]}  # $(vTotalFTEs): selection total
+    by_carrier = emp.groupby("Carrier Name")["# Equivalent FTEs"].sum() / emp["# Equivalent FTEs"].sum()
+    assert shares == pytest.approx(by_carrier[by_carrier.notna()].to_dict(), rel=1e-12)
 
 
 @pytest.mark.needs_parquet
@@ -117,7 +120,13 @@ def test_model_follows_the_chapter_11_script():
     pages = {s["displayName"]: [json.loads(v["config"])["singleVisual"] for v in s["visualContainers"]]
              for s in report["sections"]}
     assert list(pages) == ["Dashboard", "Associations", "Data Consistency", "Variables"]
-    assert [v["visualType"] for v in pages["Dashboard"]].count("slicer") == 7 and len(pages["Dashboard"]) == 14
+    shown = {p: [v for v in vs if "display" not in v] for p, vs in pages.items()}
+    assert [v["visualType"] for v in shown["Dashboard"]].count("slicer") == 7 and len(shown["Dashboard"]) == 14
+    groups = {p: {v["syncGroup"]["groupName"] for v in vs if v["visualType"] == "slicer"} for p, vs in pages.items()}
+    assert len(groups["Dashboard"]) == 16 and all(g == groups["Dashboard"] for g in groups.values())  # global selections
+    top = [json.loads(v["filters"]) for s in report["sections"] for v in s["visualContainers"] if json.loads(v["filters"])]
+    assert len(top) == 1 and top[0][0]["type"] == "TopN"
+    assert top[0][0]["filter"]["From"][0]["Expression"]["Subquery"]["Query"]["Top"] == 10
     columns = {(c["table"], c["name"]) for c in read_tmdl(PBIP)["columns"]}
     measures = {m["name"] for m in read_tmdl(PBIP)["measures"]}
     for visuals in pages.values():  # every slicer / chart field exists in the model

@@ -139,11 +139,11 @@
   },
   {
    "name": "FTE % to Total",
-   "parity_key": "f0af66ad7007",
+   "parity_key": "9f20a3cefdc3",
    "kpis": [
     "CH43#1"
    ],
-   "dax": "DIVIDE(SUM('Main Data'[# Equivalent FTEs]), SUM('Main Data'[# Equivalent FTEs]))"
+   "dax": "DIVIDE(SUM('Main Data'[# Equivalent FTEs]), CALCULATE(SUM('Main Data'[# Equivalent FTEs]), ALLSELECTED()))"
   },
   {
    "name": "FTEs",
@@ -323,6 +323,7 @@
  },
  "semantic_gaps": [
   "Derived from the Chapter 15 base model: Chapter 11's 66 chart expressions are 26 distinct Qlik expressions, all of which the base model already migrates, so the measures, segment tables and calculated column are shared (the metric picker reads INLFED, Chapter 11's name for that inline table).",
+  "FTE % to Total (CH43): $(vTotalFTEs) is '= Sum([# Equivalent FTEs])', evaluated once in the selection, so the denominator is the selection-wide total -> CALCULATE(..., ALLSELECTED()); the inventory expansion had dropped the '=' (each carrier divided by itself) and is corrected to Sum(TOTAL ...) in the manifest.",
   "No Section Access in Chapter 11: no roles; Main Data keeps the Employment rows and Carrier Groups / Airlines / Carrier Operating Region / Markets keep every member the script loads (inventory: Main Data 1,258,763, Airlines 337).",
   "Aircraft Types: Aircraft_Base_File.csv WHERE Exists, LEFT JOIN Aircraft_Group.csv on the group, then CONCATENATE Aircraft_2010_Update.csv (engine type / count from SubField(AC_GROUPNAME, ', ')) -> Power Query merges; ApplyMap Map_Manufacturer_Country -> left merge on Aircraft_Manufacturers.csv with 'Unknown' default. The STORE into Aircraft Types Transformed.qvd is an ETL side effect and is not reproduced.",
   "Origin / Destination Airports: LEFT KEEP ([Main Data]) over the Access tables -> keep rows whose key is in Main Data (read from the Access tables' Parquet export).",
