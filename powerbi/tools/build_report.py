@@ -93,8 +93,8 @@ def visual(name: str, vtype: str, pos: tuple, columns: list, meas: list, title: 
     alias = {t: f"t{i}" for i, t in enumerate(tables)}
     select = [{**field("Column", alias[t], c), "Name": f"{t}.{c}"} for t, c in columns]
     select += [{**field("Measure", alias[t], m), "Name": f"{t}.{m}"} for t, m in meas]
-    # "active" marks a slicer's field; on a table it narrows the rendered columns to that one.
-    active = {"active": True} if vtype == "slicer" else {}
+    # "active" marks slicer fields and chart category levels; on a table it narrows the rendered columns to that one.
+    active = {} if vtype == "tableEx" else {"active": True}
     proj = {role_cols: [{"queryRef": f"{t}.{c}", **active} for t, c in columns]}
     if role_meas:
         proj.setdefault(role_meas, []).extend({"queryRef": f"{t}.{m}"} for t, m in meas)
