@@ -122,7 +122,7 @@ def scaffold(app: str, data_root: str) -> Path:
                 field_table.setdefault(n, t["name"])
 
     measures, skipped, used = {}, [], set()
-    for k in kpi_list(manifest):
+    for k in kpi_list(manifest, app):
         if k["parity_key"] in measures:
             measures[k["parity_key"]]["kpis"].append(k["kpi"])
             continue

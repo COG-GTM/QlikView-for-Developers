@@ -22,6 +22,9 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   aggregations with `DISTINCT`, `TOTAL <fields>`, set analysis (`$`, `1`, field value lists,
   numeric search strings, `+ - * /`), `Aggr()`, `If()`, arithmetic, `$(var)` / `$(=expr)`.
   Fields from several tables are joined along shared key fields (Qlik associations).
+* Apps whose sheets have no chart expressions (the Ch10 ETL demos) add `parity/checks/<app>.json`:
+  data checks with the same shape as KPIs (`object`, `label`, `expression`, `dims`, ids `CHK01#1@…`)
+  that pin the transformed table itself; they go through `source`, `queries` and `compare` unchanged.
 * Grains: grand total, the chart's dimensions, and each drill-down level / cyclic
   alternative of grouped dimensions (Ch03 `Time` = Year, Year+Month).
 * Also evaluated: `Dimensionality()` (the number of grain dimensions) and `Pick()`;
