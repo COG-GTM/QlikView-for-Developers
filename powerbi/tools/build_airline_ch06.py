@@ -133,11 +133,11 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
             for i, (oid, f) in enumerate(LIST_BOXES["Main"])]
     mb_id, mb_caption, mb_fields = MULTI_BOX
     top = [(oid, f, f) for oid, f in LIST_BOXES["Dashboard"]] + [(mb_id, f"{mb_caption}: {f}", f) for f in mb_fields]
-    dash = [slicer(oid, title, tables[f], f, (10 + 157 * (i % 8), 10 + 62 * (i // 8), 152, 56), i, True)
+    dash = [slicer(oid, title, tables[f], f, (10 + 140 * (i % 9), 10 + 62 * (i // 9), 135, 56), i, True)
             for i, (oid, title, f) in enumerate(top)]
     on_dash = {f for _, _, f in top}
     hidden = [(oid, f) for oid, f in LIST_BOXES["Main"] if f not in on_dash]
-    dash += [slicer(oid, f, tables[f], f, (10 + 157 * ((len(top) + i) % 8), 10 + 62 * ((len(top) + i) // 8), 152, 56),
+    dash += [slicer(oid, f, tables[f], f, (10 + 140 * ((len(top) + i) % 9), 10 + 62 * ((len(top) + i) // 9), 135, 56),
                     len(dash) + i, True, hidden=True) for i, (oid, f) in enumerate(hidden)]
     dash += [visual(*v, z=len(dash) + i) for i, v in enumerate(VISUALS)]
     report = root / f"{SLUG}.Report" / "report.json"
