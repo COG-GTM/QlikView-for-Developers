@@ -1,0 +1,30 @@
+table 'Carrier Groups'
+	lineageTag: 1b0f900a-346a-5370-9dfa-f26efc1066ba
+
+	column '%Carrier Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2f3c8698-0a21-5622-926c-3719290da43b
+		summarizeBy: none
+		sourceColumn: %Carrier Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier Group'
+		dataType: string
+		lineageTag: 074b9151-ba3f-5919-8cc7-dbec75f88393
+		summarizeBy: none
+		sourceColumn: Carrier Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Carrier Groups' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/QVDs/Carrier Groups.parquet"),
+				    Selected = Table.SelectColumns(Source, {"%Carrier Group ID", "Carrier Group"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Carrier Group ID", Int64.Type}, {"Carrier Group", type text}})
+				in
+				    Typed

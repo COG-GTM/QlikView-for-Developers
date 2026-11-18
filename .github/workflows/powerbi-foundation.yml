@@ -1,0 +1,47 @@
+name: Power BI foundation
+
+on:
+  pull_request:
+  push:
+    branches: [samuels-migration]
+  workflow_dispatch:
+
+jobs:
+  convert-verify-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: powerbi/requirements.txt
+      - name: Install mdbtools and Python dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y mdbtools
+          pip install -r powerbi/requirements.txt
+      - name: Convert sources to Parquet
+        run: python powerbi/tools/convert_sources.py
+      - name: Catalog is up to date
+        run: git diff --exit-code -- powerbi/data/catalog.json
+      - name: Verify row counts (sources and inventory)
+        run: python powerbi/tools/verify_conversion.py
+      - name: Recompute KPIs from source for every app
+        run: python powerbi/parity/harness.py source --all
+      - name: Chapter 03 expected results and scaffold are reproducible
+        run: |
+          python powerbi/tools/scaffold_pbip.py --app "Chapter03__Solution_Chapter 3_Airline Operations"
+          git diff --exit-code -- powerbi/parity/expected powerbi/apps
+      - name: Tests
+        working-directory: powerbi
+        run: python -m pytest -q
+      - name: Upload Parquet and parity outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: powerbi-parquet
+          path: |
+            powerbi/data/parquet
+            powerbi/data/conversion_report.md
+            powerbi/parity/expected
+          retention-days: 14

@@ -1,0 +1,378 @@
+///$tab Information
+/****************************************[ Information ]****************************************
+
+	Application:						Airline Operations.qvw
+	
+	Version:							1.0
+	
+	Author:								Barry Harmsen 		/	Mike Garcia
+										barry@qlikfix.com 	/	mike.garciam@gmail.com
+	
+	Date created:						May 1st 2012
+	
+	Date last modified:					June 25th 2012
+	
+	Goal of application:				HighCloud Airlines has the intention to enter the
+										US market. This application is intended to help
+										determine if this is a sensible business case at this
+										moment, by analyzing historical air travel data.
+										
+										
+------------------------------------------[ Change log ]----------------------------------------
+
+
+	Version:							1.0
+	
+	Date modified:						June 25th 2012
+	
+	Modified by:						Barry Harmsen
+	
+	Changes:							- Created new Aircrafts dimension table
+										- Cleaned up script by adding tabs and adding comments
+										- Added information tab
+										
+										
+-----------------------------------------------------------------------------------------------
+
+	Version:							0.1
+	
+	Date modified:						May 1st 2012
+	
+	Modified by:						Mike Garcia
+	
+	Changes:							- Initial version, no changes
+	
+
+***********************************************************************************************/
+///$tab Main
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='$#,##0.00;-$#,##0.00';
+SET TimeFormat='hh:mm:ss';
+SET DateFormat='YYYY-MM-DD';
+SET TimestampFormat='YYYY-MM-DD hh:mm:ss[.fff]';
+SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
+SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
+
+SET vLoadMainData = 'Y';
+SET HidePrefix = '%';
+///$tab Includes
+$(Include=..\0.Includes\config.qvs);
+$(Include=..\0.Includes\tracerowcount.qvs);
+$(Include=..\0.Includes\SetVariables.txt);
+///$tab Mapping
+Map_Table_Comments:
+MAPPING LOAD TableName, 
+     Comment
+FROM
+[..\1.Source Data\Metadata\Comments.xls]
+(biff, embedded labels, table is Tables$);
+
+Map_Field_Comments:
+MAPPING LOAD FieldName, 
+     Comment
+FROM
+[..\1.Source Data\Metadata\Comments.xls]
+(biff, embedded labels, table is Fields$);
+
+
+///$tab Comments
+COMMENT TABLES USING Map_Table_Comments;
+COMMENT FIELDS USING Map_Field_Comments;
+///$tab Main Data
+IF '$(vLoadMainData)' = 'Y' THEN
+
+[Main Data]:
+LOAD [%Airline ID], 
+     [%Carrier Group ID], 
+     [%Unique Carrier Code], 
+     [%Unique Carrier Entity Code], 
+     [%Region Code], 
+     [%Origin Airport ID], 
+     [%Origin Airport Sequence ID], 
+     [%Origin Airport Market ID], 
+     [%Origin World Area Code], 
+     [%Destination Airport ID], 
+     [%Destination Airport Sequence ID], 
+     [%Destination Airport Market ID], 
+     [%Destination World Area Code], 
+     [%Aircraft Group ID], 
+     [%Aircraft Type ID], 
+     [%Aircraft Configuration ID], 
+     [%Distance Group ID], 
+     [%Service Class ID], 
+     [%Datasource ID], 
+     [# Departures Scheduled], 
+     [# Departures Performed], 
+     [# Payload], 
+     Distance, 
+     [# Available Seats], 
+     [# Transported Passengers], 
+     [# Transported Freight], 
+     [# Transported Mail], 
+     [# Ramp-To-Ramp Time], 
+     [# Air Time], 
+     [Unique Carrier], 
+     [Carrier Code], 
+     [Carrier Name], 
+     [Origin Airport Code], 
+     [Origin City], 
+     [Origin State Code], 
+     [Origin State FIPS], 
+     [Origin State], 
+     [Origin Country Code], 
+     [Origin Country], 
+     [Destination Airport Code], 
+     [Destination City], 
+     [Destination State Code], 
+     [Destination State FIPS], 
+     [Destination State], 
+     [Destination Country Code], 
+     [Destination Country], 
+//     Year, 
+     Period, 
+//     Quarter, 
+//     [Month (#)], 
+//     Month, 
+     [From - To Airport Code], 
+     [From - To Airport ID], 
+     [From - To City], 
+     [From - To State Code], 
+     [From - To State]
+FROM
+[..\3.QVD\Source\Flight Data.qvd]
+(qvd);
+
+END IF
+
+///$tab Employment Data
+//Concatenate ([Main Data])
+//LOAD [%Airline ID], 
+//     [%Unique Carrier Code], 
+//     [%Carrier Group ID], 
+//     [# Full Time Employees], 
+//     [# Part Time Employees], 
+//     [# Total Employees], 
+//     [# Equivalent FTEs], 
+//     [Unique Carrier], 
+//     [Carrier Code], 
+//     [Carrier Name], 
+////     Year, 
+////     'Q' & Ceil([Month (#)]/3, 1) as Quarter,
+//     Period 
+////     [Month (#)], 
+////     Month
+//FROM
+//[..\3.QVD\Source\T_F41SCHEDULE_P1A_EMP.qvd]
+//(qvd);
+
+Concatenate ([Main Data])
+LOAD [# M-Delta Total Employees], 
+     [# M-Delta Full Time Employees], 
+     [# M-Delta Part Time Employees], 
+     [# M-Delta Equivalent FTEs], 
+     [# Q-Delta Total Employees], 
+     [# Q-Delta Full Time Employees], 
+     [# Q-Delta Part Time Employees], 
+     [# Q-Delta Equivalent FTEs], 
+     [# Y-Delta Total Employees], 
+     [# Y-Delta Full Time Employees], 
+     [# Y-Delta Part Time Employees], 
+     [# Y-Delta Equivalent FTEs], 
+     [%Airline ID], 
+//     Year, 
+//     [Month (#)], 
+     [# Total Employees], 
+     Period, 
+//     Month, 
+     [%Unique Carrier Code], 
+     [Unique Carrier], 
+     [Carrier Code], 
+     [Carrier Name], 
+     [%Carrier Group ID], 
+     [# Full Time Employees], 
+     [# Part Time Employees], 
+     [# Equivalent FTEs]
+FROM
+[..\3.QVD\Transformed\Employment Statistics.QVD]
+(qvd);
+
+///$tab Calendar
+//--- Select the lowest and highest periods 
+//		from the Flights fact table.
+
+Temp_Calendar_Range:
+LOAD
+	Num(Date#(Min(Period), 'YYYYMM'))		as MinDate,
+	Num(Date#(Max(Period), 'YYYYMM')) 		as MaxDate
+RESIDENT [Main Data];
+
+//--- Assign the start and end dates to variables
+LET vMinDate = Peek('MinDate', 0, 'Temp_Calendar_Range');
+LET vMaxDate = Peek('MaxDate', 0, 'Temp_Calendar_Range');
+
+DROP TABLE Temp_Calendar_Range; // Cleanup
+
+[Master Calendar]:
+Load *,
+	 AutoNumber(Year & Quarter, 'QuarterID') 		as [QuarterID],
+	 AutoNumber(Period, 'PeriodID') 				as [PeriodID]
+	 ;
+LOAD DISTINCT
+	Year(Temp_Date) * 100 + Month(Temp_Date) 		as [Period],
+	Year(Temp_Date)								  	as [Year],	
+	Month(Temp_Date)								as [Month],	
+	Date(Temp_Date, 'YYYY-MM')					  	as [Year - Month],
+	'Q' & Ceil(Month(Temp_Date) / 3)			  	as [Quarter]
+	;
+LOAD DISTINCT
+	MonthStart($(vMinDate) + IterNo() - 1)   as Temp_Date	
+AUTOGENERATE (1)
+WHILE $(vMinDate) + IterNo() - 1 <= $(vMaxDate);
+
+
+//--- Remove the temporary variables
+LET vMinDate = Null();
+LET vMaxDate = Null();
+///$tab Airlines
+[Carrier Groups]: 
+	LOAD [%Carrier Group ID], 
+		 [%Carrier Group ID] as [Temp_Carrier_Group_ID],
+	     [Carrier Group]
+	FROM
+	[..\3.QVD\Source\Carrier Groups.qvd]
+	(qvd)
+		Where Exists([%Carrier Group ID]);
+		
+Concatenate ([Carrier Groups])
+	Load Distinct
+		 [%Carrier Group ID],
+		 'Unknown' as [Carrier Group]
+	Resident [Main Data]
+		 Where not Exists([Temp_Carrier_Group_ID], [%Carrier Group ID]);
+
+Drop Field [Temp_Carrier_Group_ID];
+
+Airlines:
+	LOAD [%Airline ID], 
+	     Airline
+	FROM
+	[..\3.QVD\Source\Airlines.qvd]
+	(qvd)
+		Where Exists([%Airline ID]);
+
+[Carrier Operating Region]:
+	LOAD [%Region Code], 
+		 [%Region Code] as [Temp_Region_Code],
+	     [Carrier's Operating Region]
+	FROM
+	[..\3.QVD\Source\Carrier Operating Region.qvd]
+	(qvd)
+		Where Exists([%Region Code]);
+
+Concatenate ([Carrier Operating Region])
+	Load Distinct
+		 [%Region Code],
+		 'Unknown' as [Carrier's Operating Region]
+	Resident [Main Data]
+		 Where not Exists([Temp_Region_Code], [%Region Code]);
+
+DROP Field [Temp_Region_Code];
+
+[Flight Types]:
+	LOAD [%Datasource ID], 
+	     [Flight Type]
+	FROM
+	[..\3.QVD\Source\Flight Types.qvd]
+	(qvd)
+		Where Exists([%Datasource ID]);
+	
+///$tab Aircrafts
+//========================================[ Aircraft Types ]========================================
+
+[Aircraft Types]:
+LOAD [%Aircraft Type ID], 
+     [Aircraft Name], 
+     [Aircraft Manufacturer], 
+     [Aircraft Manufacturer Country], 
+     [Aircraft Name Full], 
+     [Aircraft Name Abbreviated], 
+     [Aircraft Begin Date], 
+     [Aircraft End Date], 
+     [Aircraft Age Classification], 
+     [Aircraft Engine Type], 
+     [Aircraft Number Of Engines]
+FROM
+[..\3.QVD\Transformed\Aircraft Types Transformed.qvd]
+(qvd)
+	Where Exists([%Aircraft Type ID]);
+
+///$tab Airports
+[Distance Groups]:
+	LOAD [%Distance Group ID], 
+	     [Distance Interval]
+	FROM
+	[..\3.QVD\Source\Distance Groups.qvd]
+	(qvd)
+		Where Exists([%Distance Group ID]);
+
+[Origin Airports]:
+	LOAD [%Origin Airport ID], 
+	     [Origin Airport]
+	FROM
+	[..\3.QVD\Source\Origin Airports.qvd]
+	(qvd)
+		 Where Exists([%Origin Airport ID]);
+	 
+[Destination Airports]:
+	LOAD [%Destination Airport ID], 
+	     [Destination Airport]
+	FROM
+	[..\3.QVD\Source\Destination Airports.qvd]
+	(qvd)
+		 Where Exists([%Destination Airport ID]);
+		 
+[Origin Markets]:
+	LOAD [%Origin Airport Market ID], 
+		 [%Origin Airport Market ID] as [Temp_Origin_Airport_Market_ID], 
+	     [Origin Market]
+	FROM
+	[..\3.QVD\Source\Origin Markets.qvd]
+	(qvd)
+		Where Exists([%Origin Airport Market ID]);
+
+Concatenate([Origin Markets])
+	Load Distinct
+		 [%Origin Airport Market ID],
+		 'Unknown' as [Origin Market]
+	Resident [Main Data]
+		 Where not Exists([Temp_Origin_Airport_Market_ID], [%Origin Airport Market ID]);
+
+Drop Field [Temp_Origin_Airport_Market_ID];
+
+[Destination Markets]:
+	LOAD [%Destination Airport Market ID], 
+		 [%Destination Airport Market ID] as [Temp_Destination_Airport_Market_ID],  
+	     [Destination Market]
+	FROM
+	[..\3.QVD\Source\Destination Markets.qvd]
+	(qvd)
+		Where Exists([%Destination Airport Market ID]);
+
+Concatenate([Destination Markets])
+	Load Distinct
+		 [%Destination Airport Market ID],
+		 'Unknown' as [Destination Market]
+	Resident [Main Data]
+		 Where not Exists([Temp_Destination_Airport_Market_ID], [%Destination Airport Market ID]);
+
+Drop Field [Temp_Destination_Airport_Market_ID];
+///$tab Metrics
+LOAD * INLINE [
+    Metric Name				, eMetric
+    # of Flights			, eDeparturesPerformed
+    Enplaned Passengers		, eEnplanedPassengers
+    Air Time				, eAirTime
+];

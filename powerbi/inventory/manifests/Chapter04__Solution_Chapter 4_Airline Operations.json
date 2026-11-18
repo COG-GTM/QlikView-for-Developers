@@ -1,0 +1,818 @@
+{
+ "app": "Solution_Chapter 4_Airline Operations.qvw",
+ "path": "Chapter04/Solution_Chapter 4_Airline Operations.qvw",
+ "chapter": "Chapter04",
+ "qvw_bytes": 55781888,
+ "last_reload": "2012-07-21 12:23:41",
+ "script": {
+  "file": "scripts/Chapter04__Solution_Chapter 4_Airline Operations.qvs",
+  "tabs": [
+   "Main",
+   "Main Data",
+   "Airlines",
+   "Aircrafts",
+   "Airports"
+  ],
+  "hidden_script": false,
+  "features": {
+   "sql_select": 2
+  },
+  "sources": [
+   {
+    "path": "..\\Data Files\\QVDs\\Flight Data.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Flight Data.qvd"
+   },
+   {
+    "path": "..\\Data Files\\QVDs\\Carrier Groups.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Carrier Groups.qvd"
+   },
+   {
+    "path": "..\\Data Files\\QVDs\\Airlines.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Airlines.qvd"
+   },
+   {
+    "path": "..\\Data Files\\QVDs\\Carrier Operating Region.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Carrier Operating Region.qvd"
+   },
+   {
+    "path": "..\\Data Files\\QVDs\\Flight Types.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Flight Types.qvd"
+   },
+   {
+    "path": "..\\Data Files\\QVDs\\Aircraft Groups.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Aircraft Groups.qvd"
+   },
+   {
+    "path": "..\\Data Files\\QVDs\\Aircraft Types.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Aircraft Types.qvd"
+   },
+   {
+    "path": "..\\Data Files\\QVDs\\Distance Groups.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Distance Groups.qvd"
+   },
+   {
+    "path": "..\\Data Files\\CSVs\\Origin Markets.csv",
+    "format": "txt, codepage is 1252, embedded labels, delimiter is '\\t', msq",
+    "kind": "CSV",
+    "resolved": "Data Files/CSVs/Origin Markets.csv"
+   },
+   {
+    "path": "..\\Data Files\\CSVs\\Destination Markets.csv",
+    "format": "txt, codepage is 1252, embedded labels, delimiter is '\\t', msq",
+    "kind": "CSV",
+    "resolved": "Data Files/CSVs/Destination Markets.csv"
+   },
+   {
+    "path": "Origin Airports",
+    "format": "SQL via OLE DB",
+    "kind": "MS Access (Jet OLEDB)",
+    "resolved": "Data Files/MDBs/Dimension Tables.mdb (table: Origin Airports)"
+   },
+   {
+    "path": "Destination Airports",
+    "format": "SQL via OLE DB",
+    "kind": "MS Access (Jet OLEDB)",
+    "resolved": "Data Files/MDBs/Dimension Tables.mdb (table: Destination Airports)"
+   }
+  ],
+  "stores": [],
+  "includes": [],
+  "table_labels": [
+   "Main Data",
+   "Carrier Groups",
+   "Airlines",
+   "Carrier Operating Region",
+   "Flight Types",
+   "Aircraft Groups",
+   "Aircraft Types",
+   "Distance Groups",
+   "Origin Airports",
+   "Destination Airports",
+   "Origin Markets",
+   "Destination Markets"
+  ],
+  "script_variables": [
+   {
+    "kind": "SET",
+    "name": "ThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "DecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyDecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyFormat",
+    "value": "'$#,##0.00;-$#,##0.00'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimeFormat",
+    "value": "'hh:mm:ss'"
+   },
+   {
+    "kind": "SET",
+    "name": "DateFormat",
+    "value": "'YYYY-MM-DD'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimestampFormat",
+    "value": "'YYYY-MM-DD hh:mm:ss[.fff]'"
+   },
+   {
+    "kind": "SET",
+    "name": "MonthNames",
+    "value": "'Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec'"
+   },
+   {
+    "kind": "SET",
+    "name": "DayNames",
+    "value": "'Mon;Tue;Wed;Thu;Fri;Sat;Sun'"
+   }
+  ],
+  "lines": 155
+ },
+ "data_model": {
+  "tables": [
+   {
+    "name": "Main Data",
+    "fields": 56,
+    "key_fields": 11,
+    "rows": 1256075,
+    "role": "fact (likely)"
+   },
+   {
+    "name": "Carrier Groups",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 8,
+    "role": "dimension"
+   },
+   {
+    "name": "Airlines",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 1548,
+    "role": "dimension"
+   },
+   {
+    "name": "Carrier Operating Region",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 6,
+    "role": "dimension"
+   },
+   {
+    "name": "Flight Types",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 4,
+    "role": "dimension"
+   },
+   {
+    "name": "Aircraft Groups",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 10,
+    "role": "dimension"
+   },
+   {
+    "name": "Aircraft Types",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 379,
+    "role": "dimension"
+   },
+   {
+    "name": "Distance Groups",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 25,
+    "role": "dimension"
+   },
+   {
+    "name": "Origin Airports",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 2104,
+    "role": "dimension"
+   },
+   {
+    "name": "Destination Airports",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 2169,
+    "role": "dimension"
+   },
+   {
+    "name": "Origin Markets",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 1841,
+    "role": "dimension"
+   },
+   {
+    "name": "Destination Markets",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 1903,
+    "role": "dimension"
+   },
+   {
+    "name": "$$SysTable 12",
+    "fields": 3,
+    "key_fields": 2,
+    "rows": 78,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 13",
+    "fields": 3,
+    "key_fields": 1,
+    "rows": 12,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 14",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 67,
+    "role": "system/synthetic"
+   }
+  ],
+  "key_fields": [
+   {
+    "field": "%Airline ID",
+    "cardinality": 1549,
+    "tags": "$key, $numeric, $integer"
+   },
+   {
+    "field": "%Carrier Group ID",
+    "cardinality": 9,
+    "tags": "$key, $numeric, $integer"
+   },
+   {
+    "field": "%Region Code",
+    "cardinality": 7,
+    "tags": "$key, $ascii, $text"
+   },
+   {
+    "field": "%Origin Airport ID",
+    "cardinality": 2124,
+    "tags": "$key, $numeric, $integer"
+   },
+   {
+    "field": "%Origin Airport Market ID",
+    "cardinality": 1859,
+    "tags": "$key, $numeric, $integer, $timestamp, $date"
+   },
+   {
+    "field": "%Destination Airport ID",
+    "cardinality": 2185,
+    "tags": "$key, $numeric, $integer"
+   },
+   {
+    "field": "%Destination Airport Market ID",
+    "cardinality": 1917,
+    "tags": "$key, $numeric, $integer, $timestamp, $date"
+   },
+   {
+    "field": "%Aircraft Group ID",
+    "cardinality": 10,
+    "tags": "$key, $numeric, $integer"
+   },
+   {
+    "field": "%Aircraft Type ID",
+    "cardinality": 379,
+    "tags": "$key, $numeric, $integer"
+   },
+   {
+    "field": "%Distance Group ID",
+    "cardinality": 25,
+    "tags": "$key, $numeric, $integer"
+   },
+   {
+    "field": "%Datasource ID",
+    "cardinality": 4,
+    "tags": "$key, $ascii, $text"
+   }
+  ],
+  "fields_by_table": {
+   "Main Data": [
+    "%Airline ID",
+    "%Carrier Group ID",
+    "%Unique Carrier Code",
+    "%Unique Carrier Entity Code",
+    "%Region Code",
+    "%Origin Airport ID",
+    "%Origin Airport Sequence ID",
+    "%Origin Airport Market ID",
+    "%Origin World Area Code",
+    "%Destination Airport ID",
+    "%Destination Airport Sequence ID",
+    "%Destination Airport Market ID",
+    "%Destination World Area Code",
+    "%Aircraft Group ID",
+    "%Aircraft Type ID",
+    "%Aircraft Configuration ID",
+    "%Distance Group ID",
+    "%Service Class ID",
+    "%Datasource ID",
+    "# Departures Scheduled",
+    "# Departures Performed",
+    "# Payload",
+    "Distance",
+    "# Available Seats",
+    "# Transported Passengers",
+    "# Transported Freight",
+    "# Transported Mail",
+    "# Ramp-To-Ramp Time",
+    "# Air Time",
+    "Unique Carrier",
+    "Carrier Code",
+    "Carrier Name",
+    "Origin Airport Code",
+    "Origin City",
+    "Origin State Code",
+    "Origin State FIPS",
+    "Origin State",
+    "Origin Country Code",
+    "Origin Country",
+    "Destination Airport Code",
+    "Destination City",
+    "Destination State Code",
+    "Destination State FIPS",
+    "Destination State",
+    "Destination Country Code",
+    "Destination Country",
+    "Year",
+    "Period",
+    "Quarter",
+    "Month (#)",
+    "Month",
+    "From - To Airport Code",
+    "From - To Airport ID",
+    "From - To City",
+    "From - To State Code",
+    "From - To State"
+   ],
+   "Airlines": [
+    "%Airline ID",
+    "Airline"
+   ],
+   "Carrier Groups": [
+    "%Carrier Group ID",
+    "Carrier Group"
+   ],
+   "Carrier Operating Region": [
+    "%Region Code",
+    "Carrier's Operating Region"
+   ],
+   "Origin Airports": [
+    "%Origin Airport ID",
+    "Origin Airport"
+   ],
+   "Origin Markets": [
+    "%Origin Airport Market ID",
+    "Origin Market"
+   ],
+   "Destination Airports": [
+    "%Destination Airport ID",
+    "Destination Airport"
+   ],
+   "Destination Markets": [
+    "%Destination Airport Market ID",
+    "Destination Market"
+   ],
+   "Aircraft Groups": [
+    "%Aircraft Group ID",
+    "Aircraft Group"
+   ],
+   "Aircraft Types": [
+    "%Aircraft Type ID",
+    "Aircraft Type"
+   ],
+   "Distance Groups": [
+    "%Distance Group ID",
+    "Distance Interval"
+   ],
+   "Flight Types": [
+    "%Datasource ID",
+    "Flight Type"
+   ]
+  },
+  "groups": [
+   {
+    "name": "Time",
+    "type": "drill-down",
+    "fields": [
+     "Year",
+     "Month"
+    ]
+   }
+  ]
+ },
+ "variables": [],
+ "config_variables": {
+  "CD": "F:",
+  "QvPath": "C:\\Program Files\\QlikView",
+  "QvRoot": "C:",
+  "QvWorkPath": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 1 - 9\\QlikView Development\\Airline Operations\\Apps",
+  "QvWorkRoot": "C:",
+  "WinPath": "C:\\Windows",
+  "WinRoot": "C:",
+  "ErrorMode": "",
+  "StripComments": "",
+  "OpenUrlTimeout": "",
+  "ScriptErrorCount": "0",
+  "ScriptErrorList": "",
+  "ScriptError": "",
+  "ThousandSep": ",",
+  "DecimalSep": ".",
+  "MoneyThousandSep": ",",
+  "MoneyDecimalSep": ".",
+  "MoneyFormat": "$#,##0.00;-$#,##0.00",
+  "TimeFormat": "hh:mm:ss",
+  "DateFormat": "YYYY-MM-DD",
+  "TimestampFormat": "YYYY-MM-DD hh:mm:ss[.fff]",
+  "MonthNames": "Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec",
+  "DayNames": "Mon;Tue;Wed;Thu;Fri;Sat;Sun"
+ },
+ "sheets": [
+  {
+   "name": "Main",
+   "id": "SH01"
+  },
+  {
+   "name": "Dashboard",
+   "id": "SH02"
+  }
+ ],
+ "objects": {
+  "ids": [
+   "SH01",
+   "LB09",
+   "LB11",
+   "LB12",
+   "LB10",
+   "LB15",
+   "LB03",
+   "LB05",
+   "LB06",
+   "LB02",
+   "LB07",
+   "LB13",
+   "LB01",
+   "LB04",
+   "SH02",
+   "CH02",
+   "CH01",
+   "LB27",
+   "LB32",
+   "SO01",
+   "LB26",
+   "LB28",
+   "LB29",
+   "LB31",
+   "LB30"
+  ],
+  "by_type": {
+   "sheet": 2,
+   "list box": 20,
+   "chart": 2,
+   "search object": 1
+  }
+ },
+ "charts": [
+  {
+   "id": "CH01",
+   "caption": "Traffic per Year",
+   "type": "Bar Chart",
+   "dimensions": [
+    "Time"
+   ],
+   "expressions": [
+    {
+     "label": "# of Flights",
+     "expression": "Sum ([# Departures Performed])"
+    },
+    {
+     "label": "# of Enplanned Passengers",
+     "expression": "Sum ([# Transported Passengers])"
+    },
+    {
+     "label": "Transported Freight",
+     "expression": "Sum ([# Transported Freight])"
+    },
+    {
+     "label": "Transported Mail",
+     "expression": "Sum ([# Transported Mail])"
+    }
+   ]
+  },
+  {
+   "id": "CH02",
+   "caption": "Top 10 Routes",
+   "type": "Straight Table",
+   "dimensions": [
+    "From - To City"
+   ],
+   "expressions": [
+    {
+     "label": "Flights",
+     "expression": "Sum ([# Departures Performed])"
+    },
+    {
+     "label": "Passengers",
+     "expression": "Sum ([# Transported Passengers])"
+    },
+    {
+     "label": "Freight",
+     "expression": "Sum ([# Transported Freight])"
+    },
+    {
+     "label": "Mail",
+     "expression": "Sum ([# Transported Mail])"
+    }
+   ]
+  }
+ ],
+ "kpis": [
+  {
+   "object": "CH01",
+   "caption": "Traffic per Year",
+   "label": "# of Flights",
+   "qlik": "Sum ([# Departures Performed])",
+   "expanded": "Sum ([# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "Time"
+   ]
+  },
+  {
+   "object": "CH01",
+   "caption": "Traffic per Year",
+   "label": "# of Enplanned Passengers",
+   "qlik": "Sum ([# Transported Passengers])",
+   "expanded": "Sum ([# Transported Passengers])",
+   "qlik_semantics": [],
+   "dims": [
+    "Time"
+   ]
+  },
+  {
+   "object": "CH01",
+   "caption": "Traffic per Year",
+   "label": "Transported Freight",
+   "qlik": "Sum ([# Transported Freight])",
+   "expanded": "Sum ([# Transported Freight])",
+   "qlik_semantics": [],
+   "dims": [
+    "Time"
+   ]
+  },
+  {
+   "object": "CH01",
+   "caption": "Traffic per Year",
+   "label": "Transported Mail",
+   "qlik": "Sum ([# Transported Mail])",
+   "expanded": "Sum ([# Transported Mail])",
+   "qlik_semantics": [],
+   "dims": [
+    "Time"
+   ]
+  },
+  {
+   "object": "CH02",
+   "caption": "Top 10 Routes",
+   "label": "Flights",
+   "qlik": "Sum ([# Departures Performed])",
+   "expanded": "Sum ([# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "From - To City"
+   ]
+  },
+  {
+   "object": "CH02",
+   "caption": "Top 10 Routes",
+   "label": "Passengers",
+   "qlik": "Sum ([# Transported Passengers])",
+   "expanded": "Sum ([# Transported Passengers])",
+   "qlik_semantics": [],
+   "dims": [
+    "From - To City"
+   ]
+  },
+  {
+   "object": "CH02",
+   "caption": "Top 10 Routes",
+   "label": "Freight",
+   "qlik": "Sum ([# Transported Freight])",
+   "expanded": "Sum ([# Transported Freight])",
+   "qlik_semantics": [],
+   "dims": [
+    "From - To City"
+   ]
+  },
+  {
+   "object": "CH02",
+   "caption": "Top 10 Routes",
+   "label": "Mail",
+   "qlik": "Sum ([# Transported Mail])",
+   "expanded": "Sum ([# Transported Mail])",
+   "qlik_semantics": [],
+   "dims": [
+    "From - To City"
+   ]
+  }
+ ],
+ "converter_assessment": {
+  "verdict": "partial",
+  "input_needed": "QVW is not readable by Qlik-To-PowerBI (QVF/JSON only); fed QVW-derived intermediate JSON from this manifest",
+  "trial": {
+   "exit": 0,
+   "tmdl_tables": 14,
+   "generic_table_names": 1,
+   "dax_measures": 7,
+   "dax_measures_unconverted": 0,
+   "relationships": [
+    [
+     "'Main Data'.'# Ramp-To-Ramp Time'",
+     "Calendar.Date"
+    ],
+    [
+     "'Main Data'.'%Carrier Group ID'",
+     "'Carrier Groups'.'%Carrier Group ID'"
+    ],
+    [
+     "'Main Data'.'%Airline ID'",
+     "Airlines.'%Airline ID'"
+    ],
+    [
+     "'Main Data'.'%Region Code'",
+     "'Carrier Operating Region'.'%Region Code'"
+    ],
+    [
+     "'Main Data'.'%Datasource ID'",
+     "'Flight Types'.'%Datasource ID'"
+    ],
+    [
+     "'Main Data'.'%Aircraft Group ID'",
+     "'Aircraft Groups'.'%Aircraft Group ID'"
+    ],
+    [
+     "'Main Data'.'%Aircraft Type ID'",
+     "'Aircraft Types'.'%Aircraft Type ID'"
+    ],
+    [
+     "'Main Data'.'%Distance Group ID'",
+     "'Distance Groups'.'%Distance Group ID'"
+    ],
+    [
+     "'Main Data'.'%Origin Airport ID'",
+     "'Origin Airports'.'%Origin Airport ID'"
+    ],
+    [
+     "'Main Data'.'%Destination Airport ID'",
+     "'Destination Airports'.'%Destination Airport ID'"
+    ],
+    [
+     "'Main Data'.'%Origin Airport Market ID'",
+     "'Origin Markets'.'%Origin Airport Market ID'"
+    ],
+    [
+     "'Main Data'.'%Destination Airport Market ID'",
+     "'Destination Markets'.'%Destination Airport Market ID'"
+    ]
+   ],
+   "report_pages": 2,
+   "reported_fidelity": "100% (not credible: unconverted Qlik syntax counted as exact)"
+  },
+  "unconverted_measures": [],
+  "chart_types": [
+   "Bar Chart",
+   "Straight Table"
+  ]
+ },
+ "pbip_plan": {
+  "relationships_from_keys": [
+   {
+    "key": "%Airline ID",
+    "tables": [
+     "Main Data",
+     "Airlines"
+    ]
+   },
+   {
+    "key": "%Carrier Group ID",
+    "tables": [
+     "Main Data",
+     "Carrier Groups"
+    ]
+   },
+   {
+    "key": "%Region Code",
+    "tables": [
+     "Main Data",
+     "Carrier Operating Region"
+    ]
+   },
+   {
+    "key": "%Origin Airport ID",
+    "tables": [
+     "Main Data",
+     "Origin Airports"
+    ]
+   },
+   {
+    "key": "%Origin Airport Market ID",
+    "tables": [
+     "Main Data",
+     "Origin Markets"
+    ]
+   },
+   {
+    "key": "%Destination Airport ID",
+    "tables": [
+     "Main Data",
+     "Destination Airports"
+    ]
+   },
+   {
+    "key": "%Destination Airport Market ID",
+    "tables": [
+     "Main Data",
+     "Destination Markets"
+    ]
+   },
+   {
+    "key": "%Aircraft Group ID",
+    "tables": [
+     "Main Data",
+     "Aircraft Groups"
+    ]
+   },
+   {
+    "key": "%Aircraft Type ID",
+    "tables": [
+     "Main Data",
+     "Aircraft Types"
+    ]
+   },
+   {
+    "key": "%Distance Group ID",
+    "tables": [
+     "Main Data",
+     "Distance Groups"
+    ]
+   },
+   {
+    "key": "%Datasource ID",
+    "tables": [
+     "Main Data",
+     "Flight Types"
+    ]
+   }
+  ],
+  "fact_tables": [
+   "Main Data"
+  ],
+  "rls": null
+ },
+ "gaps": [
+  "MS Access .mdb via Jet OLEDB: needs Access.Database M connector (32/64-bit ACE driver) or pre-export to CSV",
+  "QVD sources: Power BI cannot read QVD natively; converter emits Qvd.Document/placeholder CSV paths. Pre-convert QVDs to Parquet/CSV",
+  "Synthetic/system tables in model: $$SysTable 12, $$SysTable 13, $$SysTable 14",
+  "QlikView-only/approximate objects: search object×1 (map to slicers/bookmarks/cards/field parameters/buttons manually)"
+ ]
+}

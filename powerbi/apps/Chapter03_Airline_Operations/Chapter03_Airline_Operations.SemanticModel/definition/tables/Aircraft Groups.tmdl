@@ -1,0 +1,30 @@
+table 'Aircraft Groups'
+	lineageTag: 5c7fe6ea-f353-578a-bf4f-37865e06b5de
+
+	column '%Aircraft Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e638217b-34f9-5080-b927-0ce0013e4b79
+		summarizeBy: none
+		sourceColumn: %Aircraft Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Group'
+		dataType: string
+		lineageTag: a5cae502-259c-5f9f-abe2-3d97593f9ad3
+		summarizeBy: none
+		sourceColumn: Aircraft Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Aircraft Groups' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/QVDs/Aircraft Groups.parquet"),
+				    Selected = Table.SelectColumns(Source, {"%Aircraft Group ID", "Aircraft Group"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Aircraft Group ID", Int64.Type}, {"Aircraft Group", type text}})
+				in
+				    Typed
