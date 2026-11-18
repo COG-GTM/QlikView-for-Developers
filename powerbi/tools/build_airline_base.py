@@ -150,7 +150,8 @@ MEASURES = {
     "a1ec8a2cb5ee": ("Air Time % (CH21)", f"DIVIDE(SUM({m('# Air Time')}), SUM({m('# Ramp-To-Ramp Time')}))", PCT),
     "90777bd5df7f": ("Carrier", f"IF(DISTINCTCOUNTNOBLANK({CN}) = 1, MAX({CN}), \"Others\")", None),
     "072410d4365a": ("Departures Performed (thousands)", f"DIVIDE({FLIGHTS}, 1000)", DEC),
-    "f0af66ad7007": ("FTE % to Total", f"DIVIDE(SUM({m('# Equivalent FTEs')}), SUM({m('# Equivalent FTEs')}))", PCT),
+    # vTotalFTEs is "= Sum(...)": evaluated once over the selections, i.e. Sum(TOTAL ...)
+    "9f20a3cefdc3": ("FTE % to Total", f"DIVIDE(SUM({m('# Equivalent FTEs')}), CALCULATE(SUM({m('# Equivalent FTEs')}), ALLSELECTED()))", PCT),
     "db52d6494b27": ("FTEs", f"SUM({m('# Equivalent FTEs')})", NUM),
     "a8d240d462f9": ("# of Flights (units)", f"DIVIDE({FLIGHTS}, 1)", NUM),
     "f72a33049af9": ("# of Flights (thousands)", f"DIVIDE({FLIGHTS}, 1000)", DEC),
