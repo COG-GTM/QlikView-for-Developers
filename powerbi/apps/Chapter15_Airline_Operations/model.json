@@ -138,11 +138,11 @@
   },
   {
    "name": "FTE % to Total",
-   "parity_key": "f0af66ad7007",
+   "parity_key": "9f20a3cefdc3",
    "kpis": [
     "CH43#1"
    ],
-   "dax": "DIVIDE(SUM('Main Data'[# Equivalent FTEs]), SUM('Main Data'[# Equivalent FTEs]))"
+   "dax": "DIVIDE(SUM('Main Data'[# Equivalent FTEs]), CALCULATE(SUM('Main Data'[# Equivalent FTEs]), ALLSELECTED()))"
   },
   {
    "name": "FTEs",
@@ -504,6 +504,7 @@
   "Alternate states Group A / Group B -> disconnected 'Group A' / 'Group B' period tables used as slicers; the measures intersect the main selection with the group's periods ({[Group A] * $}).",
   "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the carriers whose value falls in the segment at query time, so RLS and selections apply as in QlikView. The row-level Flight Type deal status -> calculated column on Flight Types.",
   "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
+  "FTE % to Total (CH43): $(vTotalFTEs) is '= Sum([# Equivalent FTEs])', evaluated once in the selection, so the denominator is the selection-wide total -> CALCULATE(..., ALLSELECTED()); the inventory expansion had dropped the '=' (each carrier divided by itself) and is corrected to Sum(TOTAL ...) in the manifest.",
   "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion."
  ]
 }

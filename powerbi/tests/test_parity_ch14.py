@@ -68,6 +68,8 @@ def test_kpis_match_pandas(expected, flights):
     assert _total(expected, "CH60#1") == pytest.approx(ytd / ly - 1, rel=1e-12)
     assert _results(expected, "CH69#1")["Carrier Name"]  # Employment rows are visible without Section Access
     assert _results(expected, "CH46#1") == {"total": [], "Carrier Group": []}  # no Metric Name selected
+    shares = [r[1] for r in _results(expected, "CH43#1")["Carrier Name"] if r[1] is not None]
+    assert len(shares) > 1 and sum(shares) == pytest.approx(1)  # $(vTotalFTEs) is the selection-wide total
 
 
 def test_pbip_covers_every_kpi_without_roles(expected):

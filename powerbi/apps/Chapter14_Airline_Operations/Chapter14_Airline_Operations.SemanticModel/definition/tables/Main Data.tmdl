@@ -96,12 +96,12 @@ table 'Main Data'
 		annotation QlikExpression = ((Sum ([# Departures Performed]) / 1000))
 		annotation QlikObjects = CH22#2, CH47#2, CH55#1
 
-	measure 'FTE % to Total' = DIVIDE(SUM('Main Data'[# Equivalent FTEs]), SUM('Main Data'[# Equivalent FTEs]))
+	measure 'FTE % to Total' = DIVIDE(SUM('Main Data'[# Equivalent FTEs]), CALCULATE(SUM('Main Data'[# Equivalent FTEs]), ALLSELECTED()))
 		formatString: 0.00%
-		lineageTag: cfe579c0-2fe4-51dc-82bf-0103a315aacd
+		lineageTag: 32d209e4-a2ac-5663-88df-ec22ccf8fd2a
 
-		annotation ParityKey = f0af66ad7007
-		annotation QlikExpression = Sum([# Equivalent FTEs]) / ( Sum([# Equivalent FTEs]))
+		annotation ParityKey = 9f20a3cefdc3
+		annotation QlikExpression = Sum([# Equivalent FTEs]) / Sum(TOTAL [# Equivalent FTEs])
 		annotation QlikObjects = CH43#1
 
 	measure FTEs = SUM('Main Data'[# Equivalent FTEs])

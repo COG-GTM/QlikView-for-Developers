@@ -161,7 +161,10 @@ MEASURES = {
     "a1ec8a2cb5ee": ("Air Time % (CH21)", f"DIVIDE(SUM({m('# Air Time')}), SUM({m('# Ramp-To-Ramp Time')}))", PCT),
     "90777bd5df7f": ("Carrier", f"IF(DISTINCTCOUNTNOBLANK({CN}) = 1, MAX({CN}), \"Others\")", None),
     "072410d4365a": ("Departures Performed (thousands)", f"DIVIDE({FLIGHTS}, 1000)", DEC),
-    "f0af66ad7007": ("FTE % to Total", f"DIVIDE(SUM({m('# Equivalent FTEs')}), SUM({m('# Equivalent FTEs')}))", PCT),
+    # $(vTotalFTEs) is '= Sum([# Equivalent FTEs])': a '=' variable is evaluated once in the selection before
+    # expansion, so the denominator is the selection-wide total (manifest expansion: Sum(TOTAL ...)).
+    "9f20a3cefdc3": ("FTE % to Total", f"DIVIDE(SUM({m('# Equivalent FTEs')}), "
+                                       f"CALCULATE(SUM({m('# Equivalent FTEs')}), ALLSELECTED()))", PCT),
     "db52d6494b27": ("FTEs", f"SUM({m('# Equivalent FTEs')})", NUM),
     "a8d240d462f9": ("# of Flights (units)", f"DIVIDE({FLIGHTS}, 1)", NUM),
     "f72a33049af9": ("# of Flights (thousands)", f"DIVIDE({FLIGHTS}, 1000)", DEC),
@@ -289,6 +292,9 @@ GAPS = [
     "carriers whose value falls in the segment at query time, so RLS and selections apply as in QlikView. The row-level "
     "Flight Type deal status -> calculated column on Flight Types.",
     "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
+    "FTE % to Total (CH43): $(vTotalFTEs) is '= Sum([# Equivalent FTEs])', evaluated once in the selection, so the "
+    "denominator is the selection-wide total -> CALCULATE(..., ALLSELECTED()); the inventory expansion had dropped the "
+    "'=' (each carrier divided by itself) and is corrected to Sum(TOTAL ...) in the manifest.",
     "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, "
     "like QlikView's empty expansion.",
 ]
