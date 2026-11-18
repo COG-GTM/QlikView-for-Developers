@@ -120,7 +120,6 @@ GAPS = [
     "filter pane / bookmarks and are not generated.",
 ]
 
-TOP_N = {"CH02": 10}  # Qlik 'Top 10 Routes': max dimension values by the first expression
 
 
 def measures_for_ch11() -> dict[str, tuple]:
@@ -250,20 +249,6 @@ def relationships() -> list[tuple[str, str, str, str]]:
     return rels
 
 
-def top_n_filter(table: str, col: str, measure: str, n: int) -> list[dict]:
-    """Visual-level Top N filter: keep the n values of table[col] with the highest measure."""
-    ref = {"Column": {"Expression": {"SourceRef": {"Source": "m"}}, "Property": col}}
-    sub = {"Version": 2, "From": [{"Name": "m", "Entity": table, "Type": 0}], "Select": [{**ref, "Name": "field"}],
-           "OrderBy": [{"Direction": 2, "Expression": {"Measure": {"Expression": {"SourceRef": {"Source": "m"}},
-                                                                   "Property": measure}}}], "Top": n}
-    return [{"name": tag(SLUG, "topn", table, col), "type": "TopN", "howCreated": 1,
-             "expression": {"Column": {"Expression": {"SourceRef": {"Entity": table}}, "Property": col}},
-             "filter": {"Version": 2, "From": [{"Name": "subquery", "Expression": {"Subquery": {"Query": sub}}, "Type": 2},
-                                               {"Name": "m", "Entity": table, "Type": 0}],
-                        "Where": [{"Condition": {"In": {"Expressions": [ref],
-                                                        "Table": {"SourceRef": {"Source": "subquery"}}}}}]}}]
-
-
 def with_synced_slicers(sections: list[dict]) -> None:
     """QlikView selections are global: every list-box field gets a slicer on every page, in one sync group (hidden
     where the sheet had no list box for it), so a selection on any page filters every page's charts."""
@@ -284,26 +269,6 @@ def with_synced_slicers(sections: list[dict]) -> None:
             hidden = {**cfg, "name": tag(SLUG, "sync", sheet, group), "layouts": [{"id": 0, "position": pos}],
                       "singleVisual": {**cfg["singleVisual"], "display": {"mode": "hidden"}}}
             sec["visualContainers"].append({**pos, "config": json.dumps(hidden), "filters": "[]"})
-
-
-def with_top_n(sections: list[dict]) -> None:
-    for sec in sections:
-        sheet = json.loads(sec["config"])["QlikSheet"]
-        for vc in sec["visualContainers"]:
-            cfg = json.loads(vc["config"])
-            for oid, n in TOP_N.items():
-                if cfg["name"] == tag(SLUG, "visual", sheet, oid):
-                    query = cfg["singleVisual"]["prototypeQuery"]
-                    entities = {f["Name"]: f["Entity"] for f in query["From"]}
-                    col = next(x["Column"] for x in query["Select"] if "Column" in x)
-                    measure = next(x["Measure"]["Property"] for x in query["Select"] if "Measure" in x)
-                    vc["filters"] = json.dumps(top_n_filter(entities[col["Expression"]["SourceRef"]["Source"]],
-                                                            col["Property"], measure, n))
-                    alias = next(x["Measure"]["Expression"]["SourceRef"]["Source"] for x in query["Select"]
-                                 if "Measure" in x)
-                    query["OrderBy"] = [{"Direction": 2, "Expression": {"Measure": {
-                        "Expression": {"SourceRef": {"Source": alias}}, "Property": measure}}}]
-                    vc["config"] = json.dumps(cfg)
 
 
 def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "parquet") -> Path:
@@ -371,7 +336,6 @@ def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "par
         sections, unmapped = base.report_sections(manifest, specs, measures)
     finally:
         base.SLUG = base.CFG.slug
-    with_top_n(sections)
     with_synced_slicers(sections)
     (rp / "report.json").write_text(json.dumps({
         "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),

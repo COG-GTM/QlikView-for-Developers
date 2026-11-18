@@ -643,6 +643,23 @@ def grid(items: list, x0: int, width: int, cols: int) -> list[tuple]:
     return [(item, x0 + 10 + (i % cols) * (w + 10), 10 + (i // cols) * (h + 10), w, h) for i, item in enumerate(items)]
 
 
+def top_n_filter(table: str, col: str, measure: str, n: int) -> list[dict]:
+    """Visual-level Top N filter: keep the n values of table[col] with the highest measure."""
+    ref = {"Column": {"Expression": {"SourceRef": {"Source": "m"}}, "Property": col}}
+    sub = {"Version": 2, "From": [{"Name": "m", "Entity": table, "Type": 0}], "Select": [{**ref, "Name": "field"}],
+           "OrderBy": [{"Direction": 2, "Expression": {"Measure": {"Expression": {"SourceRef": {"Source": "m"}},
+                                                                   "Property": measure}}}], "Top": n}
+    return [{"name": tag(SLUG, "topn", table, col), "type": "TopN", "howCreated": 1,
+             "expression": {"Column": {"Expression": {"SourceRef": {"Entity": table}}, "Property": col}},
+             "filter": {"Version": 2, "From": [{"Name": "subquery", "Expression": {"Subquery": {"Query": sub}}, "Type": 2},
+                                               {"Name": "m", "Entity": table, "Type": 0}],
+                        "Where": [{"Condition": {"In": {"Expressions": [ref],
+                                                        "Table": {"SourceRef": {"Source": "subquery"}}}}}]}}]
+
+
+TOP_N = re.compile(r"\bTop (\d+)\b")  # Qlik 'Top 10 Routes': the dimension capped at N values by the first expression
+
+
 def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hidden: list[tuple] = ()) -> list[dict]:
     """Slicers in a left panel (up to 6 per column), the charts in a grid filling the rest of the page; hidden synced
     slicers are parked in a strip along the bottom edge."""
@@ -662,11 +679,18 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hi
                 if ref not in {s_["Name"] for s_ in select}:
                     select.append({kind: {"Expression": {"SourceRef": {"Source": alias}}, "Property": col}, "Name": ref})
                 projections.setdefault(role, []).append({"queryRef": ref})
+        filters = []
+        dims = [s_["Column"] for s_ in select if "Column" in s_]
+        meas = [s_["Measure"] for s_ in select if "Measure" in s_]
+        if (top := TOP_N.search(title)) and visual != "slicer" and dims and meas:
+            table = next(t for t, a in aliases.items() if a == dims[0]["Expression"]["SourceRef"]["Source"])
+            filters = top_n_filter(table, dims[0]["Property"], meas[0]["Property"], int(top.group(1)))
         pos = {"x": x, "y": y, "z": z, "width": w, "height": h}
         config = {"name": tag(SLUG, "visual", sheet, vid), "layouts": [{"id": 0, "position": pos}],
                   "singleVisual": {"visualType": visual, "projections": projections, "prototypeQuery": {
                       "Version": 2, "From": [{"Name": a, "Entity": t, "Type": 0} for t, a in aliases.items()],
-                      "Select": select}, "drillFilterOtherVisuals": True,
+                      "Select": select, **({"OrderBy": [{"Direction": 2, "Expression": {"Measure": meas[0]}}]}
+                                           if filters else {})}, "drillFilterOtherVisuals": True,
                       # QlikView selections are global: slicers on the same field are synced across pages
                       **({"syncGroup": {"groupName": select[0]["Name"], "fieldChanges": True, "filterChanges": True}}
                          if visual == "slicer" else {}),
@@ -679,7 +703,7 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hi
                       "vcObjects": {"title": [{"properties": {
                           "show": {"expr": {"Literal": {"Value": "true"}}},
                           "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]}}}
-        out.append({**pos, "config": json.dumps(config), "filters": "[]"})
+        out.append({**pos, "config": json.dumps(config), "filters": json.dumps(filters)})
     return out
 
 
