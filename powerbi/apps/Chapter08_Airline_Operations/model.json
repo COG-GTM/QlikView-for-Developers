@@ -156,6 +156,168 @@
    "Aircraft Number Of Engines": "The number of engines on the aircraft"
   }
  },
+ "slicers": [
+  {
+   "id": "LB27",
+   "sheet": "SH03",
+   "caption": "Flight Type",
+   "field": "Flight Type",
+   "table": "Flight Types",
+   "column": "Flight Type"
+  },
+  {
+   "id": "LB29",
+   "sheet": "SH03",
+   "caption": "Carrier Group",
+   "field": "Carrier Group",
+   "table": "Carrier Groups",
+   "column": "Carrier Group"
+  },
+  {
+   "id": "LB28",
+   "sheet": "SH03",
+   "caption": "Carrier's Operating Region",
+   "field": "Carrier's Operating Region",
+   "table": "Carrier Operating Region",
+   "column": "Carrier's Operating Region"
+  },
+  {
+   "id": "LB33",
+   "sheet": "SH03",
+   "caption": "Carrier Name",
+   "field": "Carrier Name",
+   "table": "Main Data",
+   "column": "Carrier Name"
+  },
+  {
+   "id": "LB31",
+   "sheet": "SH03",
+   "caption": "Quarter",
+   "field": "Quarter",
+   "table": "Main Data",
+   "column": "Quarter"
+  },
+  {
+   "id": "LB30",
+   "sheet": "SH03",
+   "caption": "Month",
+   "field": "Month",
+   "table": "Main Data",
+   "column": "Month"
+  },
+  {
+   "id": "LB32",
+   "sheet": "SH03",
+   "caption": "Year",
+   "field": "Year",
+   "table": "Main Data",
+   "column": "Year"
+  },
+  {
+   "id": "LB04",
+   "sheet": "SH01",
+   "caption": "Origin Country",
+   "field": "Origin Country",
+   "table": "Main Data",
+   "column": "Origin Country"
+  },
+  {
+   "id": "LB01",
+   "sheet": "SH01",
+   "caption": "Destination Country",
+   "field": "Destination Country",
+   "table": "Main Data",
+   "column": "Destination Country"
+  },
+  {
+   "id": "LB13",
+   "sheet": "SH01",
+   "caption": "Carrier's Operating Region",
+   "field": "Carrier's Operating Region",
+   "table": "Carrier Operating Region",
+   "column": "Carrier's Operating Region"
+  },
+  {
+   "id": "LB07",
+   "sheet": "SH01",
+   "caption": "Carrier Name",
+   "field": "Carrier Name",
+   "table": "Main Data",
+   "column": "Carrier Name"
+  },
+  {
+   "id": "LB02",
+   "sheet": "SH01",
+   "caption": "Destination State",
+   "field": "Destination State",
+   "table": "Main Data",
+   "column": "Destination State"
+  },
+  {
+   "id": "LB06",
+   "sheet": "SH01",
+   "caption": "Origin City",
+   "field": "Origin City",
+   "table": "Main Data",
+   "column": "Origin City"
+  },
+  {
+   "id": "LB05",
+   "sheet": "SH01",
+   "caption": "Origin State",
+   "field": "Origin State",
+   "table": "Main Data",
+   "column": "Origin State"
+  },
+  {
+   "id": "LB03",
+   "sheet": "SH01",
+   "caption": "Destination City",
+   "field": "Destination City",
+   "table": "Main Data",
+   "column": "Destination City"
+  },
+  {
+   "id": "LB15",
+   "sheet": "SH01",
+   "caption": "Carrier Group",
+   "field": "Carrier Group",
+   "table": "Carrier Groups",
+   "column": "Carrier Group"
+  },
+  {
+   "id": "LB12",
+   "sheet": "SH01",
+   "caption": "Flight Type",
+   "field": "Flight Type",
+   "table": "Flight Types",
+   "column": "Flight Type"
+  },
+  {
+   "id": "LB09",
+   "sheet": "SH01",
+   "caption": "Distance Interval",
+   "field": "Distance Interval",
+   "table": "Distance Groups",
+   "column": "Distance Interval"
+  }
+ ],
+ "unmapped_list_boxes": [
+  {
+   "id": "LB10",
+   "sheet": "SH01",
+   "caption": "Aircraft Type",
+   "field": "Aircraft Type",
+   "reason": "field 'Aircraft Type' is not in this app's data model"
+  },
+  {
+   "id": "LB11",
+   "sheet": "SH01",
+   "caption": "Aircraft Group",
+   "field": "Aircraft Group",
+   "reason": "field 'Aircraft Group' is not in this app's data model"
+  }
+ ],
  "semantic_gaps": [
   "Origin / Destination Airports: the repo's Dimension Tables.mdb holds 6,209 airports each; the .qvw was reloaded from an older .mdb with 2,104 / 2,169 (inventory/row_count_exceptions.json). The repo tables are supersets of every airport ID Main Data uses, so measures are unaffected; only unassociated airport rows differ.",
   "IF '$(vLoadMainData)' = 'Y' conditional load: the script always sets 'Y'; Main Data is always loaded.",
@@ -166,6 +328,8 @@
   "Month (Flight Data dual) -> text column sorted by the hidden Month__num.",
   "Calculated dimension (Flight Type deal status) -> calculated column 'Deal Status' on Flight Types.",
   "Synthetic keys ($$SysTable 11-13) are not reproduced: every dimension joins Main Data on its one % key.",
-  "QlikView-only sheet objects (multi boxes, current selections, bookmark object, buttons, search object, container, statistics box, text objects) and chart layout are not migrated; the report has one empty page."
+  "Report: one page per Qlik sheet; list boxes -> slicers on their sheet's page (field from the .qvw's DocumentSummary, sheet from the .qvw's object storage order). Charts, QlikView-only sheet objects (multi boxes, current selections, bookmark object, buttons, search object, container, statistics box, text objects) and layout are not migrated yet.",
+  "List box LB10 (Aircraft Type, sheet SH01): field 'Aircraft Type' is not in this app's data model; not migrated.",
+  "List box LB11 (Aircraft Group, sheet SH01): field 'Aircraft Group' is not in this app's data model; not migrated."
  ]
 }

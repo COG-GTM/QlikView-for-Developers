@@ -143,3 +143,24 @@ def test_comments_become_descriptions():
 def test_measures_avoid_reserved_var_names():
     text = (SM / "tables" / "Main Data.tmdl").read_text()
     assert not re.search(r"\bVAR\s+(Levels|Level|Value|Values|Table|Date|Year|Month)\b", text, re.I)
+
+
+def test_list_boxes_become_slicers_on_their_sheet_page():
+    model = json.loads((PBIP / "model.json").read_text())
+    report = json.loads((PBIP / "Chapter08_Airline_Operations.Report" / "report.json").read_text())
+    manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
+    assert [s["displayName"] for s in report["sections"]] == [s["name"] for s in manifest["sheets"]]
+    boxes = [o for o in manifest["objects"]["ids"] if o.startswith("LB")]
+    assert sorted(b["id"] for b in model["slicers"] + model["unmapped_list_boxes"]) == sorted(boxes)
+    assert {b["id"]: b["field"] for b in model["unmapped_list_boxes"]} == {"LB10": "Aircraft Type",
+                                                                            "LB11": "Aircraft Group"}
+    columns = {(c["table"], c["name"]) for c in read_tmdl(PBIP)["columns"] if not c["hidden"]}
+    sheet = {s["id"]: s["name"] for s in manifest["sheets"]}
+    pages = {s["displayName"]: [json.loads(v["config"]) for v in s["visualContainers"]] for s in report["sections"]}
+    for b in model["slicers"]:
+        assert (b["table"], b["column"]) in columns and b["caption"] == b["field"]
+        v = next(v for v in pages[sheet[b["sheet"]]] if v["name"] == b["id"])
+        assert v["singleVisual"]["visualType"] == "slicer"
+        assert v["singleVisual"]["projections"]["Values"][0]["queryRef"] == f"{b['table']}.{b['column']}"
+    assert {b["id"] for b in model["slicers"] if b["sheet"] == "SH03"} == {
+        "LB27", "LB28", "LB29", "LB30", "LB31", "LB32", "LB33"}

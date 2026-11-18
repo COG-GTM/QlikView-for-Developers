@@ -10,6 +10,7 @@ build_airline_base.py by ParityKey, keeping only those this app's charts use; bu
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import re
 import sys
@@ -20,7 +21,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_airline_base import CALC_DIMS, DEFAULT_ROOT, MEASURES, catalog_types, m_let, m_list, m_types  # noqa: E402
 
-from scaffold_pbip import APPS, POWERBI, TYPE_MAP, show, tag, tname  # noqa: E402
+from scaffold_pbip import APPS, POWERBI, REPO, TYPE_MAP, show, tag, tname  # noqa: E402
 
 sys.path.insert(0, str(POWERBI / "parity"))
 from harness import kpi_list, parity_key  # noqa: E402
@@ -28,6 +29,9 @@ from harness import kpi_list, parity_key  # noqa: E402
 APP = "Chapter08__Solution_Chapter 8_Airline Operations"
 SLUG = "Chapter08_Airline_Operations"
 PARQUET = POWERBI / "data" / "parquet"
+QVW = REPO / "Chapter08" / "Solution_Chapter 8_Airline Operations.qvw"
+PAGE_W, PAGE_H = 1280, 720
+SLICER_W, SLICER_H, SLICER_COLS = 236, 160, 5
 FLIGHT = "Data Files/QVDs/Flight Data.parquet"
 BASE = "Data Files/CSVs/Aircraft_Base_File.parquet"
 GROUPS = "Data Files/CSVs/Aircraft_Group.parquet"
@@ -87,8 +91,10 @@ GAPS = [
     "Month (Flight Data dual) -> text column sorted by the hidden Month__num.",
     "Calculated dimension (Flight Type deal status) -> calculated column 'Deal Status' on Flight Types.",
     "Synthetic keys ($$SysTable 11-13) are not reproduced: every dimension joins Main Data on its one % key.",
-    "QlikView-only sheet objects (multi boxes, current selections, bookmark object, buttons, search object, container, "
-    "statistics box, text objects) and chart layout are not migrated; the report has one empty page.",
+    "Report: one page per Qlik sheet; list boxes -> slicers on their sheet's page (field from the .qvw's "
+    "DocumentSummary, sheet from the .qvw's object storage order). Charts, QlikView-only sheet objects (multi boxes, "
+    "current selections, bookmark object, buttons, search object, container, statistics box, text objects) and layout "
+    "are not migrated yet.",
 ]
 
 
@@ -214,6 +220,76 @@ def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: l
     (path / f"{fname}.tmdl").write_text("\n".join(lines), encoding="utf-8")
 
 
+def list_boxes(manifest: dict) -> list[dict]:
+    """List boxes from the .qvw's DocumentSummary.xml (caption and bound field), with the sheet that holds them.
+
+    The manifest lists object ids in the .qvw's storage order: each sheet's objects follow its sheet id, except the
+    first sheet, whose id comes after its first objects.
+    """
+    with QVW.open("rb") as f:
+        f.seek(-400_000, 2)
+        tail = f.read()
+    xml = tail[tail.rfind(b"<DocumentSummary"):tail.rfind(b"</DocumentSummary>")].decode("utf-8")
+    fields = {}
+    for obj in re.findall(r"<SheetObject>(.*?)</SheetObject>", xml, re.S):
+        if "<Type>List Box</Type>" in obj:
+            oid = re.search(r"<ObjectId>Document\\(\w+)</ObjectId>", obj).group(1)
+            caption = html.unescape(re.search(r"<Caption>(.*?)</Caption>", obj, re.S).group(1))
+            fld = re.search(r"<Field>(.*?)</Field>", obj, re.S)
+            fields[oid] = (caption, html.unescape(fld.group(1)) if fld else caption)
+    sheets = [x["id"] for x in manifest["sheets"]]
+    current, out = sheets[0], []
+    for oid in manifest["objects"]["ids"]:
+        if oid in sheets:
+            current = oid if oid != sheets[0] or not out else current
+        elif oid in fields:
+            out.append({"id": oid, "sheet": current, "caption": fields[oid][0], "field": fields[oid][1]})
+    if missing := set(fields) - {b["id"] for b in out}:
+        raise SystemExit(f"list boxes not on any sheet: {sorted(missing)}")
+    return out
+
+
+def slicer(box: dict, table: str, column: str, i: int) -> dict:
+    x, y = 20 + (i % SLICER_COLS) * (SLICER_W + 12), 20 + (i // SLICER_COLS) * (SLICER_H + 12)
+    pos = {"x": x, "y": y, "z": i, "width": SLICER_W, "height": SLICER_H}
+    ref = f"{table}.{column}"
+    config = {"name": box["id"], "layouts": [{"id": 0, "position": pos}], "singleVisual": {
+        "visualType": "slicer", "projections": {"Values": [{"queryRef": ref, "active": True}]},
+        "prototypeQuery": {"Version": 2, "From": [{"Name": "t", "Entity": table, "Type": 0}],
+                           "Select": [{"Column": {"Expression": {"SourceRef": {"Source": "t"}}, "Property": column},
+                                       "Name": ref}]},
+        "objects": {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Basic'"}}}}}]},
+        "vcObjects": {"title": [{"properties": {
+            "show": {"expr": {"Literal": {"Value": "true"}}},
+            "text": {"expr": {"Literal": {"Value": "'" + box["caption"].replace("'", "''") + "'"}}}}}]}}}
+    return {**pos, "config": json.dumps(config), "filters": "[]"}
+
+
+def report(manifest: dict, specs: dict) -> tuple[dict, list[dict], list[dict]]:
+    """One page per Qlik sheet; each list box becomes a slicer on the model column of its field."""
+    columns = {}
+    for table, spec in specs.items():
+        for col, _ in spec["cols"]:
+            if not col.startswith("%") and not col.endswith("__num"):
+                columns.setdefault(col, table)
+    mapped, unmapped, sections = [], [], []
+    boxes = list_boxes(manifest)
+    for n, sheet in enumerate(manifest["sheets"]):
+        visuals = []
+        for box in (b for b in boxes if b["sheet"] == sheet["id"]):
+            table = columns.get(box["field"])
+            if table is None:
+                unmapped.append({**box, "reason": f"field {box['field']!r} is not in this app's data model"})
+                continue
+            visuals.append(slicer(box, table, box["field"], len(visuals)))
+            mapped.append({**box, "table": table, "column": box["field"]})
+        sections.append({"name": f"ReportSection{n}", "displayName": sheet["name"], "displayOption": 1, "ordinal": n,
+                         "width": PAGE_W, "height": PAGE_H, "config": "{}", "filters": "[]",
+                         "visualContainers": visuals})
+    return ({"config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
+             "layoutOptimization": 0, "resourcePackages": [], "sections": sections}, mapped, unmapped)
+
+
 def relationships() -> list[tuple[str, str, str, str]]:
     rels = [("Main Data", key, name, key) for name, _, key, _ in DIMENSIONS]
     rels.insert(4, ("Main Data", AIRCRAFT_KEY, AIRCRAFT, AIRCRAFT_KEY))
@@ -281,12 +357,8 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
     (sm / "definition.pbism").write_text(json.dumps({"version": "4.0", "settings": {}}, indent=2) + "\n")
     (rp / "definition.pbir").write_text(json.dumps(
         {"version": "4.0", "datasetReference": {"byPath": {"path": f"../{SLUG}.SemanticModel"}}}, indent=2) + "\n")
-    (rp / "report.json").write_text(json.dumps({
-        "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
-        "layoutOptimization": 0, "resourcePackages": [],
-        "sections": [{"name": "ReportSection", "displayName": "Page 1", "displayOption": 1, "ordinal": 0,
-                      "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": []}]},
-        indent=2) + "\n")
+    report_json, slicers, unmapped = report(manifest, specs)
+    (rp / "report.json").write_text(json.dumps(report_json, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (root / f"{SLUG}.pbip").write_text(json.dumps(
         {"version": "1.0", "artifacts": [{"report": {"path": f"{SLUG}.Report"}}], "settings": {"enableAutoRecovery": True}},
         indent=2) + "\n")
@@ -299,9 +371,11 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
          "calculated_dimensions": [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q, "dax": d}
                                    for t, col, q, d, _ in calc_dims],
          "descriptions": {"tables": table_comments, "fields": field_comments},
-         "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
+         "slicers": slicers, "unmapped_list_boxes": unmapped,
+         "semantic_gaps": GAPS + [f"List box {b['id']} ({b['caption']}, sheet {b['sheet']}): {b['reason']}; not "
+                                  "migrated." for b in unmapped]}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(measures)} measures, "
-          f"{len(calc_dims)} calculated columns")
+          f"{len(calc_dims)} calculated columns, {len(slicers)} slicers ({len(unmapped)} list boxes unmapped)")
     return root
 
 
