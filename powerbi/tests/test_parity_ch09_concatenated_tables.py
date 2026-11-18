@@ -13,6 +13,7 @@ import pytest
 
 import harness
 from dax import read_tmdl
+from scaffold_pbip import tag
 
 APP = "Chapter09__Solution_Chapter 9_Concatenated tables"
 POWERBI = Path(__file__).resolve().parents[1]
@@ -153,8 +154,11 @@ def test_report_pages_have_the_sheets_charts_and_slicers():
         for v in visuals:
             kinds.setdefault(page["displayName"], []).append(v["visualType"])
             assert {s["Name"] for s in v["prototypeQuery"]["Select"]} <= fields
-    charts = sum(1 for k in kinds.values() for t in k if t != "slicer")
-    assert charts >= len({c["id"].split(" ")[0] for c in manifest["charts"]})
+    charts = {c["id"].split(" ")[0] for c in manifest["charts"]}
+    names = {json.loads(v["config"])["name"] for p in report["sections"] for v in p["visualContainers"]}
+    placed = {cid for page in manifest["sheets"] for cid in charts
+              if tag(PBIP.name, "visual", page["id"], cid) in names}
+    assert placed == charts
     assert kinds["Dashboard"].count("slicer") == 7 and "gauge" in kinds["Dashboard"]
     assert kinds["Associations"].count("slicer") == 11
     unmapped = json.loads((PBIP / "model.json").read_text())["unmapped_list_boxes"]

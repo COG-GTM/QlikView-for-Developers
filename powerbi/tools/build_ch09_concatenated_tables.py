@@ -269,7 +269,8 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
     pages, unmapped = base.report_sections(manifest, specs, measures)
     slicer_gap = ("Report: one page per QlikView sheet from build_airline_base.report_sections - each chart is a visual "
                   "bound to its KPIs' measures at the deepest grain, each list box a slicer on the field its caption "
-                  "names (synced across pages, as QlikView selections are document-wide). No model field for: "
+                  "names (synced across pages, as QlikView selections are document-wide; a page with no list box, "
+                  "Gauge Styles, has no synced slicer, so selections made elsewhere do not filter it). No model field for: "
                   + ", ".join(f"{k} '{v}'" for k, v in sorted(unmapped.items())) + ".")
     rels = []
     for ft, fc, tt, tc in relationships():
