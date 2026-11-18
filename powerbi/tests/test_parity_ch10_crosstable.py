@@ -133,10 +133,14 @@ def test_report_page_visuals_bind_to_model_fields():
     for container in page["visualContainers"]:
         visual = json.loads(container["config"])["singleVisual"]
         types.append(visual["visualType"])
+        query = visual["prototypeQuery"]
+        sources = {f["Name"] for f in query["From"] if f["Entity"] == "Sheet1$"}
+        assert sources and len(sources) == len(query["From"])
         selected = {}
-        for item in visual["prototypeQuery"]["Select"]:
+        for item in query["Select"]:
             kind = "Column" if "Column" in item else "Measure"
             ref = item[kind]
+            assert ref["Expression"]["SourceRef"]["Source"] in sources
             assert ref["Property"] in (columns if kind == "Column" else measures), ref["Property"]
             selected[item["Name"]] = ref["Property"]
         for refs in visual["projections"].values():
