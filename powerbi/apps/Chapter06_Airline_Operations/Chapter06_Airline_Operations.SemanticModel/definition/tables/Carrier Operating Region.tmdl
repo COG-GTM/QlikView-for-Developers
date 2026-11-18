@@ -1,0 +1,29 @@
+table 'Carrier Operating Region'
+	lineageTag: b7ee095b-35fc-513f-8849-21a8f0a2cebc
+
+	column '%Region Code'
+		dataType: string
+		isHidden
+		lineageTag: 08e0585c-e396-5add-b4e2-f309ddd85134
+		summarizeBy: none
+		sourceColumn: %Region Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier''s Operating Region'
+		dataType: string
+		lineageTag: 929e3c9b-0b86-5fa3-bcc1-f186ec8b559a
+		summarizeBy: none
+		sourceColumn: Carrier's Operating Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Carrier Operating Region' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/QVDs/Carrier Operating Region.parquet"),
+				    Selected = Table.SelectColumns(Source, {"%Region Code", "Carrier's Operating Region"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Region Code", type text}, {"Carrier's Operating Region", type text}})
+				in
+				    Typed

@@ -31,9 +31,20 @@ jobs:
         run: python powerbi/parity/harness.py source --all
       - name: Committed expected results, PBIPs and DAX queries are reproducible
         run: |
-          python powerbi/tools/scaffold_pbip.py --app "Chapter03__Solution_Chapter 3_Airline Operations"
+          python powerbi/tools/build_ch03_airline.py
+          python powerbi/parity/harness.py queries --app "Chapter03__Solution_Chapter 3_Airline Operations" --pbip powerbi/apps/Chapter03_Airline_Operations
+          python powerbi/tools/scaffold_pbip.py --app "Chapter04__Solution_Chapter 4_Airline Operations"
+          python powerbi/tools/build_report.py --app "Chapter04__Solution_Chapter 4_Airline Operations" --pbip powerbi/apps/Chapter04_Airline_Operations
+          python powerbi/parity/harness.py queries --app "Chapter04__Solution_Chapter 4_Airline Operations" --pbip powerbi/apps/Chapter04_Airline_Operations
           python powerbi/tools/build_airline_base.py
+          python powerbi/tools/build_airline_ch06.py
+          python powerbi/parity/harness.py queries --app "Chapter06__Solution_Chapter 6_Airline Operations" --pbip powerbi/apps/Chapter06_Airline_Operations
           python powerbi/parity/harness.py queries --app "Chapter15__Solution_Chapter 15_Airline Operations" --pbip powerbi/apps/Chapter15_Airline_Operations
+          python powerbi/tools/build_airline_ch08.py
+          python powerbi/parity/harness.py queries --app "Chapter08__Solution_Chapter 8_Airline Operations" --pbip powerbi/apps/Chapter08_Airline_Operations
+          python powerbi/tools/build_ch09_concatenated_tables.py
+          python powerbi/parity/harness.py queries --app "Chapter09__Solution_Chapter 9_Concatenated tables" --pbip powerbi/apps/Chapter09_Concatenated_tables
+          python powerbi/parity/harness.py queries --app "Chapter13__Solution_Chapter 13_Airline Operations" --pbip powerbi/apps/Chapter13_Airline_Operations
           git status --porcelain -- powerbi/parity powerbi/apps
           git diff --exit-code -- powerbi/parity/expected powerbi/parity/dax powerbi/apps
           test -z "$(git status --porcelain --untracked-files=all -- powerbi/parity/dax powerbi/apps)"
