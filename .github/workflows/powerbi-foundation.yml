@@ -33,6 +33,10 @@ jobs:
         run: |
           python powerbi/tools/scaffold_pbip.py --app "Chapter03__Solution_Chapter 3_Airline Operations"
           git diff --exit-code -- powerbi/parity/expected powerbi/apps
+      - name: Hand-built app parity artifacts are reproducible
+        run: |
+          python powerbi/parity/harness.py queries --app "Chapter10__Hierarchy example" --pbip powerbi/apps/Chapter10_Hierarchy_example
+          git diff --exit-code -- powerbi/parity/expected powerbi/parity/dax
       - name: Tests
         working-directory: powerbi
         run: python -m pytest -q

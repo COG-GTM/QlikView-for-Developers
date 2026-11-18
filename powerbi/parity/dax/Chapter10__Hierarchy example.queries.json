@@ -1,0 +1,26 @@
+{
+ "app": "Chapter10__Hierarchy example",
+ "pbip": "powerbi/apps/Chapter10_Hierarchy_example",
+ "queries": [
+  {
+   "id": "table:Sheet1$-ExpandedNodes",
+   "table": "Sheet1$-ExpandedNodes",
+   "columns": [
+    "Parent_ID",
+    "Child_ID",
+    "Parent",
+    "Child",
+    "Child1",
+    "Child2",
+    "Child3",
+    "Child4",
+    "ParentName",
+    "Path",
+    "Depth"
+   ],
+   "query": "EVALUATE SELECTCOLUMNS('Sheet1$-ExpandedNodes', \"Parent_ID\", 'Sheet1$-ExpandedNodes'[Parent_ID], \"Child_ID\", 'Sheet1$-ExpandedNodes'[Child_ID], \"Parent\", 'Sheet1$-ExpandedNodes'[Parent], \"Child\", 'Sheet1$-ExpandedNodes'[Child], \"Child1\", 'Sheet1$-ExpandedNodes'[Child1], \"Child2\", 'Sheet1$-ExpandedNodes'[Child2], \"Child3\", 'Sheet1$-ExpandedNodes'[Child3], \"Child4\", 'Sheet1$-ExpandedNodes'[Child4], \"ParentName\", 'Sheet1$-ExpandedNodes'[ParentName], \"Path\", 'Sheet1$-ExpandedNodes'[Path], \"Depth\", 'Sheet1$-ExpandedNodes'[Depth])"
+  }
+ ],
+ "relationships": [],
+ "unmapped": []
+}

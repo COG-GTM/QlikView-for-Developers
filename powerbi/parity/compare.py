@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import math
 import re
+from collections import Counter
 from pathlib import Path
 
 from harness import DAX, REPORTS, load_expected, show
@@ -72,6 +73,18 @@ def check_relationship(result: dict) -> dict:
     return {"id": result["id"], "status": status, **counts}
 
 
+def compare_table(expected: dict, actual: dict | None) -> dict:
+    """Full-table parity: the rows must match as a multiset, every cell compared like a dimension value."""
+    if actual is None:
+        return {"id": expected["id"], "status": "missing"}
+    exp = Counter(tuple(norm_dim(x) for x in r) for r in expected["rows"])
+    act = Counter(tuple(norm_dim(x) for x in r) for r in actual["rows"])
+    diffs = [{"row": list(r), "source": exp[r], "dax": act[r]} for r in sorted(set(exp) | set(act), key=str)
+             if exp[r] != act[r]]
+    return {"id": expected["id"], "status": "pass" if not diffs else "fail", "rows": expected["row_count"],
+            "mismatches": len(diffs), "examples": diffs[:5]}
+
+
 def compare_rowset(expected: dict, actual: dict | None) -> dict:
     """Table/list box: the distinct rows shown must be the same set (no measure column)."""
     if actual is None:
@@ -103,6 +116,8 @@ def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6, relation
             continue
         for r in k["results"]:
             out.append({"kpi": k["kpi"], "label": k["label"], **compare_result(r, actual.get(r["id"]), rel, abs_)})
+    for t in expected_doc.get("tables", []):
+        out.append({"kpi": "table", "label": t["table"], **compare_table(t, actual.get(t["id"]))})
     for o in expected_doc.get("objects", []):
         for r in o["results"]:
             check = compare_result(r, actual.get(r["id"]), rel, abs_) if o["type"] == "row count" \
