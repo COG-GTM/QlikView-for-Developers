@@ -328,6 +328,10 @@ PAGES = [
     ("Data Consistency", "SH09", False, [
         (*slicer("LB35")[:2], (10, 10, 300, 300), *slicer("LB35")[3:]),
         (*slicer("LB34")[:2], (320, 10, 400, 700), *slicer("LB34")[3:]),
+        # stands in for table box TB01 'Flights': shows which aircraft fly in which years, since slicers on two
+        # dimensions do not filter each other the way associated QlikView list boxes do
+        ("tableEx", "Flights", (730, 10, 540, 700),
+         {"Values": [col(CAL, "Year"), col("Aircraft Types", "Aircraft Name"), meas("# of Flights")]}),
     ]),
 ]
 

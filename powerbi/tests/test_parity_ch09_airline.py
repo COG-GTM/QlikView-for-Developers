@@ -161,6 +161,10 @@ def test_list_boxes_become_slicers_and_parity_objects(expected):
                                        ("LB01", "LB02", "LB03", "LB04", "LB05", "LB06", "LB07", "LB09", "LB12", "LB13",
                                         "LB15")}
     assert by_page["Data Consistency"] == {"Master Calendar.Year", "Aircraft Types.Aircraft Name"}
+    flights = next(json.loads(v["config"])["singleVisual"] for s in report["sections"] if s["displayName"] == "Data Consistency"
+                   for v in s["visualContainers"] if "'Flights'" in v["config"])
+    assert [r["queryRef"] for r in flights["projections"]["Values"]] == [
+        "Master Calendar.Year", "Aircraft Types.Aircraft Name", "Main Data.# of Flights"]
     objs = {o["object"]: o for o in expected["objects"]}
     assert set(objs) == set(b.LIST_BOXES) - {"LB15", "LB29"}
     assert all(objs[lb]["fields"] == [b.LIST_BOXES[lb][1]] and objs[lb]["status"] == "ok" for lb in objs)

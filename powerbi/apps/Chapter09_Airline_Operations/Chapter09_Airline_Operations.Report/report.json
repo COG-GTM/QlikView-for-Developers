@@ -669,6 +669,15 @@
           "height": 700,
           "config": "{\"name\": \"246c00c4-5195-59e5-8a17-740a217341cb\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 320, \"y\": 10, \"z\": 1, \"width\": 400, \"height\": 700}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Types.Aircraft Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Name\"}, \"Name\": \"Aircraft Types.Aircraft Name\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Aircraft Name'\"}}}}}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
+        },
+        {
+          "x": 730,
+          "y": 10,
+          "z": 2,
+          "width": 540,
+          "height": 700,
+          "config": "{\"name\": \"3b9be6b4-0a89-5f8b-a1c7-34f0af00da45\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 730, \"y\": 10, \"z\": 2, \"width\": 540, \"height\": 700}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}, {\"queryRef\": \"Aircraft Types.Aircraft Name\"}, {\"queryRef\": \"Main Data.# of Flights\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Master Calendar\", \"Type\": 0}, {\"Name\": \"t1\", \"Entity\": \"Aircraft Types\", \"Type\": 0}, {\"Name\": \"t2\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Aircraft Name\"}, \"Name\": \"Aircraft Types.Aircraft Name\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t2\"}}, \"Property\": \"# of Flights\"}, \"Name\": \"Main Data.# of Flights\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Flights'\"}}}}}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
         }
       ]
     }
