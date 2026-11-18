@@ -1,0 +1,93 @@
+table Flights
+	lineageTag: 43f53ee7-a38a-5ba3-badd-c453e0fe546e
+
+	measure 'Flights by Group' = DIVIDE(SUM(Flights[# Departures Performed]), 1000)
+		formatString: #,0.00
+		lineageTag: 45f5ac65-e7e7-5620-9098-964e42bb64c2
+
+		annotation ParityKey = f666b17294cf
+		annotation QlikExpression = Sum ([# Departures Performed]) /1000
+		annotation QlikObjects = CH01#1
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f0d2351-faa9-58bd-b894-a1223034928c
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month (#)'
+		dataType: int64
+		formatString: 0
+		lineageTag: ef0026e5-80ba-52b8-a503-3c4045be2d3a
+		summarizeBy: none
+		sourceColumn: Month (#)
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Aircraft Type ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1f9cfc00-35d7-552d-bb71-70f27edd0a00
+		summarizeBy: none
+		sourceColumn: %Aircraft Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Departures Scheduled'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b5fde21-0b46-5f94-bc7b-b0e7bfea7a9d
+		summarizeBy: sum
+		sourceColumn: # Departures Scheduled
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Departures Performed'
+		dataType: int64
+		formatString: 0
+		lineageTag: f52bb305-73f2-590a-b1c5-ab4c9113a35f
+		summarizeBy: sum
+		sourceColumn: # Departures Performed
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Available Seats'
+		dataType: int64
+		formatString: 0
+		lineageTag: bfaf56e9-49de-50f7-8cf7-7430eb4d5b6c
+		summarizeBy: sum
+		sourceColumn: # Available Seats
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Transported Passengers'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2a6153a7-fc5f-5a2a-bd4d-31814ce19d57
+		summarizeBy: sum
+		sourceColumn: # Transported Passengers
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Transported Freight'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ad1529f-b036-5b5f-9841-f38a087950ed
+		summarizeBy: sum
+		sourceColumn: # Transported Freight
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Flights = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Chapter09/Flights.parquet"),
+				    Selected = Table.SelectColumns(Source, {"Year", "Month (#)", "%Aircraft Type ID", "# Departures Scheduled", "# Departures Performed", "# Available Seats", "# Transported Passengers", "# Transported Freight"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"Year", Int64.Type}, {"Month (#)", Int64.Type}, {"%Aircraft Type ID", Int64.Type}, {"# Departures Scheduled", Int64.Type}, {"# Departures Performed", Int64.Type}, {"# Available Seats", Int64.Type}, {"# Transported Passengers", Int64.Type}, {"# Transported Freight", Int64.Type}})
+				in
+				    Typed
