@@ -4,7 +4,8 @@ data/parquet/
 parity/expected/*.json.gz
 !parity/expected/Chapter03__Solution_Chapter 3_Airline Operations.json.gz
 !parity/expected/Chapter10__Generic Load.json.gz
-parity/dax/
+parity/dax/*
+!parity/dax/Chapter10__Generic Load.queries.json
 parity/reports/
 __pycache__/
 .pytest_cache/

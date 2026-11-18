@@ -1,0 +1,52 @@
+{
+ "app": "Chapter10__Generic Load",
+ "pbip": "powerbi/apps/Chapter10_Generic_Load",
+ "queries": [
+  {
+   "id": "table:GenericDB.Color",
+   "measure": null,
+   "grain": [
+    "Object",
+    "Color"
+   ],
+   "query": "EVALUATE GROUPBY(FILTER('GenericDB', NOT ISBLANK('GenericDB'[Color])), 'GenericDB'[Object], 'GenericDB'[Color], \"__rows\", SUMX(CURRENTGROUP(), 1))"
+  },
+  {
+   "id": "table:GenericDB.Weight",
+   "measure": null,
+   "grain": [
+    "Object",
+    "Weight"
+   ],
+   "query": "EVALUATE GROUPBY(FILTER('GenericDB', NOT ISBLANK('GenericDB'[Weight])), 'GenericDB'[Object], 'GenericDB'[Weight], \"__rows\", SUMX(CURRENTGROUP(), 1))"
+  },
+  {
+   "id": "table:GenericDB.Diameter",
+   "measure": null,
+   "grain": [
+    "Object",
+    "Diameter"
+   ],
+   "query": "EVALUATE GROUPBY(FILTER('GenericDB', NOT ISBLANK('GenericDB'[Diameter])), 'GenericDB'[Object], 'GenericDB'[Diameter], \"__rows\", SUMX(CURRENTGROUP(), 1))"
+  },
+  {
+   "id": "table:GenericDB.Value",
+   "measure": null,
+   "grain": [
+    "Object",
+    "Value"
+   ],
+   "query": "EVALUATE GROUPBY(FILTER('GenericDB', NOT ISBLANK('GenericDB'[Value])), 'GenericDB'[Object], 'GenericDB'[Value], \"__rows\", SUMX(CURRENTGROUP(), 1))"
+  },
+  {
+   "id": "table:GenericDB.Thickness",
+   "measure": null,
+   "grain": [
+    "Object",
+    "Thickness"
+   ],
+   "query": "EVALUATE GROUPBY(FILTER('GenericDB', NOT ISBLANK('GenericDB'[Thickness])), 'GenericDB'[Object], 'GenericDB'[Thickness], \"__rows\", SUMX(CURRENTGROUP(), 1))"
+  }
+ ],
+ "unmapped": []
+}
