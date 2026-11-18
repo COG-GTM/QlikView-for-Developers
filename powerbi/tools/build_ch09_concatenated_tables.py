@@ -14,6 +14,7 @@ import argparse
 import json
 import re
 import sys
+import zlib
 from pathlib import Path
 
 import pandas as pd
@@ -109,6 +110,69 @@ def let(steps: list[str], last: str) -> str:
             merged.append("\n\t\t\t\t    ".join([*pending, s]))
             pending = []
     return m_let(merged, last)
+
+
+QVW = POWERBI.parent / "Chapter09" / "Solution_Chapter 9_Concatenated tables.qvw"
+
+
+def qvw_listboxes() -> list[tuple[str, str, str]]:
+    """(sheet, list box id, caption) for every list box of the .qvw, in sheet order.
+
+    The list box field bindings are not readable, so the caption (QlikView's default is the field name) stands in
+    for it. In the document block each object record has its caption string just before `<id>[\\tlnk#n]\\x00\\x01`, and
+    each sheet record is `Document\\<sheet id>` followed by the `\\x04<id>` of its objects.
+    """
+    raw = QVW.read_bytes()
+    doc = zlib.decompressobj().decompress(raw[23:])
+    manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
+    out = []
+    for sheet in manifest["sheets"]:
+        start = doc.find(b"Document\\" + sheet["id"].encode() + b"\x00")
+        if start < 0:
+            start = re.search(rb"Document\\" + re.escape(sheet["id"].encode()) + rb"(?![\w])", doc).start()
+        seg = doc[start + 9:start + 3000]
+        stop = seg.find(b"Document\\SH")
+        kids = dict.fromkeys(m.decode() for m in re.findall(rb"\x04(LB\d\d)", seg[:stop if stop > 0 else None]))
+        for lb in kids:
+            captions = set()
+            for m in re.finditer(rb"[\x04\n]" + lb.encode() + rb"(?:\tlnk#\d+)?\x00\x01[\x00\x01]\x00,", doc):
+                text = [t for t in re.findall(rb"[\x20-\x7e]{2,}", doc[m.start() - 300:m.start()])
+                        if t not in (b"Tahoma", b"Arial")]
+                if text:
+                    captions.add(text[-1].decode("latin1"))
+            if captions:  # a record's caption can carry its printable length byte ('Year<'): keep the shortest
+                out.append((sheet["name"], lb, min(captions, key=len)))
+    return out
+
+
+def report_pages(columns: dict[str, list[str]]) -> tuple[list[dict], list[str]]:
+    """One page per QlikView sheet with list boxes; each list box whose caption is a model field becomes a slicer."""
+    owner = {c: t for t, cols in columns.items() for c in cols}
+    pages, unmapped, by_sheet = [], [], {}
+    for sheet, lb, caption in qvw_listboxes():
+        if caption in owner:
+            by_sheet.setdefault(sheet, []).append((lb, owner[caption], caption))
+        elif f"{lb} '{caption}'" not in unmapped:
+            unmapped.append(f"{lb} '{caption}'")
+    for n, (sheet, slicers) in enumerate(by_sheet.items()):
+        visuals = []
+        for i, (lb, table, col) in enumerate(slicers):
+            pos = {"x": 20 + (i % 6) * 205, "y": 20 + (i // 6) * 230, "z": i, "width": 195, "height": 220}
+            ref = f"{table}.{col}"
+            visuals.append({**pos, "config": json.dumps({
+                "name": lb, "layouts": [{"id": 0, "position": pos}],
+                "singleVisual": {
+                    "visualType": "slicer", "projections": {"Values": [{"queryRef": ref, "active": True}]},
+                    "prototypeQuery": {"Version": 2, "From": [{"Name": "t", "Entity": table, "Type": 0}], "Select": [
+                        {"Column": {"Expression": {"SourceRef": {"Source": "t"}}, "Property": col}, "Name": ref}]},
+                    "objects": {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Basic'"}}}}}]},
+                    "vcObjects": {"title": [{"properties": {
+                        "show": {"expr": {"Literal": {"Value": "true"}}},
+                        "text": {"expr": {"Literal": {"Value": "'" + col.replace("'", "''") + "'"}}}}}]}}}),
+                "filters": "[]"})
+        pages.append({"name": f"ReportSection{n}", "displayName": sheet, "displayOption": 1, "ordinal": n,
+                      "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": visuals})
+    return pages, unmapped
 
 
 def comments() -> tuple[dict[str, str], dict[str, str]]:
@@ -263,6 +327,13 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
         write_table(sm / "definition" / "tables", name, spec,
                     list(measures.values()) if name == "Main Data" else [],
                     [x for x in calc if x[0] == name], table_comments, field_comments)
+    columns = {name: [c for c, *_ in spec["cols"] if not c.startswith("%") and not c.endswith("__num")]
+               + [col for t, col, *_ in calc if t == name] for name, spec in specs.items()}
+    pages, unmapped = report_pages(columns)
+    slicer_gap = ("List boxes -> slicers on one page per QlikView sheet (Gauge Styles has none), matched by caption since "
+                  "the field bindings are unreadable. QlikView selections are document-wide; a Power BI slicer filters its "
+                  "own page unless synced. Multi boxes, statistics box, table box and search object are not rebuilt. "
+                  "No model field for: " + ", ".join(unmapped) + ".")
     rels = []
     for ft, fc, tt, tc in relationships():
         rels += [f"relationship {tag(SLUG, 'rel', ft, fc, tt)}", f"\tfromColumn: {tname(ft)}.{tname(fc)}",
@@ -303,8 +374,7 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
     (rp / "report.json").write_text(json.dumps({
         "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
         "layoutOptimization": 0, "resourcePackages": [],
-        "sections": [{"name": "ReportSection", "displayName": "Page 1", "displayOption": 1, "ordinal": 0,
-                      "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": []}]},
+        "sections": pages},
         indent=2) + "\n")
     (root / f"{SLUG}.pbip").write_text(json.dumps(
         {"version": "1.0", "artifacts": [{"report": {"path": f"{SLUG}.Report"}}], "settings": {"enableAutoRecovery": True}},
@@ -317,9 +387,12 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
                       for x in measures.values()],
          "calculated_dimensions": [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q, "dax": d}
                                    for t, col, q, d, _ in calc],
-         "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
+         "slicers": [{"page": p["displayName"], "list_box": json.loads(v["config"])["name"],
+                      "field": json.loads(v["config"])["singleVisual"]["projections"]["Values"][0]["queryRef"]}
+                     for p in pages for v in p["visualContainers"]],
+         "semantic_gaps": [*GAPS, slicer_gap]}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(measures)} measures, "
-          f"{len(calc)} calculated columns")
+          f"{len(calc)} calculated columns, {sum(len(p['visualContainers']) for p in pages)} slicers")
     return root
 
 

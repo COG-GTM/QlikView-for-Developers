@@ -17,6 +17,7 @@ Rebuild with `python powerbi/tools/build_ch09_concatenated_tables.py`; never edi
 | `OLEDB CONNECT32` Dimension Tables.mdb, `Left Keep ([Main Data])` Origin / Destination Airports | `Data Files/MDBs/Dimension Tables/*.parquet`, rows kept when the key is in `Main Data` |
 | `COMMENT TABLES / FIELDS USING Map_*_Comments` (Comments.xls) | TMDL `///` descriptions on the table and on every column of the commented field |
 | 10 key fields shared with `[Main Data]` | 10 relationships `Main Data` (many) → dimension (one), keys hidden |
+| 22 list boxes on 7 sheets (field bindings unreadable; captions read from the .qvw object records) | 48 slicers on one report page per sheet, the caption matched to a model field (`model.json` → `slicers`); `Aircraft Group` (LB11) and `Aircraft Type` (LB10) on Associations have no model field and are listed as gaps |
 | 23 charts, 12 distinct expressions | 12 measures with `ParityKey` annotations; CH27's row-level deal status → calculated column `Flight Types[Deal Status]` |
 
 Row counts: all 11 tables of the source model (`parity/models/Chapter09__Solution_Chapter 9_Concatenated tables.sql`)

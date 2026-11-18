@@ -137,3 +137,28 @@ def test_power_query_reproduces_the_script_transformations():
         assert '"Unknown"' in (SM / "tables" / f"{t}.tmdl").read_text()
     main = (SM / "tables" / "Main Data.tmdl").read_text()
     assert "Table.Combine({Flight, EmploymentQ})" in main and "sortByColumn: Month__num" in main
+
+
+def test_list_boxes_become_slicers_on_their_sheets():
+    from build_ch09_concatenated_tables import qvw_listboxes
+    boxes = qvw_listboxes()
+    assert len(boxes) == 50 and len({lb for _, lb, _ in boxes}) == 22
+    report = json.loads((PBIP / "Chapter09_Concatenated_tables.Report" / "report.json").read_text())
+    pages = {p["displayName"]: [json.loads(v["config"]) for v in p["visualContainers"]] for p in report["sections"]}
+    assert list(pages) == ["Dashboard", "Analysis", "Reports", "Associations", "Other Charts",
+                           "Other representations", "Data Consistency"]
+    model = read_tmdl(PBIP)
+    fields = {f"{c['table']}.{c['name']}" for c in model["columns"]}
+    unmapped = {(sheet, lb) for sheet, lb, caption in boxes if caption in ("Aircraft Group", "Aircraft Type")}
+    assert {(s, v["name"]) for s, vs in pages.items() for v in vs} == {(s, lb) for s, lb, _ in boxes} - unmapped
+    for visuals in pages.values():
+        for v in visuals:
+            ref = v["singleVisual"]["projections"]["Values"][0]["queryRef"]
+            assert v["singleVisual"]["visualType"] == "slicer" and ref in fields
+    dashboard = {v["name"]: v["singleVisual"]["projections"]["Values"][0]["queryRef"] for v in pages["Dashboard"]}
+    assert dashboard == {"LB32": "Main Data.Year", "LB30": "Main Data.Month", "LB31": "Main Data.Quarter",
+                         "LB27": "Flight Types.Flight Type", "LB33": "Main Data.Carrier Name",
+                         "LB28": "Carrier Operating Region.Carrier's Operating Region",
+                         "LB29": "Carrier Groups.Carrier Group"}
+    gaps = json.loads((PBIP / "model.json").read_text())["semantic_gaps"]
+    assert any("LB11 'Aircraft Group', LB10 'Aircraft Type'" in g for g in gaps)
