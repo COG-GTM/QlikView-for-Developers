@@ -135,7 +135,8 @@ class SourceModel:
             used[joined.index(t)].update(keys)
             used[p].update(keys)
         for f, col in colmap.items():
-            used[int(col.split(".", 1)[0][1:])].add(f)
+            i = int(col.split(".", 1)[0][1:])
+            used[i].update(c for c in (f, f"{f}__num") if c in self.columns[joined[i]])
         for t, _, keys in joins:
             if self._unique_on(t, keys):
                 used[joined.index(t)] = set(self.columns[t])

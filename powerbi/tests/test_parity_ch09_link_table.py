@@ -70,3 +70,14 @@ def test_pbip_covers_every_kpi_with_many_to_many_link():
     assert rels[(("Main Data", "%Key Field"), ("Link Table", "%Key Field"))]
     assert rels[(("Employment Statistics", "%Key Field"), ("Link Table", "%Key Field"))]
     assert not rels[(("Link Table", "%Airline ID"), ("Airlines", "%Airline ID"))]
+
+
+@pytest.mark.needs_parquet
+def test_link_table_dual_fields_keep_their_numbers():
+    """A field joined from the non-unique link table keeps its __num companion (numeric selections, Min/Max)."""
+    model = SourceModel(APP)
+    frm, cols = model.from_clause({"Month", DEP})
+    assert "Month__num" in cols and cols["Month"].split(".")[0] == cols["Month__num"].split(".")[0]
+    jan = model.con.execute(f'SELECT sum({cols[DEP]}) FROM {frm} WHERE {cols["Month__num"]} = 1').fetchone()[0]
+    flights = pd.read_parquet(PARQUET / "QVDs/Flight Data.parquet", columns=["Month (#)", DEP])
+    assert jan == flights.loc[flights["Month (#)"] == 1, DEP].sum()
