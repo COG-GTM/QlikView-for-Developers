@@ -1,0 +1,64 @@
+{
+ "app": "Chapter10__Crosstable example",
+ "pbip": "powerbi/apps/Chapter10_Crosstable_example",
+ "queries": [
+  {
+   "id": "CHK01#1@total",
+   "measure": "Total Sales",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Total Sales])"
+  },
+  {
+   "id": "CHK01#1@Department+Month",
+   "measure": "Total Sales",
+   "grain": [
+    "Department",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Sheet1$'[Department], 'Sheet1$'[Month], \"value\", [Total Sales])"
+  },
+  {
+   "id": "CHK02#1@total",
+   "measure": "Total Sales",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Total Sales])"
+  },
+  {
+   "id": "CHK02#1@Department",
+   "measure": "Total Sales",
+   "grain": [
+    "Department"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Sheet1$'[Department], \"value\", [Total Sales])"
+  },
+  {
+   "id": "CHK03#1@total",
+   "measure": "Total Sales",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Total Sales])"
+  },
+  {
+   "id": "CHK03#1@Month",
+   "measure": "Total Sales",
+   "grain": [
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Sheet1$'[Month], \"value\", [Total Sales])"
+  },
+  {
+   "id": "CHK04#1@total",
+   "measure": "Sales Count",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Sales Count])"
+  },
+  {
+   "id": "CHK04#1@Department",
+   "measure": "Sales Count",
+   "grain": [
+    "Department"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Sheet1$'[Department], \"value\", [Sales Count])"
+  }
+ ],
+ "unmapped": []
+}
