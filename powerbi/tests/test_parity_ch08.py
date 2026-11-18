@@ -145,36 +145,44 @@ def test_measures_avoid_reserved_var_names():
     assert not re.search(r"\bVAR\s+(Levels|Level|Value|Values|Table|Date|Year|Month)\b", text, re.I)
 
 
-def test_list_boxes_become_slicers_on_their_sheet_page():
-    model = json.loads((PBIP / "model.json").read_text())
+def _pages():
     report = json.loads((PBIP / "Chapter08_Airline_Operations.Report" / "report.json").read_text())
+    return {s["displayName"]: [json.loads(v["config"])["singleVisual"] for v in s["visualContainers"]]
+            for s in report["sections"]}
+
+
+def _title(v):
+    return v["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"][1:-1].replace("''", "'")
+
+
+def test_every_chart_is_on_a_sheet_page_with_model_fields():
     manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
-    assert [s["displayName"] for s in report["sections"]] == [s["name"] for s in manifest["sheets"]]
-    boxes = [o for o in manifest["objects"]["ids"] if o.startswith("LB")]
-    assert sorted(b["id"] for b in model["slicers"] + model["unmapped_list_boxes"]) == sorted(boxes)
+    pages = _pages()
+    assert list(pages) == [s["name"] for s in manifest["sheets"]]
+    charts = [(name, v) for name, vs in pages.items() for v in vs
+              if v["visualType"] != "slicer" and _title(v) not in ("Associations",) or
+              (v["visualType"] == "tableEx" and _title(v) == "Other representations")]
+    assert sorted(_title(v) for _, v in charts) == sorted(c["caption"] for c in manifest["charts"])
+    assert sum(v["visualType"] == "gauge" for _, v in charts) == 9
+    model = read_tmdl(PBIP)
+    columns = {f"{c['table']}.{c['name']}" for c in model["columns"] if not c["hidden"]}
+    measures = {f"{m['table']}.{m['name']}" for m in model["measures"]}
+    for vs in pages.values():
+        for v in vs:
+            for sel in v["prototypeQuery"]["Select"]:
+                assert sel["Name"] in (measures if "Measure" in sel else columns), sel["Name"]
+    assert {_title(v) for v in pages["Gauge Styles"] if v["visualType"] == "gauge"} == {"Air Time %"}
+
+
+def test_list_boxes_become_synced_slicers_on_every_page():
+    model = json.loads((PBIP / "model.json").read_text())
     assert {b["id"]: b["field"] for b in model["unmapped_list_boxes"]} == {"LB10": "Aircraft Type",
                                                                             "LB11": "Aircraft Group"}
-    columns = {(c["table"], c["name"]) for c in read_tmdl(PBIP)["columns"] if not c["hidden"]}
-    sheet = {s["id"]: s["name"] for s in manifest["sheets"]}
-    pages = {s["displayName"]: [json.loads(v["config"]) for v in s["visualContainers"]] for s in report["sections"]}
-    for b in model["slicers"]:
-        assert (b["table"], b["column"]) in columns and b["caption"] == b["field"]
-        v = next(v for v in pages[sheet[b["sheet"]]] if v["name"] == b["id"])
-        assert v["singleVisual"]["visualType"] == "slicer"
-        assert v["singleVisual"]["projections"]["Values"][0]["queryRef"] == f"{b['table']}.{b['column']}"
-    assert {b["id"] for b in model["slicers"] if b["sheet"] == "SH03"} == {
-        "LB27", "LB28", "LB29", "LB30", "LB31", "LB32", "LB33"}
-
-
-def test_slicers_sync_selections_across_every_page():
-    model = json.loads((PBIP / "model.json").read_text())
-    report = json.loads((PBIP / "Chapter08_Airline_Operations.Report" / "report.json").read_text())
     fields = {f"{b['table']}.{b['column']}" for b in model["slicers"]}
-    for page in report["sections"]:
-        configs = [json.loads(v["config"])["singleVisual"] for v in page["visualContainers"]]
-        assert sorted(c["syncGroup"]["groupName"] for c in configs) == sorted(fields), page["displayName"]
-        for c in configs:
-            assert c["syncGroup"]["groupName"] == c["projections"]["Values"][0]["queryRef"]
-            assert c["syncGroup"]["filterChanges"] and c["syncGroup"]["fieldChanges"]
-        shown = sum(c.get("display", {}).get("mode") != "hidden" for c in configs)
-        assert shown == {"Dashboard": 7, "Associations": 11}.get(page["displayName"], 0)
+    assert len(fields) == 14 and all(b["caption"] == b["column"] for b in model["slicers"])
+    for name, vs in _pages().items():
+        sl = [v for v in vs if v["visualType"] == "slicer"]
+        assert sorted(v["syncGroup"]["groupName"] for v in sl) == sorted(fields), name
+        assert all(v["syncGroup"]["groupName"] == v["projections"]["Values"][0]["queryRef"] for v in sl)
+        shown = [v for v in sl if v.get("display", {}).get("mode") != "hidden"]
+        assert len(shown) == {"Associations": 11, "Gauge Styles": 0}.get(name, 7), name
