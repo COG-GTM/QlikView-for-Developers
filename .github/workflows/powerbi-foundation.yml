@@ -32,6 +32,9 @@ jobs:
       - name: Committed expected results, PBIPs and DAX queries are reproducible
         run: |
           python powerbi/tools/scaffold_pbip.py --app "Chapter03__Solution_Chapter 3_Airline Operations"
+          python powerbi/tools/scaffold_pbip.py --app "Chapter04__Solution_Chapter 4_Airline Operations"
+          python powerbi/tools/build_report.py --app "Chapter04__Solution_Chapter 4_Airline Operations" --pbip powerbi/apps/Chapter04_Airline_Operations
+          python powerbi/parity/harness.py queries --app "Chapter04__Solution_Chapter 4_Airline Operations" --pbip powerbi/apps/Chapter04_Airline_Operations
           python powerbi/tools/build_airline_base.py
           python powerbi/parity/harness.py queries --app "Chapter15__Solution_Chapter 15_Airline Operations" --pbip powerbi/apps/Chapter15_Airline_Operations
           git status --porcelain -- powerbi/parity powerbi/apps

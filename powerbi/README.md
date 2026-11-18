@@ -9,6 +9,7 @@ chapter versions + 5 Chapter 09/10 demos).
 | `tools/convert_sources.py` | Converts every QVD, the Access database, Excel workbooks and CSVs to Parquet under `data/parquet/` (generated, not committed) and writes `data/catalog.json` |
 | `tools/verify_conversion.py` | Row-count verification against each source and against the inventory → `data/conversion_report.md` |
 | `tools/scaffold_pbip.py` | Generates a PBIP (TMDL) skeleton for an app per [docs/CONVENTIONS.md](docs/CONVENTIONS.md) |
+| `tools/build_report.py` | Writes report pages (slicers, charts with Top N filters) for a scaffolded plain-load app from its sheet layout and the PBIP's `ParityKey` measures |
 | `apps/` | One PBIP folder per migrated app (Chapter 03 scaffold is the reference layout) |
 | `parity/` | Parity harness: recomputes every KPI/chart expression from source, generates DAX queries, compares — see [docs/PARITY.md](docs/PARITY.md) |
 | `tests/` | `python -m pytest` (run from `powerbi/`) |
@@ -45,3 +46,8 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
 * Chapter 15 (Airline Operations base model, `apps/Chapter15_Airline_Operations`): its 14
   source-model tables match the inventory (after reproducing Section Access reduction for
   ADMIN), all 92 KPI expressions evaluate, and 182 DAX queries (role ADMIN) are generated.
+* Chapter 04 (`apps/Chapter04_Airline_Operations`): scaffolded plain-load model (12 tables,
+  11 relationships, 4 measures) with Main and Dashboard report pages; all 8 KPI expressions
+  match pyqvd + pandas on the original QVD, and 20 DAX queries plus 11 relationship checks
+  are generated. Origin/Destination Airports differ from the inventory only by the
+  documented superset exceptions.
