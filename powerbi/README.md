@@ -48,3 +48,6 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
 * Chapter 14 (Airline Operations, `apps/Chapter14_Airline_Operations`, built from the Chapter 15
   base without Section Access): its 13 unreduced source-model tables match the inventory, all 92
   KPI expressions evaluate, and 182 DAX queries (no role) are generated.
+* Chapter 09 Concatenated tables (`apps/Chapter09_Concatenated_tables`, derived from the
+  Chapter 15 base): its 11 source-model tables match the inventory, all 42 KPI expressions
+  evaluate, and 85 DAX queries are generated.

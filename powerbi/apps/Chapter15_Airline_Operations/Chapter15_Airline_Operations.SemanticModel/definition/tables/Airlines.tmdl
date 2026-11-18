@@ -26,6 +26,7 @@ table Airlines
 				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Airlines.parquet"), {"%Airline ID", "Airline"}),
 				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Airline ID"))),
 				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Airline ID"])),
-				    Typed = Table.TransformColumnTypes(Kept, {{"%Airline ID", Int64.Type}, {"Airline", type text}})
+				    WithPlaceholder = Table.Combine({Kept, #table({"%Airline ID", "Airline"}, {{-1, null}})}),
+				    Typed = Table.TransformColumnTypes(WithPlaceholder, {{"%Airline ID", Int64.Type}, {"Airline", type text}})
 				in
 				    Typed
