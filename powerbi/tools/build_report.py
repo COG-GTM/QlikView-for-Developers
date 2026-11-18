@@ -104,12 +104,12 @@ def visual(name: str, vtype: str, pos: tuple, columns: list, meas: list, title: 
     if vtype == "slicer":
         # Qlik selections are global; synced slicers carry them across pages.
         single["syncGroup"] = {"groupName": "{}.{}".format(*columns[0]), "fieldChanges": True, "filterChanges": True}
-    if hidden:
-        single["display"] = {"mode": "hidden"}
     if title:
         single["vcObjects"] = {"title": [{"properties": {"show": lit_bool(True), "text": lit(title)}}]}
     config = {"name": name, "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": 0, "width": w, "height": h}}],
               "singleVisual": single}
+    if hidden:
+        config["layouts"][0]["display"] = {"mode": "hidden"}
     return {"x": x, "y": y, "z": 0, "width": w, "height": h, "config": json.dumps(config),
             "filters": json.dumps(filters or [])}
 

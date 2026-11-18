@@ -229,7 +229,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB09\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Distance Groups.Distance Interval\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Distance Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Distance Interval\"}, \"Name\": \"Distance Groups.Distance Interval\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Distance Groups.Distance Interval\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB09\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Distance Groups.Distance Interval\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Distance Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Distance Interval\"}, \"Name\": \"Distance Groups.Distance Interval\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Distance Groups.Distance Interval\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         },
         {
@@ -238,7 +238,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB10\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Types.Aircraft Type\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Type\"}, \"Name\": \"Aircraft Types.Aircraft Type\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Aircraft Types.Aircraft Type\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB10\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Types.Aircraft Type\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Type\"}, \"Name\": \"Aircraft Types.Aircraft Type\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Aircraft Types.Aircraft Type\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         },
         {
@@ -247,7 +247,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB03\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination City\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination City\"}, \"Name\": \"Main Data.Destination City\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Destination City\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB03\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination City\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination City\"}, \"Name\": \"Main Data.Destination City\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Destination City\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         },
         {
@@ -256,7 +256,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB05\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin State\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin State\"}, \"Name\": \"Main Data.Origin State\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Origin State\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB05\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin State\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin State\"}, \"Name\": \"Main Data.Origin State\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Origin State\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         },
         {
@@ -265,7 +265,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB06\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin City\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin City\"}, \"Name\": \"Main Data.Origin City\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Origin City\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB06\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin City\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin City\"}, \"Name\": \"Main Data.Origin City\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Origin City\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         },
         {
@@ -274,7 +274,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB02\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination State\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination State\"}, \"Name\": \"Main Data.Destination State\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Destination State\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB02\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination State\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination State\"}, \"Name\": \"Main Data.Destination State\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Destination State\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         },
         {
@@ -283,7 +283,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB07\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Carrier Name\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB07\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Carrier Name\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         },
         {
@@ -292,7 +292,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination Country\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination Country\"}, \"Name\": \"Main Data.Destination Country\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Destination Country\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination Country\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination Country\"}, \"Name\": \"Main Data.Destination Country\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Destination Country\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         },
         {
@@ -301,7 +301,7 @@
           "z": 0,
           "width": 160,
           "height": 120,
-          "config": "{\"name\": \"SH02_LB04\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin Country\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin Country\"}, \"Name\": \"Main Data.Origin Country\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Origin Country\", \"fieldChanges\": true, \"filterChanges\": true}, \"display\": {\"mode\": \"hidden\"}}}",
+          "config": "{\"name\": \"SH02_LB04\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 160, \"height\": 120}, \"display\": {\"mode\": \"hidden\"}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin Country\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin Country\"}, \"Name\": \"Main Data.Origin Country\"}]}, \"drillFilterOtherVisuals\": true, \"syncGroup\": {\"groupName\": \"Main Data.Origin Country\", \"fieldChanges\": true, \"filterChanges\": true}}}",
           "filters": "[]"
         }
       ]

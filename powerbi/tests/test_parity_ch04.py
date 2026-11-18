@@ -61,7 +61,7 @@ def test_report_has_both_sheets_and_charts():
     assert charts["CH02"]["visualType"] == "tableEx"
     def slicers(section, hidden):
         return [c for c in map(json.loads, (v["config"] for v in section["visualContainers"]))
-                if c["singleVisual"]["visualType"] == "slicer" and ("display" in c["singleVisual"]) == hidden]
+                if c["singleVisual"]["visualType"] == "slicer" and ("display" in c["layouts"][0]) == hidden]
     main, dash = report["sections"]
     assert [c["name"] for c in slicers(main, False)][:1] == ["LB09"] and len(slicers(main, False)) == 13
     assert len(slicers(dash, False)) == 7 and not slicers(main, True)
