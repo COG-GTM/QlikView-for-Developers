@@ -39,7 +39,7 @@ class AirlineApp:
 
 
 CH15 = AirlineApp("Chapter15__Solution_Chapter 15_Airline Operations", "Chapter15_Airline_Operations", True,
-                  "INLFED-1", False)
+                  "INLFED-1", True)
 CH13 = AirlineApp("Chapter13__Solution_Chapter 13_Airline Operations", "Chapter13_Airline_Operations", False,
                   "INLFED", True)
 CH14 = AirlineApp("Chapter14__Solution_Chapter 14_Airline Operations", "Chapter14_Airline_Operations", False,

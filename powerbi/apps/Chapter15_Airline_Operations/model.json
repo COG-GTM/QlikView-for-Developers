@@ -494,6 +494,12 @@
    "omit": "Carrier Name"
   }
  },
+ "unmapped_list_boxes": {
+  "MB02": "Aircraft",
+  "MB01": "Flight Information",
+  "LB10": "Aircraft Type",
+  "LB11": "Aircraft Group"
+ },
  "semantic_gaps": [
   "Section Access -> RLS roles named after the Qlik USERIDs (ADMIN, DF, DU, IF, NOCARRIER) filtering INLFED[%FLIGHTTYPE]; passwords are not migrated, role membership is assigned in the Power BI service. '*' means every %FLIGHTTYPE value listed in Section Access, so ADMIN and NOCARRIER see the four flight types and, like in QlikView, not the Employment Statistics rows of Main Data (they have no %Datasource ID). Users outside every role (dataset owners) see all rows, which QlikView never showed in this document.",
   "OMIT Carrier Name (NOCARRIER) -> object-level security: Carrier Name has columnPermission none for that role; measures and calculated columns that reference it fail for that role instead of returning null as in QlikView.",
@@ -504,6 +510,7 @@
   "Alternate states Group A / Group B -> disconnected 'Group A' / 'Group B' period tables used as slicers; the measures intersect the main selection with the group's periods ({[Group A] * $}).",
   "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the carriers whose value falls in the segment at query time, so RLS and selections apply as in QlikView. The row-level Flight Type deal status -> calculated column on Flight Types.",
   "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
-  "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion."
+  "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion.",
+  "List boxes -> slicers on the field named by the box caption, on the page of the box's sheet (one per field and page). Boxes whose caption is no model field are not rebuilt (see unmapped_list_boxes): MB02 'Aircraft'; MB01 'Flight Information'; LB10 'Aircraft Type'; LB11 'Aircraft Group'. Their captions name no model field (multi boxes list several fields under one caption). Objects inside containers (on no sheet's object list) are placed on the first sheet with a container."
  ]
 }

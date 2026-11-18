@@ -209,7 +209,11 @@ class Evaluator:
         key has no dimension row show up as a null member (Qlik's '-' row, Power BI's blank row)."""
         if not dims:
             return pd.DataFrame({"__all": [0]})
-        frm, cols = self.m.from_clause(set(dims) | {f for f in fields if self.m.tables_with(f)})
+        used = {f for f in fields if self.m.tables_with(f)}
+        if not used:  # e.g. Dimensionality(): a chart's rows still follow the facts, null members included
+            fact = max(self.m.tables, key=lambda t: self.m.rows[t])
+            used = {self.m.columns[fact][0]}
+        frm, cols = self.m.from_clause(set(dims) | used)
         sel = ", ".join(f"{cols[d]} AS {qi(d)}" for d in dims)
         return self.m.con.execute(f"SELECT DISTINCT {sel} FROM {frm}").df()
 
