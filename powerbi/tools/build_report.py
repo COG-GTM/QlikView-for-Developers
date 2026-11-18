@@ -160,7 +160,7 @@ def page(i: int, spec: dict, charts: dict, by_key: dict, cols: dict, synced: lis
             if (t, c) not in here:
                 here.add((t, c))
                 boxes.append((f"{spec['id']}_{oid}", t, c))
-        per_row, sw, sh = 9, 135, 56
+        per_row, sw, sh = 9, 135, 72  # 72 px fits a dropdown slicer's title and its "All" box
         for j, (oid, t, c) in enumerate(boxes):
             r, k = divmod(j, per_row)
             visuals.append(visual(oid, "slicer", (10 + k * (sw + 5), 10 + r * (sh + 6), sw, sh), [(t, c)], [], c,
