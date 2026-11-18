@@ -120,9 +120,9 @@ def report(sm_tables: set[str]) -> dict:
         # QlikView selections are global: every list box field is a sync group present on every page,
         # hidden where the sheet has no list box for it
         shown = {LIST_BOXES[lb] for lb in slicers}
-        for field in dict.fromkeys(LIST_BOXES.values()):
-            if field not in shown:
-                visuals.append(("slicer", {"Values": [field]}, 0, 0, 140, 90))
+        hidden = [f for f in dict.fromkeys(LIST_BOXES.values()) if f not in shown]
+        for k, field in enumerate(hidden):  # bottom strip, clear of every visible visual
+            visuals.append(("slicer", {"Values": [field]}, 1260 - 20 * k, 702, 16, 16))
         for j, ch in enumerate(charts):
             vt, roles = CHARTS[ch]
             per_row = 3 if n > 4 else 2 if n > 1 else 1
