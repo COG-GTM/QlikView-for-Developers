@@ -37,6 +37,10 @@ jobs:
           git status --porcelain -- powerbi/parity powerbi/apps
           git diff --exit-code -- powerbi/parity/expected powerbi/parity/dax powerbi/apps
           test -z "$(git status --porcelain --untracked-files=all -- powerbi/parity/dax powerbi/apps)"
+      - name: Hand-built app parity artifacts are reproducible
+        run: |
+          python powerbi/parity/harness.py queries --app "Chapter10__Hierarchy example" --pbip powerbi/apps/Chapter10_Hierarchy_example
+          git diff --exit-code -- powerbi/parity/expected powerbi/parity/dax
       - name: Tests
         working-directory: powerbi
         run: python -m pytest -q

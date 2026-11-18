@@ -36,5 +36,6 @@
    "query": "EVALUATE ROW(\"value\", COUNTROWS('Production Planning - Legacy'))"
   }
  ],
+ "relationships": [],
  "unmapped": []
 }

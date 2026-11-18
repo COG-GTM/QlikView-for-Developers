@@ -17,5 +17,12 @@
    "query": "EVALUATE SUMMARIZECOLUMNS('Aircrafts'[Aircraft Group], \"value\", [Flights by Group])"
   }
  ],
+ "relationships": [
+  {
+   "id": "REL:'Flights'[%Aircraft Type ID] -> 'Aircrafts'[%Aircraft Type ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Flights'[%Aircraft Type ID]), NOT ISBLANK('Flights'[%Aircraft Type ID])), \"k\", 'Flights'[%Aircraft Type ID]), SELECTCOLUMNS(ALLNOBLANKROW('Aircrafts'[%Aircraft Type ID]), \"k\", 'Aircrafts'[%Aircraft Type ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Flights'), REMOVEFILTERS(), TREATAS(missing, 'Flights'[%Aircraft Type ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Aircrafts')) - COUNTROWS(ALLNOBLANKROW('Aircrafts'[%Aircraft Type ID])))"
+  }
+ ],
  "unmapped": []
 }

@@ -41,6 +41,9 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 * Still unsupported (`Above()`, `Rank()`, `Concat()`, bookmarks, ...) is listed as
   `unsupported` with the reason instead of being guessed; extend `qlik_expr.py`/`engine.py`
   when an app needs it.
+* Apps with no chart expressions (Chapter 10 ETL demos such as `Hierarchy example`) get
+  full-table parity instead: every row of each model table, columns in Qlik field order,
+  under `tables` with id `table:<Qlik table>`, when the app has no `parity/objects/<app>.json`.
 * Table boxes and list boxes (rows shown, no measure; complements `checks` above, which need a measure)
   are listed in `parity/objects/<app>.json` (`objects.py`): a table box yields the distinct
   rows of its fields, a list box the distinct non-null values of its field, and a
@@ -57,12 +60,19 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   `EVALUATE ROW("value", [M])` or `EVALUATE SUMMARIZECOLUMNS('T'[c1], …, "value", [M])`.
   KPIs without an annotated measure are listed under `unmapped`. Sheet objects become
   `EVALUATE SUMMARIZECOLUMNS('T'[c1], …)` (compared as a set of rows) and row counts
-  `EVALUATE ROW("value", COUNTROWS('T'))`.
+  `EVALUATE ROW("value", COUNTROWS('T'))`. Full-table entries become
+  `EVALUATE SELECTCOLUMNS('T', "field", 'T'[col], …)`, matching columns by name or
+  `sourceColumn` (so DAX calculated columns can stand in for script-generated fields).
+  Each relationship in `relationships.tmdl` also gets an integrity query
+  (`REL:<from> -> <to>`, under `relationships`): many-side keys with no one-side match,
+  the rows they cover, and duplicated one-side keys.
 * `run_dax.ps1` (Windows PowerShell 5.1+) runs the queries with ADOMD.NET against the model
   open in Power BI Desktop (port from `msmdsrv.port.txt` under
   `%LOCALAPPDATA%\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces`), or against any
   XMLA endpoint via `-Server`/`-Database` (Premium/Fabric workspace, or Analysis Services).
-  It writes `{"app", "produced_by", "executed_at", "results": [{"id", "columns", "rows"}]}`.
+  It writes `{"app", "produced_by", "role", "executed_at", "results": [{"id", "columns", "rows"}]}`.
+  A top-level `"role"` in the queries file (or `-Role`) connects with `Roles=<role>`, so the
+  queries run under that RLS role (apps whose baseline is Section Access reduced for a user).
 * Procedure on the Windows machine: get the Parquet (convert under WSL or download the CI
   artifact) → open `apps/<Slug>/<Slug>.pbip` → set `DataRoot` → Refresh → run `queries`
   then `run_dax.ps1` → run `compare` → commit `reports/<app>.md` with the app's PR.
@@ -73,8 +83,12 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 
 * Rows are matched on dimension values (numbers compared numerically, dates by ISO date,
   text exactly). Blank and 0 are equal (Qlik hides zero rows, DAX drops blank rows).
+* Full-table results must match as a multiset of rows, each cell compared like a dimension value.
 * Values: `rel_tol=1e-9`, `abs_tol=1e-6` by default (`--rel-tol`, `--abs-tol`).
-* Exit code 0 only when every evaluated result passes; `fail` lists up to 5 example rows.
+* Exit code 0 only when every evaluated result passes and no relationship check fails;
+  `fail` lists up to 5 example rows.
+* Relationships: `fail` on duplicated one-side keys, `missing` when a check listed in the queries file has no result, `warn` on unmatched
+  many-side keys (those rows sit under the blank member, as Qlik keeps them unassociated).
 
 ## 4. Known semantic gaps to keep in mind
 

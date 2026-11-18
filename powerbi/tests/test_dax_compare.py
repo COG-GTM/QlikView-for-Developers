@@ -83,3 +83,34 @@ def test_duplicate_parity_key_is_rejected(tmp_path, monkeypatch):
     monkeypatch.setattr(dax, "DAX", tmp_path)
     with pytest.raises(ValueError, match="two measures"):
         dax.write_queries(CH03, dst)
+
+
+def test_every_relationship_gets_an_integrity_query(tmp_path, monkeypatch):
+    monkeypatch.setattr(dax, "DAX", tmp_path)
+    dax.write_queries(CH03, harness.REPO / "powerbi/apps/Chapter03_Airline_Operations")
+    spec = json.loads((tmp_path / f"{CH03}.queries.json").read_text())
+    ids = [r["id"] for r in spec["relationships"]]
+    assert len(ids) == 7
+    assert "REL:'Main Data'[%Airline ID] -> 'Airlines'[%Airline ID]" in ids
+    q = spec["relationships"][0]["query"]
+    assert q.startswith("DEFINE VAR missing = EXCEPT(") and '"duplicate_keys"' in q
+
+
+def test_compare_reports_relationship_integrity(expected):
+    results = _as_dax_results(expected)
+    cols = ["[unmatched_keys]", "[unmatched_rows]", "[duplicate_keys]"]
+    results["results"] += [
+        {"id": "REL:a -> b", "columns": cols, "rows": [[None, None, 0]]},
+        {"id": "REL:c -> d", "columns": cols, "rows": [[2, 12, 0]]},
+        {"id": "REL:e -> f", "columns": cols, "rows": [[None, None, 3]]},
+    ]
+    report = compare.compare(expected, results)
+    assert set(report["summary"]) == {"pass"}
+    assert report["relationship_summary"] == {"pass": 1, "warn": 1, "fail": 1}
+    assert [r["status"] for r in report["relationships"]] == ["pass", "warn", "fail"]
+    assert report["relationships"][1]["unmatched_rows"] == 12
+
+
+def test_compare_flags_missing_relationship_results(expected):
+    report = compare.compare(expected, _as_dax_results(expected), relationship_ids=["REL:a -> b"])
+    assert report["relationship_summary"] == {"missing": 1}

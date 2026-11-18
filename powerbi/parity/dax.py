@@ -6,9 +6,13 @@ and a Qlik field maps to the column whose ``sourceColumn`` (or name) is that fie
 Each expected result id gets one query:
   grand total -> EVALUATE ROW("value", [Measure])
   grain       -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2], "value", [Measure])
+  table       -> EVALUATE SELECTCOLUMNS('T', "c1", 'T'[c1], ...)   (full-table parity, apps without KPIs)
 Sheet objects without expressions (parity/objects/<app>.json):
   table/list box -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2])   (the distinct rows it shows)
   row count      -> EVALUATE ROW("value", COUNTROWS('T'))
+Each relationship in ``relationships.tmdl`` gets an integrity query (id ``REL:<from> -> <to>``):
+distinct many-side keys with no match on the one side, the many-side rows they cover, and
+duplicated one-side keys.
 """
 from __future__ import annotations
 
@@ -58,6 +62,42 @@ def read_tmdl(pbip: Path) -> dict:
     return model
 
 
+COLREF_RE = re.compile(r"^('(?:[^']|'')*'|[^.]+)\.('(?:[^']|'')*'|.+)$")
+
+
+def read_relationships(pbip: Path) -> list[dict]:
+    path = next(pbip.glob("*.SemanticModel")) / "definition" / "relationships.tmdl"
+    if not path.exists():
+        return []
+    rels, current = [], None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if m := re.match(r"^relationship (.+)$", line):
+            current = {"name": m.group(1).strip(), "active": True, "to_many": False}
+            rels.append(current)
+        elif current is None:
+            continue
+        elif m := re.match(r"^	(fromColumn|toColumn):\s*(.+)$", line):
+            t, c = COLREF_RE.match(m.group(2).strip()).groups()
+            current[m.group(1)] = (unquote_tmdl(t), unquote_tmdl(c))
+        elif re.match(r"^	isActive:\s*false\s*$", line):
+            current["active"] = False
+        elif re.match(r"^	toCardinality:\s*many\s*$", line):
+            current["to_many"] = True
+    return [r for r in rels if "fromColumn" in r and "toColumn" in r]
+
+
+def relationship_query(rel: dict) -> dict:
+    (ft, fc), (tt, tc) = rel["fromColumn"], rel["toColumn"]
+    f, t = dax_col(ft, fc), dax_col(tt, tc)
+    dups = "0" if rel["to_many"] else f"COUNTROWS(ALLNOBLANKROW({dax_table(tt)})) - COUNTROWS(ALLNOBLANKROW({t}))"
+    query = (f'DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW({f}), NOT ISBLANK({f})), "k", {f}), '
+             f'SELECTCOLUMNS(ALLNOBLANKROW({t}), "k", {t})) '
+             f'EVALUATE ROW("unmatched_keys", COUNTROWS(missing) + 0, '
+             f'"unmatched_rows", CALCULATE(COUNTROWS({dax_table(ft)}), REMOVEFILTERS(), TREATAS(missing, {f})) + 0, '
+             f'"duplicate_keys", {dups})')
+    return {"id": f"REL:{f} -> {t}", "active": rel["active"], "query": query}
+
+
 def column_for(model: dict, field: str) -> dict | None:
     if field.startswith("="):  # Qlik calculated dimension -> calculated column annotated with its ParityKey
         hits = [c for c in model["columns"] if parity_key(field) in c.get("keys", [])]
@@ -96,6 +136,16 @@ def write_queries(app: str, pbip: Path) -> str:
                 group = ", ".join(dax_col(c["table"], c["name"]) for c in cols)
                 query = f'EVALUATE SUMMARIZECOLUMNS({group}, "value", {mref})'
             queries.append({"id": r["id"], "measure": measure["name"], "grain": r["grain"], "query": query})
+    for t in expected.get("tables", []):
+        cols = [column_for(model, c) for c in t["columns"]]
+        if None in cols:
+            missing = [c for c, col in zip(t["columns"], cols) if col is None]
+            unmapped.append({"id": t["id"], "reason": f"no column for {missing}"})
+            continue
+        select = ", ".join(f'"{f.replace(chr(34), chr(34) * 2)}", {dax_col(c["table"], c["name"])}'
+                           for f, c in zip(t["columns"], cols))
+        queries.append({"id": t["id"], "table": t["table"], "columns": t["columns"],
+                        "query": f"EVALUATE SELECTCOLUMNS({dax_table(cols[0]['table'])}, {select})"})
     for o in expected.get("objects", []):
         for r in o["results"]:
             if o["type"] == "row count":
@@ -114,6 +164,9 @@ def write_queries(app: str, pbip: Path) -> str:
     out = DAX / f"{app}.queries.json"
     overlay = MODELS / f"{app}.overlay.json"
     role = json.loads(overlay.read_text()).get("parity_role") if overlay.exists() else None
+    relationships = [relationship_query(r) for r in read_relationships(pbip)]
     out.write_text(json.dumps({"app": app, "pbip": show(pbip), **({"role": role} if role else {}), "queries": queries,
+                               "relationships": relationships,
                                "unmapped": unmapped}, indent=1, ensure_ascii=False) + "\n")
-    return f"{len(queries)} DAX queries, {len(unmapped)} unmapped -> {show(out)}"
+    return (f"{len(queries)} DAX queries, {len(relationships)} relationship checks, "
+            f"{len(unmapped)} unmapped -> {show(out)}")

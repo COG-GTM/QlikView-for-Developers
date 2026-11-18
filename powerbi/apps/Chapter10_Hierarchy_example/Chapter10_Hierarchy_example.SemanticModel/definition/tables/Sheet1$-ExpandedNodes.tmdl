@@ -1,0 +1,125 @@
+/// Qlik HIERARCHY(Child_ID, Parent_ID, Child, ParentName, Child, Path, ' - ', HierarchyLevel) over Sheet1$:
+/// the parent/child rows load as-is; ancestors (Child1..Child4), ParentName, Path and Depth are DAX PATH/PATHITEM columns.
+table 'Sheet1$-ExpandedNodes'
+	lineageTag: c36900fc-7463-55d4-8b88-31f9270f7ab7
+
+	column Parent_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 89c8af5b-38bd-5b6f-962e-495dc1adf2f2
+		summarizeBy: none
+		sourceColumn: Parent_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Child_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f7c2a35-f9ef-5543-83a3-e8c8a26d69db
+		summarizeBy: none
+		sourceColumn: Child_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Parent
+		dataType: string
+		lineageTag: af3e6464-1b28-5466-b7d2-b0289f7ba723
+		summarizeBy: none
+		sourceColumn: Parent
+
+		annotation SummarizationSetBy = Automatic
+
+	column Child
+		dataType: string
+		lineageTag: 99829a90-0be3-53e0-a5e0-4ae38e004e84
+		summarizeBy: none
+		sourceColumn: Child
+
+		annotation SummarizationSetBy = Automatic
+
+	column NodePath = PATH('Sheet1$-ExpandedNodes'[Child_ID], 'Sheet1$-ExpandedNodes'[Parent_ID])
+		dataType: string
+		isHidden
+		lineageTag: 1b9f8ec5-52f5-5ed1-bc25-9d8a0562bf5d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Child1 = LOOKUPVALUE('Sheet1$-ExpandedNodes'[Child], 'Sheet1$-ExpandedNodes'[Child_ID], PATHITEM('Sheet1$-ExpandedNodes'[NodePath], 1, INTEGER))
+		dataType: string
+		lineageTag: 4d881fb5-a9ed-57b8-859a-ef6b3c485ed7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Child2 = LOOKUPVALUE('Sheet1$-ExpandedNodes'[Child], 'Sheet1$-ExpandedNodes'[Child_ID], PATHITEM('Sheet1$-ExpandedNodes'[NodePath], 2, INTEGER))
+		dataType: string
+		lineageTag: 6979cb9d-cd8c-5a7a-9331-4479479d92b1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Child3 = LOOKUPVALUE('Sheet1$-ExpandedNodes'[Child], 'Sheet1$-ExpandedNodes'[Child_ID], PATHITEM('Sheet1$-ExpandedNodes'[NodePath], 3, INTEGER))
+		dataType: string
+		lineageTag: 181138ae-797a-5919-be1c-89ae75e88e2d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Child4 = LOOKUPVALUE('Sheet1$-ExpandedNodes'[Child], 'Sheet1$-ExpandedNodes'[Child_ID], PATHITEM('Sheet1$-ExpandedNodes'[NodePath], 4, INTEGER))
+		dataType: string
+		lineageTag: 8bb127d3-bbfe-5413-a267-01a552aaf6d8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParentName = LOOKUPVALUE('Sheet1$-ExpandedNodes'[Child], 'Sheet1$-ExpandedNodes'[Child_ID], 'Sheet1$-ExpandedNodes'[Parent_ID])
+		dataType: string
+		lineageTag: 3cc3d94b-cd8d-50db-a934-e15067dad1f7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Path = 'Sheet1$-ExpandedNodes'[Child1] & IF(NOT ISBLANK('Sheet1$-ExpandedNodes'[Child2]), " - " & 'Sheet1$-ExpandedNodes'[Child2]) & IF(NOT ISBLANK('Sheet1$-ExpandedNodes'[Child3]), " - " & 'Sheet1$-ExpandedNodes'[Child3]) & IF(NOT ISBLANK('Sheet1$-ExpandedNodes'[Child4]), " - " & 'Sheet1$-ExpandedNodes'[Child4])
+		dataType: string
+		lineageTag: 7585d58c-b0ea-5d61-a695-eab1fc05d958
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Depth = PATHLENGTH('Sheet1$-ExpandedNodes'[NodePath])
+		dataType: int64
+		formatString: 0
+		lineageTag: 2ee594a4-e9f3-5092-878f-303e06450643
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy Geography
+		lineageTag: 0e2f9ad6-300e-55cd-9beb-77c7032c73e5
+
+		level Child1
+			lineageTag: 96584a09-a774-5058-8e08-49637c3646ad
+			column: Child1
+
+		level Child2
+			lineageTag: cee9b99c-aa2b-5479-af95-5d1f9b4840f7
+			column: Child2
+
+		level Child3
+			lineageTag: 34710973-1ee8-55d5-9d2f-7946be3ddafc
+			column: Child3
+
+		level Child4
+			lineageTag: d4fbbabf-07dc-5d4a-9c8c-2695d979cdef
+			column: Child4
+
+	partition 'Sheet1$-ExpandedNodes' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Chapter10/Hierarchy example/Sheet1.parquet"),
+				    Selected = Table.SelectColumns(Source, {"Parent_ID", "Child_ID", "Parent", "Child"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"Parent_ID", Int64.Type}, {"Child_ID", Int64.Type}, {"Parent", type text}, {"Child", type text}})
+				in
+				    Typed

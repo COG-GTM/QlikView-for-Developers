@@ -19,6 +19,8 @@ import sys
 import time
 from pathlib import Path
 
+import pandas as pd
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import objects  # noqa: E402
 import qlik_expr as q  # noqa: E402
@@ -120,6 +122,15 @@ def _json_value(v):
     return v
 
 
+def table_snapshot(model: SourceModel, table: str, fields: list[str]) -> dict:
+    """Every row of a source-model table (columns in the Qlik field order), sorted, for full-table parity."""
+    df = model.con.execute(f'SELECT * FROM "{table.replace(chr(34), chr(34) * 2)}"').df()
+    cols = [f for f in fields if f in df.columns] + [c for c in df.columns if c not in fields]
+    rows = [[None if pd.isna(x) else _json_value(x) for x in r] for r in df[cols].itertuples(index=False)]
+    rows.sort(key=lambda r: [str(x) for x in r])
+    return {"id": f"table:{table}", "table": table, "columns": cols, "row_count": len(rows), "rows": rows}
+
+
 def cmd_source(app: str) -> dict:
     manifest = json.loads((INVENTORY / "manifests" / f"{app}.json").read_text())
     started = time.time()
@@ -154,6 +165,10 @@ def cmd_source(app: str) -> dict:
             for name in [t for t in model.tables if t.startswith("__calcdim_")]:
                 ev.drop_calculated_dimension(name)
         result["kpis"].append(entry)
+    if not result["kpis"] and spec is None:  # no chart expressions (ETL demos): the data model itself is what must match
+        fields = manifest["data_model"].get("fields_by_table", {})
+        result["tables"] = [table_snapshot(model, t["name"], fields.get(t["name"], []))
+                            for t in manifest["data_model"]["tables"] if t["name"] in model.rows]
     if spec is not None:
         result["objects"] = objects.evaluate(model, spec)
     result["elapsed_s"] = round(time.time() - started, 1)
@@ -170,7 +185,8 @@ def write_expected(app: str) -> Path:
         f.write(payload)  # mtime=0: byte-identical output, so CI can diff it
     ok = sum(k["status"] == "ok" for k in res["kpis"])
     objs = f", {len(res['objects'])} sheet objects" if "objects" in res else ""
-    print(f"{app}: {res['status']}; {ok}/{len(res['kpis'])} KPI expressions{objs} evaluated from source -> "
+    tables = f"; {len(res['tables'])} tables snapshotted for full-table parity" if res.get("tables") else ""
+    print(f"{app}: {res['status']}; {ok}/{len(res['kpis'])} KPI expressions{objs} evaluated from source{tables} -> "
           f"{show(out)}")
     if res["status"] != "ok":
         print(f"   {res['reason'][:160]}")
