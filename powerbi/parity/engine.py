@@ -383,7 +383,8 @@ def _element_pred(col: str, kind: str, arg, model: SourceModel) -> str:
     possible = f"SELECT DISTINCT {icols[fld]} FROM {frm} WHERE {where} AND {icols[fld]} IS NOT NULL"
     if kind == "p":
         return f"{col} IN ({possible})"
-    return f"({col} IS NOT NULL AND {col} NOT IN ({possible}))"
+    afrm, acols = model.from_clause({fld})
+    return f"{col} IN (SELECT DISTINCT {acols[fld]} FROM {afrm} WHERE {acols[fld]} IS NOT NULL EXCEPT {possible})"
 
 
 def set_sql(node, cols, model: SourceModel) -> str:
