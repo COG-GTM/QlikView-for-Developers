@@ -48,15 +48,12 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   `EVALUATE ROW("value", [M])` or `EVALUATE SUMMARIZECOLUMNS('T'[c1], …, "value", [M])`.
   KPIs without an annotated measure are listed under `unmapped`. Sheet objects become
   `EVALUATE SUMMARIZECOLUMNS('T'[c1], …)` (compared as a set of rows) and row counts
-<<<<<<< HEAD
-  `EVALUATE ROW("value", COUNTROWS('T'))`. Each relationship in `relationships.tmdl` also
-  gets an integrity query (`REL:<from> -> <to>`, under `relationships`): many-side keys with
-  no one-side match, the rows they cover, and duplicated one-side keys.
-=======
   `EVALUATE ROW("value", COUNTROWS('T'))`. Full-table entries become
   `EVALUATE SELECTCOLUMNS('T', "field", 'T'[col], …)`, matching columns by name or
   `sourceColumn` (so DAX calculated columns can stand in for script-generated fields).
->>>>>>> origin/samuels-migration
+  Each relationship in `relationships.tmdl` also gets an integrity query
+  (`REL:<from> -> <to>`, under `relationships`): many-side keys with no one-side match,
+  the rows they cover, and duplicated one-side keys.
 * `run_dax.ps1` (Windows PowerShell 5.1+) runs the queries with ADOMD.NET against the model
   open in Power BI Desktop (port from `msmdsrv.port.txt` under
   `%LOCALAPPDATA%\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces`), or against any
