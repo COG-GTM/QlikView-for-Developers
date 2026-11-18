@@ -28,6 +28,9 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   calculated dimensions, variables defined only in missing include files) are listed as
   `unsupported` with the reason instead of being guessed; extend `qlik_expr.py`/`engine.py`
   when an app needs them.
+* Apps without chart expressions (the Chapter 10 ETL demos) get table checks instead: one
+  entry per Qlik table (`kind: "table"`, id `table:<table>`) with the table's rows counted per
+  field combination, so the Power BI model is checked to hold the same data.
 * Result ids: `<object>#<n>@<grain>` (e.g. `CH01#1@Year+Month`). Output is gzip JSON,
   byte-reproducible (CI checks the committed Chapter 03 file).
 
@@ -37,6 +40,10 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   column by `sourceColumn`. Each result id becomes
   `EVALUATE ROW("value", [M])` or `EVALUATE SUMMARIZECOLUMNS('T'[c1], …, "value", [M])`.
   KPIs without an annotated measure are listed under `unmapped`.
+  A table check becomes `EVALUATE GROUPBY('T', 'T'[c1], …, "value", SUMX(CURRENTGROUP(), 1))`
+  over the Power BI table holding all its fields; when that table has more columns (a
+  `GENERIC LOAD` pivoted into one table) it is filtered to rows where the Qlik table's
+  attribute column is not blank.
 * `run_dax.ps1` (Windows PowerShell 5.1+) runs the queries with ADOMD.NET against the model
   open in Power BI Desktop (port from `msmdsrv.port.txt` under
   `%LOCALAPPDATA%\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces`), or against any

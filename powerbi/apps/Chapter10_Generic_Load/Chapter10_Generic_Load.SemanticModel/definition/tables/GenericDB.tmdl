@@ -1,0 +1,65 @@
+table GenericDB
+	lineageTag: 627c7a52-2a6a-5b3a-82b9-2b4437af3460
+
+	column Object
+		dataType: string
+		lineageTag: 4ce4d1e1-edaf-56f0-9f43-82133629d91a
+		summarizeBy: none
+		sourceColumn: Object
+
+		annotation SummarizationSetBy = Automatic
+
+	column Color
+		dataType: string
+		lineageTag: 5c057fac-1af6-5cb1-80af-626f88eb8325
+		summarizeBy: none
+		sourceColumn: Color
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weight
+		dataType: string
+		lineageTag: 427e30df-3062-5ad6-ab60-cf8d1bf0279a
+		summarizeBy: none
+		sourceColumn: Weight
+
+		annotation SummarizationSetBy = Automatic
+
+	column Diameter
+		dataType: string
+		lineageTag: f3069687-ea26-5f78-bd2d-1984fc929861
+		summarizeBy: none
+		sourceColumn: Diameter
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: int64
+		formatString: 0
+		lineageTag: f6619848-5ec6-52c2-9ee8-094f95342cde
+		summarizeBy: none
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	column Thickness
+		dataType: string
+		lineageTag: 12731635-c2e8-5182-947d-d5d94941bbd4
+		summarizeBy: none
+		sourceColumn: Thickness
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GenericDB = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Chapter10/Generic DB/GenericDB.parquet"),
+				    Selected = Table.SelectColumns(Source, {"Object", "Attribute", "Value"}),
+				    // GENERIC LOAD: one column per Attribute; no aggregation, so a repeated Object/Attribute pair is an error
+				    Pivoted = Table.Pivot(Selected, {"Color", "Weight", "Diameter", "Value", "Thickness"}, "Attribute", "Value"),
+				    Typed = Table.TransformColumnTypes(Pivoted, {{"Object", type text}, {"Color", type text}, {"Weight", type text}, {"Diameter", type text}, {"Value", Int64.Type}, {"Thickness", type text}})
+				in
+				    Typed
+
+	annotation QlikTables = GenericDB.Color, GenericDB.Weight, GenericDB.Diameter, GenericDB.Value, GenericDB.Thickness

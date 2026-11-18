@@ -1,0 +1,13 @@
+{
+ "app": "Chapter10__Generic Load",
+ "generated_by": "hand-written (GENERIC LOAD pivoted with Table.Pivot)",
+ "qlik_tables": {
+  "GenericDB.Color": "GenericDB",
+  "GenericDB.Weight": "GenericDB",
+  "GenericDB.Diameter": "GenericDB",
+  "GenericDB.Value": "GenericDB",
+  "GenericDB.Thickness": "GenericDB"
+ },
+ "measures": [],
+ "needs_hand_written_dax": []
+}

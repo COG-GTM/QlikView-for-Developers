@@ -21,7 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import qlik_expr as q  # noqa: E402
-from engine import INVENTORY, REPO, Evaluator, ModelUnavailable, SourceModel  # noqa: E402
+from engine import INVENTORY, REPO, Evaluator, ModelUnavailable, SourceModel, qi  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 EXPECTED, DAX, REPORTS = HERE / "expected", HERE / "dax", HERE / "reports"
@@ -118,6 +118,8 @@ def cmd_source(app: str) -> dict:
         return result
     ev = Evaluator(model)
     result.update(status="ok", model_source=model.model_source, model_tables=model.table_check)
+    if not manifest["kpis"]:
+        result["key_fields"] = [k["field"] for k in manifest["data_model"]["key_fields"]]
     for k in kpi_list(manifest):
         entry = {**k, "results": []}
         try:
@@ -137,8 +139,32 @@ def cmd_source(app: str) -> dict:
         except q.Unsupported as e:
             entry.update(status="unsupported", reason=str(e), results=[])
         result["kpis"].append(entry)
+    if not manifest["kpis"]:
+        result["kpis"] = table_checks(model, manifest)
     result["elapsed_s"] = round(time.time() - started, 1)
     return result
+
+
+def table_checks(model, manifest: dict) -> list[dict]:
+    """Content of every Qlik table, for apps without chart expressions (the Chapter 10 ETL demos).
+
+    One result per table: grain = the table's fields, value = how many rows hold that combination.
+    Entries have kind "table"; dax.py turns them into GROUPBY queries over the mapped Power BI table.
+    """
+    out = []
+    for t in manifest["data_model"]["tables"]:
+        name = t["name"]
+        if name.startswith("$$") or name not in model.columns:
+            continue
+        fields = model.columns[name]
+        cols = ", ".join(qi(f) for f in fields)
+        df = model.con.execute(f"SELECT {cols}, count(*) AS __rows FROM {qi(name)} GROUP BY ALL").df()
+        rows = [[_json_value(x) for x in r] for r in df[fields + ["__rows"]].itertuples(index=False)]
+        rows.sort(key=lambda r: [str(x) for x in r])
+        out.append({"kpi": f"table:{name}", "kind": "table", "object": name, "caption": None, "label": name,
+                    "expression": None, "dims": fields, "parity_key": None, "grains": [fields], "status": "ok",
+                    "results": [{"id": f"table:{name}", "grain": fields, "row_count": len(rows), "rows": rows}]})
+    return out
 
 
 def write_expected(app: str) -> Path:
@@ -150,7 +176,8 @@ def write_expected(app: str) -> Path:
     with open(out, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=9, mtime=0, filename="") as f:
         f.write(payload)  # mtime=0: byte-identical output, so CI can diff it
     ok = sum(k["status"] == "ok" for k in res["kpis"])
-    print(f"{app}: {res['status']}; {ok}/{len(res['kpis'])} KPI expressions evaluated from source -> "
+    what = "tables" if res["kpis"] and all(k.get("kind") == "table" for k in res["kpis"]) else "KPI expressions"
+    print(f"{app}: {res['status']}; {ok}/{len(res['kpis'])} {what} evaluated from source -> "
           f"{show(out)}")
     if res["status"] != "ok":
         print(f"   {res['reason'][:160]}")
