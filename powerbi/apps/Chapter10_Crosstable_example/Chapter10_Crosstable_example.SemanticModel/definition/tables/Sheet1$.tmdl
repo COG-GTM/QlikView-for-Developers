@@ -1,0 +1,69 @@
+table 'Sheet1$'
+	lineageTag: 08e94ed0-7a61-5a1b-a741-443e6bcbb546
+
+	measure 'Total Sales' = SUM('Sheet1$'[Sales])
+		formatString: #,0
+		lineageTag: b9bcc49d-061b-5029-a1ca-732ab0885a08
+
+		annotation ParityKey = ded951d8db5e
+		annotation QlikExpression = Sum(Sales)
+		annotation QlikObjects = CHK01#1, CHK02#1, CHK03#1 (parity/checks; the Qlik sheet has no charts)
+
+	measure 'Sales Count' = COUNT('Sheet1$'[Sales])
+		formatString: 0
+		lineageTag: 7c0955f1-adcc-5922-800c-b727d0c6738c
+
+		annotation ParityKey = 403587b58df8
+		annotation QlikExpression = Count(Sales)
+		annotation QlikObjects = CHK04#1 (parity/checks; the Qlik sheet has no charts)
+
+	column Department
+		dataType: string
+		lineageTag: 6e7ef591-dcf4-5e62-8d99-4e32a414d395
+		summarizeBy: none
+		sourceColumn: Department
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		sortByColumn: Month__num
+		lineageTag: bdfb751a-1dc2-5e89-a3e2-4fd336a88f3f
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: int64
+		formatString: #,0
+		lineageTag: 79a9cd16-40bf-5b88-8b8f-255c1351c4e5
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month__num
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3dc81701-d115-5a9b-abd1-111c4fb3e879
+		summarizeBy: none
+		sourceColumn: Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Sheet1$' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Chapter10/Crosstable example/Sheet1.parquet"),
+				    Selected = Table.SelectColumns(Source, {"Department", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}),
+				    // CrossTable(Month, Sales): 1 qualifier column (Department), the other listed columns become rows
+				    Unpivoted = Table.UnpivotOtherColumns(Selected, {"Department"}, "Month", "Sales"),
+				    // Qlik sorts the Month text values in load order (column order of the LOAD); keep it as a sort column
+				    MonthOrder = List.Skip(Table.ColumnNames(Selected), 1),
+				    MonthNumbered = Table.AddColumn(Unpivoted, "Month__num", each List.PositionOf(MonthOrder, [Month]) + 1, Int64.Type),
+				    Typed = Table.TransformColumnTypes(MonthNumbered, {{"Department", type text}, {"Month", type text}, {"Sales", Int64.Type}, {"Month__num", Int64.Type}})
+				in
+				    Typed
