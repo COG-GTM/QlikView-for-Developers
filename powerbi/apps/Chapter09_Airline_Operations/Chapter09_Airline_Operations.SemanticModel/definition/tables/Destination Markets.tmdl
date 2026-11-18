@@ -1,0 +1,34 @@
+table 'Destination Markets'
+	lineageTag: 40ac7d1a-7788-5f46-8731-fa4f40518623
+
+	column '%Destination Airport Market ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: afca0d31-d522-5e74-aeef-e3b8075b23d4
+		summarizeBy: none
+		sourceColumn: %Destination Airport Market ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Market'
+		dataType: string
+		lineageTag: 5219f4af-93fb-5993-bb1e-e0b078147030
+		summarizeBy: none
+		sourceColumn: Destination Market
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Destination Markets' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(fnReadParquet("Data Files/CSVs/Destination Markets.parquet"), {"%Destination Airport Market ID", "Destination Market"}),
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Destination Airport Market ID"))),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Destination Airport Market ID"])),
+				    Missing = List.Difference(FactKeys, Table.Column(Kept, "%Destination Airport Market ID")),
+				    Unknown = Table.FromColumns({Missing, List.Repeat({"Unknown"}, List.Count(Missing))}, {"%Destination Airport Market ID", "Destination Market"}),
+				    Combined = Table.Combine({Kept, Unknown}),
+				    Typed = Table.TransformColumnTypes(Combined, {{"%Destination Airport Market ID", Int64.Type}, {"Destination Market", type text}})
+				in
+				    Typed

@@ -1,0 +1,5 @@
+[
+ {"id": "CH15#2@Carrier Name", "dims": ["Sun Country Airlines d/b/a Mn Airlines"], "reason": "Flight Data spells the carrier 'Sun Country Airlines d/b/a MN Airlines' and the 2009-2011 Employment rows 'Sun Country Airlines d/b/a Mn Airlines'. QlikView keeps two values; a Power BI text column is case-insensitive and stores one ('MN'), so the 'Mn' row has no DAX row. Its 'MN' row matches."},
+ {"id": "LB07@Carrier Name", "dims": ["Sun Country Airlines d/b/a Mn Airlines"], "reason": "Flight Data spells the carrier 'Sun Country Airlines d/b/a MN Airlines' and the 2009-2011 Employment rows 'Sun Country Airlines d/b/a Mn Airlines'. QlikView keeps two values; a Power BI text column is case-insensitive and stores one ('MN'), so the 'Mn' row has no DAX row. Its 'MN' row matches."},
+ {"id": "LB33@Carrier Name", "dims": ["Sun Country Airlines d/b/a Mn Airlines"], "reason": "Flight Data spells the carrier 'Sun Country Airlines d/b/a MN Airlines' and the 2009-2011 Employment rows 'Sun Country Airlines d/b/a Mn Airlines'. QlikView keeps two values; a Power BI text column is case-insensitive and stores one ('MN'), so the 'Mn' row has no DAX row. Its 'MN' row matches."}
+]

@@ -80,6 +80,7 @@ def test_report_has_both_sheets_and_charts():
                                               "Main Data.# of Enplanned Passengers", "Main Data.Transported Freight",
                                               "Main Data.Transported Mail"]
     assert not any("active" in p for p in table)
+    assert [p.get("active") for p in charts["CH01"]["projections"]["Category"]] == [True, True]
     top = next(json.loads(v["filters"]) for v in report["sections"][1]["visualContainers"]
                if json.loads(v["config"])["name"] == "CH02")
     assert top[0]["type"] == "TopN" and top[0]["filter"]["From"][0]["Expression"]["Subquery"]["Query"]["Top"] == 10
