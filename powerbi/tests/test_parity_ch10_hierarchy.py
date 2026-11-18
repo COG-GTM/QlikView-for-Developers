@@ -64,6 +64,7 @@ def test_paths_match_the_values_stored_in_the_qvw(table):
         assert path.encode("latin-1") in blob, path
 
 
+@pytest.mark.needs_parquet
 def test_expected_is_reproducible():
     committed = gzip.decompress((harness.EXPECTED / f"{APP}.json.gz").read_bytes())
     assert json.loads(committed)["tables"] == harness.cmd_source(APP)["tables"]
