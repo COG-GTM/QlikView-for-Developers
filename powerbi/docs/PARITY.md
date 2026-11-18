@@ -28,6 +28,9 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   calculated dimensions, variables defined only in missing include files) are listed as
   `unsupported` with the reason instead of being guessed; extend `qlik_expr.py`/`engine.py`
   when an app needs them.
+* Apps with no chart expressions (Chapter 10 ETL demos such as `Hierarchy example`) get
+  full-table parity instead: every row of each model table, columns in Qlik field order,
+  under `tables` with id `table:<Qlik table>`.
 * Result ids: `<object>#<n>@<grain>` (e.g. `CH01#1@Year+Month`). Output is gzip JSON,
   byte-reproducible (CI checks the committed Chapter 03 file).
 
@@ -36,7 +39,9 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 * `queries` reads the app's TMDL: KPI → measure by `annotation ParityKey`; Qlik field →
   column by `sourceColumn`. Each result id becomes
   `EVALUATE ROW("value", [M])` or `EVALUATE SUMMARIZECOLUMNS('T'[c1], …, "value", [M])`.
-  KPIs without an annotated measure are listed under `unmapped`.
+  KPIs without an annotated measure are listed under `unmapped`. Full-table entries become
+  `EVALUATE SELECTCOLUMNS('T', "field", 'T'[col], …)`, matching columns by name or
+  `sourceColumn` (so DAX calculated columns can stand in for script-generated fields).
 * `run_dax.ps1` (Windows PowerShell 5.1+) runs the queries with ADOMD.NET against the model
   open in Power BI Desktop (port from `msmdsrv.port.txt` under
   `%LOCALAPPDATA%\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces`), or against any
@@ -52,6 +57,7 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 
 * Rows are matched on dimension values (numbers compared numerically, dates by ISO date,
   text exactly). Blank and 0 are equal (Qlik hides zero rows, DAX drops blank rows).
+* Full-table results must match as a multiset of rows, each cell compared like a dimension value.
 * Values: `rel_tol=1e-9`, `abs_tol=1e-6` by default (`--rel-tol`, `--abs-tol`).
 * Exit code 0 only when every evaluated result passes; `fail` lists up to 5 example rows.
 

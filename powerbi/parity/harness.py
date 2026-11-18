@@ -19,6 +19,8 @@ import sys
 import time
 from pathlib import Path
 
+import pandas as pd
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import qlik_expr as q  # noqa: E402
 from engine import INVENTORY, REPO, Evaluator, ModelUnavailable, SourceModel  # noqa: E402
@@ -106,6 +108,15 @@ def _json_value(v):
     return v
 
 
+def table_snapshot(model: SourceModel, table: str, fields: list[str]) -> dict:
+    """Every row of a source-model table (columns in the Qlik field order), sorted, for full-table parity."""
+    df = model.con.execute(f'SELECT * FROM "{table.replace(chr(34), chr(34) * 2)}"').df()
+    cols = [f for f in fields if f in df.columns] + [c for c in df.columns if c not in fields]
+    rows = [[None if pd.isna(x) else _json_value(x) for x in r] for r in df[cols].itertuples(index=False)]
+    rows.sort(key=lambda r: [str(x) for x in r])
+    return {"id": f"table:{table}", "table": table, "columns": cols, "row_count": len(rows), "rows": rows}
+
+
 def cmd_source(app: str) -> dict:
     manifest = json.loads((INVENTORY / "manifests" / f"{app}.json").read_text())
     started = time.time()
@@ -137,6 +148,10 @@ def cmd_source(app: str) -> dict:
         except q.Unsupported as e:
             entry.update(status="unsupported", reason=str(e), results=[])
         result["kpis"].append(entry)
+    if not result["kpis"]:  # no chart expressions (ETL demos): the data model itself is what must match
+        fields = manifest["data_model"].get("fields_by_table", {})
+        result["tables"] = [table_snapshot(model, t["name"], fields.get(t["name"], []))
+                            for t in manifest["data_model"]["tables"] if t["name"] in model.rows]
     result["elapsed_s"] = round(time.time() - started, 1)
     return result
 
@@ -150,7 +165,8 @@ def write_expected(app: str) -> Path:
     with open(out, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=9, mtime=0, filename="") as f:
         f.write(payload)  # mtime=0: byte-identical output, so CI can diff it
     ok = sum(k["status"] == "ok" for k in res["kpis"])
-    print(f"{app}: {res['status']}; {ok}/{len(res['kpis'])} KPI expressions evaluated from source -> "
+    tables = f"; {len(res['tables'])} tables snapshotted for full-table parity" if res.get("tables") else ""
+    print(f"{app}: {res['status']}; {ok}/{len(res['kpis'])} KPI expressions evaluated from source{tables} -> "
           f"{show(out)}")
     if res["status"] != "ok":
         print(f"   {res['reason'][:160]}")

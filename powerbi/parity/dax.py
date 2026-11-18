@@ -6,6 +6,7 @@ and a Qlik field maps to the column whose ``sourceColumn`` (or name) is that fie
 Each expected result id gets one query:
   grand total -> EVALUATE ROW("value", [Measure])
   grain       -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2], "value", [Measure])
+  table       -> EVALUATE SELECTCOLUMNS('T', "c1", 'T'[c1], ...)   (full-table parity, apps without KPIs)
 """
 from __future__ import annotations
 
@@ -89,6 +90,16 @@ def write_queries(app: str, pbip: Path) -> str:
                 group = ", ".join(dax_col(c["table"], c["name"]) for c in cols)
                 query = f'EVALUATE SUMMARIZECOLUMNS({group}, "value", {mref})'
             queries.append({"id": r["id"], "measure": measure["name"], "grain": r["grain"], "query": query})
+    for t in expected.get("tables", []):
+        cols = [column_for(model, c) for c in t["columns"]]
+        if None in cols:
+            missing = [c for c, col in zip(t["columns"], cols) if col is None]
+            unmapped.append({"id": t["id"], "reason": f"no column for {missing}"})
+            continue
+        select = ", ".join(f'"{f.replace(chr(34), chr(34) * 2)}", {dax_col(c["table"], c["name"])}'
+                           for f, c in zip(t["columns"], cols))
+        queries.append({"id": t["id"], "table": t["table"], "columns": t["columns"],
+                        "query": f"EVALUATE SELECTCOLUMNS({dax_table(cols[0]['table'])}, {select})"})
     DAX.mkdir(exist_ok=True)
     out = DAX / f"{app}.queries.json"
     out.write_text(json.dumps({"app": app, "pbip": show(pbip), "queries": queries,
