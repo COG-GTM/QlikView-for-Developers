@@ -1,15 +1,33 @@
 {
- "description": "Known, explained differences between the inventory row count (stored in the .qvw at the author's last reload) and the repo's source data. 'apps' is a regex on the manifest name.",
+ "description": "Known, explained differences between the inventory row count (stored in the .qvw at the author's last reload) and the repo's source data. An exception applies only to that exact source, inventory count and converted count; 'covers' is re-checked on every run (every key value the fact table uses exists in the table). 'apps' is a regex on the manifest name.",
  "exceptions": [
   {
    "apps": "Chapter0[4-8]__.*",
    "table": "Origin Airports",
-   "reason": "Repo Dimension Tables.mdb (and Origin Airports.qvd) hold 6,209 airports; the .qvw was reloaded from an older copy of the .mdb with 2,104. The repo table is a superset: all 2,124 origin airport IDs used by Flight Data are present, so measures are unaffected; only unassociated airport rows differ."
+   "reason": "Repo Dimension Tables.mdb (and Origin Airports.qvd) hold 6,209 airports; the .qvw was reloaded from an older copy of the .mdb with 2,104. The repo table is a superset: all 2,124 origin airport IDs used by Flight Data are present, so measures are unaffected; only unassociated airport rows differ.",
+   "source": "Data Files/MDBs/Dimension Tables.mdb :: Origin Airports",
+   "inventory_rows": 2104,
+   "parquet_rows": 6209,
+   "covers": {
+    "table": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Origin Airports.parquet",
+    "key": "%Origin Airport ID",
+    "fact": "powerbi/data/parquet/Data Files/QVDs/Flight Data.parquet",
+    "fact_key": "%Origin Airport ID"
+   }
   },
   {
    "apps": "Chapter0[4-8]__.*",
    "table": "Destination Airports",
-   "reason": "Repo Dimension Tables.mdb (and Destination Airports.qvd) hold 6,209 airports; the .qvw was reloaded from an older copy of the .mdb with 2,169. The repo table is a superset: all 2,185 destination airport IDs used by Flight Data are present, so measures are unaffected; only unassociated airport rows differ."
+   "reason": "Repo Dimension Tables.mdb (and Destination Airports.qvd) hold 6,209 airports; the .qvw was reloaded from an older copy of the .mdb with 2,169. The repo table is a superset: all 2,185 destination airport IDs used by Flight Data are present, so measures are unaffected; only unassociated airport rows differ.",
+   "source": "Data Files/MDBs/Dimension Tables.mdb :: Destination Airports",
+   "inventory_rows": 2169,
+   "parquet_rows": 6209,
+   "covers": {
+    "table": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Destination Airports.parquet",
+    "key": "%Destination Airport ID",
+    "fact": "powerbi/data/parquet/Data Files/QVDs/Flight Data.parquet",
+    "fact_key": "%Destination Airport ID"
+   }
   }
  ]
 }

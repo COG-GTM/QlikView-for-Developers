@@ -61,3 +61,25 @@ def test_compare_flags_wrong_and_missing_results(expected):
     status = {r["id"]: r["status"] for r in report["results"]}
     assert status["CH01#1@Year"] == "fail" and status["CH02#4@total"] == "missing"
     assert report["summary"]["pass"] == len(status) - 2
+
+
+def test_compare_rejects_another_apps_results(expected):
+    results = _as_dax_results(expected)
+    results["app"] = "Chapter06__Solution_Chapter 6_Airline Operations"
+    with pytest.raises(ValueError):
+        compare.compare(expected, results)
+
+
+def test_duplicate_parity_key_is_rejected(tmp_path, monkeypatch):
+    import shutil
+    src = harness.REPO / "powerbi/apps/Chapter03_Airline_Operations"
+    dst = tmp_path / "app"
+    shutil.copytree(src, dst)
+    main = next(dst.rglob("Main Data.tmdl"))
+    text = main.read_text(encoding="utf-8")
+    first_key = text.split("annotation ParityKey = ")[1].split()[0]
+    second_key = text.split("annotation ParityKey = ")[2].split()[0]
+    main.write_text(text.replace(second_key, first_key), encoding="utf-8")
+    monkeypatch.setattr(dax, "DAX", tmp_path)
+    with pytest.raises(ValueError, match="two measures"):
+        dax.write_queries(CH03, dst)

@@ -35,10 +35,22 @@ def show(path) -> str:
         return str(path)
 
 
+LITERAL_RE = re.compile(r"'(?:[^']|'')*'|\"(?:[^\"]|\"\")*\"|\[[^\]]*\]")
+
+
 def parity_key(expression: str) -> str:
-    """Stable id of a Qlik expression; PBIP measures carry it as `annotation ParityKey`."""
-    norm = re.sub(r"\s+", "", expression.lstrip("=")).lower()
-    return hashlib.sha1(norm.encode()).hexdigest()[:12]
+    """Stable id of a Qlik expression; PBIP measures carry it as `annotation ParityKey`.
+
+    Whitespace and case are normalized only outside 'strings', "search strings" and [field names],
+    whose contents are significant.
+    """
+    text, parts, pos = expression.strip().lstrip("="), [], 0
+    for m in LITERAL_RE.finditer(text):
+        parts.append(re.sub(r"\s+", "", text[pos:m.start()]).lower())
+        parts.append(m.group())
+        pos = m.end()
+    parts.append(re.sub(r"\s+", "", text[pos:]).lower())
+    return hashlib.sha1("".join(parts).encode()).hexdigest()[:12]
 
 
 def grains(dims: list[str], groups: dict[str, dict]) -> list[list[str]]:

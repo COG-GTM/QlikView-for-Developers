@@ -64,6 +64,8 @@ def compare_result(expected: dict, actual: dict | None, rel: float, abs_: float)
 
 
 def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6) -> dict:
+    if results_doc.get("app") != expected_doc["app"]:
+        raise ValueError(f"results are for app {results_doc.get('app')!r}, expected {expected_doc['app']!r}")
     actual = {r["id"]: r for r in results_doc.get("results", [])}
     out = []
     for k in expected_doc["kpis"]:

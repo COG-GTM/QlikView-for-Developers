@@ -63,7 +63,12 @@ def column_for(model: dict, field: str) -> dict | None:
 def write_queries(app: str, pbip: Path) -> str:
     expected = load_expected(app)
     model = read_tmdl(pbip)
-    by_key = {k: m for m in model["measures"] for k in m.get("keys", [])}
+    by_key: dict[str, dict] = {}
+    for m in model["measures"]:
+        for k in m.get("keys", []):
+            if k in by_key:
+                raise ValueError(f"ParityKey {k} is on two measures: {by_key[k]['name']!r} and {m['name']!r}")
+            by_key[k] = m
     queries, unmapped = [], []
     for k in expected["kpis"]:
         measure = by_key.get(k["parity_key"])

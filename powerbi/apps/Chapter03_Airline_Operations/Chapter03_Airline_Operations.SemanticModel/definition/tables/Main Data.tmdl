@@ -3,33 +3,33 @@ table 'Main Data'
 
 	measure '# of Flights' = SUM('Main Data'[# Departures Performed])
 		formatString: #,0
-		lineageTag: c0c68e67-ef7d-5469-b17d-764776b7ce1a
+		lineageTag: fac02f1a-e2e4-5058-a8de-baf1fede162f
 
-		annotation ParityKey = d2e7e8fd68bb
+		annotation ParityKey = 1baea265cccd
 		annotation QlikExpression = Sum ([# Departures Performed])
 		annotation QlikObjects = CH01#1, CH02#1
 
 	measure '# of Enplanned Passengers' = SUM('Main Data'[# Transported Passengers])
 		formatString: #,0
-		lineageTag: ee6499db-4228-50f2-90cf-e430bef6a725
+		lineageTag: a4d4917e-5fe0-5ba4-bb05-87091fe4e1f1
 
-		annotation ParityKey = d73490b733fa
+		annotation ParityKey = 7f15ad08b3bb
 		annotation QlikExpression = Sum ([# Transported Passengers])
 		annotation QlikObjects = CH01#2, CH02#2
 
 	measure 'Transported Freight' = SUM('Main Data'[# Transported Freight])
 		formatString: #,0
-		lineageTag: 9ffdadee-a838-520b-8f2d-316f0dcb8ce0
+		lineageTag: 5130d9cc-4e5d-525c-adfb-b64a76710066
 
-		annotation ParityKey = f43d5cdd79ce
+		annotation ParityKey = aea8a21aee5f
 		annotation QlikExpression = Sum ([# Transported Freight])
 		annotation QlikObjects = CH01#3, CH02#3
 
 	measure 'Transported Mail' = SUM('Main Data'[# Transported Mail])
 		formatString: #,0
-		lineageTag: 9e9f2770-de84-5243-b395-339006e0b71a
+		lineageTag: f485cb34-5d1d-54df-a5c4-f5d561853aa3
 
-		annotation ParityKey = 31d9ac1fbe90
+		annotation ParityKey = e0ca719214a7
 		annotation QlikExpression = Sum ([# Transported Mail])
 		annotation QlikObjects = CH01#4, CH02#4
 

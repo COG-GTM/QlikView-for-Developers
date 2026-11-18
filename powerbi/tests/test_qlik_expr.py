@@ -45,3 +45,11 @@ def test_script_reader_plain_vs_derived():
     loads = parse_script(script)
     assert loads[2].source_kind == "sql" and loads[2].source == "Origin Airports"
     assert [(f.source_name, f.name) for f in loads[4].fields] == [("a", "b"), ("c", "c")]
+
+
+def test_parity_key_keeps_literal_contents():
+    from harness import parity_key
+    assert parity_key("Sum ( [# Departures Performed] )") == parity_key("SUM([# Departures Performed])")
+    assert parity_key("Sum({<Airline={'A B'}>} x)") != parity_key("Sum({<Airline={'AB'}>} x)")
+    assert parity_key("Sum({<Airline={'ab'}>} x)") != parity_key("Sum({<Airline={'AB'}>} x)")
+    assert parity_key("Sum([a b])") != parity_key("Sum([ab])")

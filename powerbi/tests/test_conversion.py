@@ -30,3 +30,27 @@ def test_every_qvd_and_access_table_is_converted():
     qvds = [p for p in vc.REPO.rglob("*") if p.suffix.lower() == ".qvd" and "powerbi" not in p.parts]
     assert {p.relative_to(vc.REPO).as_posix() for p in qvds} <= set(cat)
     assert len(cat["Data Files/MDBs/Dimension Tables.mdb"]["tables"]) == 17
+
+
+def test_plain_load_with_missing_source_fails():
+    catalog = json.loads(vc.CATALOG.read_text())
+    del catalog["sources"]["Data Files/CSVs/Origin Markets.csv"]
+    rows = [r for r in vc.check_inventory(catalog) if r["table"] == "Origin Markets" and r["app"].startswith("Chapter04")]
+    assert [r["status"] for r in rows] == ["MISSING_SOURCE"]
+
+
+def test_exception_only_covers_the_recorded_counts():
+    catalog = json.loads(vc.CATALOG.read_text())
+    mdb = catalog["sources"]["Data Files/MDBs/Dimension Tables.mdb"]["tables"]
+    next(t for t in mdb if t["table"] == "Origin Airports")["rows"] = 0
+    rows = [r for r in vc.check_inventory(catalog) if r["table"] == "Origin Airports" and r["app"].startswith("Chapter04")]
+    assert [r["status"] for r in rows] == ["MISMATCH"]
+
+
+@pytest.mark.needs_parquet
+def test_exception_superset_claim_is_checked():
+    exc = json.loads(vc.EXCEPTIONS.read_text())["exceptions"][0]
+    assert vc.coverage_problem(exc["covers"]) is None
+    wrong = {**exc["covers"], "key": "%Origin Airport ID", "table": "powerbi/data/parquet/Data Files/QVDs/Airlines.parquet"}
+    wrong["key"] = "%Airline ID"
+    assert "missing" in vc.coverage_problem(wrong)

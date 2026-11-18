@@ -63,6 +63,19 @@ def catalog_table(catalog: dict, source: str, table: str | None) -> dict | None:
     return next((t for t in tables if t["table"].lower() == table.lower()), None)
 
 
+def coverage_problem(covers: dict) -> str | None:
+    """An exception's superset claim: every key value used by `fact` exists in `table`. None when it holds."""
+    import pyarrow.compute as pc
+
+    paths = [REPO / covers["table"], REPO / covers["fact"]]
+    if not all(p.exists() for p in paths):
+        return None if not (REPO / "powerbi/data/parquet").exists() else f"missing {covers['table']} or {covers['fact']}"
+    have = pc.unique(pq.read_table(paths[0], columns=[covers["key"]])[covers["key"]])
+    used = pc.drop_null(pc.unique(pq.read_table(paths[1], columns=[covers["fact_key"]])[covers["fact_key"]]))
+    missing = len(used) - pc.sum(pc.is_in(used, value_set=have)).as_py()
+    return f"{missing} {covers['fact_key']} values used by the fact table are missing" if missing else None
+
+
 def check_integrity(catalog: dict) -> list[dict]:
     rows = []
     for src, entry in catalog["sources"].items():
@@ -90,16 +103,24 @@ def check_inventory(catalog: dict) -> list[dict]:
             load = plain.get(t["name"])
             resolved = resolve_source(manifest, load) if load else None
             ct = catalog_table(catalog, *resolved) if resolved else None
-            if not ct:
+            if not load:
                 row.update(status="derived")
+            elif not ct:
+                row.update(status="MISSING_SOURCE", reason=f"plain load of {load.source!r} has no converted table")
             else:
                 row.update(source=resolved[0] + (f" :: {resolved[1]}" if resolved[1] else ""),
                            parquet=ct["parquet"], parquet_rows=ct["rows"])
                 if ct["rows"] == t["rows"]:
                     row["status"] = "match"
                 else:
-                    exc = next((e for e in exceptions if e["table"] == t["name"] and re.fullmatch(e["apps"], app)), None)
-                    row.update(status="explained" if exc else "MISMATCH", reason=exc and exc["reason"])
+                    exc = next((e for e in exceptions if e["table"] == t["name"] and re.fullmatch(e["apps"], app)
+                                and e["source"] == row["source"] and e["inventory_rows"] == t["rows"]
+                                and e["parquet_rows"] == ct["rows"]), None)
+                    problem = exc and coverage_problem(exc["covers"]) if exc and exc.get("covers") else None
+                    if exc and not problem:
+                        row.update(status="explained", reason=exc["reason"])
+                    else:
+                        row.update(status="MISMATCH", reason=problem)
             out.append(row)
     return out
 
@@ -132,10 +153,10 @@ def main() -> int:
     inventory = check_inventory(catalog)
     write_report(integrity, inventory)
     bad_int = [r for r in integrity if not r["ok"]]
-    bad_inv = [r for r in inventory if r["status"] == "MISMATCH"]
+    bad_inv = [r for r in inventory if r["status"] in ("MISMATCH", "MISSING_SOURCE")]
     by = lambda s: sum(r["status"] == s for r in inventory)  # noqa: E731
     print(f"integrity: {len(integrity) - len(bad_int)}/{len(integrity)} parquet tables match their source row count")
-    print(f"inventory: {by('match')} match, {by('explained')} explained, {len(bad_inv)} mismatch, "
+    print(f"inventory: {by('match')} match, {by('explained')} explained, {len(bad_inv)} mismatch/missing, "
           f"{by('derived')} derived (app source model)")
     for r in bad_int + bad_inv:
         print("FAIL", r)

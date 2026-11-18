@@ -67,3 +67,15 @@ def test_committed_expected_results_are_reproducible(tmp_path, monkeypatch):
     monkeypatch.setattr(harness, "EXPECTED", tmp_path)
     harness.write_expected(CH03)
     assert (tmp_path / f"{CH03}.json.gz").read_bytes() == committed
+
+
+@pytest.mark.needs_parquet
+def test_unmatched_dimension_keys_form_a_null_member():
+    """Fact rows whose %Airline ID has no Airlines row appear as a null Airline, like Power BI's blank row."""
+    from engine import Evaluator, SourceModel
+    model = SourceModel("Chapter07__Solution_Chapter 7_Airline Operations")
+    ev = Evaluator(model)
+    by_airline = ev.evaluate(ev.compile("Sum([# Transported Passengers])"), ["Airline"])
+    total = ev.evaluate(ev.compile("Sum([# Transported Passengers])"), [])["value"].iloc[0]
+    assert by_airline["value"].sum() == total
+    assert by_airline["Airline"].isna().sum() == 1

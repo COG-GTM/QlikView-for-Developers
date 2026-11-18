@@ -169,17 +169,19 @@ class Evaluator:
         return str(int(v)) if isinstance(v, (int, float)) and float(v).is_integer() else str(v)
 
     def evaluate(self, node, dims: list[str]) -> pd.DataFrame:
-        frame = self.frame(dims)
+        frame = self.frame(dims, q.fields_in(node))
         value = self.ev(node, dims, frame)
         out = frame.copy()
         out["value"] = value.values if isinstance(value, pd.Series) else value
         return out
 
     # ------------------------------------------------------------ internals
-    def frame(self, dims: list[str]) -> pd.DataFrame:
+    def frame(self, dims: list[str], fields: set[str] = frozenset()) -> pd.DataFrame:
+        """Dimension combinations to report: joined with the expression's fields so that fact rows whose
+        key has no dimension row show up as a null member (Qlik's '-' row, Power BI's blank row)."""
         if not dims:
             return pd.DataFrame({"__all": [0]})
-        frm, cols = self.m.from_clause(set(dims))
+        frm, cols = self.m.from_clause(set(dims) | {f for f in fields if self.m.tables_with(f)})
         sel = ", ".join(f"{cols[d]} AS {qi(d)}" for d in dims)
         return self.m.con.execute(f"SELECT DISTINCT {sel} FROM {frm}").df()
 
