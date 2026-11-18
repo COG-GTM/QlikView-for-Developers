@@ -216,6 +216,11 @@ def configure() -> None:
     base.MEASURES = {k: (n, d.replace("'INLFED-1'", "INLFED"), f) for k, (n, d, f) in base.MEASURES.items()
                      if k not in HC_DELTA_MEASURES}
     base.NULL_KEY_FIELDS = []
+    # CH43 divides by $(vTotalFTEs) = '= Sum([# Equivalent FTEs])', evaluated once over the selection
+    fte = f"SUM({base.m('# Equivalent FTEs')})"
+    base.MEASURES.pop("f0af66ad7007")
+    base.MEASURES[base.parity_key("Sum([# Equivalent FTEs]) / Sum(TOTAL [# Equivalent FTEs])")] = (
+        "FTE % to Total", f"DIVIDE({fte}, CALCULATE({fte}, ALLSELECTED()))", base.PCT)
     cal = base.c(base.CAL, "Period")
     for pk, state in (("233f869eae9d", "Group A"), ("6ba2cbf5d1e6", "Group B")):
         name, _, fmt = base.MEASURES[pk]
@@ -240,6 +245,10 @@ def build(data_root: str = base.DEFAULT_ROOT) -> Path:
         "(LB10 / LB11): this script loads neither field (Aircraft Name is SSD_NAME, which matches the old Aircraft "
         "Type text for 50 of 180 types, and the group text is split into Aircraft Engine Type / Number Of Engines). "
         "Charts and other sheet objects are not laid out on the pages.")
+    data["semantic_gaps"].append(
+        "FTE % to Total (CH43): $(vTotalFTEs) is '= Sum([# Equivalent FTEs])', evaluated once over the selection, so the "
+        "denominator is the selection-wide total -> CALCULATE(..., ALLSELECTED()); the inventory expansion had dropped "
+        "the '=' (each carrier divided by itself) and is corrected to Sum(TOTAL ...) in the manifest.")
     data["generated_by"] = "powerbi/tools/build_airline_ch12.py"
     del data["roles"]
     model.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n")
