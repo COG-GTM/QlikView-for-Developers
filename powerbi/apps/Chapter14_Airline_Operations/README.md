@@ -15,6 +15,7 @@ do not edit the TMDL by hand; change the builder and rerun it).
 | Alternate states Group A / Group B | disconnected `Group A` / `Group B` period tables |
 | Calculated dimensions (Aggr/Class buckets, deal status) | calculated columns with `annotation ParityKey` |
 | 92 chart expressions (48 distinct) | 48 measures with `annotation ParityKey` |
+| 15 sheets, 32 list boxes | 15 report pages; list boxes whose caption is a model field -> slicers (`model.json` `report`; sheet objects from `tools/extract_sheet_objects.py`) |
 
 Semantic differences are listed in `model.json` (`semantic_gaps`). Parity: source side in
 `powerbi/parity/expected/` (`parity/models/Chapter14__Solution_Chapter 14_Airline Operations.sql`), DAX queries

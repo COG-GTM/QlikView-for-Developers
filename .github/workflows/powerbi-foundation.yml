@@ -32,11 +32,12 @@ jobs:
       - name: Committed expected results, PBIPs and DAX queries are reproducible
         run: |
           python powerbi/tools/scaffold_pbip.py --app "Chapter03__Solution_Chapter 3_Airline Operations"
+          python powerbi/tools/extract_sheet_objects.py --app "Chapter14__Solution_Chapter 14_Airline Operations"
           python powerbi/tools/build_airline_base.py
           python powerbi/parity/harness.py queries --app "Chapter15__Solution_Chapter 15_Airline Operations" --pbip powerbi/apps/Chapter15_Airline_Operations
           python powerbi/parity/harness.py queries --app "Chapter14__Solution_Chapter 14_Airline Operations" --pbip powerbi/apps/Chapter14_Airline_Operations
           git status --porcelain -- powerbi/parity powerbi/apps
-          git diff --exit-code -- powerbi/parity/expected powerbi/parity/dax powerbi/apps
+          git diff --exit-code -- powerbi/parity/expected powerbi/parity/dax powerbi/apps powerbi/inventory/sheet_objects
           test -z "$(git status --porcelain --untracked-files=all -- powerbi/parity/dax powerbi/apps)"
       - name: Hand-built app parity artifacts are reproducible
         run: |

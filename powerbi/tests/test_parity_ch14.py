@@ -83,3 +83,17 @@ def test_pbip_covers_every_kpi_without_roles(expected):
     assert "INLFED[eMetric]" in (SM / "tables" / "Main Data.tmdl").read_text()
     assert not (SM / "tables" / "INLFED-1.tmdl").exists()
     assert "VAR Levels" not in json.dumps(queries) + (SM / "tables" / "Main Data.tmdl").read_text()
+
+
+def test_report_pages_rebuild_list_boxes_as_slicers():
+    inv = json.loads((POWERBI / "inventory" / "sheet_objects" / f"{APP}.json").read_text())
+    report = json.loads((PBIP / "Chapter14_Airline_Operations.Report" / "report.json").read_text())
+    model = json.loads((PBIP / "model.json").read_text())
+    assert [s["displayName"] for s in report["sections"]][:3] == ["Dashboard", "Analysis", "Reports"]
+    assert len(report["sections"]) == len(inv["sheets"]) == 15
+    slicers = [json.loads(v["config"])["singleVisual"] for s in report["sections"] for v in s["visualContainers"]]
+    assert all(v["visualType"] == "slicer" for v in slicers)
+    dashboard = model["report"][0]["slicers"]
+    assert dashboard["LB33"] == "Main Data[Carrier Name]" and dashboard["LB32"] == "Master Calendar[Year]"
+    assert model["report"][9]["slicers"]["LB36"] == "INLFED[Metric Name]"
+    assert any("LB10 'Aircraft Type', LB11 'Aircraft Group'" in g for g in model["semantic_gaps"])

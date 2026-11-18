@@ -463,6 +463,62 @@ def role_tmdl(user: str) -> str:
     return "\n".join(lines)
 
 
+SLICER_W, SLICER_H, SLICERS_PER_ROW = 240, 160, 5
+
+
+def slicer(page: str, n: int, table: str, col: str) -> dict:
+    x, y = 20 + n % SLICERS_PER_ROW * (SLICER_W + 10), 20 + n // SLICERS_PER_ROW * (SLICER_H + 10)
+    pos = {"x": x, "y": y, "z": n, "width": SLICER_W, "height": SLICER_H}
+    ref = f"{table}.{col}"
+    return {**pos, "filters": "[]", "config": json.dumps({
+        "name": tag(SLUG, "visual", page, str(n)), "layouts": [{"id": 0, "position": pos}],
+        "singleVisual": {"visualType": "slicer", "projections": {"Values": [{"queryRef": ref}]},
+                         "prototypeQuery": {"Version": 2, "From": [{"Name": "t", "Entity": table, "Type": 0}],
+                                            "Select": [{"Column": {"Expression": {"SourceRef": {"Source": "t"}},
+                                                                   "Property": col}, "Name": ref}]},
+                         "drillFilterOtherVisuals": True}})}
+
+
+def report_pages(specs: dict) -> tuple[list[dict], list[dict], list[str]]:
+    """One page per Qlik sheet; list boxes whose caption is a visible model field become slicers.
+
+    inventory/sheet_objects/<app>.json (tools/extract_sheet_objects.py) gives each sheet's objects and the list
+    boxes' captions; without it the report keeps a single empty page."""
+    src = POWERBI / "inventory" / "sheet_objects" / f"{APP}.json"
+    if not src.exists():
+        return [{"name": "ReportSection", "displayName": "Page 1", "displayOption": 1, "ordinal": 0, "width": 1280,
+                 "height": 720, "config": "{}", "filters": "[]", "visualContainers": []}], [], []
+    inv = json.loads(src.read_text())
+    fields: dict[str, str] = {}
+    for table, spec in specs.items():
+        for col, _ in spec["cols"]:
+            if not col.startswith("%") and not col.endswith("__num"):
+                fields.setdefault(col, table)
+    sections, pages, unmapped = [], [], {}
+    for n, sheet in enumerate(inv["sheets"]):
+        name = re.sub(r"^='(.*?)'\s*&\s*", r"\1", sheet["name"]).replace("[", "").replace("]", "")
+        lbs = [o for o in sheet["objects"] if o in inv["list_box_captions"]]
+        mapped = [o for o in lbs if inv["list_box_captions"][o] in fields]
+        unmapped.update({o: inv["list_box_captions"][o] for o in lbs if o not in mapped})
+        sections.append({"name": f"ReportSection{n:02d}", "displayName": name, "displayOption": 1, "ordinal": n,
+                         "width": 1280, "height": max(720, 40 + -(-len(mapped) // SLICERS_PER_ROW) * (SLICER_H + 10)),
+                         "config": "{}", "filters": "[]",
+                         "visualContainers": [slicer(sheet["id"], i, fields[inv["list_box_captions"][o]],
+                                                     inv["list_box_captions"][o]) for i, o in enumerate(mapped)]})
+        pages.append({"sheet": sheet["id"], "page": name,
+                      "slicers": {o: f"{fields[inv['list_box_captions'][o]]}[{inv['list_box_captions'][o]}]"
+                                  for o in mapped},
+                      "not_rebuilt": [o for o in sheet["objects"] if o not in mapped]})
+    gaps_out = []
+    if unmapped:
+        gaps_out.append("List boxes whose caption is no model field are not rebuilt as slicers: " + ", ".join(
+            f"{o} '{c}'" for o, c in sorted(unmapped.items())) + " (no such field in the model nor in the .qvw's stored data model).")
+    gaps_out.append("Report pages carry the sheets' list boxes as slicers only; charts, multi boxes, text objects, "
+                    "buttons, search, current selections, containers and the other Qlik-only objects are listed per "
+                    "page in model.json (report.not_rebuilt) and are not rebuilt yet.")
+    return sections, pages, gaps_out
+
+
 def build(data_root: str = DEFAULT_ROOT, app: str = APP) -> Path:
     global APP, SLUG, SECTION, METRIC_TABLE
     APP, variant = app, VARIANTS[app]
@@ -535,12 +591,10 @@ def build(data_root: str = DEFAULT_ROOT, app: str = APP) -> Path:
     (sm / "definition.pbism").write_text(json.dumps({"version": "4.0", "settings": {}}, indent=2) + "\n")
     (rp / "definition.pbir").write_text(json.dumps(
         {"version": "4.0", "datasetReference": {"byPath": {"path": f"../{SLUG}.SemanticModel"}}}, indent=2) + "\n")
+    sections, pages, report_gaps = report_pages(specs)
     (rp / "report.json").write_text(json.dumps({
         "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
-        "layoutOptimization": 0, "resourcePackages": [],
-        "sections": [{"name": "ReportSection", "displayName": "Page 1", "displayOption": 1, "ordinal": 0,
-                      "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": []}]},
-        indent=2) + "\n")
+        "layoutOptimization": 0, "resourcePackages": [], "sections": sections}, indent=2) + "\n")
     (root / f"{SLUG}.pbip").write_text(json.dumps(
         {"version": "1.0", "artifacts": [{"report": {"path": f"{SLUG}.Report"}}], "settings": {"enableAutoRecovery": True}},
         indent=2) + "\n")
@@ -554,7 +608,8 @@ def build(data_root: str = DEFAULT_ROOT, app: str = APP) -> Path:
                                   + [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q,
                                       "dax": "segment table + '# of Carriers'"} for t, col, q, _, _, _ in SEGMENTS],
          "roles": {u: {"flight_types": SECTION_ACCESS[u][0], "omit": SECTION_ACCESS[u][1]} for u in users},
-         "semantic_gaps": gaps()}, indent=1, ensure_ascii=False) + "\n")
+         **({"report": pages} if pages else {}),
+         "semantic_gaps": gaps() + report_gaps}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(users)} roles, "
           f"{len(measures)} measures, {len(CALC_DIMS)} calculated columns")
     return root

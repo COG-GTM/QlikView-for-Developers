@@ -4,15 +4,839 @@
   "resourcePackages": [],
   "sections": [
     {
-      "name": "ReportSection",
-      "displayName": "Page 1",
+      "name": "ReportSection00",
+      "displayName": "Dashboard",
       "displayOption": 1,
       "ordinal": 0,
       "width": 1280,
       "height": 720,
       "config": "{}",
       "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"9686c5fe-b468-59fe-b37b-eac129ae3725\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"2ceedfb1-f971-5be4-a6ec-b20a1d823ec8\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"b6991b64-1773-5d92-b656-56427c6965ad\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"8f682b6a-8d26-5b23-9a27-f69a0b071932\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 20,
+          "z": 4,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"8f196530-043e-5365-a368-a079bc29376a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 20, \"z\": 4, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 20,
+          "y": 190,
+          "z": 5,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"142a6109-d481-5ea9-9196-6dc3f4d62694\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 190, \"z\": 5, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 190,
+          "z": 6,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"60414c46-b2ee-5ae1-99a6-c71b5d11f2e6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 190, \"z\": 6, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection01",
+      "displayName": "Analysis",
+      "displayOption": 1,
+      "ordinal": 1,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"dffc5eca-1c1b-5018-9881-0d9bd5a54f31\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"1b016d05-bf74-5715-8c25-f5b8e4748b2d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"dfc769c2-02b7-5aff-bb3d-0eb65693d2c5\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"a274826f-c151-591f-b8a7-55d9c05af601\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 20,
+          "z": 4,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"57cf15eb-5529-5c67-9fac-5f47fbcc035c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 20, \"z\": 4, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 20,
+          "y": 190,
+          "z": 5,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"8da3a458-eacd-5d33-a6e7-a84759714e02\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 190, \"z\": 5, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 190,
+          "z": 6,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"109b296e-1a7d-57ce-b359-7dcdbcb5a6ed\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 190, \"z\": 6, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection02",
+      "displayName": "Reports",
+      "displayOption": 1,
+      "ordinal": 2,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"85002525-0abc-51e4-8dd7-7833e90676a3\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"e4588375-ab47-5d15-9d7a-f9bafbc76c8a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"ce3e6df3-5bf0-50dd-a731-755cb07e195e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"50474b3d-c10b-5b7f-808d-0a869f37597a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 20,
+          "z": 4,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"e28a30cb-19be-5962-9365-6fd3e196d78a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 20, \"z\": 4, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 20,
+          "y": 190,
+          "z": 5,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"e996a7f4-af88-53f3-9175-0a11df6f6f21\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 190, \"z\": 5, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 190,
+          "z": 6,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"76f5147e-693a-54ce-8440-58908408701b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 190, \"z\": 6, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection03",
+      "displayName": "Details for Carrier Name",
+      "displayOption": 1,
+      "ordinal": 3,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
       "visualContainers": []
+    },
+    {
+      "name": "ReportSection04",
+      "displayName": "Associations",
+      "displayOption": 1,
+      "ordinal": 4,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"71ed8d7c-c0c5-59a1-9493-1d06be0b948e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin Country\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Origin Country\"}, \"Name\": \"Main Data.Origin Country\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"d351f197-05d7-51d0-af94-bb45cd9d6d6e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination Country\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Destination Country\"}, \"Name\": \"Main Data.Destination Country\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"fc0a1ecc-aa4f-51d6-a9cf-ebb6a5d790a6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"222357bb-d082-5d73-a239-df8708297904\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 20,
+          "z": 4,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"2900f30f-7a90-5696-b0ac-06bd4e125053\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 20, \"z\": 4, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination State\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Destination State\"}, \"Name\": \"Main Data.Destination State\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 20,
+          "y": 190,
+          "z": 5,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"d5ded0f6-8892-555c-b023-405083a4b34c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 190, \"z\": 5, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin City\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Origin City\"}, \"Name\": \"Main Data.Origin City\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 190,
+          "z": 6,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"8ce2e6c2-5a91-57c1-a1eb-56c6493079de\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 190, \"z\": 6, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin State\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Origin State\"}, \"Name\": \"Main Data.Origin State\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 190,
+          "z": 7,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"d8a22cc8-e439-5b61-b966-3fe8bf32b2f8\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 190, \"z\": 7, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination City\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Destination City\"}, \"Name\": \"Main Data.Destination City\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 190,
+          "z": 8,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"411ff5b3-a52e-5e72-8e8d-fa08ce6f4052\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 190, \"z\": 8, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 190,
+          "z": 9,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"5c2f33d3-58da-5349-9ec9-9ce17f2490aa\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 190, \"z\": 9, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 20,
+          "y": 360,
+          "z": 10,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"a7e6f98e-3402-5fa9-b71e-7d57df2f8259\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 360, \"z\": 10, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Distance Groups.Distance Interval\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Distance Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Distance Interval\"}, \"Name\": \"Distance Groups.Distance Interval\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection05",
+      "displayName": "Gauge Styles",
+      "displayOption": 1,
+      "ordinal": 5,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": []
+    },
+    {
+      "name": "ReportSection06",
+      "displayName": "Other Charts",
+      "displayOption": 1,
+      "ordinal": 6,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"84804ca3-15ff-5669-b75e-7e59fa9d001c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"dc410904-0acb-587c-a0a2-b28dc602bcf1\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"68e563cf-9e40-50c6-ab85-1348fc42e957\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"c00975ce-e74c-56d6-b920-df958cca66b8\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 20,
+          "z": 4,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"229abe7b-cb9a-50b0-a360-37cf21dfc96c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 20, \"z\": 4, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 20,
+          "y": 190,
+          "z": 5,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"d5a9988e-27e0-5af7-8e61-8275b5be540b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 190, \"z\": 5, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 190,
+          "z": 6,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"077a9b65-60a8-5b92-a4b1-108f731ce79a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 190, \"z\": 6, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection07",
+      "displayName": "Other representations",
+      "displayOption": 1,
+      "ordinal": 7,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"710a6564-187d-54f9-a7d4-c37298add4c3\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"87bf20b7-bae1-5a81-ace3-7c1ae11d80b0\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"75071e24-a239-5ebc-acdc-60ed2b40af99\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"0a6cab69-51bf-55aa-b287-da44b710407f\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 20,
+          "z": 4,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"928c00c0-7edc-5120-8f89-40199f73a49a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 20, \"z\": 4, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 20,
+          "y": 190,
+          "z": 5,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"844127e6-aaa9-50a3-bd95-637d134a8873\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 190, \"z\": 5, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 190,
+          "z": 6,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"16ce386e-77f4-5215-9bf0-e2acafb89550\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 190, \"z\": 6, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection08",
+      "displayName": "Data Consistency",
+      "displayOption": 1,
+      "ordinal": 8,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"29245bca-d1ce-5c1f-a92c-b9ba4fe5e65c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Types.Aircraft Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Aircraft Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Aircraft Name\"}, \"Name\": \"Aircraft Types.Aircraft Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"ee465485-c4ca-5753-a500-3ce924852d54\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection09",
+      "displayName": "Variables",
+      "displayOption": 1,
+      "ordinal": 9,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"890e4e4d-a28a-58ae-a467-ae3927f98a31\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"49fd5518-97b8-5952-a5d6-bfa3d7ab5529\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"61bdcdcb-bdfd-51b7-9004-155702b55dbb\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"4a5afa91-4497-5cdb-a1d6-4ba843ebd908\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"INLFED.Metric Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"INLFED\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Metric Name\"}, \"Name\": \"INLFED.Metric Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection10",
+      "displayName": "Advanced Expressions",
+      "displayOption": 1,
+      "ordinal": 10,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"8284319f-8e53-5aba-96fe-ca61867cb386\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"46ab9e4a-b523-509e-8277-73d823b1de6a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"897b3022-9c01-57e6-9aad-247e800af340\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection11",
+      "displayName": "Set Analysis",
+      "displayOption": 1,
+      "ordinal": 11,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"8e670c93-0507-5a70-9b3c-6be68d54bc54\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"3d73467d-aea7-5ed0-90d3-26e8d77e5fb6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"43638da2-aa06-5328-b143-8e15d001142b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection12",
+      "displayName": "Point In Time Reporting",
+      "displayOption": 1,
+      "ordinal": 12,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"9cc7565c-032e-5d76-9e5c-e1054232a50e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"f85442ad-c69b-5310-a2c4-be9b02840b81\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"54e9068a-4889-503e-9bee-25f9659b17ca\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"7e5f683a-6461-58b9-9f58-0c4d6630dc32\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 20,
+          "z": 4,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"cd811a9b-98cb-513e-82dc-d73c8e094db7\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 20, \"z\": 4, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 20,
+          "y": 190,
+          "z": 5,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"d9ba3892-9b7d-506f-bb35-2ce6e33465d8\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 190, \"z\": 5, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 190,
+          "z": 6,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"10c3d0ed-c2a3-51ce-8b0e-d56bd647c3eb\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 190, \"z\": 6, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection13",
+      "displayName": "Comparative Analysis",
+      "displayOption": 1,
+      "ordinal": 13,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"762b682d-a39c-5e30-a082-d959d1a4c88c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"ade11e0f-3e45-541d-9320-7b8686740dc9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"4c69d174-d003-5253-929e-f8d19e0d2c64\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection14",
+      "displayName": "Employment Data",
+      "displayOption": 1,
+      "ordinal": 14,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"c4fadb34-ff54-528f-9bfe-dec275dbd784\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 270,
+          "y": 20,
+          "z": 1,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"becabec9-140a-59a8-858c-ec91f7905eaa\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 270, \"y\": 20, \"z\": 1, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 520,
+          "y": 20,
+          "z": 2,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"60eb2932-550d-5392-b891-b0c86dfd934e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 20, \"z\": 2, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 770,
+          "y": 20,
+          "z": 3,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"a4eeeb0a-e45f-5ec8-ad3d-ecbf36c603bf\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 770, \"y\": 20, \"z\": 3, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}"
+        },
+        {
+          "x": 1020,
+          "y": 20,
+          "z": 4,
+          "width": 240,
+          "height": 160,
+          "filters": "[]",
+          "config": "{\"name\": \"a91cb6ea-e544-5438-b8d7-fb33ed7ba9fc\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 20, \"z\": 4, \"width\": 240, \"height\": 160}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}"
+        }
+      ]
     }
   ]
 }

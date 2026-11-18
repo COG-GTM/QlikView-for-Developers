@@ -1,0 +1,332 @@
+{
+ "app": "Chapter14__Solution_Chapter 14_Airline Operations",
+ "generated_by": "powerbi/tools/extract_sheet_objects.py",
+ "list_box_captions": {
+  "LB01": "Destination Country",
+  "LB02": "Destination State",
+  "LB03": "Destination City",
+  "LB04": "Origin Country",
+  "LB05": "Origin State",
+  "LB06": "Origin City",
+  "LB07": "Carrier Name",
+  "LB09": "Distance Interval",
+  "LB10": "Aircraft Type",
+  "LB11": "Aircraft Group",
+  "LB12": "Flight Type",
+  "LB13": "Carrier's Operating Region",
+  "LB15": "Carrier Group",
+  "LB27": "Flight Type",
+  "LB28": "Carrier's Operating Region",
+  "LB29": "Carrier Group",
+  "LB30": "Month",
+  "LB31": "Quarter",
+  "LB32": "Year",
+  "LB33": "Carrier Name",
+  "LB34": "Aircraft Name",
+  "LB35": "Year",
+  "LB36": "Metric Name",
+  "LB37": "Destination Airport",
+  "LB38": "Origin Airport",
+  "LB39": "Flight Type",
+  "LB40": "Destination Country",
+  "LB41": "Destination State Code",
+  "LB42": "Destination City",
+  "LB43": "Origin Country",
+  "LB44": "Origin State Code",
+  "LB45": "Origin City"
+ },
+ "sheets": [
+  {
+   "id": "SH03",
+   "name": "Dashboard",
+   "objects": [
+    "TX01",
+    "TX02",
+    "TX03",
+    "TX04",
+    "CH15",
+    "LB32",
+    "BU01",
+    "CS01",
+    "MB01",
+    "CH05",
+    "LB28",
+    "MB02",
+    "CH07",
+    "CH06",
+    "LB30",
+    "LB31",
+    "SO01",
+    "BU03",
+    "BU02",
+    "LB27",
+    "LB29",
+    "CH54",
+    "BM01",
+    "LB33",
+    "TX05"
+   ]
+  },
+  {
+   "id": "SH_Analysis",
+   "name": "Analysis",
+   "objects": [
+    "LB29",
+    "LB27",
+    "LB33",
+    "LB28",
+    "CS01",
+    "MB01",
+    "BM01",
+    "SO01",
+    "LB32",
+    "LB31",
+    "LB30",
+    "CT01",
+    "CH04",
+    "BU01",
+    "BU02",
+    "BU03",
+    "SB01",
+    "MB02",
+    "CH51"
+   ]
+  },
+  {
+   "id": "SH05",
+   "name": "Reports",
+   "objects": [
+    "LB33",
+    "CH22",
+    "CH21",
+    "MB02",
+    "LB28",
+    "BU03",
+    "BU02",
+    "BU01",
+    "BM01",
+    "MB01",
+    "CS01",
+    "LB27",
+    "LB29",
+    "SO01",
+    "LB31",
+    "LB30",
+    "LB32"
+   ]
+  },
+  {
+   "id": "SH17",
+   "name": "='Details for ' & [Carrier Name]",
+   "objects": []
+  },
+  {
+   "id": "SH01",
+   "name": "Associations",
+   "objects": [
+    "LB04",
+    "LB01",
+    "LB13",
+    "LB07",
+    "LB02",
+    "LB06",
+    "LB05",
+    "LB03",
+    "LB15",
+    "LB10",
+    "LB12",
+    "LB11",
+    "LB09"
+   ]
+  },
+  {
+   "id": "SH04",
+   "name": "Gauge Styles",
+   "objects": [
+    "CH14",
+    "CH12",
+    "CH13",
+    "CH09",
+    "CH11",
+    "CH08"
+   ]
+  },
+  {
+   "id": "SH06",
+   "name": "Other Charts",
+   "objects": [
+    "MB02",
+    "CH41",
+    "CH28",
+    "CH26",
+    "CH27",
+    "CH24",
+    "CH25",
+    "BU03",
+    "BU02",
+    "BU01",
+    "LB30",
+    "LB31",
+    "SO01",
+    "MB01",
+    "CS01",
+    "LB28",
+    "LB33",
+    "LB27",
+    "LB29",
+    "LB32"
+   ]
+  },
+  {
+   "id": "SH08",
+   "name": "Other representations",
+   "objects": [
+    "LB30",
+    "LB31",
+    "SO01",
+    "LB32",
+    "LB29",
+    "LB27",
+    "LB33",
+    "LB28",
+    "MB01",
+    "CH38",
+    "MB02",
+    "BU03",
+    "BU02",
+    "BU01",
+    "CS01"
+   ]
+  },
+  {
+   "id": "SH09",
+   "name": "Data Consistency",
+   "objects": [
+    "TB01",
+    "LB34",
+    "LB35"
+   ]
+  },
+  {
+   "id": "SH10",
+   "name": "Variables",
+   "objects": [
+    "LB31",
+    "SO01",
+    "LB32",
+    "LB30",
+    "IB01",
+    "SL01",
+    "CH45",
+    "CH42",
+    "CH43",
+    "CH44",
+    "LB36",
+    "CH46",
+    "BU03",
+    "BU02",
+    "BU01",
+    "CS01"
+   ]
+  },
+  {
+   "id": "SH11",
+   "name": "Advanced Expressions",
+   "objects": [
+    "TX06",
+    "BU03",
+    "BU02",
+    "CS01",
+    "BU01",
+    "CH49",
+    "CH48",
+    "CH47",
+    "LB31",
+    "SO01",
+    "LB30",
+    "LB32",
+    "CH56",
+    "CH50",
+    "CH52",
+    "CH55",
+    "CH53"
+   ]
+  },
+  {
+   "id": "SH12",
+   "name": "Set Analysis",
+   "objects": [
+    "BU01",
+    "CS01",
+    "BU03",
+    "BU02",
+    "LB30",
+    "LB31",
+    "SO01",
+    "LB32",
+    "CH58",
+    "CH59",
+    "CH57"
+   ]
+  },
+  {
+   "id": "SH13",
+   "name": "Point In Time Reporting",
+   "objects": [
+    "CH65",
+    "CH62",
+    "CH61",
+    "CH60",
+    "LB32",
+    "LB31",
+    "SO01",
+    "MB01",
+    "MB02",
+    "LB33",
+    "LB28",
+    "LB27",
+    "CS01",
+    "BU03",
+    "BU01",
+    "BU02",
+    "LB29",
+    "LB30"
+   ]
+  },
+  {
+   "id": "SH15",
+   "name": "Comparative Analysis",
+   "objects": [
+    "LB31",
+    "SO01",
+    "LB32",
+    "LB30",
+    "CT02",
+    "CT03",
+    "CS02",
+    "CS03",
+    "CH66",
+    "CH67"
+   ]
+  },
+  {
+   "id": "SH16",
+   "name": "Employment Data",
+   "objects": [
+    "SO01",
+    "LB31",
+    "BU01",
+    "CS01",
+    "BU03",
+    "BU02",
+    "LB30",
+    "LB32",
+    "CH68",
+    "LB29",
+    "LB33",
+    "CH70",
+    "CH69"
+   ]
+  }
+ ]
+}
