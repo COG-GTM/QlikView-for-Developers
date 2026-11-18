@@ -1,0 +1,33 @@
+{
+ "description": "Inputs the .qvw does not store. Variables: the point-in-time set modifiers come from ..\\0.Includes\\SetVariables.txt, which is not in the repo and whose definitions are not saved in the .qvw (only their uses are). They are reconstructed from how the app uses them (the Master Calendar's PeriodID / QuarterID AutoNumbers exist for these sets) and are an assumption: the Power BI measures implement the same definitions. alternate_states: states declared in the .qvw (Group A / Group B, used by the 'Group A vs Group B' sheet).",
+ "alternate_states": [
+  "Group A",
+  "Group B"
+ ],
+ "variables": {
+  "vSetYTD": {
+   "definition": "Year={$(=Max(Year))}, Month={\"<=$(=Max(Month))\"}, PeriodID=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetLYYTD": {
+   "definition": "Year={$(=Max(Year) - 1)}, Month={\"<=$(=Max(Month))\"}, PeriodID=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetMTD": {
+   "definition": "Year={$(=Max(Year))}, Month={$(=Max(Month))}, PeriodID=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetLYMTD": {
+   "definition": "Year={$(=Max(Year) - 1)}, Month={$(=Max(Month))}, PeriodID=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetPreviousMonth": {
+   "definition": "PeriodID={$(=Max(PeriodID) - 1)}, Year=, Month=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetPreviousNMonth": {
+   "definition": "PeriodID={$(=Max(PeriodID) - $1)}, Year=, Month=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  }
+ }
+}

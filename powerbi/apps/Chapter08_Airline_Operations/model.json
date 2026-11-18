@@ -158,161 +158,291 @@
  },
  "slicers": [
   {
-   "id": "LB27",
-   "sheet": "SH03",
-   "caption": "Flight Type",
-   "field": "Flight Type",
-   "table": "Flight Types",
-   "column": "Flight Type"
-  },
-  {
-   "id": "LB29",
-   "sheet": "SH03",
-   "caption": "Carrier Group",
-   "field": "Carrier Group",
-   "table": "Carrier Groups",
-   "column": "Carrier Group"
-  },
-  {
-   "id": "LB28",
-   "sheet": "SH03",
-   "caption": "Carrier's Operating Region",
-   "field": "Carrier's Operating Region",
-   "table": "Carrier Operating Region",
-   "column": "Carrier's Operating Region"
-  },
-  {
-   "id": "LB33",
-   "sheet": "SH03",
-   "caption": "Carrier Name",
-   "field": "Carrier Name",
-   "table": "Main Data",
-   "column": "Carrier Name"
-  },
-  {
-   "id": "LB31",
-   "sheet": "SH03",
-   "caption": "Quarter",
-   "field": "Quarter",
-   "table": "Main Data",
-   "column": "Quarter"
-  },
-  {
-   "id": "LB30",
-   "sheet": "SH03",
-   "caption": "Month",
-   "field": "Month",
-   "table": "Main Data",
-   "column": "Month"
-  },
-  {
-   "id": "LB32",
    "sheet": "SH03",
    "caption": "Year",
-   "field": "Year",
    "table": "Main Data",
    "column": "Year"
   },
   {
-   "id": "LB04",
-   "sheet": "SH01",
-   "caption": "Origin Country",
-   "field": "Origin Country",
+   "sheet": "SH03",
+   "caption": "Month",
    "table": "Main Data",
-   "column": "Origin Country"
+   "column": "Month"
   },
   {
-   "id": "LB01",
-   "sheet": "SH01",
-   "caption": "Destination Country",
-   "field": "Destination Country",
+   "sheet": "SH03",
+   "caption": "Quarter",
    "table": "Main Data",
-   "column": "Destination Country"
+   "column": "Quarter"
   },
   {
-   "id": "LB13",
-   "sheet": "SH01",
-   "caption": "Carrier's Operating Region",
-   "field": "Carrier's Operating Region",
-   "table": "Carrier Operating Region",
-   "column": "Carrier's Operating Region"
-  },
-  {
-   "id": "LB07",
-   "sheet": "SH01",
-   "caption": "Carrier Name",
-   "field": "Carrier Name",
-   "table": "Main Data",
-   "column": "Carrier Name"
-  },
-  {
-   "id": "LB02",
-   "sheet": "SH01",
-   "caption": "Destination State",
-   "field": "Destination State",
-   "table": "Main Data",
-   "column": "Destination State"
-  },
-  {
-   "id": "LB06",
-   "sheet": "SH01",
-   "caption": "Origin City",
-   "field": "Origin City",
-   "table": "Main Data",
-   "column": "Origin City"
-  },
-  {
-   "id": "LB05",
-   "sheet": "SH01",
-   "caption": "Origin State",
-   "field": "Origin State",
-   "table": "Main Data",
-   "column": "Origin State"
-  },
-  {
-   "id": "LB03",
-   "sheet": "SH01",
-   "caption": "Destination City",
-   "field": "Destination City",
-   "table": "Main Data",
-   "column": "Destination City"
-  },
-  {
-   "id": "LB15",
-   "sheet": "SH01",
-   "caption": "Carrier Group",
-   "field": "Carrier Group",
-   "table": "Carrier Groups",
-   "column": "Carrier Group"
-  },
-  {
-   "id": "LB12",
-   "sheet": "SH01",
+   "sheet": "SH03",
    "caption": "Flight Type",
-   "field": "Flight Type",
    "table": "Flight Types",
    "column": "Flight Type"
   },
   {
-   "id": "LB09",
+   "sheet": "SH03",
+   "caption": "Carrier Name",
+   "table": "Main Data",
+   "column": "Carrier Name"
+  },
+  {
+   "sheet": "SH03",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region",
+   "column": "Carrier's Operating Region"
+  },
+  {
+   "sheet": "SH03",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups",
+   "column": "Carrier Group"
+  },
+  {
+   "sheet": "SH_Analysis",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups",
+   "column": "Carrier Group"
+  },
+  {
+   "sheet": "SH_Analysis",
+   "caption": "Flight Type",
+   "table": "Flight Types",
+   "column": "Flight Type"
+  },
+  {
+   "sheet": "SH_Analysis",
+   "caption": "Carrier Name",
+   "table": "Main Data",
+   "column": "Carrier Name"
+  },
+  {
+   "sheet": "SH_Analysis",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region",
+   "column": "Carrier's Operating Region"
+  },
+  {
+   "sheet": "SH_Analysis",
+   "caption": "Year",
+   "table": "Main Data",
+   "column": "Year"
+  },
+  {
+   "sheet": "SH_Analysis",
+   "caption": "Quarter",
+   "table": "Main Data",
+   "column": "Quarter"
+  },
+  {
+   "sheet": "SH_Analysis",
+   "caption": "Month",
+   "table": "Main Data",
+   "column": "Month"
+  },
+  {
+   "sheet": "SH05",
+   "caption": "Year",
+   "table": "Main Data",
+   "column": "Year"
+  },
+  {
+   "sheet": "SH05",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region",
+   "column": "Carrier's Operating Region"
+  },
+  {
+   "sheet": "SH05",
+   "caption": "Month",
+   "table": "Main Data",
+   "column": "Month"
+  },
+  {
+   "sheet": "SH05",
+   "caption": "Quarter",
+   "table": "Main Data",
+   "column": "Quarter"
+  },
+  {
+   "sheet": "SH05",
+   "caption": "Carrier Name",
+   "table": "Main Data",
+   "column": "Carrier Name"
+  },
+  {
+   "sheet": "SH05",
+   "caption": "Flight Type",
+   "table": "Flight Types",
+   "column": "Flight Type"
+  },
+  {
+   "sheet": "SH05",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups",
+   "column": "Carrier Group"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Origin Country",
+   "table": "Main Data",
+   "column": "Origin Country"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Destination Country",
+   "table": "Main Data",
+   "column": "Destination Country"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region",
+   "column": "Carrier's Operating Region"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Carrier Name",
+   "table": "Main Data",
+   "column": "Carrier Name"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Destination State",
+   "table": "Main Data",
+   "column": "Destination State"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Origin City",
+   "table": "Main Data",
+   "column": "Origin City"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Origin State",
+   "table": "Main Data",
+   "column": "Origin State"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Destination City",
+   "table": "Main Data",
+   "column": "Destination City"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups",
+   "column": "Carrier Group"
+  },
+  {
+   "sheet": "SH01",
+   "caption": "Flight Type",
+   "table": "Flight Types",
+   "column": "Flight Type"
+  },
+  {
    "sheet": "SH01",
    "caption": "Distance Interval",
-   "field": "Distance Interval",
    "table": "Distance Groups",
    "column": "Distance Interval"
+  },
+  {
+   "sheet": "SH06",
+   "caption": "Month",
+   "table": "Main Data",
+   "column": "Month"
+  },
+  {
+   "sheet": "SH06",
+   "caption": "Quarter",
+   "table": "Main Data",
+   "column": "Quarter"
+  },
+  {
+   "sheet": "SH06",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region",
+   "column": "Carrier's Operating Region"
+  },
+  {
+   "sheet": "SH06",
+   "caption": "Carrier Name",
+   "table": "Main Data",
+   "column": "Carrier Name"
+  },
+  {
+   "sheet": "SH06",
+   "caption": "Flight Type",
+   "table": "Flight Types",
+   "column": "Flight Type"
+  },
+  {
+   "sheet": "SH06",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups",
+   "column": "Carrier Group"
+  },
+  {
+   "sheet": "SH06",
+   "caption": "Year",
+   "table": "Main Data",
+   "column": "Year"
+  },
+  {
+   "sheet": "SH08",
+   "caption": "Month",
+   "table": "Main Data",
+   "column": "Month"
+  },
+  {
+   "sheet": "SH08",
+   "caption": "Quarter",
+   "table": "Main Data",
+   "column": "Quarter"
+  },
+  {
+   "sheet": "SH08",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region",
+   "column": "Carrier's Operating Region"
+  },
+  {
+   "sheet": "SH08",
+   "caption": "Carrier Name",
+   "table": "Main Data",
+   "column": "Carrier Name"
+  },
+  {
+   "sheet": "SH08",
+   "caption": "Flight Type",
+   "table": "Flight Types",
+   "column": "Flight Type"
+  },
+  {
+   "sheet": "SH08",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups",
+   "column": "Carrier Group"
+  },
+  {
+   "sheet": "SH08",
+   "caption": "Year",
+   "table": "Main Data",
+   "column": "Year"
   }
  ],
  "unmapped_list_boxes": [
   {
    "id": "LB10",
-   "sheet": "SH01",
    "caption": "Aircraft Type",
    "field": "Aircraft Type",
    "reason": "field 'Aircraft Type' is not in this app's data model"
   },
   {
    "id": "LB11",
-   "sheet": "SH01",
    "caption": "Aircraft Group",
    "field": "Aircraft Group",
    "reason": "field 'Aircraft Group' is not in this app's data model"
@@ -328,8 +458,8 @@
   "Month (Flight Data dual) -> text column sorted by the hidden Month__num.",
   "Calculated dimension (Flight Type deal status) -> calculated column 'Deal Status' on Flight Types.",
   "Synthetic keys ($$SysTable 11-13) are not reproduced: every dimension joins Main Data on its one % key.",
-  "Report: one page per Qlik sheet; list boxes -> slicers on their sheet's page (field from the .qvw's DocumentSummary, sheet from the .qvw's object storage order). QlikView selections are document-wide, so every slicer is in a sync group per field and each page carries hidden synced slicers for the fields it does not show. Charts, QlikView-only sheet objects (multi boxes, current selections, bookmark object, buttons, search object, container, statistics box, text objects) and layout are not migrated yet.",
-  "List box LB10 (Aircraft Type, sheet SH01): field 'Aircraft Type' is not in this app's data model; not migrated.",
-  "List box LB11 (Aircraft Group, sheet SH01): field 'Aircraft Group' is not in this app's data model; not migrated."
+  "Report: one page per Qlik sheet from the base model's per-sheet generator (report_sections: sheet objects from the .qvw's document block): every chart with its measures, list boxes as slicers (captions checked against the .qvw's DocumentSummary fields). QlikView selections are document-wide, so slicers are synced per field and each page carries hidden synced slicers for the fields it does not show. QlikView-only objects (multi boxes, current selections, bookmark object, buttons, search object, statistics box, text objects) and layout are not migrated.",
+  "List box LB10 (Aircraft Type): field 'Aircraft Type' is not in this app's data model; not migrated.",
+  "List box LB11 (Aircraft Group): field 'Aircraft Group' is not in this app's data model; not migrated."
  ]
 }
