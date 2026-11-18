@@ -360,8 +360,6 @@ SEARCH_CMP = re.compile(r"^\s*(<=|>=|<|>|=)\s*(-?\d+(?:\.\d+)?)\s*$")
 
 
 def _value_pred(col: str, num_col: str | None, kind: str, value) -> str:
-    if kind in ("e", "p"):  # no selections: nothing is excluded, every value is possible
-        return "FALSE" if kind == "e" else "TRUE"
     if kind == "num":
         p = f"TRY_CAST({col} AS DOUBLE) = {value!r}"
         return f"({p} OR {num_col} = {value!r})" if num_col else p
@@ -374,6 +372,18 @@ def _value_pred(col: str, num_col: str | None, kind: str, value) -> str:
             return f"CAST({col} AS VARCHAR) ILIKE {ql(value.replace('*', '%').replace('?', '_'))}"
         return f"CAST({col} AS VARCHAR) ILIKE {ql(value)}"
     return f"CAST({col} AS VARCHAR) = {ql(value)}"
+
+
+def _element_pred(col: str, kind: str, arg, model: SourceModel) -> str:
+    """p(<set> F) / e(<set> F): the values of F possible (or excluded) in that set; no set = the current
+    selection state, which in the no-selections baseline is every row."""
+    fld, inner = arg
+    frm, icols = model.from_clause({fld} | (q.fields_in(inner) if inner is not None else set()))
+    where = set_sql(inner, icols, model) if inner is not None else "TRUE"
+    possible = f"SELECT DISTINCT {icols[fld]} FROM {frm} WHERE {where} AND {icols[fld]} IS NOT NULL"
+    if kind == "p":
+        return f"{col} IN ({possible})"
+    return f"({col} IS NOT NULL AND {col} NOT IN ({possible}))"
 
 
 def set_sql(node, cols, model: SourceModel) -> str:
@@ -392,6 +402,9 @@ def set_sql(node, cols, model: SourceModel) -> str:
             continue
         col = cols[mod.field]
         num_col = cols.get(f"{mod.field}__num")
-        any_of = " OR ".join(_value_pred(col, num_col, k, v) for k, v in mod.values) or "FALSE"
+        if mod.values and mod.values[0][0] in ("e", "p"):
+            any_of = _element_pred(col, *mod.values[0], model)
+        else:
+            any_of = " OR ".join(_value_pred(col, num_col, k, v) for k, v in mod.values) or "FALSE"
         preds.append(f"NOT COALESCE(({any_of}), FALSE)" if mod.op == "-=" else f"COALESCE(({any_of}), FALSE)")
     return " AND ".join(preds) or "TRUE"

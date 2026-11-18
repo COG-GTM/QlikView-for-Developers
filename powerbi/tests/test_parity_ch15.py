@@ -125,3 +125,16 @@ def test_roles_reproduce_section_access():
     assert "columnPermission 'Carrier Name' = none" in roles["NOCARRIER"]
     assert all("columnPermission" not in roles[u] for u in roles if u != "NOCARRIER")
     assert "PASSWORD" not in "".join(roles.values()) and "123" not in "".join(roles.values())
+
+
+@pytest.mark.needs_parquet
+def test_element_functions_honour_their_set(flights):
+    from engine import Evaluator
+    ev = Evaluator(SourceModel(APP))
+    by_year = flights.groupby(flights["Period"] // 100)[DEP].sum()
+
+    def total(expr):
+        return ev.evaluate(ev.compile(expr), [])["value"].iloc[0]
+    assert total(f"Sum({{1<Year = p({{1<Year={{2010}}>}} Year)>}} [{DEP}])") == by_year[2010]
+    assert total(f"Sum({{1<Year = e({{1<Year={{2010}}>}} Year)>}} [{DEP}])") == by_year[2009] + by_year[2011]
+    assert pd.isna(total(f"Sum({{1<Year = e(Year)>}} [{DEP}])"))
