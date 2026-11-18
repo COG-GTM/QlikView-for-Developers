@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from build_airline_base import static_title
 
 import harness
 from dax import read_tmdl
@@ -91,12 +92,12 @@ def test_pbip_covers_every_kpi_without_roles(expected):
 def test_report_pages_list_boxes_as_synced_slicers_and_a_visual_per_chart():
     manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
     report = json.loads((PBIP / "Chapter14_Airline_Operations.Report" / "report.json").read_text())
-    assert [p["displayName"] for p in report["sections"]] == [s["name"] for s in manifest["sheets"]]
+    assert [p["displayName"] for p in report["sections"]] == [static_title(s["name"]) for s in manifest["sheets"]]
     pages = {p["displayName"]: [json.loads(c["config"]) for c in p["visualContainers"]] for p in report["sections"]}
 
     def slicers(page):
         return {v["singleVisual"]["projections"]["Values"][0]["queryRef"] for v in pages[page]
-                if v["singleVisual"]["visualType"] == "slicer"}
+                if v["singleVisual"]["visualType"] == "slicer" and "display" not in v["singleVisual"]}
     assert {"Master Calendar.Year", "Main Data.Carrier Name", "Flight Types.Flight Type"} <= slicers("Dashboard")
     assert slicers("Data Consistency") == {"Aircraft Types.Aircraft Name", "Master Calendar.Year"}
     assert "INLFED.Metric Name" in slicers("Variables")
@@ -104,7 +105,7 @@ def test_report_pages_list_boxes_as_synced_slicers_and_a_visual_per_chart():
         for v in visuals:
             if v["singleVisual"]["visualType"] == "slicer":  # QlikView selections are global
                 assert v["singleVisual"]["syncGroup"]["groupName"] == v["singleVisual"]["projections"]["Values"][0]["queryRef"]
-                assert "display" not in v["singleVisual"] and "display" not in v["layouts"][0]
+                assert "display" not in v["layouts"][0]  # hidden synced copies hide the visual, not the layout
     model = json.loads((PBIP / "model.json").read_text())
     assert model["unmapped_list_boxes"] == {"MB01": "Flight Information", "MB02": "Aircraft",
                                             "LB10": "Aircraft Type", "LB11": "Aircraft Group"}

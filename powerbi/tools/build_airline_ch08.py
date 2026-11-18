@@ -283,6 +283,9 @@ def report(manifest: dict, specs: dict, measures: dict) -> tuple[dict, list[dict
     slicers, shared = [], {}
     for sec in sections:
         sheet = json.loads(sec["config"])["QlikSheet"]
+        # this app adds its own hidden synced slicers below; drop the base generator's copies
+        sec["visualContainers"] = [v for v in sec["visualContainers"]
+                                   if "display" not in json.loads(v["config"])["singleVisual"]]
         for v in sec["visualContainers"]:
             sv = json.loads(v["config"])["singleVisual"]
             if sv["visualType"] == "slicer":
