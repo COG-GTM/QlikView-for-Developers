@@ -20,6 +20,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import objects  # noqa: E402
 import qlik_expr as q  # noqa: E402
 from engine import INVENTORY, REPO, Evaluator, ModelUnavailable, SourceModel  # noqa: E402
 
@@ -116,6 +117,7 @@ def cmd_source(app: str) -> dict:
         result.update(status="model_unavailable", reason=str(e),
                       kpis=[{**k, "status": "model_unavailable"} for k in kpi_list(manifest)])
         return result
+    spec = objects.load_spec(app)
     ev = Evaluator(model)
     result.update(status="ok", model_source=model.model_source, model_tables=model.table_check)
     for k in kpi_list(manifest):
@@ -137,6 +139,8 @@ def cmd_source(app: str) -> dict:
         except q.Unsupported as e:
             entry.update(status="unsupported", reason=str(e), results=[])
         result["kpis"].append(entry)
+    if spec is not None:
+        result["objects"] = objects.evaluate(model, spec)
     result["elapsed_s"] = round(time.time() - started, 1)
     return result
 
@@ -150,7 +154,8 @@ def write_expected(app: str) -> Path:
     with open(out, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=9, mtime=0, filename="") as f:
         f.write(payload)  # mtime=0: byte-identical output, so CI can diff it
     ok = sum(k["status"] == "ok" for k in res["kpis"])
-    print(f"{app}: {res['status']}; {ok}/{len(res['kpis'])} KPI expressions evaluated from source -> "
+    objs = f", {len(res['objects'])} sheet objects" if "objects" in res else ""
+    print(f"{app}: {res['status']}; {ok}/{len(res['kpis'])} KPI expressions{objs} evaluated from source -> "
           f"{show(out)}")
     if res["status"] != "ok":
         print(f"   {res['reason'][:160]}")
