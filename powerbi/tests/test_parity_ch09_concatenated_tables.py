@@ -152,7 +152,8 @@ def test_report_pages_have_the_sheets_charts_and_slicers():
         visuals = [json.loads(v["config"])["singleVisual"] for v in page["visualContainers"]]
         assert any(v["visualType"] != "slicer" for v in visuals), page["displayName"]
         for v in visuals:
-            kinds.setdefault(page["displayName"], []).append(v["visualType"])
+            if "display" not in v:  # hidden synced slicer copies carry selections from other pages
+                kinds.setdefault(page["displayName"], []).append(v["visualType"])
             assert {s["Name"] for s in v["prototypeQuery"]["Select"]} <= fields
     charts = {c["id"].split(" ")[0] for c in manifest["charts"]}
     names = {json.loads(v["config"])["name"] for p in report["sections"] for v in p["visualContainers"]}
