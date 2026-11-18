@@ -530,8 +530,26 @@ def list_box_captions(doc: bytes) -> dict[str, str]:
     return out
 
 
-def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> tuple[list[dict], dict[str, str]]:
-    """One page per sheet; returns the pages and the list / multi boxes that have no model field (id -> caption)."""
+def multi_box_fields(doc: bytes, oid: str, fields: dict) -> list[str]:
+    """Fields of a multi box: after its caption / id and font names, the document block lists its fields (each
+    optionally preceded by a display label) up to the next font name."""
+    m = re.search(rb"(?<![\\A-Za-z0-9])" + oid.encode() + rb"(?![0-9])", doc)
+    out, started = [], False
+    for text in re.findall(rb"[\x20-\x7e]{3,}", doc[m.end():m.end() + 2000]):
+        t = text.decode("latin-1")
+        if t in ("Tahoma", "Arial"):
+            if out:
+                break
+            started = True
+        elif started and t in fields and t not in out:
+            out.append(t)
+    return out
+
+
+def report_sections(manifest: dict, specs: dict, measures: dict[str, dict],
+                    multi_boxes: bool = False) -> tuple[list[dict], dict[str, str]]:
+    """One page per sheet; returns the pages and the list / multi boxes that have no model field (id -> caption).
+    With multi_boxes, a multi box becomes one slicer per field it lists."""
     fields = {}
     for name, spec in specs.items():
         for col, _ in spec["cols"]:
@@ -549,6 +567,11 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> t
         sheet_name = static_title(next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet))
         visuals, slicers = [], []
         for oid in object_ids:
+            if oid in boxes and multi_boxes and oid.startswith("MB") and multi_box_fields(doc, oid, fields):
+                for f in multi_box_fields(doc, oid, fields):
+                    if fields[f] not in [r["Values"][0] for _, _, _, r, _ in slicers]:
+                        slicers.append((f"{oid}-{f}", f, "slicer", {"Values": [fields[f]]}, set()))
+                continue
             if oid in boxes:
                 if boxes[oid] in fields and fields[boxes[oid]] not in [r["Values"][0] for _, _, _, r, _ in slicers]:
                     slicers.append((oid, boxes[oid], "slicer", {"Values": [fields[boxes[oid]]]}, set()))

@@ -19,3 +19,4 @@ parity/expected/*.json.gz
 parity/reports/
 __pycache__/
 .pytest_cache/
+!parity/expected/Chapter09__Solution_Chapter 9_Link table.json.gz

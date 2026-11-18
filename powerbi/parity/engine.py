@@ -112,7 +112,7 @@ class SourceModel:
         if not need:
             need = [max(self.tables, key=self.rows.get)]
         root = max(need, key=self.rows.get)
-        joined, sql = [root], f"{qi(root)} AS t0"
+        joined, joins = [root], []
         for target in [t for t in need if t != root]:
             if target in joined:
                 continue
@@ -121,19 +121,44 @@ class SourceModel:
                 if t in joined:
                     continue
                 prev = next(j for j in joined if set(self.columns[j]) & set(self.columns[t]))
-                keys = sorted(set(self.columns[prev]) & set(self.columns[t]))
-                a_prev, a_new = f"t{joined.index(prev)}", f"t{len(joined)}"
-                on = " AND ".join(f"{a_new}.{qi(k)} = {a_prev}.{qi(k)}" for k in keys)
-                sql += f" LEFT JOIN (SELECT DISTINCT * FROM {qi(t)}) AS {a_new} ON {on}"
+                joins.append((t, joined.index(prev), sorted(set(self.columns[prev]) & set(self.columns[t]))))
                 joined.append(t)
         colmap = {}
         for f in fields:
             idx = next(i for i, t in enumerate(joined) if f in self.columns[t])
             colmap[f] = f"t{idx}.{qi(f)}"
+        # A joined table that is not unique on its join keys (e.g. a link table whose key carries several values of
+        # another field) contributes only its keys and the requested fields, made distinct: a field value associated
+        # with a fact row then counts once, as in QlikView, instead of once per link row.
+        used = {i: set() for i in range(len(joined))}
+        for t, p, keys in joins:
+            used[joined.index(t)].update(keys)
+            used[p].update(keys)
+        for f, col in colmap.items():
+            i = int(col.split(".", 1)[0][1:])
+            used[i].update(c for c in (f, f"{f}__num") if c in self.columns[joined[i]])
+        for t, _, keys in joins:
+            if self._unique_on(t, keys):
+                used[joined.index(t)] = set(self.columns[t])
+        sql = f"{qi(root)} AS t0"
+        for t, p, keys in joins:
+            i = joined.index(t)
+            cols = ", ".join(qi(c) for c in self.columns[t] if c in used[i])
+            on = " AND ".join(f"t{i}.{qi(k)} = t{p}.{qi(k)}" for k in keys)
+            sql += f" LEFT JOIN (SELECT DISTINCT {cols} FROM {qi(t)}) AS t{i} ON {on}"
         for i, t in enumerate(joined):
             for c in self.columns[t]:
-                colmap.setdefault(c, f"t{i}.{qi(c)}")
+                if i == 0 or c in used[i]:
+                    colmap.setdefault(c, f"t{i}.{qi(c)}")
         return sql, colmap
+
+    def _unique_on(self, table: str, keys: list[str]) -> bool:
+        cache = self.__dict__.setdefault("_unique", {})
+        if (table, tuple(keys)) not in cache:
+            k = ", ".join(qi(x) for x in keys)
+            cache[(table, tuple(keys))] = self.con.execute(
+                f"SELECT count(*) = count(DISTINCT ({k})) FROM (SELECT DISTINCT * FROM {qi(table)})").fetchone()[0]
+        return cache[(table, tuple(keys))]
 
     def _path(self, joined: list[str], target: str) -> list[str]:
         prev = {t: None for t in joined}

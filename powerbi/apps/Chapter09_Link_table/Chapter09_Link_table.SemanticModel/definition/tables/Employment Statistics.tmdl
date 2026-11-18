@@ -1,0 +1,58 @@
+table 'Employment Statistics'
+	lineageTag: 5f91f064-7f15-5c15-9a1f-b16aee076cf0
+
+	column '%Key Field'
+		dataType: string
+		isHidden
+		lineageTag: a4b13a0c-ba04-5d2b-8ea3-be5ee3ccb8b0
+		summarizeBy: none
+		sourceColumn: %Key Field
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Full Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 44515623-66fb-540d-8807-547ff834de64
+		summarizeBy: sum
+		sourceColumn: # Full Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Part Time Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a067d32-2bd1-5d59-86ac-3a0a201ef410
+		summarizeBy: sum
+		sourceColumn: # Part Time Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Total Employees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ddbde27-61d7-57a3-b4f6-0c9406f896c9
+		summarizeBy: sum
+		sourceColumn: # Total Employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Equivalent FTEs'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0dd6e474-e173-56a7-9b34-5b79650eba70
+		summarizeBy: sum
+		sourceColumn: # Equivalent FTEs
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Employment Statistics' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/QVDs/T_F41SCHEDULE_P1A_EMP.parquet"),
+				    Keyed = Table.AddColumn(Source, "%Key Field", each fnText(_[#"Period"]) & " | " & fnText(_[#"%Airline ID"]) & " | " & fnText(_[#"%Unique Carrier Code"]) & " | " & fnText(_[#"%Carrier Group ID"]), type text),
+				    Selected = Table.SelectColumns(Keyed, {"%Key Field", "# Full Time Employees", "# Part Time Employees", "# Total Employees", "# Equivalent FTEs"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Key Field", type text}, {"# Full Time Employees", Int64.Type}, {"# Part Time Employees", Int64.Type}, {"# Total Employees", Int64.Type}, {"# Equivalent FTEs", Int64.Type}})
+				in
+				    Typed
