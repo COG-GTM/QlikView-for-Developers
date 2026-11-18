@@ -14,7 +14,7 @@ chapter's script and sheets contain.
 | `STORE ... Aircraft Types Transformed.qvd`, `IF $(vLoadMainData)` | not migrated (ETL side effect / always loaded) |
 | Calculated dimension (Flight Type deal status) | calculated column `Flight Types[Deal Status]` |
 | 42 chart expressions (12 distinct) | 12 measures with `annotation ParityKey` |
-| 7 sheets, 20 list boxes (field from the .qvw's DocumentSummary) | 7 report pages, 18 slicers; Aircraft Type / Aircraft Group list boxes have no field in this model (gaps) |
+| 7 sheets, 23 charts, 20 list boxes | 7 report pages from the base generator (`report_sections`): every chart with its measures, 14 slicer fields synced across all pages (hidden synced slicers where a page doesn't show the field); Aircraft Type / Aircraft Group list boxes have no field in this model (gaps) |
 
 Semantic differences are listed in `model.json` (`semantic_gaps`). Parity: source model
 `powerbi/parity/models/Chapter08__Solution_Chapter 8_Airline Operations.sql`, expected results in

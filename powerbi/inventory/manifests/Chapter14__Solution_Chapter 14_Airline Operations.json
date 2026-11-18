@@ -2159,7 +2159,7 @@
    "caption": "FTE % to Total",
    "label": "FTE % to Total",
    "qlik": "Sum([# Equivalent FTEs]) / $(vTotalFTEs)",
-   "expanded": "Sum([# Equivalent FTEs]) / ( Sum([# Equivalent FTEs]))",
+   "expanded": "Sum([# Equivalent FTEs]) / Sum(TOTAL [# Equivalent FTEs])",
    "qlik_semantics": [],
    "dims": [
     "Carrier Name"
