@@ -1,0 +1,245 @@
+{
+ "app": "Chapter07__Solution_Chapter 7_Airline Operations",
+ "generated_by": "powerbi/tools/build_ch07_airline.py",
+ "base": "powerbi/tools/build_airline_base.py (Chapter 15)",
+ "measures": [
+  {
+   "name": "# of Flights",
+   "parity_key": "1baea265cccd",
+   "kpis": [
+    "CH01#1",
+    "CH02#1",
+    "CH04#3"
+   ],
+   "dax": "SUM('Main Data'[# Departures Performed])"
+  },
+  {
+   "name": "# of Enplanned Passengers",
+   "parity_key": "7f15ad08b3bb",
+   "kpis": [
+    "CH01#2",
+    "CH02#2",
+    "CH04#2",
+    "CH15#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Passengers])"
+  },
+  {
+   "name": "Transported Freight",
+   "parity_key": "aea8a21aee5f",
+   "kpis": [
+    "CH01#3",
+    "CH02#3"
+   ],
+   "dax": "SUM('Main Data'[# Transported Freight])"
+  },
+  {
+   "name": "Transported Mail",
+   "parity_key": "e0ca719214a7",
+   "kpis": [
+    "CH01#4",
+    "CH02#4",
+    "CH04#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Mail])"
+  },
+  {
+   "name": "# of Passengers (millions)",
+   "parity_key": "0c8ca154aacf",
+   "kpis": [
+    "CH03#1",
+    "CH22#1",
+    "CH24#1",
+    "CH25#1",
+    "CH26#1",
+    "CH27#1",
+    "CH28#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000)"
+  },
+  {
+   "name": "# of Available Seats (millions)",
+   "parity_key": "8dfad31060e3",
+   "kpis": [
+    "CH03#2"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Available Seats]), 1000000)"
+  },
+  {
+   "name": "Load Factor",
+   "parity_key": "213681cc0d2a",
+   "kpis": [
+    "CH03#3",
+    "CH05#1",
+    "CH21#1",
+    "CH38#1",
+    "CH38#2"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))"
+  },
+  {
+   "name": "Performed vs Scheduled",
+   "parity_key": "7588bff24d2c",
+   "kpis": [
+    "CH06#1",
+    "CH21#2",
+    "CH38#3",
+    "CH38#4"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Departures Performed]), SUM('Main Data'[# Departures Scheduled]))"
+  },
+  {
+   "name": "Air Time %",
+   "parity_key": "cd4c4a3c94f4",
+   "kpis": [
+    "CH07#1",
+    "CH08#1",
+    "CH09#1",
+    "CH11#1",
+    "CH12#1",
+    "CH13#1",
+    "CH14#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Carrier",
+   "parity_key": "90777bd5df7f",
+   "kpis": [
+    "CH15#2"
+   ],
+   "dax": "IF(DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]) = 1, MAX('Main Data'[Carrier Name]), \"Others\")"
+  },
+  {
+   "name": "Air Time % (CH21)",
+   "parity_key": "a1ec8a2cb5ee",
+   "kpis": [
+    "CH21#3",
+    "CH38#5",
+    "CH38#6"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Departures Performed (thousands)",
+   "parity_key": "072410d4365a",
+   "kpis": [
+    "CH22#2"
+   ],
+   "dax": "DIVIDE([# of Flights], 1000)"
+  }
+ ],
+ "calculated_dimensions": [
+  {
+   "table": "Flight Types",
+   "column": "Deal Status",
+   "parity_key": "caa19c70b731",
+   "qlik": "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))",
+   "dax": "SWITCH([Flight Type], \"Domestic, US Carriers Only\", \"Open\", \"International, Foreign Carriers\", \"Negotiating\", \"Closed\")"
+  }
+ ],
+ "pages": [
+  {
+   "page": "Main",
+   "charts": [],
+   "slicers": [
+    "Year",
+    "Quarter",
+    "Month",
+    "Carrier Group",
+    "Airline",
+    "Carrier Name",
+    "Flight Type",
+    "Aircraft Group",
+    "Aircraft Type",
+    "Distance Interval",
+    "Origin Country",
+    "Destination Country",
+    "Carrier's Operating Region"
+   ]
+  },
+  {
+   "page": "Dashboard",
+   "charts": [
+    "CH05",
+    "CH06",
+    "CH07"
+   ],
+   "slicers": [
+    "Year",
+    "Month",
+    "Carrier Group",
+    "Flight Type"
+   ]
+  },
+  {
+   "page": "Analysis",
+   "charts": [
+    "CH01",
+    "CH02",
+    "CH03",
+    "CH15",
+    "CH04"
+   ],
+   "slicers": [
+    "Year",
+    "Carrier Name"
+   ]
+  },
+  {
+   "page": "Reports",
+   "charts": [
+    "CH21",
+    "CH22"
+   ],
+   "slicers": [
+    "Year",
+    "Carrier Group"
+   ]
+  },
+  {
+   "page": "Gauge Styles",
+   "charts": [
+    "CH08",
+    "CH09",
+    "CH11",
+    "CH12",
+    "CH13",
+    "CH14"
+   ],
+   "slicers": [
+    "Year"
+   ]
+  },
+  {
+   "page": "Other Charts",
+   "charts": [
+    "CH24",
+    "CH25",
+    "CH26",
+    "CH27",
+    "CH28"
+   ],
+   "slicers": [
+    "Year"
+   ]
+  },
+  {
+   "page": "Other representations",
+   "charts": [
+    "CH38"
+   ],
+   "slicers": [
+    "Year"
+   ]
+  }
+ ],
+ "semantic_gaps": [
+  "Origin/Destination Airports come from the repo's Dimension Tables.mdb (6,209 rows each); the .qvw was reloaded from an older copy (2,104 / 2,169 rows, inventory/row_count_exceptions.json). Every airport ID Flight Data uses is in both, so measures are unaffected; airport list boxes show more members.",
+  "$$SysTable 12-14 (synthetic keys) are not reproduced; the %-keys are single-column relationships.",
+  "Time (drill-down Year > Month) -> Year, Month hierarchy on the axis; Airline_Origin_Destination (cyclic) -> Airline on the KPIs per Airline table (Origin/Destination Country are columns of Main Data for re-pivoting).",
+  "Radar, Mekko, Grid and Block charts have no native visual: line chart, stacked column, matrix and treemap.",
+  "Text objects, buttons, the bookmark object, current selections, search object, multi box and statistics box have no Power BI equivalent: slicers, the filter pane and bookmarks replace them. List box fields are not decoded from the .qvw, so page slicers use this chapter's dimension fields.",
+  "Chart presentation (Top 10 routes, gauge bands, traffic lights, mini charts) is not reproduced; the full result sets are, and parity compares them."
+ ]
+}

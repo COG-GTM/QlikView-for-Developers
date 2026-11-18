@@ -1,0 +1,505 @@
+{
+  "config": "{\"version\": \"5.59\", \"themeCollection\": {}, \"activeSectionIndex\": 0}",
+  "layoutOptimization": 0,
+  "resourcePackages": [],
+  "sections": [
+    {
+      "name": "ReportSection0",
+      "displayName": "Main",
+      "displayOption": 1,
+      "ordinal": 0,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"59d7d074-fb2a-59ea-91cc-b58b15587600\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 170,
+          "y": 20,
+          "z": 1,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"4af32ab6-8af4-59d2-807f-5f54785e3b1e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 170, \"y\": 20, \"z\": 1, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Main Data.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 120,
+          "z": 2,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"36783af6-1b8f-511e-9596-f12456ce4b1d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 120, \"z\": 2, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 170,
+          "y": 120,
+          "z": 3,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"177eaf29-10bc-5909-bb55-0b2386ad5638\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 170, \"y\": 120, \"z\": 3, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 220,
+          "z": 4,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"93c0dc8d-d0ba-5cc9-a927-ab19a59e6067\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 220, \"z\": 4, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Airlines.Airline\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Airlines\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Airline\"}, \"Name\": \"Airlines.Airline\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 170,
+          "y": 220,
+          "z": 5,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"7337fdd9-c8d9-5be3-b44f-beac81eef2b9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 170, \"y\": 220, \"z\": 5, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 320,
+          "z": 6,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"9baca2db-2bad-59ec-8cc4-73339293424e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 320, \"z\": 6, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 170,
+          "y": 320,
+          "z": 7,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"292ca4c8-c8df-5dca-92cb-7dac2dd74758\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 170, \"y\": 320, \"z\": 7, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Groups.Aircraft Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Group\"}, \"Name\": \"Aircraft Groups.Aircraft Group\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 420,
+          "z": 8,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"d6d18b24-ba24-58b7-b3b4-d51f143c2902\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 420, \"z\": 8, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Types.Aircraft Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Type\"}, \"Name\": \"Aircraft Types.Aircraft Type\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 170,
+          "y": 420,
+          "z": 9,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"4194546a-aefa-5c1a-a7bf-6628180caa8c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 170, \"y\": 420, \"z\": 9, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Distance Groups.Distance Interval\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Distance Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Distance Interval\"}, \"Name\": \"Distance Groups.Distance Interval\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 520,
+          "z": 10,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"217455fc-9d17-51fe-a3af-8e8f81c6676c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 520, \"z\": 10, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin Country\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin Country\"}, \"Name\": \"Main Data.Origin Country\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 170,
+          "y": 520,
+          "z": 11,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"8bda7fbc-b412-5ab1-9a09-b27045a5f418\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 170, \"y\": 520, \"z\": 11, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination Country\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination Country\"}, \"Name\": \"Main Data.Destination Country\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 620,
+          "z": 12,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"ace19499-8590-5aa8-9018-8a710fb3e4cf\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 620, \"z\": 12, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection1",
+      "displayName": "Dashboard",
+      "displayOption": 1,
+      "ordinal": 1,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"3af32a46-5811-526f-957f-cbb6d45e90ba\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 120,
+          "z": 1,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"d2230fc1-4d12-5dcc-aac2-d768779d2876\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 120, \"z\": 1, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 220,
+          "z": 2,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"75dc281d-39e2-55b3-a519-b705ab94cae6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 220, \"z\": 2, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 320,
+          "z": 3,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"fafe33f6-851e-5bac-b37e-692cfe4d2f24\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 320, \"z\": 3, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 20,
+          "z": 4,
+          "width": 450,
+          "height": 330,
+          "config": "{\"name\": \"1e448c10-bbca-57a7-9001-bf219d025009\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 20, \"z\": 4, \"width\": 450, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Load Factor\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Load Factor\"}, \"Name\": \"Main Data.Load Factor\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 810,
+          "y": 20,
+          "z": 5,
+          "width": 450,
+          "height": 330,
+          "config": "{\"name\": \"6c9c39de-1d42-5ecc-8730-83f232f1adbd\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 810, \"y\": 20, \"z\": 5, \"width\": 450, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Performed vs Scheduled\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Performed vs Scheduled\"}, \"Name\": \"Main Data.Performed vs Scheduled\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 370,
+          "z": 6,
+          "width": 450,
+          "height": 330,
+          "config": "{\"name\": \"3f800bff-b36a-5237-93ef-8299cf91992e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 370, \"z\": 6, \"width\": 450, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection2",
+      "displayName": "Analysis",
+      "displayOption": 1,
+      "ordinal": 2,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"f7ad733e-e4f6-5bdf-94ea-21f7b4ec6fab\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 120,
+          "z": 1,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"e49881ee-cb9a-50f1-8153-e5d4b0b3f6a4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 120, \"z\": 1, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 20,
+          "z": 2,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"8ad5e62e-d214-5413-bbe0-28dab6b68253\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 20, \"z\": 2, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Main Data.Year\"}, {\"queryRef\": \"Main Data.Month\"}], \"Y\": [{\"queryRef\": \"Main Data.# of Flights\"}, {\"queryRef\": \"Main Data.# of Enplanned Passengers\"}, {\"queryRef\": \"Main Data.Transported Freight\"}, {\"queryRef\": \"Main Data.Transported Mail\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Flights\"}, \"Name\": \"Main Data.# of Flights\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Enplanned Passengers\"}, \"Name\": \"Main Data.# of Enplanned Passengers\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Transported Freight\"}, \"Name\": \"Main Data.Transported Freight\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Transported Mail\"}, \"Name\": \"Main Data.Transported Mail\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 653,
+          "y": 20,
+          "z": 3,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"f731d8fa-2d6f-51f2-b035-e259c8b24bf4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 653, \"y\": 20, \"z\": 3, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.From - To City\"}, {\"queryRef\": \"Main Data.# of Flights\"}, {\"queryRef\": \"Main Data.# of Enplanned Passengers\"}, {\"queryRef\": \"Main Data.Transported Freight\"}, {\"queryRef\": \"Main Data.Transported Mail\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"From - To City\"}, \"Name\": \"Main Data.From - To City\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Flights\"}, \"Name\": \"Main Data.# of Flights\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Enplanned Passengers\"}, \"Name\": \"Main Data.# of Enplanned Passengers\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Transported Freight\"}, \"Name\": \"Main Data.Transported Freight\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Transported Mail\"}, \"Name\": \"Main Data.Transported Mail\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 966,
+          "y": 20,
+          "z": 4,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"64c9459f-7f38-5b93-9f3b-f18d9b9acfb9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 966, \"y\": 20, \"z\": 4, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"lineClusteredColumnComboChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Flight Types.Flight Type\"}], \"Y\": [{\"queryRef\": \"Main Data.# of Passengers (millions)\"}, {\"queryRef\": \"Main Data.# of Available Seats (millions)\"}], \"Y2\": [{\"queryRef\": \"Main Data.Load Factor\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}, {\"Name\": \"t1\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"# of Passengers (millions)\"}, \"Name\": \"Main Data.# of Passengers (millions)\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"# of Available Seats (millions)\"}, \"Name\": \"Main Data.# of Available Seats (millions)\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Load Factor\"}, \"Name\": \"Main Data.Load Factor\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 370,
+          "z": 5,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"4b26669a-6003-5b67-aab4-7563b83b5fb4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 370, \"z\": 5, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"pieChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Main Data.Carrier Name\"}], \"Y\": [{\"queryRef\": \"Main Data.# of Enplanned Passengers\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Enplanned Passengers\"}, \"Name\": \"Main Data.# of Enplanned Passengers\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 653,
+          "y": 370,
+          "z": 6,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"82cba57d-0564-5906-ac60-afd5bd45b269\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 653, \"y\": 370, \"z\": 6, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"scatterChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Main Data.Carrier Name\"}], \"X\": [{\"queryRef\": \"Main Data.Transported Mail\"}], \"Y\": [{\"queryRef\": \"Main Data.# of Enplanned Passengers\"}], \"Size\": [{\"queryRef\": \"Main Data.# of Flights\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Transported Mail\"}, \"Name\": \"Main Data.Transported Mail\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Enplanned Passengers\"}, \"Name\": \"Main Data.# of Enplanned Passengers\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Flights\"}, \"Name\": \"Main Data.# of Flights\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection3",
+      "displayName": "Reports",
+      "displayOption": 1,
+      "ordinal": 3,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"a14e3fc8-6903-593c-aebd-4986403bd42b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 120,
+          "z": 1,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"09191896-f5b6-5759-b434-c7ea10260851\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 120, \"z\": 1, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 20,
+          "z": 2,
+          "width": 450,
+          "height": 680,
+          "config": "{\"name\": \"b471ea39-cec7-577d-bb2e-b8c2fcf8d2ee\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 20, \"z\": 2, \"width\": 450, \"height\": 680}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Airlines.Airline\"}, {\"queryRef\": \"Main Data.Load Factor\"}, {\"queryRef\": \"Main Data.Performed vs Scheduled\"}, {\"queryRef\": \"Main Data.Air Time % (CH21)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Airlines\", \"Type\": 0}, {\"Name\": \"t1\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Airline\"}, \"Name\": \"Airlines.Airline\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Load Factor\"}, \"Name\": \"Main Data.Load Factor\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Performed vs Scheduled\"}, \"Name\": \"Main Data.Performed vs Scheduled\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Air Time % (CH21)\"}, \"Name\": \"Main Data.Air Time % (CH21)\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 810,
+          "y": 20,
+          "z": 3,
+          "width": 450,
+          "height": 680,
+          "config": "{\"name\": \"5b42ff29-9281-5452-855f-ed8dcefba7a7\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 810, \"y\": 20, \"z\": 3, \"width\": 450, \"height\": 680}}], \"singleVisual\": {\"visualType\": \"pivotTable\", \"projections\": {\"Rows\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}, {\"queryRef\": \"Airlines.Airline\"}], \"Columns\": [{\"queryRef\": \"Main Data.Year\"}, {\"queryRef\": \"Main Data.Month\"}], \"Values\": [{\"queryRef\": \"Main Data.# of Passengers (millions)\"}, {\"queryRef\": \"Main Data.Departures Performed (thousands)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Groups\", \"Type\": 0}, {\"Name\": \"t1\", \"Entity\": \"Airlines\", \"Type\": 0}, {\"Name\": \"t2\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Airline\"}, \"Name\": \"Airlines.Airline\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t2\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t2\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t2\"}}, \"Property\": \"# of Passengers (millions)\"}, \"Name\": \"Main Data.# of Passengers (millions)\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t2\"}}, \"Property\": \"Departures Performed (thousands)\"}, \"Name\": \"Main Data.Departures Performed (thousands)\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection4",
+      "displayName": "Gauge Styles",
+      "displayOption": 1,
+      "ordinal": 4,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"49506899-24ee-5627-8f32-c5601d637dc3\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 20,
+          "z": 1,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"24a99671-d500-534a-9668-f9df68049eac\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 20, \"z\": 1, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 653,
+          "y": 20,
+          "z": 2,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"eb77da5e-1999-5140-85bc-28d9409b73b4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 653, \"y\": 20, \"z\": 2, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 966,
+          "y": 20,
+          "z": 3,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"728eb0c2-9ae7-5344-8f44-49196a81fb33\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 966, \"y\": 20, \"z\": 3, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 370,
+          "z": 4,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"a897e798-1eb3-51ba-8b5a-0a08e9b9d099\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 370, \"z\": 4, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 653,
+          "y": 370,
+          "z": 5,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"18e0a921-2a0c-54e7-8f73-0550cf27dd85\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 653, \"y\": 370, \"z\": 5, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 966,
+          "y": 370,
+          "z": 6,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"d106d398-f42a-5cf7-a946-aaadcc1a7e14\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 966, \"y\": 370, \"z\": 6, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection5",
+      "displayName": "Other Charts",
+      "displayOption": 1,
+      "ordinal": 5,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"a7bee0ab-c40c-5954-84ed-508074e734f7\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 20,
+          "z": 1,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"00084fec-d094-58c5-9506-949c6d25df06\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 20, \"z\": 1, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Main Data.Month\"}], \"Y\": [{\"queryRef\": \"Main Data.# of Passengers (millions)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Passengers (millions)\"}, \"Name\": \"Main Data.# of Passengers (millions)\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 653,
+          "y": 20,
+          "z": 2,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"667d5c89-ea41-5101-ab2a-4b9ccd7a5409\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 653, \"y\": 20, \"z\": 2, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"columnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Flight Types.Flight Type\"}], \"Series\": [{\"queryRef\": \"Main Data.Year\"}], \"Y\": [{\"queryRef\": \"Main Data.# of Passengers (millions)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}, {\"Name\": \"t1\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"# of Passengers (millions)\"}, \"Name\": \"Main Data.# of Passengers (millions)\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 966,
+          "y": 20,
+          "z": 3,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"b1fd5916-d997-5e65-896b-607cb19cc227\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 966, \"y\": 20, \"z\": 3, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"pivotTable\", \"projections\": {\"Rows\": [{\"queryRef\": \"Main Data.Year\"}, {\"queryRef\": \"Main Data.Quarter\"}], \"Columns\": [{\"queryRef\": \"Flight Types.Flight Type\"}], \"Values\": [{\"queryRef\": \"Main Data.# of Passengers (millions)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}, {\"Name\": \"t1\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Main Data.Quarter\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Passengers (millions)\"}, \"Name\": \"Main Data.# of Passengers (millions)\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 370,
+          "z": 4,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"12359a49-2d86-5ca0-a422-56fc0a12dd5d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 370, \"z\": 4, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"funnel\", \"projections\": {\"Category\": [{\"queryRef\": \"Flight Types.Deal Status\"}], \"Y\": [{\"queryRef\": \"Main Data.# of Passengers (millions)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}, {\"Name\": \"t1\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Deal Status\"}, \"Name\": \"Flight Types.Deal Status\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"# of Passengers (millions)\"}, \"Name\": \"Main Data.# of Passengers (millions)\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 653,
+          "y": 370,
+          "z": 5,
+          "width": 293,
+          "height": 330,
+          "config": "{\"name\": \"b39cf548-170f-51b3-92ac-1c602fb75492\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 653, \"y\": 370, \"z\": 5, \"width\": 293, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"treemap\", \"projections\": {\"Group\": [{\"queryRef\": \"Main Data.Destination Country\"}], \"Details\": [{\"queryRef\": \"Main Data.Destination City\"}], \"Values\": [{\"queryRef\": \"Main Data.# of Passengers (millions)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination Country\"}, \"Name\": \"Main Data.Destination Country\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination City\"}, \"Name\": \"Main Data.Destination City\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"# of Passengers (millions)\"}, \"Name\": \"Main Data.# of Passengers (millions)\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection6",
+      "displayName": "Other representations",
+      "displayOption": 1,
+      "ordinal": 6,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 280,
+          "height": 90,
+          "config": "{\"name\": \"ecf63832-1a55-5934-b93f-b39d19ceb61b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 280, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 340,
+          "y": 20,
+          "z": 1,
+          "width": 920,
+          "height": 680,
+          "config": "{\"name\": \"5e15e56d-8ff0-5bf0-bc04-fd1b20bc0316\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 340, \"y\": 20, \"z\": 1, \"width\": 920, \"height\": 680}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Groups.Aircraft Group\"}, {\"queryRef\": \"Main Data.Load Factor\"}, {\"queryRef\": \"Main Data.Performed vs Scheduled\"}, {\"queryRef\": \"Main Data.Air Time % (CH21)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Groups\", \"Type\": 0}, {\"Name\": \"t1\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Group\"}, \"Name\": \"Aircraft Groups.Aircraft Group\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Load Factor\"}, \"Name\": \"Main Data.Load Factor\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Performed vs Scheduled\"}, \"Name\": \"Main Data.Performed vs Scheduled\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t1\"}}, \"Property\": \"Air Time % (CH21)\"}, \"Name\": \"Main Data.Air Time % (CH21)\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
+    }
+  ]
+}
