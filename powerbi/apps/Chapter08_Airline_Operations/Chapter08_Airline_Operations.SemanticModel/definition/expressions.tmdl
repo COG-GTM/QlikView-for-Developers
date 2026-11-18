@@ -1,0 +1,11 @@
+expression DataRoot = "C:\QlikView-for-Developers\powerbi\data\parquet\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: e5cfde6e-6cb8-54a5-912a-31a769110f5a
+
+expression fnReadParquet =
+		(relativePath as text) as table =>
+		let
+		    FullPath = DataRoot & Text.Replace(relativePath, "/", "\"),
+		    Source = Parquet.Document(File.Contents(FullPath))
+		in
+		    Source
+	lineageTag: a4dc3d0b-25bf-573c-9091-772ff216fcd4
