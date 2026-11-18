@@ -59,11 +59,17 @@ def test_report_has_both_sheets_and_charts():
     charts = {c["name"]: c["singleVisual"] for c in configs if c["name"] in ("CH01", "CH02")}
     assert charts["CH01"]["visualType"] == "clusteredColumnChart"
     assert charts["CH02"]["visualType"] == "tableEx"
-    slicers = {s["displayName"]: [c["name"] for c in map(json.loads, (v["config"] for v in s["visualContainers"]))
-                                  if c["singleVisual"]["visualType"] == "slicer"] for s in report["sections"]}
-    assert len(slicers["Main"]) == 13 and len(slicers["Dashboard"]) == 7
-    assert all(oid.startswith("LB") for ids in slicers.values() for oid in ids)
-    top = json.loads(report["sections"][1]["visualContainers"][-1]["filters"])
+    def slicers(section, hidden):
+        return [c for c in map(json.loads, (v["config"] for v in section["visualContainers"]))
+                if c["singleVisual"]["visualType"] == "slicer" and ("display" in c["singleVisual"]) == hidden]
+    main, dash = report["sections"]
+    assert [c["name"] for c in slicers(main, False)][:1] == ["LB09"] and len(slicers(main, False)) == 13
+    assert len(slicers(dash, False)) == 7 and not slicers(main, True)
+    groups = {s["singleVisual"]["syncGroup"]["groupName"] for s in slicers(main, False)}
+    dash_groups = {s["singleVisual"]["syncGroup"]["groupName"] for s in slicers(dash, False) + slicers(dash, True)}
+    assert groups <= dash_groups, "every Main list box must filter the Dashboard charts"
+    top = next(json.loads(v["filters"]) for v in report["sections"][1]["visualContainers"]
+               if json.loads(v["config"])["name"] == "CH02")
     assert top[0]["type"] == "TopN" and top[0]["filter"]["From"][0]["Expression"]["Subquery"]["Query"]["Top"] == 10
 
 

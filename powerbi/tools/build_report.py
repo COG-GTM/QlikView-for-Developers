@@ -86,7 +86,8 @@ def field(kind: str, alias: str, prop: str) -> dict:
 
 
 def visual(name: str, vtype: str, pos: tuple, columns: list, meas: list, title: str | None,
-           role_cols: str, role_meas: str | None, order_by: tuple | None = None, filters: list | None = None) -> dict:
+           role_cols: str, role_meas: str | None, order_by: tuple | None = None, filters: list | None = None,
+           hidden: bool = False) -> dict:
     x, y, w, h = pos
     tables = list(dict.fromkeys([t for t, _ in columns] + [t for t, _ in meas]))
     alias = {t: f"t{i}" for i, t in enumerate(tables)}
@@ -100,6 +101,11 @@ def visual(name: str, vtype: str, pos: tuple, columns: list, meas: list, title: 
         t, m = order_by
         query["OrderBy"] = [{"Direction": 2, "Expression": field("Measure", alias[t], m)}]
     single = {"visualType": vtype, "projections": proj, "prototypeQuery": query, "drillFilterOtherVisuals": True}
+    if vtype == "slicer":
+        # Qlik selections are global; synced slicers carry them across pages.
+        single["syncGroup"] = {"groupName": "{}.{}".format(*columns[0]), "fieldChanges": True, "filterChanges": True}
+    if hidden:
+        single["display"] = {"mode": "hidden"}
     if title:
         single["vcObjects"] = {"title": [{"properties": {"show": lit_bool(True), "text": lit(title)}}]}
     config = {"name": name, "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": 0, "width": w, "height": h}}],
@@ -140,7 +146,7 @@ def chart_visual(chart: dict, by_key: dict, pos: tuple) -> dict:
     return visual(chart["id"], vtype, pos, cols, meas, chart["caption"], "Category", "Y", order, filters)
 
 
-def page(i: int, spec: dict, charts: dict, by_key: dict, cols: dict) -> dict:
+def page(i: int, spec: dict, charts: dict, by_key: dict, cols: dict, synced: list) -> dict:
     visuals = []
     boxes = slicers(spec, cols)
     n = len(boxes)
@@ -152,6 +158,13 @@ def page(i: int, spec: dict, charts: dict, by_key: dict, cols: dict) -> dict:
         ch = (PAGE_H - 30) // len(spec["charts"])
         for j, cid in enumerate(spec["charts"]):
             visuals.append(chart_visual(charts[cid], by_key, (sw + 20, 10 + j * (ch + 10), cw, ch)))
+        # Hidden synced slicers let list boxes on other sheets filter this sheet's charts.
+        here = {(t, c) for _, t, c in boxes}
+        for oid, t, c in synced:
+            if (t, c) not in here:
+                here.add((t, c))
+                visuals.append(visual(f"{spec['id']}_{oid}", "slicer", (0, 0, 160, 120), [(t, c)], [], None,
+                                      "Values", None, hidden=True))
     else:
         per_row = 5
         w, h = (PAGE_W - 10 * (per_row + 1)) // per_row, (PAGE_H - 40) // 3
@@ -167,9 +180,10 @@ def build(app: str, pbip_dir: Path) -> Path:
     charts = {c["id"]: c for c in manifest["charts"]}
     by_key = measures(pbip_dir / pbip_dir.name)
     cols = columns(pbip_dir / pbip_dir.name)
+    synced = [b for spec in LAYOUTS[app] for b in slicers(spec, cols)]
     report = {"config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
               "layoutOptimization": 0, "resourcePackages": [],
-              "sections": [page(i, s, charts, by_key, cols) for i, s in enumerate(LAYOUTS[app])]}
+              "sections": [page(i, s, charts, by_key, cols, synced) for i, s in enumerate(LAYOUTS[app])]}
     out = pbip_dir / f"{pbip_dir.name}.Report" / "report.json"
     out.write_text(json.dumps(report, indent=2) + "\n")
     return out
