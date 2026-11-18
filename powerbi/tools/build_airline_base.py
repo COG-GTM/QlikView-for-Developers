@@ -682,7 +682,7 @@ def build(data_root: str = DEFAULT_ROOT, cfg: AirlineApp = CH15) -> Path:
     for name, spec in specs.items():
         write_table(sm / "definition" / "tables", name, spec,
                     list(measures.values()) if name == "Main Data" else [],
-                    [x for x in CALC_DIMS if x[0] == name])
+                    [x for x in CALC_DIMS if x[0] == name], slug=SLUG)
     rels = []
     for ft, fc, tt, tc in relationships():
         rels += [f"relationship {tag(SLUG, 'rel', ft, fc, tt)}", f"\tfromColumn: {tname(ft)}.{tname(fc)}",
