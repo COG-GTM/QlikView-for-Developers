@@ -193,3 +193,11 @@ def test_every_page_carries_every_list_box_field_so_selections_are_global():
     assert len(every) >= 20 and all(fields(vs) == every for vs in pages)
     assert all(not fields(vs, hidden=True) & fields(vs, hidden=False) for vs in pages)
     assert fields(pages[[i for i, vs in enumerate(pages) if not fields(vs, hidden=False)][0]], hidden=True) == every
+
+
+def test_known_differences_only_cover_the_sun_country_spelling(expected):
+    exc = json.loads((POWERBI / "parity" / "exceptions" / f"{APP}.json").read_text())
+    ids = {r["id"] for k in expected["kpis"] for r in k["results"]}
+    assert exc and all(e["id"] in ids and "Mn" in e["reason"] for e in exc)
+    assert {e["id"].split("@")[0] for e in exc} == {"CH15#2", "CH43#1", "CH44#1", "CH69#2", "CH69#3",
+                                                     "CH48#1", "CH52#1", "CH53#1", "CH54#1"}
