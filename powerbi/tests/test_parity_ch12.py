@@ -121,7 +121,8 @@ def test_report_pages_rebuild_list_boxes_as_slicers():
             entity = v["singleVisual"]["prototypeQuery"]["From"][0]["Entity"]
             assert (entity, sel["Column"]["Property"]) in fields
             title = v["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"]
-            assert title.startswith("'" + sel["Column"]["Property"].replace("'", "''"))
+            prop = sel["Column"]["Property"]
+            assert title == "'" + prop.replace("'", "''") + "'" or title == f"'{prop[8:]} ({prop[:7]})'"
 
 
 def test_comparative_analysis_route_slicers_feed_the_group_measures():
@@ -130,6 +131,8 @@ def test_comparative_analysis_route_slicers_feed_the_group_measures():
     entities = [json.loads(v["config"])["singleVisual"]["prototypeQuery"]["From"][0]["Entity"]
                 for v in page["visualContainers"]]
     assert entities.count("Group A Route") == entities.count("Group B Route") == 9
+    queries = json.loads((POWERBI / "parity" / "dax" / f"{APP}.queries.json").read_text())
+    assert "Route" not in json.dumps(queries)
     tmdl = (SM / "tables" / "Main Data.tmdl").read_text()
     for state in ("Group A", "Group B"):
         (dax,) = [x for x in tmdl.splitlines() if x.startswith(f"\tmeasure '{state} Flights' = ")]

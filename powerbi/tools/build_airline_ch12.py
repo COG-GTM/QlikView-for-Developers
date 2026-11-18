@@ -93,7 +93,8 @@ ROUTE_DIMS = [("Origin Airports", "%Origin Airport ID", "Origin Airport"),
 ROUTE_TARGETS = [("Main Data", c) for c in ROUTE_MD] + [(t, c) for t, _, c in ROUTE_DIMS]
 
 
-def route_spec() -> dict:
+def route_spec(state: str) -> dict:
+    # own column names, so parity queries over Main Data fields never bind to the disconnected copies
     keys = [k for _, k, _ in ROUTE_DIMS]
     steps = [f"Source = Table.Distinct(Table.SelectColumns(#\"Main Data\", {base.m_list(keys + ROUTE_MD)}))"]
     last = "Source"
@@ -101,15 +102,18 @@ def route_spec() -> dict:
         steps += [f'J{i} = Table.NestedJoin({last}, {{"{key}"}}, #"{table}", {{"{key}"}}, "D{i}", JoinKind.LeftOuter)',
                   f'E{i} = Table.ExpandTableColumn(J{i}, "D{i}", {{"{col}"}})']
         last = f"E{i}"
-    cols = [(c, "string") for _, c in ROUTE_TARGETS]
-    steps += [f"Selected = Table.Distinct(Table.SelectColumns({last}, {base.m_list(c for c, _ in cols)}))",
-              f"Typed = Table.TransformColumnTypes(Selected, {base.m_types(cols)})"]
+    cols = [(f"{state} {c}", "string") for _, c in ROUTE_TARGETS]
+    names = [c for _, c in ROUTE_TARGETS]
+    renames = ", ".join(f'{{"{c}", "{state} {c}"}}' for c in names)
+    steps += [f"Selected = Table.Distinct(Table.SelectColumns({last}, {base.m_list(names)}))",
+              f"Renamed = Table.RenameColumns(Selected, {{{renames}}})",
+              f"Typed = Table.TransformColumnTypes(Renamed, {base.m_types(cols)})"]
     return {"cols": cols, "m": base.m_let(steps, "Typed")}
 
 
 def state_measure(state: str, flights: str, cal: str) -> str:
     period = f"KEEPFILTERS(TREATAS(VALUES('{state}'[{state} Period]), {cal}))"
-    route = ", ".join(f"KEEPFILTERS(TREATAS(VALUES('{state} Route'[{c}]), {base.tname(t)}[{c}]))"
+    route = ", ".join(f"KEEPFILTERS(TREATAS(VALUES('{state} Route'[{state} {c}]), {base.tname(t)}[{c}]))"
                       for t, c in ROUTE_TARGETS)
     return (f"IF(ISFILTERED('{state} Route'), CALCULATE({flights}, {period}, {route}), "
             f"CALCULATE({flights}, {period}))")
@@ -142,7 +146,7 @@ def write_report(root: Path, specs: dict) -> list[dict]:
             if lb in STATE_LBS:
                 for state in STATES:
                     n = len(visuals)
-                    visuals.append(slicer(lb, f"{state} Route", field, 10 + (n % 6) * 210, 10 + (n // 6) * 170, n,
+                    visuals.append(slicer(lb, f"{state} Route", f"{state} {field}", 10 + (n % 6) * 210, 10 + (n // 6) * 170, n,
                                           f"{field} ({state})"))
                     mapped.append({"sheet": title, "object": lb, "caption": field, "table": f"{state} Route",
                                    "state": state})
@@ -195,7 +199,7 @@ def table_specs(types: dict) -> dict[str, dict]:
     specs["Main Data"]["m"] = "\n".join(x for x in md.split("\n") if "Placeholder = " not in x).replace(
         "TransformColumnTypes(Placeholder", "TransformColumnTypes(Combined")
     for state in STATES:
-        specs[f"{state} Route"] = route_spec()
+        specs[f"{state} Route"] = route_spec(state)
     return {("INLFED" if k == "INLFED-1" else k): v for k, v in specs.items()}
 
 

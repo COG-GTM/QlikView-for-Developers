@@ -336,7 +336,7 @@
    "grain": [
     "Origin Country"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A Route'[Origin Country], \"value\", [Load Factor])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin Country], \"value\", [Load Factor])"
   },
   {
    "id": "CH21#1@Destination Country",
@@ -344,7 +344,7 @@
    "grain": [
     "Destination Country"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A Route'[Destination Country], \"value\", [Load Factor])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country], \"value\", [Load Factor])"
   },
   {
    "id": "CH21#2@total",
@@ -366,7 +366,7 @@
    "grain": [
     "Origin Country"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A Route'[Origin Country], \"value\", [Performed vs Scheduled])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin Country], \"value\", [Performed vs Scheduled])"
   },
   {
    "id": "CH21#2@Destination Country",
@@ -374,7 +374,7 @@
    "grain": [
     "Destination Country"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A Route'[Destination Country], \"value\", [Performed vs Scheduled])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country], \"value\", [Performed vs Scheduled])"
   },
   {
    "id": "CH21#3@total",
@@ -396,7 +396,7 @@
    "grain": [
     "Origin Country"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A Route'[Origin Country], \"value\", [Air Time % (CH21)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin Country], \"value\", [Air Time % (CH21)])"
   },
   {
    "id": "CH21#3@Destination Country",
@@ -404,7 +404,7 @@
    "grain": [
     "Destination Country"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A Route'[Destination Country], \"value\", [Air Time % (CH21)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country], \"value\", [Air Time % (CH21)])"
   },
   {
    "id": "CH22#1@total",
@@ -512,7 +512,7 @@
     "Destination Country",
     "Destination City"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Group A Route'[Destination Country], 'Group A Route'[Destination City], \"value\", [# of Passengers (millions)])"
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country], 'Main Data'[Destination City], \"value\", [# of Passengers (millions)])"
   },
   {
    "id": "CH38#1@total",
