@@ -180,7 +180,7 @@ MEASURES = {
     "f72a33049af9": ("# of Flights (thousands)", f"DIVIDE({FLIGHTS}, 1000)", DEC),
     "0437729d9522": ("# of Flights (millions)", f"DIVIDE({FLIGHTS}, 1000000)", DEC),
     "b8cda7856288": ("Selected Metric",
-                     "SWITCH(SELECTEDVALUE(@METRIC[eMetric]), "
+                     "SWITCH(SELECTEDVALUE('INLFED-1'[eMetric]), "
                      f"\"eDeparturesPerformed\", DIVIDE({FLIGHTS}, 1000), "
                      f"\"eEnplanedPassengers\", DIVIDE(SUM({m('# Transported Passengers')}), 1000000), "
                      f"\"eAirTime\", DIVIDE(SUM({m('# Air Time')}), SUM({m('# Ramp-To-Ramp Time')})))", DEC),
@@ -302,7 +302,7 @@ GAPS = [
     "carriers whose value falls in the segment at query time, so RLS and selections apply as in QlikView. The row-level "
     "Flight Type deal status -> calculated column on Flight Types.",
     "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
-    "$($(=eMetric)) -> SWITCH over SELECTEDVALUE(@METRIC[eMetric]); blank without a single Metric Name selected, "
+    "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, "
     "like QlikView's empty expansion.",
 ]
 
@@ -313,7 +313,7 @@ NO_SECTION_ACCESS_DIMENSION_GAP = (
 
 
 def gaps() -> list[str]:
-    out = [g.replace("@METRIC", tname(CFG.metric_table)) for g in GAPS]
+    out = [g.replace("'INLFED-1'", tname(CFG.metric_table)) for g in GAPS]
     if CFG.section_access:
         return out
     return [NO_SECTION_ACCESS_DIMENSION_GAP if g.startswith("Dimension rows:") else g for g in out
@@ -419,9 +419,10 @@ def table_specs(types: dict) -> dict[str, dict]:
     return specs
 
 
-def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: list[tuple], slug: str | None = None):
+def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: list[tuple],
+                slug: str | None = None):
     """spec: cols, m, optional sort / qlik / description (table) / descriptions (column -> text, e.g. COMMENT FIELDS)."""
-    slug = slug or SLUG  # the app being built, not the default app at import time
+    slug = slug or SLUG  # the app being built (build() rebinds SLUG), not the import-time default
     names = {n for n, _ in spec["cols"]}
     lines = [f"/// {spec['description']}"] if spec.get("description") else []
     lines += [f"table {tname(name)}", f"\tlineageTag: {tag(slug, name)}", ""]
@@ -673,7 +674,7 @@ def build(data_root: str = DEFAULT_ROOT, cfg: AirlineApp = CH15) -> Path:
         if pk not in MEASURES:
             raise SystemExit(f"{k['kpi']}: no measure for ParityKey {pk}: {k['expression']}")
         mz = measures.setdefault(pk, {"parity_key": pk, "name": MEASURES[pk][0],
-                                      "dax": MEASURES[pk][1].replace("@METRIC", tname(cfg.metric_table)),
+                                      "dax": MEASURES[pk][1].replace("'INLFED-1'", tname(cfg.metric_table)),
                                       "fmt": MEASURES[pk][2], "kpis": [], "qlik": " ".join(k["expression"].split())})
         mz["kpis"].append(k["kpi"])
         for d in k["dims"]:
