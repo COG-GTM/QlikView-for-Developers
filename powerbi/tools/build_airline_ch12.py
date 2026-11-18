@@ -51,6 +51,73 @@ GAPS = [
       for g in base.GAPS if not any(w in g for w in ("Section Access", "OMIT", "each role"))],
 ]
 
+# Sheets (in .qvw order) and their list boxes as (object id, caption), read from the .qvw's sheet object lists and
+# the caption string stored before each list box id. A list box caption is normally its field name.
+SHEETS = [
+    ("SH03", "Dashboard", ["LB28", "LB32", "LB30", "LB31", "LB27", "LB33", "LB29"]),
+    ("SH_Analysis", "Analysis", ["LB29", "LB27", "LB33", "LB28", "LB32", "LB31", "LB30"]),
+    ("SH05", "Reports", ["LB32", "LB30", "LB31", "LB29", "LB27", "LB33", "LB28"]),
+    ("SH01", "Associations", ["LB04", "LB01", "LB13", "LB07", "LB02", "LB06", "LB05", "LB03", "LB15", "LB10", "LB12",
+                              "LB11", "LB09"]),
+    ("SH04", "Gauge Styles", []),
+    ("SH06", "Other Charts", ["LB30", "LB31", "LB28", "LB33", "LB27", "LB29", "LB32"]),
+    ("SH08", "Other representations", ["LB30", "LB31", "LB32", "LB29", "LB27", "LB33", "LB28"]),
+    ("SH09", "Data Consistency", ["LB34", "LB35"]),
+    ("SH10", "Variables", ["LB31", "LB32", "LB30", "LB36"]),
+    ("SH11", "Advanced Expressions", ["LB31", "LB30", "LB32"]),
+    ("SH12", "Set Analysis", ["LB32", "LB31", "LB30"]),
+    ("SH13", "Point In Time Reporting", ["LB32", "LB31", "LB33", "LB28", "LB27", "LB29", "LB30"]),
+    ("SH15", "Comparative Analysis", ["LB30", "LB32", "LB31", "LB37", "LB42", "LB41", "LB40", "LB38", "LB45", "LB44",
+                                      "LB43", "LB39"]),
+]
+LIST_BOXES = {
+    "LB27": "Flight Type", "LB28": "Carrier's Operating Region", "LB29": "Carrier Group", "LB30": "Month",
+    "LB31": "Quarter", "LB32": "Year", "LB33": "Carrier Name", "LB01": "Destination Country", "LB02": "Destination State",
+    "LB03": "Destination City", "LB04": "Origin Country", "LB05": "Origin State", "LB06": "Origin City",
+    "LB07": "Carrier Name", "LB09": "Distance Interval", "LB10": "Aircraft Type", "LB11": "Aircraft Group",
+    "LB12": "Flight Type", "LB13": "Carrier's Operating Region", "LB15": "Carrier Group", "LB34": "Aircraft Name",
+    "LB35": "Year", "LB36": "Metric Name",
+    # Comparative Analysis: list boxes in alternate states Group A / Group B, captioned by their position
+    "LB37": None, "LB38": "To Country", "LB39": "From Coutry", "LB40": "To State", "LB41": "To City",
+    "LB42": "To Airport", "LB43": "From State", "LB44": "From City", "LB45": "From Airport",
+}
+
+
+def slicer(lb: str, table: str, field: str, x: int, y: int, z: int) -> dict:
+    ref = f"{table}.{field}"
+    config = {"name": f"{SLUG}_{lb}", "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": 200, "height": 160}}],
+              "singleVisual": {"visualType": "slicer", "projections": {"Values": [{"queryRef": ref, "active": True}]},
+                               "prototypeQuery": {"Version": 2, "From": [{"Name": "t", "Entity": table, "Type": 0}],
+                                                  "Select": [{"Column": {"Expression": {"SourceRef": {"Source": "t"}},
+                                                                         "Property": field}, "Name": ref}]},
+                               "objects": {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Basic'"}}}}}]},
+                               "vcObjects": {"title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}},
+                                                                       "text": {"expr": {"Literal": {"Value": f"'{field}'"}}}}}]}}}
+    return {"x": x, "y": y, "z": z, "width": 200, "height": 160, "config": json.dumps(config), "filters": "[]"}
+
+
+def write_report(root: Path, specs: dict) -> list[dict]:
+    fields = {}
+    for table, spec in specs.items():
+        for col, _ in spec["cols"]:
+            fields.setdefault(col, table)
+    sections, mapped = [], []
+    for i, (sid, title, lbs) in enumerate(SHEETS):
+        visuals = []
+        for lb in lbs:
+            field = LIST_BOXES[lb]
+            if field in fields:
+                n = len(visuals)
+                visuals.append(slicer(lb, fields[field], field, 10 + (n % 6) * 210, 10 + (n // 6) * 170, n))
+                mapped.append({"sheet": title, "object": lb, "caption": field, "table": fields[field]})
+        sections.append({"name": f"ReportSection_{sid}", "displayName": title, "displayOption": 1, "ordinal": i,
+                         "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": visuals})
+    report = root / f"{SLUG}.Report" / "report.json"
+    data = json.loads(report.read_text())
+    data["sections"] = sections
+    report.write_text(json.dumps(data, indent=2) + "\n")
+    return mapped
+
 
 def aircraft_m(cols: list[tuple[str, str]]) -> str:
     trim = "each if _ = null then null else Text.Trim(_)"
@@ -110,8 +177,16 @@ def configure() -> None:
 def build(data_root: str = base.DEFAULT_ROOT) -> Path:
     configure()
     root = base.build(data_root)
+    slicers = write_report(root, base.table_specs(base.catalog_types()))
     model = root / "model.json"
     data = json.loads(model.read_text())
+    data["slicers"] = slicers
+    data["semantic_gaps"].append(
+        "List boxes -> one report page per sheet with a slicer per list box whose caption is a model field. Not "
+        "rebuilt: Associations' 'Aircraft Type' / 'Aircraft Group' (LB10 / LB11; no such field in the model) and the "
+        "Comparative Analysis list boxes LB37-LB45 (alternate states Group A / Group B, captions From / To ... that "
+        "are not field names; Power BI slicers have no alternate states). Charts and other sheet objects are not "
+        "laid out on the pages.")
     data["generated_by"] = "powerbi/tools/build_airline_ch12.py"
     del data["roles"]
     model.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n")

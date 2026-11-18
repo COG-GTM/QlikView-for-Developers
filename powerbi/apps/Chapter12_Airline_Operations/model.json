@@ -422,6 +422,417 @@
   "Alternate states Group A / Group B -> disconnected 'Group A' / 'Group B' period tables used as slicers; the measures intersect the main selection with the group's periods ({[Group A] * $}).",
   "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the carriers whose value falls in the segment at query time, so selections apply as in QlikView. The row-level Flight Type deal status -> calculated column on Flight Types.",
   "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
-  "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED'[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion."
+  "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED'[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion.",
+  "List boxes -> one report page per sheet with a slicer per list box whose caption is a model field. Not rebuilt: Associations' 'Aircraft Type' / 'Aircraft Group' (LB10 / LB11; no such field in the model) and the Comparative Analysis list boxes LB37-LB45 (alternate states Group A / Group B, captions From / To ... that are not field names; Power BI slicers have no alternate states). Charts and other sheet objects are not laid out on the pages."
+ ],
+ "slicers": [
+  {
+   "sheet": "Dashboard",
+   "object": "LB28",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region"
+  },
+  {
+   "sheet": "Dashboard",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Dashboard",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Dashboard",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Dashboard",
+   "object": "LB27",
+   "caption": "Flight Type",
+   "table": "Flight Types"
+  },
+  {
+   "sheet": "Dashboard",
+   "object": "LB33",
+   "caption": "Carrier Name",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Dashboard",
+   "object": "LB29",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups"
+  },
+  {
+   "sheet": "Analysis",
+   "object": "LB29",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups"
+  },
+  {
+   "sheet": "Analysis",
+   "object": "LB27",
+   "caption": "Flight Type",
+   "table": "Flight Types"
+  },
+  {
+   "sheet": "Analysis",
+   "object": "LB33",
+   "caption": "Carrier Name",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Analysis",
+   "object": "LB28",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region"
+  },
+  {
+   "sheet": "Analysis",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Analysis",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Analysis",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Reports",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Reports",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Reports",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Reports",
+   "object": "LB29",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups"
+  },
+  {
+   "sheet": "Reports",
+   "object": "LB27",
+   "caption": "Flight Type",
+   "table": "Flight Types"
+  },
+  {
+   "sheet": "Reports",
+   "object": "LB33",
+   "caption": "Carrier Name",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Reports",
+   "object": "LB28",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB04",
+   "caption": "Origin Country",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB01",
+   "caption": "Destination Country",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB13",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB07",
+   "caption": "Carrier Name",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB02",
+   "caption": "Destination State",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB06",
+   "caption": "Origin City",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB05",
+   "caption": "Origin State",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB03",
+   "caption": "Destination City",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB15",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB12",
+   "caption": "Flight Type",
+   "table": "Flight Types"
+  },
+  {
+   "sheet": "Associations",
+   "object": "LB09",
+   "caption": "Distance Interval",
+   "table": "Distance Groups"
+  },
+  {
+   "sheet": "Other Charts",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Other Charts",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Other Charts",
+   "object": "LB28",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region"
+  },
+  {
+   "sheet": "Other Charts",
+   "object": "LB33",
+   "caption": "Carrier Name",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Other Charts",
+   "object": "LB27",
+   "caption": "Flight Type",
+   "table": "Flight Types"
+  },
+  {
+   "sheet": "Other Charts",
+   "object": "LB29",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups"
+  },
+  {
+   "sheet": "Other Charts",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Other representations",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Other representations",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Other representations",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Other representations",
+   "object": "LB29",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups"
+  },
+  {
+   "sheet": "Other representations",
+   "object": "LB27",
+   "caption": "Flight Type",
+   "table": "Flight Types"
+  },
+  {
+   "sheet": "Other representations",
+   "object": "LB33",
+   "caption": "Carrier Name",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Other representations",
+   "object": "LB28",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region"
+  },
+  {
+   "sheet": "Data Consistency",
+   "object": "LB34",
+   "caption": "Aircraft Name",
+   "table": "Aircraft Types"
+  },
+  {
+   "sheet": "Data Consistency",
+   "object": "LB35",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Variables",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Variables",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Variables",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Variables",
+   "object": "LB36",
+   "caption": "Metric Name",
+   "table": "INLFED"
+  },
+  {
+   "sheet": "Advanced Expressions",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Advanced Expressions",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Advanced Expressions",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Set Analysis",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Set Analysis",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Set Analysis",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Point In Time Reporting",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Point In Time Reporting",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Point In Time Reporting",
+   "object": "LB33",
+   "caption": "Carrier Name",
+   "table": "Main Data"
+  },
+  {
+   "sheet": "Point In Time Reporting",
+   "object": "LB28",
+   "caption": "Carrier's Operating Region",
+   "table": "Carrier Operating Region"
+  },
+  {
+   "sheet": "Point In Time Reporting",
+   "object": "LB27",
+   "caption": "Flight Type",
+   "table": "Flight Types"
+  },
+  {
+   "sheet": "Point In Time Reporting",
+   "object": "LB29",
+   "caption": "Carrier Group",
+   "table": "Carrier Groups"
+  },
+  {
+   "sheet": "Point In Time Reporting",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Comparative Analysis",
+   "object": "LB30",
+   "caption": "Month",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Comparative Analysis",
+   "object": "LB32",
+   "caption": "Year",
+   "table": "Master Calendar"
+  },
+  {
+   "sheet": "Comparative Analysis",
+   "object": "LB31",
+   "caption": "Quarter",
+   "table": "Master Calendar"
+  }
  ]
 }

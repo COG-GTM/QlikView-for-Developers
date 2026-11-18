@@ -106,3 +106,17 @@ def test_pbip_covers_every_kpi_without_section_access(expected):
     assert len(queries["queries"]) == sum(len(k["results"]) for k in expected["kpis"])
     dax = (SM / "tables" / "Main Data.tmdl").read_text() + json.dumps(queries)
     assert "Levels" not in re.findall(r"VAR (\w+)", dax) and "INLFED-1" not in dax
+
+
+def test_report_pages_rebuild_list_boxes_as_slicers():
+    report = json.loads((PBIP / "Chapter12_Airline_Operations.Report" / "report.json").read_text())
+    pages = {s["displayName"]: [json.loads(v["config"]) for v in s["visualContainers"]] for s in report["sections"]}
+    assert len(pages) == 13 and len(pages["Dashboard"]) == 7
+    model = read_tmdl(PBIP)
+    fields = {(c["table"], c["name"]) for c in model["columns"]}
+    for visuals in pages.values():
+        for v in visuals:
+            assert v["singleVisual"]["visualType"] == "slicer"
+            (sel,) = v["singleVisual"]["prototypeQuery"]["Select"]
+            entity = v["singleVisual"]["prototypeQuery"]["From"][0]["Entity"]
+            assert (entity, sel["Column"]["Property"]) in fields
