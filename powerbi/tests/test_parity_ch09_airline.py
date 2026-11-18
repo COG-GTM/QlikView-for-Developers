@@ -180,7 +180,28 @@ def test_list_boxes_become_slicers_and_parity_objects(expected):
 def test_every_sheet_chart_is_a_visual_on_its_page():
     manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
     report = json.loads((PBIP / "Chapter09_Airline_Operations.Report" / "report.json").read_text())
-    titles = {json.loads(v["config"])["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]
-              ["Value"].strip("'").replace("''", "'") for s in report["sections"] for v in s["visualContainers"]}
-    for ch in manifest["charts"]:
-        assert ch["caption"] in titles or f"{ch['caption']} ({ch['id']})" in titles, ch["id"]
+
+    def title(v):
+        lit = json.loads(v["config"])["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]
+        return lit["Value"].strip("'").replace("''", "'")
+
+    pages = {s["displayName"]: [title(v) for v in s["visualContainers"]] for s in report["sections"]}
+    shown = [re.sub(r" \(CH\d+\)$", "", t) for ts in pages.values() for t in ts]
+    for caption in {c["caption"] for c in manifest["charts"]}:
+        wanted = sum(c["caption"] == caption for c in manifest["charts"])
+        assert shown.count(caption) >= wanted, caption
+    gauges = [t for t in pages["Gauge Styles"] if t.startswith("Air Time %")]
+    assert gauges == [f"Air Time % ({c})" for c in ("CH08", "CH09", "CH11", "CH12", "CH13", "CH14")]
+
+
+def test_case_variant_carrier_is_a_listed_known_difference(expected):
+    import compare
+    mn = "Sun Country Airlines d/b/a Mn Airlines"
+    ids = {"CH15#2@Carrier Name", "LB07@Carrier Name", "LB33@Carrier Name"}
+    results = [{"id": r["id"], "rows": [row for row in r["rows"] if r["id"] not in ids or row[0] != mn]}
+               for k in [*expected["kpis"], *expected["objects"]] for r in k["results"]]
+    doc = {"app": APP, "results": results}
+    assert compare.compare(expected, doc)["summary"].get("fail") == 3
+    exceptions = json.loads((compare.EXCEPTIONS / f"{APP}.json").read_text())
+    summary = compare.compare(expected, doc, exceptions=exceptions)["summary"]
+    assert summary.get("known_difference") == 3 and "fail" not in summary
