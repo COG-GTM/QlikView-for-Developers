@@ -183,7 +183,7 @@ def measures_for_ch11() -> dict[str, tuple]:
         if pk not in base.MEASURES:
             raise SystemExit(f"ParityKey {pk} has no measure in the base model")
         name, dax, fmt = base.MEASURES[pk]
-        out[pk] = (name, dax.replace("'INLFED-1'", METRIC_TABLE), fmt)
+        out[pk] = (name, dax.replace("'INLFED-1'", METRIC_TABLE).replace("@METRIC", METRIC_TABLE), fmt)
     return out
 
 

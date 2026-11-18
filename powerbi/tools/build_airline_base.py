@@ -419,8 +419,9 @@ def table_specs(types: dict) -> dict[str, dict]:
     return specs
 
 
-def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: list[tuple], slug: str = SLUG):
+def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: list[tuple], slug: str | None = None):
     """spec: cols, m, optional sort / qlik / description (table) / descriptions (column -> text, e.g. COMMENT FIELDS)."""
+    slug = slug or SLUG  # the app being built (build() rebinds SLUG), not the slug at import time
     names = {n for n, _ in spec["cols"]}
     lines = [f"/// {spec['description']}"] if spec.get("description") else []
     lines += [f"table {tname(name)}", f"\tlineageTag: {tag(slug, name)}", ""]
