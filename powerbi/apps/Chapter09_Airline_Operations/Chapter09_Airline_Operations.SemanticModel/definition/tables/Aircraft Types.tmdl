@@ -1,0 +1,136 @@
+/// Dimension containing information on aircrafts, including engine types and configuration and manufacturer
+table 'Aircraft Types'
+	lineageTag: 176ac671-7f62-5329-aabe-9492af57ec7b
+
+	/// Primary key of the Aircraft Type dimension
+	column '%Aircraft Type ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5515562f-ece7-5f80-bf04-286f023f2a7c
+		summarizeBy: none
+		sourceColumn: %Aircraft Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The name of the aircraft
+	column 'Aircraft Name'
+		dataType: string
+		lineageTag: a6b7281c-2602-5965-8a5d-24634f090c4d
+		summarizeBy: none
+		sourceColumn: Aircraft Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The name of the manufacturer of the aircraft, left blank when the aircraft is a generic type
+	column 'Aircraft Manufacturer'
+		dataType: string
+		lineageTag: bf65dc92-4d88-5719-9aec-bf88d67dade3
+		summarizeBy: none
+		sourceColumn: Aircraft Manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The country in which the manufacturer of the aircraft is based
+	column 'Aircraft Manufacturer Country'
+		dataType: string
+		lineageTag: 80393da3-b7ef-5aef-9cc6-6581ce2e9bbd
+		summarizeBy: none
+		sourceColumn: Aircraft Manufacturer Country
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The full name of the aircraft
+	column 'Aircraft Name Full'
+		dataType: string
+		lineageTag: eee43289-13ea-54ff-9d2a-df81f5873730
+		summarizeBy: none
+		sourceColumn: Aircraft Name Full
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The abbreviated name of the aircraft
+	column 'Aircraft Name Abbreviated'
+		dataType: string
+		lineageTag: af61f463-60b2-5356-b96e-c16639d93158
+		summarizeBy: none
+		sourceColumn: Aircraft Name Abbreviated
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The date when the aircraft was first entered into the database
+	column 'Aircraft Begin Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 2cbd0e06-b549-5a22-a18e-46c697adb2ff
+		summarizeBy: none
+		sourceColumn: Aircraft Begin Date
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The date when the aircraft was removed from the database
+	column 'Aircraft End Date'
+		dataType: int64
+		formatString: 0
+		lineageTag: 743a61f2-3ecd-5ff7-961d-47dfb1ffa45f
+		summarizeBy: none
+		sourceColumn: Aircraft End Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Age Classification'
+		dataType: string
+		lineageTag: 6c44b0d0-ce06-5600-8db8-9c72bfb8ee7c
+		summarizeBy: none
+		sourceColumn: Aircraft Age Classification
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The engine type of the aircraft: Helicopter, Piston, Turbo-Prop or Jet
+	column 'Aircraft Engine Type'
+		dataType: string
+		lineageTag: 23890286-982d-5153-9f7f-65cf683fe08f
+		summarizeBy: none
+		sourceColumn: Aircraft Engine Type
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The number of engines on the aircraft
+	column 'Aircraft Number Of Engines'
+		dataType: string
+		lineageTag: c1af7462-f907-515a-8c14-25a91c7c6af6
+		summarizeBy: none
+		sourceColumn: Aircraft Number Of Engines
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Aircraft Types' = m
+		mode: import
+		source =
+				let
+				    // ApplyMap('Map_Manufacturer_Country', MANUFACTURER, 'Unknown'): first matching Company,
+				    Manufacturers = Table.Buffer(fnReadParquet("Data Files/CSVs/Aircraft_Manufacturers.parquet")),
+				    Companies = Manufacturers[Company],
+				    Countries = Manufacturers[Country],
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Aircraft Type ID"))),
+				    BaseFile = Table.SelectColumns(fnReadParquet("Data Files/CSVs/Aircraft_Base_File.parquet"), {"AC_GROUP", "AC_TYPEID", "SSD_NAME", "MANUFACTURER", "LONG_NAME", "SHORT_NAME", "BEGIN_DATE", "END_DATE"}),
+				    BaseKept = Table.SelectRows(BaseFile, each List.Contains(FactKeys, [AC_TYPEID])),
+				    BaseCountry = Table.AddColumn(BaseKept, "Aircraft Manufacturer Country", each let i = List.PositionOf(Companies, [MANUFACTURER]) in if [MANUFACTURER] = null or i < 0 then "Unknown" else Countries{i}),
+				    BaseAge = Table.AddColumn(BaseCountry, "Aircraft Age Classification", each if [BEGIN_DATE] <> null and Date.Year([BEGIN_DATE]) < 1990 then "Classic" else "Current"),
+				    // LEFT JOIN Aircraft_Group.csv on the aircraft group; QlikView trims the unquoted text fields,
+				    Groups = Table.TransformColumns(fnReadParquet("Data Files/CSVs/Aircraft_Group.parquet"), {{"Aircraft Engine Type", Text.Trim}, {"Aircraft Number Of Engines", Text.Trim}}),
+				    Joined = Table.NestedJoin(BaseAge, {"AC_GROUP"}, Groups, {"Aircraft Group ID"}, "Group", JoinKind.LeftOuter),
+				    BaseEngines = Table.ExpandTableColumn(Joined, "Group", {"Aircraft Engine Type", "Aircraft Number Of Engines"}),
+				    BaseRenamed = Table.RenameColumns(Table.RemoveColumns(BaseEngines, {"AC_GROUP"}), {{"AC_TYPEID", "%Aircraft Type ID"}, {"SSD_NAME", "Aircraft Name"}, {"MANUFACTURER", "Aircraft Manufacturer"}, {"LONG_NAME", "Aircraft Name Full"}, {"SHORT_NAME", "Aircraft Name Abbreviated"}, {"BEGIN_DATE", "Aircraft Begin Date"}, {"END_DATE", "Aircraft End Date"}}),
+				    // CONCATENATE the 2010 update: engine type and number from SubField(AC_GROUPNAME, ', ', 1 / 2),
+				    Update = Table.SelectColumns(fnReadParquet("Data Files/CSVs/Aircraft_2010_Update.parquet"), {"AC_GROUPNAME", "AC_TYPEID", "SSD_NAME", "MANUFACTURER", "LONG_NAME", "SHORT_NAME", "BEGIN_DATE", "END_DATE"}),
+				    UpdateKept = Table.SelectRows(Update, each List.Contains(FactKeys, [AC_TYPEID])),
+				    UpdateCountry = Table.AddColumn(UpdateKept, "Aircraft Manufacturer Country", each let i = List.PositionOf(Companies, [MANUFACTURER]) in if [MANUFACTURER] = null or i < 0 then "Unknown" else Countries{i}),
+				    UpdateAge = Table.AddColumn(UpdateCountry, "Aircraft Age Classification", each "Current"),
+				    UpdateType = Table.AddColumn(UpdateAge, "Aircraft Engine Type", each if [AC_GROUPNAME] = null then null else Text.Split([AC_GROUPNAME], ", "){0}?),
+				    UpdateEngines = Table.AddColumn(UpdateType, "Aircraft Number Of Engines", each if [AC_GROUPNAME] = null then null else Text.Split([AC_GROUPNAME], ", "){1}?),
+				    UpdateRenamed = Table.RenameColumns(Table.RemoveColumns(UpdateEngines, {"AC_GROUPNAME"}), {{"AC_TYPEID", "%Aircraft Type ID"}, {"SSD_NAME", "Aircraft Name"}, {"MANUFACTURER", "Aircraft Manufacturer"}, {"LONG_NAME", "Aircraft Name Full"}, {"SHORT_NAME", "Aircraft Name Abbreviated"}, {"BEGIN_DATE", "Aircraft Begin Date"}, {"END_DATE", "Aircraft End Date"}}),
+				    Combined = Table.Combine({Table.SelectColumns(BaseRenamed, {"%Aircraft Type ID", "Aircraft Name", "Aircraft Manufacturer", "Aircraft Manufacturer Country", "Aircraft Name Full", "Aircraft Name Abbreviated", "Aircraft Begin Date", "Aircraft End Date", "Aircraft Age Classification", "Aircraft Engine Type", "Aircraft Number Of Engines"}), Table.SelectColumns(UpdateRenamed, {"%Aircraft Type ID", "Aircraft Name", "Aircraft Manufacturer", "Aircraft Manufacturer Country", "Aircraft Name Full", "Aircraft Name Abbreviated", "Aircraft Begin Date", "Aircraft End Date", "Aircraft Age Classification", "Aircraft Engine Type", "Aircraft Number Of Engines"})}),
+				    Typed = Table.TransformColumnTypes(Combined, {{"%Aircraft Type ID", Int64.Type}, {"Aircraft Name", type text}, {"Aircraft Manufacturer", type text}, {"Aircraft Manufacturer Country", type text}, {"Aircraft Name Full", type text}, {"Aircraft Name Abbreviated", type text}, {"Aircraft Begin Date", type date}, {"Aircraft End Date", Int64.Type}, {"Aircraft Age Classification", type text}, {"Aircraft Engine Type", type text}, {"Aircraft Number Of Engines", type text}})
+				in
+				    Typed

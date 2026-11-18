@@ -367,15 +367,14 @@ def table_specs(types: dict) -> dict[str, dict]:
     return specs
 
 
-def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: list[tuple]):
-    keys = {k for _, _, k, _, _ in DIMENSIONS} | {"Period", "%FLIGHTTYPE"}
+def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: list[tuple], slug: str = SLUG):
     names = {n for n, _ in spec["cols"]}
-    lines = [f"table {tname(name)}", f"\tlineageTag: {tag(SLUG, name)}", ""]
+    lines = [f"table {tname(name)}", f"\tlineageTag: {tag(slug, name)}", ""]
     for mz in measures:
         lines += [f"\tmeasure {tname(mz['name'])} = {mz['dax']}"]
         if mz["fmt"]:
             lines.append(f"\t\tformatString: {mz['fmt']}")
-        lines += [f"\t\tlineageTag: {tag(SLUG, name, 'm', mz['parity_key'])}", "",
+        lines += [f"\t\tlineageTag: {tag(slug, name, 'm', mz['parity_key'])}", "",
                   f"\t\tannotation ParityKey = {mz['parity_key']}", f"\t\tannotation QlikExpression = {mz['qlik']}",
                   f"\t\tannotation QlikObjects = {', '.join(mz['kpis'])}", ""]
     for col, typ in spec["cols"]:
@@ -389,7 +388,7 @@ def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: l
             lines.append(f"\t\tsortByColumn: {tname(sort)}")
         if fmt and col not in ("Period", "Year"):
             lines.append(f"\t\tformatString: {fmt}")
-        lines += [f"\t\tlineageTag: {tag(SLUG, name, 'c', col)}",
+        lines += [f"\t\tlineageTag: {tag(slug, name, 'c', col)}",
                   f"\t\tsummarizeBy: {'sum' if col.startswith('#') else 'none'}", f"\t\tsourceColumn: {col}", "",
                   "\t\tannotation SummarizationSetBy = Automatic", ""]
         if col in spec.get("qlik", {}):
@@ -398,7 +397,7 @@ def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: l
                             f"\t\tannotation QlikDimension = {' '.join(qlik.split())}"]
     for _, col, qlik, dax, typ in calc:
         lines += [f"\tcolumn {tname(col)} = {dax}", f"\t\tdataType: {typ}",
-                  f"\t\tlineageTag: {tag(SLUG, name, 'c', col)}", "\t\tsummarizeBy: none", "",
+                  f"\t\tlineageTag: {tag(slug, name, 'c', col)}", "\t\tsummarizeBy: none", "",
                   f"\t\tannotation ParityKey = {parity_key(qlik)}",
                   f"\t\tannotation QlikDimension = {' '.join(qlik.split())}", ""]
     lines += [f"\tpartition {tname(name)} = m", "\t\tmode: import", "\t\tsource =", spec["m"], ""]
