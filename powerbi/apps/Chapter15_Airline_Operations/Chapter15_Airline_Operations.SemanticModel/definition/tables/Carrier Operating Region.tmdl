@@ -24,7 +24,7 @@ table 'Carrier Operating Region'
 				let
 				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Carrier Operating Region.parquet"), {"%Region Code", "Carrier's Operating Region"}),
 				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Region Code"))),
-				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [%Region Code])),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Region Code"])),
 				    Missing = List.Difference(FactKeys, Table.Column(Kept, "%Region Code")),
 				    Unknown = Table.FromColumns({Missing, List.Repeat({"Unknown"}, List.Count(Missing))}, {"%Region Code", "Carrier's Operating Region"}),
 				    Combined = Table.Combine({Kept, Unknown}),

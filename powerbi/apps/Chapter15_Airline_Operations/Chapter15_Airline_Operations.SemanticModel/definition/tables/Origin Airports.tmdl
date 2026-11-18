@@ -25,7 +25,7 @@ table 'Origin Airports'
 				let
 				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Origin Airports.parquet"), {"%Origin Airport ID", "Origin Airport"}),
 				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Origin Airport ID"))),
-				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [%Origin Airport ID])),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Origin Airport ID"])),
 				    Typed = Table.TransformColumnTypes(Kept, {{"%Origin Airport ID", Int64.Type}, {"Origin Airport", type text}})
 				in
 				    Typed

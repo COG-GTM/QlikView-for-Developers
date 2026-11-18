@@ -225,13 +225,15 @@ SEGMENTS = [
 
 
 def carriers_dax() -> str:
-    out = "SWITCH(TRUE()"
+    """Carriers in every filtered segment (grouped or sliced); IN compares BLANK strictly (the null segment)."""
+    filtered, tests = [], []
     for table, col, _, _, label, value in SEGMENTS:
         low = c(table, "Low" if label else col)
-        # ISFILTERED, not ISINSCOPE: a slicer on the segment table selects carriers too; IN compares BLANK strictly
-        out += (f", ISFILTERED({c(table, col)}) || ISFILTERED({low}), "
-                f"COUNTROWS(FILTER(VALUES({CN}), NOT ISBLANK({CN}) && ({value}) IN VALUES({low})))")
-    return out + f", DISTINCTCOUNTNOBLANK({CN}))"
+        flt = f"ISFILTERED({c(table, col)}) || ISFILTERED({low})"
+        filtered.append(f"({flt})")
+        tests.append(f"(NOT ({flt}) || ({value}) IN VALUES({low}))")
+    return (f"IF({' || '.join(filtered)}, COUNTROWS(FILTER(VALUES({CN}), NOT ISBLANK({CN}) && "
+            f"{' && '.join(tests)})), DISTINCTCOUNTNOBLANK({CN}))")
 
 
 MEASURES["0a66033bf9d0"] = ("# of Carriers", carriers_dax(), NUM)
@@ -329,7 +331,7 @@ def table_specs(types: dict) -> dict[str, dict]:
         cols = [(key, types[path][key])] + [(x, types[path][x]) for x in labels]
         steps = [f'Source = Table.SelectColumns(fnReadParquet("{path}"), {m_list([key, *labels])})',
                  f'FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("{key}")))',
-                 f'Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [{key}]))']
+                 f'Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"{key}"]))']
         last = "Kept"
         if unknown:
             steps += [f'Missing = List.Difference(FactKeys, Table.Column(Kept, "{key}"))',

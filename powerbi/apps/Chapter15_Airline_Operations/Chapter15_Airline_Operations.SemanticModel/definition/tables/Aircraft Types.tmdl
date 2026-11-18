@@ -99,7 +99,7 @@ table 'Aircraft Types'
 				let
 				    Source = Table.SelectColumns(fnReadParquet("QVD/Transformed/Aircraft Types Transformed.parquet"), {"%Aircraft Type ID", "Aircraft Name", "Aircraft Manufacturer", "Aircraft Manufacturer Country", "Aircraft Name Full", "Aircraft Name Abbreviated", "Aircraft Begin Date", "Aircraft End Date", "Aircraft Age Classification", "Aircraft Engine Type", "Aircraft Number Of Engines"}),
 				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Aircraft Type ID"))),
-				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [%Aircraft Type ID])),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Aircraft Type ID"])),
 				    Typed = Table.TransformColumnTypes(Kept, {{"%Aircraft Type ID", Int64.Type}, {"Aircraft Name", type text}, {"Aircraft Manufacturer", type text}, {"Aircraft Manufacturer Country", type text}, {"Aircraft Name Full", type text}, {"Aircraft Name Abbreviated", type text}, {"Aircraft Begin Date", type date}, {"Aircraft End Date", Int64.Type}, {"Aircraft Age Classification", type text}, {"Aircraft Engine Type", type text}, {"Aircraft Number Of Engines", type text}})
 				in
 				    Typed

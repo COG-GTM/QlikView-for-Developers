@@ -25,7 +25,7 @@ table 'Distance Groups'
 				let
 				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Distance Groups.parquet"), {"%Distance Group ID", "Distance Interval"}),
 				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Distance Group ID"))),
-				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [%Distance Group ID])),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Distance Group ID"])),
 				    Typed = Table.TransformColumnTypes(Kept, {{"%Distance Group ID", Int64.Type}, {"Distance Interval", type text}})
 				in
 				    Typed

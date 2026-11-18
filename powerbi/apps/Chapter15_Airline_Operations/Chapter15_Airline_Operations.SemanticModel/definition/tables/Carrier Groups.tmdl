@@ -25,7 +25,7 @@ table 'Carrier Groups'
 				let
 				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Carrier Groups.parquet"), {"%Carrier Group ID", "Carrier Group"}),
 				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Carrier Group ID"))),
-				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [%Carrier Group ID])),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Carrier Group ID"])),
 				    Missing = List.Difference(FactKeys, Table.Column(Kept, "%Carrier Group ID")),
 				    Unknown = Table.FromColumns({Missing, List.Repeat({"Unknown"}, List.Count(Missing))}, {"%Carrier Group ID", "Carrier Group"}),
 				    Combined = Table.Combine({Kept, Unknown}),

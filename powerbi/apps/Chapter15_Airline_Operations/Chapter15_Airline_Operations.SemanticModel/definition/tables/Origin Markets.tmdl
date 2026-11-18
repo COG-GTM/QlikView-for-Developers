@@ -25,7 +25,7 @@ table 'Origin Markets'
 				let
 				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Origin Markets.parquet"), {"%Origin Airport Market ID", "Origin Market"}),
 				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Origin Airport Market ID"))),
-				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [%Origin Airport Market ID])),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Origin Airport Market ID"])),
 				    Missing = List.Difference(FactKeys, Table.Column(Kept, "%Origin Airport Market ID")),
 				    Unknown = Table.FromColumns({Missing, List.Repeat({"Unknown"}, List.Count(Missing))}, {"%Origin Airport Market ID", "Origin Market"}),
 				    Combined = Table.Combine({Kept, Unknown}),
