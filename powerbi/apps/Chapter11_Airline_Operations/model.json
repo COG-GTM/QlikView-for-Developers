@@ -1,0 +1,339 @@
+{
+ "app": "Chapter11__Solution_Chapter 11_Airline Operations",
+ "generated_by": "powerbi/tools/build_airline_ch11.py",
+ "base_model": "powerbi/tools/build_airline_base.py (Chapter 15)",
+ "measures": [
+  {
+   "name": "# of Flights",
+   "parity_key": "1baea265cccd",
+   "kpis": [
+    "CH01#1",
+    "CH02#1",
+    "CH04#3",
+    "CH42#1"
+   ],
+   "dax": "SUM('Main Data'[# Departures Performed])"
+  },
+  {
+   "name": "# of Enplanned Passengers",
+   "parity_key": "7f15ad08b3bb",
+   "kpis": [
+    "CH01#2",
+    "CH02#2",
+    "CH04#2",
+    "CH15#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Passengers])"
+  },
+  {
+   "name": "Transported Freight",
+   "parity_key": "aea8a21aee5f",
+   "kpis": [
+    "CH01#3",
+    "CH02#3"
+   ],
+   "dax": "SUM('Main Data'[# Transported Freight])"
+  },
+  {
+   "name": "Transported Mail",
+   "parity_key": "e0ca719214a7",
+   "kpis": [
+    "CH01#4",
+    "CH02#4",
+    "CH04#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Mail])"
+  },
+  {
+   "name": "# of Passengers (millions)",
+   "parity_key": "0c8ca154aacf",
+   "kpis": [
+    "CH03#1",
+    "CH22#1",
+    "CH24#1",
+    "CH25#1",
+    "CH26#1",
+    "CH27#1",
+    "CH28#1",
+    "CH47#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000)"
+  },
+  {
+   "name": "# of Available Seats (millions)",
+   "parity_key": "8dfad31060e3",
+   "kpis": [
+    "CH03#2"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Available Seats]), 1000000)"
+  },
+  {
+   "name": "Load Factor",
+   "parity_key": "213681cc0d2a",
+   "kpis": [
+    "CH03#3",
+    "CH05#1",
+    "CH21#1",
+    "CH38#1",
+    "CH38#2",
+    "CH41#1",
+    "CH49#2",
+    "CH50#1",
+    "CH51#1",
+    "CH56#2"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))"
+  },
+  {
+   "name": "Performed vs Scheduled",
+   "parity_key": "7588bff24d2c",
+   "kpis": [
+    "CH06#1",
+    "CH21#2",
+    "CH38#3",
+    "CH38#4"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Departures Performed]), SUM('Main Data'[# Departures Scheduled]))"
+  },
+  {
+   "name": "Air Time %",
+   "parity_key": "cd4c4a3c94f4",
+   "kpis": [
+    "CH07#1",
+    "CH08#1",
+    "CH09#1",
+    "CH11#1",
+    "CH12#1",
+    "CH13#1",
+    "CH14#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Carrier",
+   "parity_key": "90777bd5df7f",
+   "kpis": [
+    "CH15#2"
+   ],
+   "dax": "IF(DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]) = 1, MAX('Main Data'[Carrier Name]), \"Others\")"
+  },
+  {
+   "name": "Air Time % (CH21)",
+   "parity_key": "a1ec8a2cb5ee",
+   "kpis": [
+    "CH21#3",
+    "CH38#5",
+    "CH38#6"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Departures Performed (thousands)",
+   "parity_key": "072410d4365a",
+   "kpis": [
+    "CH22#2",
+    "CH47#2",
+    "CH55#1"
+   ],
+   "dax": "DIVIDE([# of Flights], 1000)"
+  },
+  {
+   "name": "FTE % to Total",
+   "parity_key": "9f20a3cefdc3",
+   "kpis": [
+    "CH43#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Equivalent FTEs]), CALCULATE(SUM('Main Data'[# Equivalent FTEs]), ALLSELECTED()))"
+  },
+  {
+   "name": "FTEs",
+   "parity_key": "db52d6494b27",
+   "kpis": [
+    "CH44#1"
+   ],
+   "dax": "SUM('Main Data'[# Equivalent FTEs])"
+  },
+  {
+   "name": "# of Flights (units)",
+   "parity_key": "a8d240d462f9",
+   "kpis": [
+    "CH45#1"
+   ],
+   "dax": "DIVIDE([# of Flights], 1)"
+  },
+  {
+   "name": "# of Flights (thousands)",
+   "parity_key": "f72a33049af9",
+   "kpis": [
+    "CH45#2"
+   ],
+   "dax": "DIVIDE([# of Flights], 1000)"
+  },
+  {
+   "name": "# of Flights (millions)",
+   "parity_key": "0437729d9522",
+   "kpis": [
+    "CH45#3"
+   ],
+   "dax": "DIVIDE([# of Flights], 1000000)"
+  },
+  {
+   "name": "Selected Metric",
+   "parity_key": "b8cda7856288",
+   "kpis": [
+    "CH46#1"
+   ],
+   "dax": "SWITCH(SELECTEDVALUE(INLFED[eMetric]), \"eDeparturesPerformed\", DIVIDE([# of Flights], 1000), \"eEnplanedPassengers\", DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000), \"eAirTime\", DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time])))"
+  },
+  {
+   "name": "Participation to the whole",
+   "parity_key": "2727aeae83d4",
+   "kpis": [
+    "CH47#3"
+   ],
+   "dax": "DIVIDE([# of Flights], CALCULATE([# of Flights], ALLSELECTED()))"
+  },
+  {
+   "name": "% vs the Carrier's whole",
+   "parity_key": "599355404d68",
+   "kpis": [
+    "CH47#4"
+   ],
+   "dax": "DIVIDE([# of Flights], IF(ISINSCOPE('Carrier Groups'[Carrier Group]), IF(ISINSCOPE('Main Data'[Carrier Name]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]), VALUES('Main Data'[Carrier Name])), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]))), IF(ISINSCOPE('Main Data'[Carrier Name]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Main Data'[Carrier Name])), CALCULATE([# of Flights], ALLSELECTED()))))"
+  },
+  {
+   "name": "% vs the Carrier's whole per year",
+   "parity_key": "624bbb57c7a7",
+   "kpis": [
+    "CH47#5"
+   ],
+   "dax": "DIVIDE([# of Flights], IF(ISINSCOPE('Carrier Groups'[Carrier Group]), IF(ISINSCOPE('Main Data'[Carrier Name]), IF(ISINSCOPE('Master Calendar'[Year]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]), VALUES('Main Data'[Carrier Name]), VALUES('Master Calendar'[Year])), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]), VALUES('Main Data'[Carrier Name]))), IF(ISINSCOPE('Master Calendar'[Year]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group]), VALUES('Master Calendar'[Year])), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Carrier Groups'[Carrier Group])))), IF(ISINSCOPE('Main Data'[Carrier Name]), IF(ISINSCOPE('Master Calendar'[Year]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Main Data'[Carrier Name]), VALUES('Master Calendar'[Year])), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Main Data'[Carrier Name]))), IF(ISINSCOPE('Master Calendar'[Year]), CALCULATE([# of Flights], ALLSELECTED(), VALUES('Master Calendar'[Year])), CALCULATE([# of Flights], ALLSELECTED())))))"
+  },
+  {
+   "name": "# of Carriers",
+   "parity_key": "0a66033bf9d0",
+   "kpis": [
+    "CH48#1",
+    "CH52#1",
+    "CH53#1",
+    "CH54#1"
+   ],
+   "dax": "IF((ISFILTERED('Carrier State Count'[Carrier State Count]) || ISFILTERED('Carrier State Count'[Carrier State Count])) || (ISFILTERED('Carrier State Count Band'[Carrier State Count Band]) || ISFILTERED('Carrier State Count Band'[Low])) || (ISFILTERED('Carrier Load Factor Band'[Carrier Load Factor Band]) || ISFILTERED('Carrier Load Factor Band'[Low])), COUNTROWS(FILTER(VALUES('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]) && (NOT (ISFILTERED('Carrier State Count'[Carrier State Count]) || ISFILTERED('Carrier State Count'[Carrier State Count])) || (CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code])) + 0) IN VALUES('Carrier State Count'[Carrier State Count])) && (NOT (ISFILTERED('Carrier State Count Band'[Carrier State Count Band]) || ISFILTERED('Carrier State Count Band'[Low])) || (FLOOR(CALCULATE(DISTINCTCOUNTNOBLANK('Main Data'[From - To State Code])) + 0, 100)) IN VALUES('Carrier State Count Band'[Low])) && (NOT (ISFILTERED('Carrier Load Factor Band'[Carrier Load Factor Band]) || ISFILTERED('Carrier Load Factor Band'[Low])) || (VAR lf = CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))) RETURN IF(ISBLANK(lf), BLANK(), FLOOR(lf * 100, 10))) IN VALUES('Carrier Load Factor Band'[Low])))), DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]))"
+  },
+  {
+   "name": "Average Load Factor per Route",
+   "parity_key": "cdd5b20db14b",
+   "kpis": [
+    "CH49#1"
+   ],
+   "dax": "AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', Airlines[Airline], 'Main Data'[From - To Airport ID]), \"@lf\", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf])"
+  },
+  {
+   "name": "Dimensionality",
+   "parity_key": "527a7b7f9d77",
+   "kpis": [
+    "CH55#2"
+   ],
+   "dax": "IF(NOT ISEMPTY('Main Data'), INT(ISINSCOPE('Carrier Groups'[Carrier Group])) + INT(ISINSCOPE(Airlines[Airline])) + INT(ISINSCOPE('Main Data'[Origin Country])) + INT(ISINSCOPE('Main Data'[Destination Country])) + INT(ISINSCOPE('Aircraft Types'[Aircraft Name])))"
+  },
+  {
+   "name": "Avg Load Factor per Route (by level)",
+   "parity_key": "18b5ee2089a0",
+   "kpis": [
+    "CH56#1"
+   ],
+   "dax": "SWITCH(INT(ISINSCOPE('Flight Types'[Flight Type])) + INT(ISINSCOPE('Carrier Groups'[Carrier Group])) + INT(ISINSCOPE('Main Data'[Carrier Name])), 0, AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[From - To Airport ID]), \"@lf\", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf]), 1, AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[From - To Airport ID], 'Flight Types'[Flight Type]), \"@lf\", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf]), 2, AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[From - To Airport ID], 'Flight Types'[Flight Type], 'Carrier Groups'[Carrier Group]), \"@lf\", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf]), 3, AVERAGEX(FILTER(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[From - To Airport ID], 'Carrier Groups'[Carrier Group], 'Flight Types'[Flight Type], 'Main Data'[Carrier Name]), \"@lf\", CALCULATE(DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats])))), NOT ISBLANK([@lf])), [@lf]))"
+  }
+ ],
+ "calculated_dimensions": [
+  {
+   "table": "Flight Types",
+   "column": "Deal Status",
+   "parity_key": "caa19c70b731",
+   "qlik": "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))",
+   "dax": "SWITCH([Flight Type], \"Domestic, US Carriers Only\", \"Open\", \"International, Foreign Carriers\", \"Negotiating\", \"Closed\")"
+  },
+  {
+   "table": "Carrier State Count",
+   "column": "Carrier State Count",
+   "parity_key": "32b8cdc84f9b",
+   "qlik": "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])",
+   "dax": "segment table + '# of Carriers'"
+  },
+  {
+   "table": "Carrier State Count Band",
+   "column": "Carrier State Count Band",
+   "parity_key": "7cf1cba465ab",
+   "qlik": "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')",
+   "dax": "segment table + '# of Carriers'"
+  },
+  {
+   "table": "Carrier Load Factor Band",
+   "column": "Carrier Load Factor Band",
+   "parity_key": "d741ad9eb585",
+   "qlik": "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')",
+   "dax": "segment table + '# of Carriers'"
+  }
+ ],
+ "report_pages": {
+  "Dashboard": [
+   "LB29",
+   "LB28",
+   "LB33",
+   "LB27",
+   "LB32",
+   "LB31",
+   "LB30",
+   "CH01",
+   "CH02",
+   "CH03",
+   "CH05",
+   "CH06",
+   "CH07",
+   "CH15"
+  ],
+  "Associations": [
+   "LB01",
+   "LB02",
+   "LB03",
+   "LB04",
+   "LB05",
+   "LB06",
+   "LB07",
+   "LB09",
+   "LB12",
+   "LB13",
+   "LB15"
+  ],
+  "Data Consistency": [
+   "LB34",
+   "LB35"
+  ],
+  "Variables": [
+   "LB36",
+   "CH46",
+   "CH45",
+   "CH44",
+   "CH43"
+  ]
+ },
+ "unmapped_list_boxes": {
+  "LB10": "Aircraft Type",
+  "LB11": "Aircraft Group"
+ },
+ "semantic_gaps": [
+  "Derived from the Chapter 15 base model: Chapter 11's 66 chart expressions are 26 distinct Qlik expressions, all of which the base model already migrates, so the measures, segment tables and calculated column are shared (the metric picker reads INLFED, Chapter 11's name for that inline table).",
+  "FTE % to Total (CH43): $(vTotalFTEs) is '= Sum([# Equivalent FTEs])', evaluated once in the selection, so the denominator is the selection-wide total -> CALCULATE(..., ALLSELECTED()); the inventory expansion had dropped the '=' (each carrier divided by itself) and is corrected to Sum(TOTAL ...) in the manifest.",
+  "No Section Access in Chapter 11: no roles; Main Data keeps the Employment rows and Carrier Groups / Airlines / Carrier Operating Region / Markets keep every member the script loads (inventory: Main Data 1,258,763, Airlines 337).",
+  "Aircraft Types: Aircraft_Base_File.csv WHERE Exists, LEFT JOIN Aircraft_Group.csv on the group, then CONCATENATE Aircraft_2010_Update.csv (engine type / count from SubField(AC_GROUPNAME, ', ')) -> Power Query merges; ApplyMap Map_Manufacturer_Country -> left merge on Aircraft_Manufacturers.csv with 'Unknown' default. The STORE into Aircraft Types Transformed.qvd is an ETL side effect and is not reproduced.",
+  "Origin / Destination Airports: LEFT KEEP ([Main Data]) over the Access tables -> keep rows whose key is in Main Data (read from the Access tables' Parquet export).",
+  "COMMENT TABLES / FIELDS USING Comments.xls -> TMDL descriptions on Aircraft Types and its fields (and Main Data's %Aircraft Type ID, as Qlik comments the field wherever it appears).",
+  "Master Calendar: one row per month (36), as in QlikView (Chapter 11 has no preceding Load * keeping daily rows); Month and Year - Month are Qlik duals -> text columns sorted by hidden __num columns.",
+  "Null-key 'Unknown' members the script adds for null fact keys are not loaded: they associate with nothing in QlikView and would wrongly match blank keys in Power BI.",
+  "IF $(vLoadMainData) = 'Y': always loaded. Includes config.qvs / tracerowcount.qvs (paths, TraceRowCount logging) are not in the repo; paths resolve by repo layout and the row-count trace is dropped.",
+  "Set analysis value modifiers use KEEPFILTERS: identical to QlikView with no selections (the parity baseline); with a slicer selection on the same field Power BI intersects where QlikView replaces the selection.",
+  "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the carriers whose value falls in the segment at query time. The row-level Flight Type deal status -> calculated column.",
+  "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields; $($(=eMetric)) -> SWITCH over SELECTEDVALUE(INLFED[eMetric]).",
+  "Report: pages Dashboard (its charts + list boxes), Associations and Data Consistency (list boxes) and Variables (Metric Name list box + the metric picker / FTE charts); the other sheets' expressions are measures in the model and their list boxes are the same linked objects as the Dashboard's. List boxes -> slicers on the field their caption names; LB10 'Aircraft Type' and LB11 'Aircraft Group' name no field of the model (Chapter 11 drops %Aircraft Group Type) and are not rebuilt. Multi boxes, current selections, buttons, bookmarks, input box, slider, search object, statistics box and the Data Consistency table box map to Power BI's filter pane / bookmarks and are not generated."
+ ]
+}

@@ -7,6 +7,10 @@ Blank and 0 are treated as equal (Qlik suppresses zero rows; DAX drops blank row
 values are compared as numbers when both parse as numbers and dates by their ISO date.
 Relationship checks (result ids starting ``REL:``) fail on duplicated one-side keys and warn on
 many-side keys with no match (those rows sit under the blank member, as in Qlik).
+Rows Power BI cannot represent (e.g. two Qlik values differing only in letter case, which a Power BI
+column stores as one value) are listed in ``parity/exceptions/<app>.json`` as
+``[{"id": <result id>, "dims": [...], "reason": ...}]``; a result whose only mismatches are listed
+there is ``known_difference`` instead of ``fail``.
 """
 from __future__ import annotations
 
@@ -17,6 +21,8 @@ from collections import Counter
 from pathlib import Path
 
 from harness import DAX, REPORTS, load_expected, show
+
+EXCEPTIONS = Path(__file__).resolve().parent / "exceptions"
 
 
 def norm_dim(v):
@@ -51,7 +57,7 @@ def close(a, b, rel, abs_):
     return a == b
 
 
-def compare_result(expected: dict, actual: dict | None, rel: float, abs_: float) -> dict:
+def compare_result(expected: dict, actual: dict | None, rel: float, abs_: float, known=frozenset()) -> dict:
     if actual is None:
         return {"id": expected["id"], "status": "missing"}
     n = len(expected["grain"])
@@ -62,7 +68,9 @@ def compare_result(expected: dict, actual: dict | None, rel: float, abs_: float)
         a, b = exp.get(key, 0.0), act.get(key, 0.0)
         if not close(a, b, rel, abs_):
             diffs.append({"dims": list(key), "source": a, "dax": b})
-    return {"id": expected["id"], "status": "pass" if not diffs else "fail", "rows": len(exp),
+    listed = [d for d in diffs if (expected["id"], tuple(d["dims"])) in known]
+    status = "pass" if not diffs else "known_difference" if len(listed) == len(diffs) else "fail"
+    return {"id": expected["id"], "status": status, "rows": len(exp),
             "mismatches": len(diffs), "examples": diffs[:5]}
 
 
@@ -104,10 +112,11 @@ def compare_rowset(expected: dict, actual: dict | None) -> dict:
             "mismatches": len(diffs), "examples": diffs[:5]}
 
 
-def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6, relationship_ids=()) -> dict:
+def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6, relationship_ids=(), exceptions=()) -> dict:
     if results_doc.get("app") != expected_doc["app"]:
         raise ValueError(f"results are for app {results_doc.get('app')!r}, expected {expected_doc['app']!r}")
     actual = {r["id"]: r for r in results_doc.get("results", [])}
+    known = frozenset((e["id"], tuple(norm_dim(x) for x in e["dims"])) for e in exceptions)
     out = []
     for k in expected_doc["kpis"]:
         if k["status"] != "ok":
@@ -115,7 +124,8 @@ def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6, relation
                         "reason": k.get("reason")})
             continue
         for r in k["results"]:
-            out.append({"kpi": k["kpi"], "label": k["label"], **compare_result(r, actual.get(r["id"]), rel, abs_)})
+            out.append({"kpi": k["kpi"], "label": k["label"],
+                        **compare_result(r, actual.get(r["id"]), rel, abs_, known)})
     for t in expected_doc.get("tables", []):
         out.append({"kpi": "table", "label": t["table"], **compare_table(t, actual.get(t["id"]))})
     for o in expected_doc.get("objects", []):
@@ -142,7 +152,9 @@ def compare_files(app: str, results: Path, rel: float, abs_: float) -> int:
     spec = DAX / f"{app}.queries.json"
     listed = json.loads(spec.read_text(encoding="utf-8")).get("relationships", []) if spec.exists() else []
     rel_ids = [r["id"] for r in listed]
-    report = compare(expected, json.loads(results.read_text(encoding="utf-8-sig")), rel, abs_, rel_ids)
+    exc = EXCEPTIONS / f"{app}.json"
+    exceptions = json.loads(exc.read_text(encoding="utf-8")) if exc.exists() else []
+    report = compare(expected, json.loads(results.read_text(encoding="utf-8-sig")), rel, abs_, rel_ids, exceptions)
     REPORTS.mkdir(exist_ok=True)
     (REPORTS / f"{app}.json").write_text(json.dumps(report, indent=1, ensure_ascii=False) + "\n")
     lines = [f"# Parity: {app}", "", f"DAX results: {report['produced_by']}", "",
@@ -160,5 +172,5 @@ def compare_files(app: str, results: Path, rel: float, abs_: float) -> int:
     md = REPORTS / f"{app}.md"
     md.write_text("\n".join(lines) + "\n")
     print(f"{report['summary']} relationships {report['relationship_summary']} -> {show(md)}")
-    ok = set(report["summary"]) <= {"pass", "unsupported", "model_unavailable"}
+    ok = set(report["summary"]) <= {"pass", "known_difference", "unsupported", "model_unavailable"}
     return 0 if ok and set(report["relationship_summary"]) <= {"pass", "warn"} else 1
