@@ -92,7 +92,9 @@ GAPS = [
     "Calculated dimension (Flight Type deal status) -> calculated column 'Deal Status' on Flight Types.",
     "Synthetic keys ($$SysTable 11-13) are not reproduced: every dimension joins Main Data on its one % key.",
     "Report: one page per Qlik sheet; list boxes -> slicers on their sheet's page (field from the .qvw's "
-    "DocumentSummary, sheet from the .qvw's object storage order). Charts, QlikView-only sheet objects (multi boxes, "
+    "DocumentSummary, sheet from the .qvw's object storage order). QlikView selections are document-wide, so every "
+    "slicer is in a sync group per field and each page carries hidden synced slicers for the fields it does not show. "
+    "Charts, QlikView-only sheet objects (multi boxes, "
     "current selections, bookmark object, buttons, search object, container, statistics box, text objects) and layout "
     "are not migrated yet.",
 ]
@@ -249,7 +251,8 @@ def list_boxes(manifest: dict) -> list[dict]:
     return out
 
 
-def slicer(box: dict, table: str, column: str, i: int) -> dict:
+def slicer(box: dict, table: str, column: str, i: int, hidden: bool = False) -> dict:
+    """Slicer synced across pages by table.column, so a selection holds on every page like QlikView's."""
     x, y = 20 + (i % SLICER_COLS) * (SLICER_W + 12), 20 + (i // SLICER_COLS) * (SLICER_H + 12)
     pos = {"x": x, "y": y, "z": i, "width": SLICER_W, "height": SLICER_H}
     ref = f"{table}.{column}"
@@ -261,7 +264,10 @@ def slicer(box: dict, table: str, column: str, i: int) -> dict:
         "objects": {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Basic'"}}}}}]},
         "vcObjects": {"title": [{"properties": {
             "show": {"expr": {"Literal": {"Value": "true"}}},
-            "text": {"expr": {"Literal": {"Value": "'" + box["caption"].replace("'", "''") + "'"}}}}}]}}}
+            "text": {"expr": {"Literal": {"Value": "'" + box["caption"].replace("'", "''") + "'"}}}}}]},
+        "syncGroup": {"groupName": ref, "fieldChanges": True, "filterChanges": True}}}
+    if hidden:
+        config["singleVisual"]["display"] = {"mode": "hidden"}
     return {**pos, "config": json.dumps(config), "filters": "[]"}
 
 
@@ -274,15 +280,20 @@ def report(manifest: dict, specs: dict) -> tuple[dict, list[dict], list[dict]]:
                 columns.setdefault(col, table)
     mapped, unmapped, sections = [], [], []
     boxes = list_boxes(manifest)
+    for box in boxes:
+        if box["field"] in columns:
+            mapped.append({**box, "table": columns[box["field"]], "column": box["field"]})
+        else:
+            unmapped.append({**box, "reason": f"field {box['field']!r} is not in this app's data model"})
+    shared = list(dict.fromkeys((b["table"], b["column"], b["caption"]) for b in mapped))
     for n, sheet in enumerate(manifest["sheets"]):
-        visuals = []
-        for box in (b for b in boxes if b["sheet"] == sheet["id"]):
-            table = columns.get(box["field"])
-            if table is None:
-                unmapped.append({**box, "reason": f"field {box['field']!r} is not in this app's data model"})
-                continue
-            visuals.append(slicer(box, table, box["field"], len(visuals)))
-            mapped.append({**box, "table": table, "column": box["field"]})
+        mine = [b for b in mapped if b["sheet"] == sheet["id"]]
+        visuals = [slicer(b, b["table"], b["column"], i) for i, b in enumerate(mine)]
+        # QlikView selections are document-wide: every other slicer field gets a hidden synced slicer on this page.
+        shown = {(b["table"], b["column"]) for b in mine}
+        for t, col, cap in (x for x in shared if (x[0], x[1]) not in shown):
+            box = {"id": f"{sheet['id']}_sync_{len(visuals)}", "caption": cap}
+            visuals.append(slicer(box, t, col, len(visuals), hidden=True))
         sections.append({"name": f"ReportSection{n}", "displayName": sheet["name"], "displayOption": 1, "ordinal": n,
                          "width": PAGE_W, "height": PAGE_H, "config": "{}", "filters": "[]",
                          "visualContainers": visuals})

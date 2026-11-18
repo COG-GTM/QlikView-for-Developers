@@ -164,3 +164,17 @@ def test_list_boxes_become_slicers_on_their_sheet_page():
         assert v["singleVisual"]["projections"]["Values"][0]["queryRef"] == f"{b['table']}.{b['column']}"
     assert {b["id"] for b in model["slicers"] if b["sheet"] == "SH03"} == {
         "LB27", "LB28", "LB29", "LB30", "LB31", "LB32", "LB33"}
+
+
+def test_slicers_sync_selections_across_every_page():
+    model = json.loads((PBIP / "model.json").read_text())
+    report = json.loads((PBIP / "Chapter08_Airline_Operations.Report" / "report.json").read_text())
+    fields = {f"{b['table']}.{b['column']}" for b in model["slicers"]}
+    for page in report["sections"]:
+        configs = [json.loads(v["config"])["singleVisual"] for v in page["visualContainers"]]
+        assert sorted(c["syncGroup"]["groupName"] for c in configs) == sorted(fields), page["displayName"]
+        for c in configs:
+            assert c["syncGroup"]["groupName"] == c["projections"]["Values"][0]["queryRef"]
+            assert c["syncGroup"]["filterChanges"] and c["syncGroup"]["fieldChanges"]
+        shown = sum(c.get("display", {}).get("mode") != "hidden" for c in configs)
+        assert shown == {"Dashboard": 7, "Associations": 11}.get(page["displayName"], 0)

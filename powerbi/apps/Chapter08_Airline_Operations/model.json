@@ -328,7 +328,7 @@
   "Month (Flight Data dual) -> text column sorted by the hidden Month__num.",
   "Calculated dimension (Flight Type deal status) -> calculated column 'Deal Status' on Flight Types.",
   "Synthetic keys ($$SysTable 11-13) are not reproduced: every dimension joins Main Data on its one % key.",
-  "Report: one page per Qlik sheet; list boxes -> slicers on their sheet's page (field from the .qvw's DocumentSummary, sheet from the .qvw's object storage order). Charts, QlikView-only sheet objects (multi boxes, current selections, bookmark object, buttons, search object, container, statistics box, text objects) and layout are not migrated yet.",
+  "Report: one page per Qlik sheet; list boxes -> slicers on their sheet's page (field from the .qvw's DocumentSummary, sheet from the .qvw's object storage order). QlikView selections are document-wide, so every slicer is in a sync group per field and each page carries hidden synced slicers for the fields it does not show. Charts, QlikView-only sheet objects (multi boxes, current selections, bookmark object, buttons, search object, container, statistics box, text objects) and layout are not migrated yet.",
   "List box LB10 (Aircraft Type, sheet SH01): field 'Aircraft Type' is not in this app's data model; not migrated.",
   "List box LB11 (Aircraft Group, sheet SH01): field 'Aircraft Group' is not in this app's data model; not migrated."
  ]
