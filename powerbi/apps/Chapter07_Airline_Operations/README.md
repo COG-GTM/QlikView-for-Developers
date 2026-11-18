@@ -14,14 +14,17 @@ Chapter 15 base model (`tools/build_airline_base.py`) by ParityKey, keeping only
 | `if(count(distinct [Carrier Name]) = 1, [Carrier Name], 'Others')` | `Carrier` measure (base DAX) |
 | Funnel calculated dimension on `[Flight Type]` | `Flight Types[Deal Status]` calculated column |
 | Groups `Time` (drill-down) / `Airline_Origin_Destination` (cyclic) | Year > Month axis hierarchy / Airline (see gaps) |
-| Sheets Main, Dashboard, Analysis, Reports, Gauge Styles, Other Charts, Other representations | one report page each, with the sheet's charts and slicers |
+| Sheets Main, Dashboard, Analysis, Reports, Gauge Styles, Other Charts, Other representations | one report page each, with the sheet's charts |
+| 22 list boxes (13 on Main, 9 linked on five sheets) | slicers on the same pages; field = list box caption, all 22 map to model columns |
+| Container CT01 (CH01-CH03) on Analysis | three visuals side by side on the Analysis page |
 
 ## Semantic gaps
 
-See `semantic_gaps` in `model.json`: the 8 airport row-count exceptions (older Access database in the .qvw,
-`inventory/row_count_exceptions.json`), chart types without a native visual, and the Qlik-only objects (text,
-buttons, bookmark, current selections, search, multi box, statistics box) replaced by slicers/filter pane/bookmarks.
-Page placement of charts is inferred from the object order stored in the .qvw.
+See `semantic_gaps` and `unmapped_objects` in `model.json`: the airport row-count exceptions (older Access
+database in the .qvw, `inventory/row_count_exceptions.json`), chart types without a native visual, and objects with
+no Power BI counterpart: multi box `Flight Information` (fields not decoded), statistics box on Distance, search
+object, current selections, bookmark object, 3 buttons, 5 text objects. Sheet membership and list box captions are
+decoded from the .qvw document block.
 
 ## Parity
 

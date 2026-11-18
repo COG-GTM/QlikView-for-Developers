@@ -66,5 +66,11 @@ def test_report_has_one_page_per_sheet():
     pages = [s["displayName"] for s in report["sections"]]
     assert pages == ["Main", "Dashboard", "Analysis", "Reports", "Gauge Styles", "Other Charts",
                      "Other representations"]
-    charts = {c for p in json.loads((PBIP / "model.json").read_text())["pages"] for c in p["charts"]}
-    assert len(charts) == 22
+    model = json.loads((PBIP / "model.json").read_text())
+    assert len({c for p in model["pages"] for c in p["charts"]}) == 22
+    list_boxes = {lb: f for p in model["pages"] for lb, f in p["slicers"].items()}
+    assert len(list_boxes) == 22
+    columns = {c["name"] for c in read_tmdl(PBIP)["columns"]}
+    assert set(list_boxes.values()) <= columns
+    slicers = [json.loads(v["config"])["singleVisual"] for s in report["sections"] for v in s["visualContainers"]]
+    assert sum(v["visualType"] == "slicer" for v in slicers) == sum(len(p["slicers"]) for p in model["pages"])

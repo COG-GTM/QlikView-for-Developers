@@ -26,15 +26,27 @@ APP = "Chapter07__Solution_Chapter 7_Airline Operations"
 SLUG = "Chapter07_Airline_Operations"
 MD = "Main Data"
 
-# Report pages = QlikView sheets. The .qvw stores object ids in sheet order (each sheet id followed by its objects;
-# the container's charts precede the first sheet); list boxes, buttons and text objects carry no decoded field, so
-# their slicers use this chapter's dimension fields.
-SLICERS = [("Main Data", "Year"), ("Main Data", "Quarter"), ("Main Data", "Month"), ("Carrier Groups", "Carrier Group"),
-           ("Airlines", "Airline"), ("Main Data", "Carrier Name"), ("Flight Types", "Flight Type"),
-           ("Aircraft Groups", "Aircraft Group"), ("Aircraft Types", "Aircraft Type"),
-           ("Distance Groups", "Distance Interval"), ("Main Data", "Origin Country"),
-           ("Main Data", "Destination Country"), ("Carrier Operating Region", "Carrier's Operating Region")]
-F = {f: t for t, f in SLICERS} | {"From - To City": MD, "Destination City": MD, "Deal Status": "Flight Types"}
+# Report pages = QlikView sheets. Sheet object lists and list box captions are decoded from the .qvw document
+# block; a list box caption is its field name, and all 22 captions are fields of the model.
+FIELD_TABLE = {"Carrier Group": "Carrier Groups", "Airline": "Airlines", "Flight Type": "Flight Types",
+               "Aircraft Group": "Aircraft Groups", "Aircraft Type": "Aircraft Types",
+               "Distance Interval": "Distance Groups", "Carrier's Operating Region": "Carrier Operating Region",
+               "Deal Status": "Flight Types"}
+LIST_BOXES = {"LB01": "Destination Country", "LB02": "Destination State", "LB03": "Destination City",
+              "LB04": "Origin Country", "LB05": "Origin State", "LB06": "Origin City", "LB07": "Carrier Name",
+              "LB09": "Distance Interval", "LB10": "Aircraft Type", "LB11": "Aircraft Group", "LB12": "Flight Type",
+              "LB13": "Carrier's Operating Region", "LB15": "Carrier Group", "LB26": "Aircraft Group",
+              "LB27": "Flight Type", "LB28": "Carrier's Operating Region", "LB29": "Carrier Group",
+              "LB30": "Month", "LB31": "Quarter", "LB32": "Year", "LB33": "Carrier Name", "LB34": "Aircraft Type"}
+# LB26-LB34 are linked objects shown on every sheet except Main and Gauge Styles
+LINKED = ["LB32", "LB31", "LB30", "LB29", "LB33", "LB27", "LB26", "LB34", "LB28"]
+UNMAPPED = {"MB01": "multi box 'Flight Information' (its fields are not decoded from the .qvw)",
+            "SB01": "statistics box on Distance (count/sum/avg/min/max of a field; no measure counterpart)",
+            "SO01": "search object (Power BI slicers have a search box)",
+            "CS01": "current selections (Power BI filter pane)", "BM01": "bookmark object (Power BI bookmarks)",
+            "BU01": "button", "BU02": "button", "BU03": "button",
+            "TX01": "text object", "TX02": "text object", "TX03": "text object", "TX04": "text object",
+            "TX05": "text object"}
 # chart id -> (visual type, {role: [field or measure name]}) ; measures are prefixed with '='
 CHARTS = {
     "CH01": ("lineChart", {"Category": ["Year", "Month"], "Y": ["=# of Flights", "=# of Enplanned Passengers",
@@ -62,13 +74,14 @@ CHARTS = {
     "CH38": ("tableEx", {"Values": ["Aircraft Group", "=Load Factor", "=Performed vs Scheduled",
                                     "=Air Time % (CH21)"]}),
 }
-PAGES = [("Main", [], [f for _, f in SLICERS]),
-         ("Dashboard", ["CH05", "CH06", "CH07"], ["Year", "Month", "Carrier Group", "Flight Type"]),
-         ("Analysis", ["CH01", "CH02", "CH03", "CH15", "CH04"], ["Year", "Carrier Name"]),
-         ("Reports", ["CH21", "CH22"], ["Year", "Carrier Group"]),
-         ("Gauge Styles", ["CH08", "CH09", "CH11", "CH12", "CH13", "CH14"], ["Year"]),
-         ("Other Charts", ["CH24", "CH25", "CH26", "CH27", "CH28"], ["Year"]),
-         ("Other representations", ["CH38"], ["Year"])]
+PAGES = [("Main", [], ["LB04", "LB01", "LB13", "LB07", "LB02", "LB06", "LB05", "LB03", "LB15", "LB10", "LB12",
+                      "LB11", "LB09"]),
+         ("Dashboard", ["CH05", "CH06", "CH07", "CH15"], LINKED),
+         ("Analysis", ["CH01", "CH02", "CH03", "CH04"], LINKED),  # CH01-CH03 sit in container CT01
+         ("Reports", ["CH21", "CH22"], LINKED),
+         ("Gauge Styles", ["CH08", "CH09", "CH11", "CH12", "CH13", "CH14"], []),
+         ("Other Charts", ["CH24", "CH25", "CH26", "CH27", "CH28"], LINKED),
+         ("Other representations", ["CH38"], LINKED)]
 
 GAPS = [
     "Origin/Destination Airports come from the repo's Dimension Tables.mdb (6,209 rows each); the .qvw was reloaded "
@@ -78,9 +91,8 @@ GAPS = [
     "Time (drill-down Year > Month) -> Year, Month hierarchy on the axis; Airline_Origin_Destination (cyclic) -> "
     "Airline on the KPIs per Airline table (Origin/Destination Country are columns of Main Data for re-pivoting).",
     "Radar, Mekko, Grid and Block charts have no native visual: line chart, stacked column, matrix and treemap.",
-    "Text objects, buttons, the bookmark object, current selections, search object, multi box and statistics box "
-    "have no Power BI equivalent: slicers, the filter pane and bookmarks replace them. List box fields are not "
-    "decoded from the .qvw, so page slicers use this chapter's dimension fields.",
+    "List boxes -> slicers on the same sheet, field = list box caption (all 22 map). Objects with no Power BI "
+    "counterpart are listed under unmapped_objects; the container CT01 (CH01-CH03) becomes three visuals on one page.",
     "Chart presentation (Top 10 routes, gauge bands, traffic lights, mini charts) is not reproduced; the full result "
     "sets are, and parity compares them.",
 ]
@@ -90,16 +102,19 @@ def report(sm_tables: set[str]) -> dict:
     def ref(name: str) -> tuple[str, str, bool]:
         if name.startswith("="):
             return MD, name[1:], True
-        return F.get(name, MD), name, False
+        return FIELD_TABLE.get(name, MD), name, False
 
     sections = []
     for i, (page, charts, slicers) in enumerate(PAGES):
         visuals = []
-        for j, field in enumerate(slicers):
-            cols = 2 if len(slicers) > 6 else 1
-            visuals.append(("slicer", {"Values": [field]}, 20 + (j % cols) * 150, 20 + (j // cols) * 100,
-                            140 * (2 // cols), 90))
         n = len(charts)
+        cols = 1 if n == 0 else 2 if len(slicers) > 6 else 1
+        rows = max(1, -(-len(slicers) // cols))
+        for j, lb in enumerate(slicers):
+            sh = min(100, 700 // rows) - 10 if n else 330
+            sx, sy = (20 + (j % 7) * 180, 20 + (j // 7) * 350) if not n else (20 + (j % cols) * 150,
+                                                                               20 + (j // cols) * (sh + 10))
+            visuals.append(("slicer", {"Values": [LIST_BOXES[lb]]}, sx, sy, 170 if not n else 140 * (2 // cols), sh))
         for j, ch in enumerate(charts):
             vt, roles = CHARTS[ch]
             per_row = 3 if n > 4 else 2 if n > 1 else 1
@@ -180,7 +195,8 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
                       for x in measures.values()],
          "calculated_dimensions": [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q, "dax": d}
                                    for t, col, q, d, _ in calc],
-         "pages": [{"page": p, "charts": c, "slicers": s} for p, c, s in PAGES],
+         "pages": [{"page": p, "charts": c, "slicers": {lb: LIST_BOXES[lb] for lb in s}} for p, c, s in PAGES],
+         "unmapped_objects": UNMAPPED,
          "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(measures)} measures from the Chapter 15 base, {len(calc)} calculated columns, "
           f"{len(PAGES)} report pages")

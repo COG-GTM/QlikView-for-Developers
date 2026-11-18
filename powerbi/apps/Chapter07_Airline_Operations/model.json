@@ -142,35 +142,41 @@
   {
    "page": "Main",
    "charts": [],
-   "slicers": [
-    "Year",
-    "Quarter",
-    "Month",
-    "Carrier Group",
-    "Airline",
-    "Carrier Name",
-    "Flight Type",
-    "Aircraft Group",
-    "Aircraft Type",
-    "Distance Interval",
-    "Origin Country",
-    "Destination Country",
-    "Carrier's Operating Region"
-   ]
+   "slicers": {
+    "LB04": "Origin Country",
+    "LB01": "Destination Country",
+    "LB13": "Carrier's Operating Region",
+    "LB07": "Carrier Name",
+    "LB02": "Destination State",
+    "LB06": "Origin City",
+    "LB05": "Origin State",
+    "LB03": "Destination City",
+    "LB15": "Carrier Group",
+    "LB10": "Aircraft Type",
+    "LB12": "Flight Type",
+    "LB11": "Aircraft Group",
+    "LB09": "Distance Interval"
+   }
   },
   {
    "page": "Dashboard",
    "charts": [
     "CH05",
     "CH06",
-    "CH07"
+    "CH07",
+    "CH15"
    ],
-   "slicers": [
-    "Year",
-    "Month",
-    "Carrier Group",
-    "Flight Type"
-   ]
+   "slicers": {
+    "LB32": "Year",
+    "LB31": "Quarter",
+    "LB30": "Month",
+    "LB29": "Carrier Group",
+    "LB33": "Carrier Name",
+    "LB27": "Flight Type",
+    "LB26": "Aircraft Group",
+    "LB34": "Aircraft Type",
+    "LB28": "Carrier's Operating Region"
+   }
   },
   {
    "page": "Analysis",
@@ -178,13 +184,19 @@
     "CH01",
     "CH02",
     "CH03",
-    "CH15",
     "CH04"
    ],
-   "slicers": [
-    "Year",
-    "Carrier Name"
-   ]
+   "slicers": {
+    "LB32": "Year",
+    "LB31": "Quarter",
+    "LB30": "Month",
+    "LB29": "Carrier Group",
+    "LB33": "Carrier Name",
+    "LB27": "Flight Type",
+    "LB26": "Aircraft Group",
+    "LB34": "Aircraft Type",
+    "LB28": "Carrier's Operating Region"
+   }
   },
   {
    "page": "Reports",
@@ -192,10 +204,17 @@
     "CH21",
     "CH22"
    ],
-   "slicers": [
-    "Year",
-    "Carrier Group"
-   ]
+   "slicers": {
+    "LB32": "Year",
+    "LB31": "Quarter",
+    "LB30": "Month",
+    "LB29": "Carrier Group",
+    "LB33": "Carrier Name",
+    "LB27": "Flight Type",
+    "LB26": "Aircraft Group",
+    "LB34": "Aircraft Type",
+    "LB28": "Carrier's Operating Region"
+   }
   },
   {
    "page": "Gauge Styles",
@@ -207,9 +226,7 @@
     "CH13",
     "CH14"
    ],
-   "slicers": [
-    "Year"
-   ]
+   "slicers": {}
   },
   {
    "page": "Other Charts",
@@ -220,26 +237,57 @@
     "CH27",
     "CH28"
    ],
-   "slicers": [
-    "Year"
-   ]
+   "slicers": {
+    "LB32": "Year",
+    "LB31": "Quarter",
+    "LB30": "Month",
+    "LB29": "Carrier Group",
+    "LB33": "Carrier Name",
+    "LB27": "Flight Type",
+    "LB26": "Aircraft Group",
+    "LB34": "Aircraft Type",
+    "LB28": "Carrier's Operating Region"
+   }
   },
   {
    "page": "Other representations",
    "charts": [
     "CH38"
    ],
-   "slicers": [
-    "Year"
-   ]
+   "slicers": {
+    "LB32": "Year",
+    "LB31": "Quarter",
+    "LB30": "Month",
+    "LB29": "Carrier Group",
+    "LB33": "Carrier Name",
+    "LB27": "Flight Type",
+    "LB26": "Aircraft Group",
+    "LB34": "Aircraft Type",
+    "LB28": "Carrier's Operating Region"
+   }
   }
  ],
+ "unmapped_objects": {
+  "MB01": "multi box 'Flight Information' (its fields are not decoded from the .qvw)",
+  "SB01": "statistics box on Distance (count/sum/avg/min/max of a field; no measure counterpart)",
+  "SO01": "search object (Power BI slicers have a search box)",
+  "CS01": "current selections (Power BI filter pane)",
+  "BM01": "bookmark object (Power BI bookmarks)",
+  "BU01": "button",
+  "BU02": "button",
+  "BU03": "button",
+  "TX01": "text object",
+  "TX02": "text object",
+  "TX03": "text object",
+  "TX04": "text object",
+  "TX05": "text object"
+ },
  "semantic_gaps": [
   "Origin/Destination Airports come from the repo's Dimension Tables.mdb (6,209 rows each); the .qvw was reloaded from an older copy (2,104 / 2,169 rows, inventory/row_count_exceptions.json). Every airport ID Flight Data uses is in both, so measures are unaffected; airport list boxes show more members.",
   "$$SysTable 12-14 (synthetic keys) are not reproduced; the %-keys are single-column relationships.",
   "Time (drill-down Year > Month) -> Year, Month hierarchy on the axis; Airline_Origin_Destination (cyclic) -> Airline on the KPIs per Airline table (Origin/Destination Country are columns of Main Data for re-pivoting).",
   "Radar, Mekko, Grid and Block charts have no native visual: line chart, stacked column, matrix and treemap.",
-  "Text objects, buttons, the bookmark object, current selections, search object, multi box and statistics box have no Power BI equivalent: slicers, the filter pane and bookmarks replace them. List box fields are not decoded from the .qvw, so page slicers use this chapter's dimension fields.",
+  "List boxes -> slicers on the same sheet, field = list box caption (all 22 map). Objects with no Power BI counterpart are listed under unmapped_objects; the container CT01 (CH01-CH03) becomes three visuals on one page.",
   "Chart presentation (Top 10 routes, gauge bands, traffic lights, mini charts) is not reproduced; the full result sets are, and parity compares them."
  ]
 }
