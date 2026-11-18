@@ -69,6 +69,12 @@ DIMENSIONS = [
      ["Destination Market"], True),
 ]
 
+# 12 flight rows have no %Carrier Group ID / %Airline ID. A filtered (RLS) dimension hides fact rows on its blank
+# member, so those keys point at a placeholder member with a null label instead: grouped they still show as the
+# null row, as in QlikView, and every role can reduce these dimensions the way Section Access does.
+NULL_KEY = -1
+NULL_KEY_FIELDS = ["%Carrier Group ID", "%Airline ID"]
+
 FLIGHT_TYPES = {"DOMESTIC_FOREIGN": "Domestic, Foreign Carriers", "DOMESTIC_US": "Domestic, US Carriers Only",
                 "INTERNATIONAL_FOREIGN": "International, Foreign Carriers",
                 "INTERNATIONAL_US": "International, US Carriers Only"}
@@ -256,11 +262,11 @@ GAPS = [
     "Master Calendar: QlikView keeps one row per day (1,065) because the script's LOAD DISTINCTs sit under a non-distinct "
     "preceding Load *; Power BI keeps one row per month (36) so Period can be the one side of the relationship. Measures "
     "over Main Data are unaffected; counts over calendar rows would differ.",
-    "Dimension rows: each role also filters the aircraft, distance, airport and market dimensions and the calendars to "
-    "the keys its facts use, as QlikView's reduction does. Carrier Groups, Airlines and Carrier Operating Region stay "
-    "unfiltered (their member names are visible to every role, e.g. Airlines 337 vs 336 in QlikView under ADMIN): 12 "
-    "flight rows have null keys there and a role filter on those tables would hide them. Null-key 'Unknown' members the script adds for null fact "
-    "keys are not loaded: they associate with nothing in QlikView and would wrongly match blank keys in Power BI.",
+    "Dimension rows: each role also filters every dimension and the calendars to the keys its facts use, as "
+    "QlikView's reduction does (Airlines 336 named members under ADMIN). The 12 flight rows without a carrier group / "
+    "airline point at a placeholder member (key -1, null label) so the filtered dimensions keep them, as the null row "
+    "QlikView shows. The script's null-key 'Unknown' members are not loaded: they associate with nothing in QlikView "
+    "and would wrongly match blank keys in Power BI.",
     "Set analysis value modifiers use KEEPFILTERS: identical to QlikView with no selections (the parity baseline); with a "
     "slicer selection on the same field Power BI intersects where QlikView replaces the selection.",
     "Point-in-time sets (vSetYTD, vSetLYYTD, vSetMTD, vSetLYMTD, vSetPreviousMonth, vSetPreviousNMonth) are defined in "
@@ -306,7 +312,8 @@ def table_specs(types: dict) -> dict[str, dict]:
         f'Flight = Table.SelectColumns(fnReadParquet("{FLIGHT}"), {m_list(FLIGHT_COLS)})',
         f'Employment = Table.SelectColumns(fnReadParquet("{EMPLOYMENT}"), {m_list(EMPLOYMENT_COLS)})',
         "Combined = Table.Combine({Flight, Employment})",
-        f"Typed = Table.TransformColumnTypes(Combined, {m_types(md_cols)})"], "Typed")}
+        f"Placeholder = Table.ReplaceValue(Combined, null, {NULL_KEY}, Replacer.ReplaceValue, {m_list(NULL_KEY_FIELDS)})",
+        f"Typed = Table.TransformColumnTypes(Placeholder, {m_types(md_cols)})"], "Typed")}
     cal_cols = [("Period", "int64"), ("Year", "int64"), ("Month", "string"), ("Month__num", "float64"),
                 ("Year - Month", "string"), ("Year - Month__num", "float64"), ("Quarter", "string"),
                 ("QuarterID", "int64"), ("PeriodID", "int64")]
@@ -339,6 +346,10 @@ def table_specs(types: dict) -> dict[str, dict]:
                       f'{m_list([key, labels[0]])})',
                       "Combined = Table.Combine({Kept, Unknown})"]
             last = "Combined"
+        if key in NULL_KEY_FIELDS:
+            steps.append(f'WithPlaceholder = Table.Combine({{{last}, #table({m_list([key, *labels])}, '
+                         f'{{{{{", ".join([str(NULL_KEY)] + ["null"] * len(labels))}}}}})}})')
+            last = "WithPlaceholder"
         steps.append(f"Typed = Table.TransformColumnTypes({last}, {m_types(cols)})")
         specs[name] = {"cols": cols, "m": m_let(steps, "Typed")}
     specs["INLFED"] = {"cols": [("Flight Type", "string"), ("%FLIGHTTYPE", "string")], "m": m_let([
@@ -424,10 +435,7 @@ def role_tmdl(user: str) -> str:
     # QlikView's reduction also drops dimension rows no surviving fact row uses; relationships only filter
     # dimension -> fact, so each dimension gets its own filter on the keys of the role's facts.
     scope = "{" + ", ".join(f'"{FLIGHT_TYPES[v]}"' for v in allowed) + "}"
-    # Not Carrier Groups / Airlines / Carrier Operating Region: 12 flight rows have null keys there, and a filtered
-    # dimension hides fact rows on its blank member, which QlikView's reduction keeps.
-    keyed = [(name, key, key) for name, _, key, _, _ in DIMENSIONS
-             if name not in ("Flight Types", "Carrier Groups", "Airlines", "Carrier Operating Region")]
+    keyed = [(name, key, key) for name, _, key, _, _ in DIMENSIONS if name != "Flight Types"]
     keyed += [("Master Calendar", "Period", "Period"), ("Group A", "Group A Period", "Period"),
               ("Group B", "Group B Period", "Period")]
     for table, col, key in keyed:
