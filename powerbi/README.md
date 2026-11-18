@@ -38,7 +38,9 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   transformations and are checked by each app's source model (`parity/models/`).
 * Parity: all 8 Chapter 03 KPI expressions (2 charts × 4) are recomputed from source for
   the grand total and every chart grain, and match an independent pyqvd + pandas
-  computation on the original QVD. Chapters 04, 06 and 07 (40/41) also evaluate. The DAX
+  computation on the original QVD. Chapters 04, 06 and 07 (40/41) also evaluate.
+  Chapter 10 Production Planning: the source model reproduces the report-file cleanup and
+  its 50 rows equal the rows stored in the .qvw (test decodes them). The DAX
   side is generated and ready to run on Windows; it has not been run yet.
 * Chapter 15 (Airline Operations base model, `apps/Chapter15_Airline_Operations`): its 14
   source-model tables match the inventory (after reproducing Section Access reduction for

@@ -1,0 +1,10 @@
+{
+ "app": "Chapter10__Production Planning",
+ "source": "Sheet Main (SH01) of Chapter10/Production Planning.qvw: LB01 and LB02 field names read from the object layout; TB01 shows the table's four fields",
+ "objects": [
+  {"id": "TB01", "type": "table box", "fields": ["Date", "Plant #", "Product Line ID", "Estimated Production"]},
+  {"id": "LB01", "type": "list box", "fields": ["Estimated Production"]},
+  {"id": "LB02", "type": "list box", "fields": ["Date"]},
+  {"id": "ROWS", "type": "row count", "table": "Production Planning - Legacy"}
+ ]
+}

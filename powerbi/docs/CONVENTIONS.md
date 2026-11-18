@@ -35,7 +35,9 @@ Text formats only (PBIP + TMDL); never commit `.pbix`. Lineage tags are determin
   `Data Files/Excel/Comments.xls` sheet `Tables` → `Data Files/Excel/Comments/Tables.parquet`.
   `data/catalog.json` lists every file with its row count and column types.
 * Text sources Power BI reads natively and that need QlikView-style parsing
-  (`Chapter10/Production Planning - Legacy.txt`) are read directly with `Csv.Document`.
+  (`Chapter10/Production Planning - Legacy.txt`) are read directly with `Csv.Document`
+  from the checkout; such apps add a `SourceRoot` text parameter (the repository root,
+  ending with `\`) next to the shared queries.
 * Every app has the same two shared queries:
   * `DataRoot` — text parameter, the folder holding the Parquet (ends with `\`).
   * `fnReadParquet(relativePath)` — `Parquet.Document(File.Contents(DataRoot & path))`, path with `/`.
