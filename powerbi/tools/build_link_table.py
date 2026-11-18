@@ -83,14 +83,9 @@ GAPS = [
     "Field and table comments from Comments.xls (COMMENT ... USING) are not migrated; config.qvs / tracerowcount.qvs "
     "are not in the repo and only set paths / log row counts.",
     "Calculated dimension: the Flight Type deal status -> calculated column on Flight Types.",
-    "List boxes -> slicers on the field named by the list box's caption: Year, Quarter, Month, Flight Type, Carrier's "
-    "Operating Region, Carrier Group, Carrier Name (Dashboard, Analysis, Reports); 11 origin / destination / carrier / "
-    "distance fields (Associations); Aircraft Name, Year (Data Consistency). Associations' 'Aircraft Type' (LB10) and "
-    "'Aircraft Group' (LB11) name no field of this model and are not migrated.",
-    "Multi boxes MB01 'Flight Information' and MB02 'Aircraft' -> one slicer per field they contain, on the Dashboard, "
-    "Analysis and Reports pages. Text objects, search object, buttons, bookmark object, current selections box, "
-    "container, statistics box and table box have no Power BI equivalent and are not migrated; gauges become cards "
-    "and the radar, mekko, grid, funnel and block charts are not rebuilt (their measures are in the model).",
+    "Text objects, search object, buttons, bookmark object, current selections box, "
+    "container, statistics box and table box have no Power BI equivalent and are not migrated. "
+    "Radar charts become line charts, mekko and grid charts pivot tables, block charts treemaps.",
 ]
 
 
@@ -214,135 +209,6 @@ def relationships() -> list[tuple[str, str, str, str, bool]]:
     return rels
 
 
-# ------------------------------------------------------------------ report
-def _field(entity: str, prop: str, measure: bool) -> tuple[dict, str]:
-    kind = "Measure" if measure else "Column"
-    return {kind: {"Expression": {"SourceRef": {"Entity": entity}}, "Property": prop},
-            "Name": f"{entity}.{prop}"}, f"{entity}.{prop}"
-
-
-def visual(page: str, i: int, vtype: str, pos: tuple[int, int, int, int], roles: dict[str, list[tuple]],
-           title: str | None = None) -> dict:
-    x, y, w, h = pos
-    select, projections = [], {}
-    for role, fields in roles.items():
-        for entity, prop, measure in fields:
-            sel, ref = _field(entity, prop, measure)
-            if ref not in {s["Name"] for s in select}:
-                select.append(sel)
-            projections.setdefault(role, []).append({"queryRef": ref})
-    single = {"visualType": vtype, "projections": projections,
-              "prototypeQuery": {"Version": 2, "From": [], "Select": select}, "drillFilterOtherVisuals": True}
-    entities = sorted({s[k]["Expression"]["SourceRef"]["Entity"] for s in select for k in ("Measure", "Column") if k in s})
-    alias = {e: f"t{n}" for n, e in enumerate(entities)}
-    single["prototypeQuery"]["From"] = [{"Name": alias[e], "Entity": e, "Type": 0} for e in entities]
-    for s in select:
-        k = "Measure" if "Measure" in s else "Column"
-        s[k]["Expression"]["SourceRef"] = {"Source": alias[s[k]["Expression"]["SourceRef"]["Entity"]]}
-    if title:
-        single["vcObjects"] = {"title": [{"properties": {
-            "show": {"expr": {"Literal": {"Value": "true"}}}, "text": {"expr": {"Literal": {"Value": f"'{title}'"}}}}}]}
-    config = {"name": tag(SLUG, "visual", page, str(i)),
-              "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": i, "width": w, "height": h}}],
-              "singleVisual": single}
-    return {"x": x, "y": y, "z": i, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
-
-
-def M(name):  # noqa: N802
-    return (MD, name, True)
-
-
-def C(table, name):  # noqa: N802
-    return (table, name, False)
-
-
-# QlikView list boxes -> slicers, by caption (font, font, caption, object id in the .qvw document block).
-# LB27-LB33 sit on the Dashboard, Analysis and Reports sheets:
-SLICERS = [C(LT, "Year"), C(LT, "Quarter"), C(LT, "Month"), C("Flight Types", "Flight Type"),
-           C("Carrier Operating Region", "Carrier's Operating Region"), C("Carrier Groups", "Carrier Group"),
-           C(LT, "Carrier Name")]
-# Associations sheet LB01-LB15 (LB10 'Aircraft Type' and LB11 'Aircraft Group' name no model field):
-ASSOCIATIONS = [C(MD, "Destination Country"), C(MD, "Destination State"), C(MD, "Destination City"),
-                C(MD, "Origin Country"), C(MD, "Origin State"), C(MD, "Origin City"), C(LT, "Carrier Name"),
-                C("Distance Groups", "Distance Interval"), C("Flight Types", "Flight Type"),
-                C("Carrier Operating Region", "Carrier's Operating Region"), C("Carrier Groups", "Carrier Group")]
-# Multi boxes -> one slicer per field (field list after the caption / id in the document block), below the charts:
-MULTI_BOXES = [C(MD, "Destination City"), C(MD, "Destination Country"), C("Distance Groups", "Distance Interval"),
-               C(MD, "From - To City"), C(MD, "Origin City"), C(MD, "Origin Country"),  # MB01 'Flight Information'
-               C("Aircraft Types", "Aircraft Name"), C("Aircraft Types", "Aircraft Engine Type"),  # MB02 'Aircraft'
-               C("Aircraft Types", "Aircraft Number Of Engines"), C("Aircraft Types", "Aircraft Manufacturer"),
-               C("Aircraft Types", "Aircraft Manufacturer Country"), C("Aircraft Types", "Aircraft Age Classification")]
-# Data Consistency sheet LB34 / LB35:
-CONSISTENCY = [C("Aircraft Types", "Aircraft Name"), C(LT, "Year")]
-PAGES = [
-    ("Dashboard", [
-        ("columnChart", (240, 20, 500, 220), {"Category": [C(LT, "Year"), C(LT, "Month")], "Y": [M("# of Flights")]},
-         "Traffic by Year (CH01)"),
-        ("barChart", (760, 20, 500, 220), {"Category": [C(MD, "From - To City")], "Y": [M("# of Enplanned Passengers")]},
-         "Top Routes (CH02)"),
-        ("clusteredColumnChart", (240, 260, 500, 220), {"Category": [C("Flight Types", "Flight Type")],
-                                                        "Y": [M("# of Passengers (millions)"), M("# of Available Seats (millions)")]},
-         "Passengers and Seats by Flight Type (CH03)"),
-        ("tableEx", (760, 260, 500, 220), {"Values": [C(LT, "Carrier Name"), M("# of Enplanned Passengers"),
-                                                      M("Transported Mail"), M("Transported Freight")]},
-         "Transported Passengers vs Mail (CH04)"),
-        ("card", (240, 500, 250, 100), {"Values": [M("Load Factor")]}, "Load Factor"),
-        ("card", (500, 500, 250, 100), {"Values": [M("Performed vs Scheduled")]}, "Performed vs Scheduled"),
-        ("card", (760, 500, 250, 100), {"Values": [M("Air Time %")]}, "Air Time %"),
-        ("card", (1020, 500, 240, 100), {"Values": [M("# of Flights")]}, "# of Flights"),
-    ]),
-    ("Analysis", [
-        ("pivotTable", (240, 20, 1020, 330), {"Rows": [C("Carrier Groups", "Carrier Group"), C("Airlines", "Airline"),
-                                                       C(LT, "Year"), C(LT, "Month")],
-                                              "Values": [M("# of Passengers (millions)"), M("Departures Performed (thousands)")]},
-         "Enplaned passengers (millions) (CH22)"),
-        ("columnChart", (240, 370, 500, 330), {"Category": [C(LT, "Month")], "Y": [M("# of Passengers (millions)")]},
-         "Passengers by Month (CH24)"),
-        ("tableEx", (760, 370, 500, 330), {"Values": [C("Airlines", "Airline"), M("Load Factor"),
-                                                      M("Performed vs Scheduled"), M("Air Time % (CH21)")]},
-         "KPIs per Airline (CH21)"),
-    ]),
-    ("Reports", [
-        ("pivotTable", (240, 20, 500, 330), {"Rows": [C(LT, "Year"), C(LT, "Quarter"), C("Flight Types", "Flight Type")],
-                                             "Values": [M("# of Passengers (millions)")]}, "Passengers by Quarter (CH26)"),
-        ("tableEx", (760, 20, 500, 330), {"Values": [C("Flight Types", "Deal Status"), M("# of Passengers (millions)")]},
-         "Deal Status (CH27)"),
-        ("pivotTable", (240, 370, 500, 330), {"Rows": [C(MD, "Destination Country"), C(MD, "Destination City")],
-                                              "Values": [M("# of Passengers (millions)")]}, "Destinations (CH28)"),
-        ("pivotTable", (760, 370, 500, 330), {"Rows": [C("Aircraft Types", "Aircraft Engine Type"),
-                                                       C("Aircraft Types", "Aircraft Number Of Engines")],
-                                              "Values": [M("Load Factor"), M("Performed vs Scheduled"), M("Air Time %")]},
-         "Aircraft Engines (CH38)"),
-    ]),
-    ("Associations", []),
-    ("Data Consistency", [
-        ("tableEx", (240, 20, 1020, 330), {"Values": [C(LT, "Year"), C(LT, "Carrier Name"), M("# of Flights"),
-                                                      C("Carrier Groups", "Carrier Group")]},
-         "Flights through the Link Table"),
-    ]),
-]
-
-
-def report() -> dict:
-    sections = []
-    for n, (page, visuals) in enumerate(PAGES):
-        if page == "Associations":
-            vcs = [visual(page, i, "slicer", (20 + (i % 4) * 315, 20 + (i // 4) * 235, 305, 225), {"Values": [f]})
-                   for i, f in enumerate(ASSOCIATIONS)]
-        else:
-            fields = CONSISTENCY if page == "Data Consistency" else SLICERS
-            vcs = [visual(page, i, "slicer", (20, 20 + i * 98, 200, 92), {"Values": [f]}) for i, f in enumerate(fields)]
-            if page != "Data Consistency":
-                vcs += [visual(page, len(vcs) + i, "slicer", (240 + (i % 6) * 172, 730 + (i // 6) * 170, 165, 160),
-                               {"Values": [f]}) for i, f in enumerate(MULTI_BOXES)]
-        vcs += [visual(page, len(vcs) + i, vt, pos, roles, title) for i, (vt, pos, roles, title) in enumerate(visuals)]
-        height = 1080 if page not in ("Associations", "Data Consistency") else 720
-        sections.append({"name": f"ReportSection{n}", "displayName": page, "displayOption": 1, "ordinal": n,
-                         "width": 1280, "height": height, "config": "{}", "filters": "[]", "visualContainers": vcs})
-    return {"config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
-            "layoutOptimization": 0, "resourcePackages": [], "sections": sections}
-
-
 def build(data_root: str = DEFAULT_ROOT) -> Path:
     manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
     root = APPS / SLUG
@@ -411,7 +277,11 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
     (sm / "definition.pbism").write_text(json.dumps({"version": "4.0", "settings": {}}, indent=2) + "\n")
     (rp / "definition.pbir").write_text(json.dumps(
         {"version": "4.0", "datasetReference": {"byPath": {"path": f"../{SLUG}.SemanticModel"}}}, indent=2) + "\n")
-    (rp / "report.json").write_text(json.dumps(report(), indent=2) + "\n")
+    base.SLUG = SLUG  # report_sections names its pages and visuals after the app being built
+    sections, unmapped_boxes = base.report_sections(manifest, specs, measures, multi_boxes=True)
+    (rp / "report.json").write_text(json.dumps({
+        "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
+        "layoutOptimization": 0, "resourcePackages": [], "sections": sections}, indent=2) + "\n")
     (root / f"{SLUG}.pbip").write_text(json.dumps(
         {"version": "1.0", "artifacts": [{"report": {"path": f"{SLUG}.Report"}}], "settings": {"enableAutoRecovery": True}},
         indent=2) + "\n")
@@ -422,9 +292,14 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
                       for x in measures.values()],
          "calculated_dimensions": [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q, "dax": d}
                                    for t, col, q, d, _ in CALC_DIMS],
-         "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
+         "unmapped_list_boxes": unmapped_boxes,
+         "semantic_gaps": GAPS + [
+             "Report: one page per sheet with every chart of the sheet. List boxes -> slicers on the field named by "
+             "the box caption, multi boxes -> one slicer per field they list. Boxes whose caption is no model field "
+             "are not rebuilt: " + "; ".join(f"{k} {v!r}" for k, v in unmapped_boxes.items()) + "."]},
+        indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(relationships())} relationships, {len(measures)} measures, "
-          f"{len(CALC_DIMS)} calculated columns, {len(PAGES)} report pages")
+          f"{len(CALC_DIMS)} calculated columns, {len(sections)} report pages")
     return root
 
 

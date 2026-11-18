@@ -138,6 +138,10 @@
    "dax": "SWITCH([Flight Type], \"Domestic, US Carriers Only\", \"Open\", \"International, Foreign Carriers\", \"Negotiating\", \"Closed\")"
   }
  ],
+ "unmapped_list_boxes": {
+  "LB11": "Aircraft Group",
+  "LB10": "Aircraft Type"
+ },
  "semantic_gaps": [
   "Link table: [Link Table] is not unique on [%Key Field] (10,073 rows, 10,068 keys; five Antonov keys carry Carrier Codes ADB and AUQ), so Main Data and Employment Statistics relate to it many-to-many, filtered from the link table. As in QlikView, a flight row of such a key counts once in totals and under each of its Carrier Codes.",
   "Fields on the link table (Year, Month, Quarter, Period, carrier names, Airlines, Carrier Groups) filter both facts; fields on one fact (e.g. Flight Type) do not filter the link table or the other fact. QlikView propagates selections in every direction; with no selections (the parity baseline) the results are the same.",
@@ -145,7 +149,7 @@
   "Aircraft Types: MAPPING LOAD / ApplyMap -> left merge on the first Country per manufacturer ('Unknown' when missing); LEFT JOIN -> merge; the script's STORE into Aircraft Types Transformed.qvd is not reproduced. QlikView trims unquoted text in delimited files, so the Aircraft_Group.csv labels are trimmed.",
   "Field and table comments from Comments.xls (COMMENT ... USING) are not migrated; config.qvs / tracerowcount.qvs are not in the repo and only set paths / log row counts.",
   "Calculated dimension: the Flight Type deal status -> calculated column on Flight Types.",
-  "List boxes -> slicers on the field named by the list box's caption: Year, Quarter, Month, Flight Type, Carrier's Operating Region, Carrier Group, Carrier Name (Dashboard, Analysis, Reports); 11 origin / destination / carrier / distance fields (Associations); Aircraft Name, Year (Data Consistency). Associations' 'Aircraft Type' (LB10) and 'Aircraft Group' (LB11) name no field of this model and are not migrated.",
-  "Multi boxes MB01 'Flight Information' and MB02 'Aircraft' -> one slicer per field they contain, on the Dashboard, Analysis and Reports pages. Text objects, search object, buttons, bookmark object, current selections box, container, statistics box and table box have no Power BI equivalent and are not migrated; gauges become cards and the radar, mekko, grid, funnel and block charts are not rebuilt (their measures are in the model)."
+  "Text objects, search object, buttons, bookmark object, current selections box, container, statistics box and table box have no Power BI equivalent and are not migrated. Radar charts become line charts, mekko and grid charts pivot tables, block charts treemaps.",
+  "Report: one page per sheet with every chart of the sheet. List boxes -> slicers on the field named by the box caption, multi boxes -> one slicer per field they list. Boxes whose caption is no model field are not rebuilt: LB11 'Aircraft Group'; LB10 'Aircraft Type'."
  ]
 }
