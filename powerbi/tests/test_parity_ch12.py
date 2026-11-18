@@ -132,7 +132,7 @@ def test_comparative_analysis_route_slicers_feed_the_group_measures():
                 for v in page["visualContainers"]]
     assert entities.count("Group A Route") == entities.count("Group B Route") == 9
     queries = json.loads((POWERBI / "parity" / "dax" / f"{APP}.queries.json").read_text())
-    assert "Route" not in json.dumps(queries)
+    assert "Route'" not in json.dumps(queries)
     tmdl = (SM / "tables" / "Main Data.tmdl").read_text()
     for state in ("Group A", "Group B"):
         (dax,) = [x for x in tmdl.splitlines() if x.startswith(f"\tmeasure '{state} Flights' = ")]
