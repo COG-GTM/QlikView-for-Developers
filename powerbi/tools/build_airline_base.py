@@ -546,7 +546,7 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> t
     boxes = list_box_captions(doc)
     pages, unmapped = [], {}
     for sheet, object_ids in sheet_objects(manifest, doc).items():
-        sheet_name = next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet)
+        sheet_name = static_title(next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet))
         visuals, slicers = [], []
         for oid in object_ids:
             if oid in boxes:
@@ -606,6 +606,14 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> t
     return sections, unmapped
 
 
+def static_title(name: str) -> str:
+    """A calculated sheet title (="'Details for ' & [Carrier Name]") as static text: 'Details for Carrier Name'."""
+    if not name.startswith("="):
+        return name
+    text = re.sub(r"'([^']*)'|\[([^\]]*)\]", lambda m: m.group(1) if m.group(1) is not None else m.group(2), name[1:])
+    return " ".join(text.replace("&", " ").split())
+
+
 def grid(items: list, x0: int, width: int, cols: int) -> list[tuple]:
     rows = math.ceil(len(items) / cols)
     w, h = (width - 10 * (cols + 1)) // cols, (720 - 10 * (rows + 1)) // rows
@@ -640,6 +648,10 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hi
                       **({"syncGroup": {"groupName": select[0]["Name"], "fieldChanges": True, "filterChanges": True}}
                          if visual == "slicer" else {}),
                       **({"display": {"mode": "hidden"}} if vid in hidden_ids else {}),
+                      # numeric fields (Period, Year) on a chart axis are categories, not a continuous scale
+                      **({"objects": {"categoryAxis": [{"properties": {"axisType": {
+                          "expr": {"Literal": {"Value": "'Categorical'"}}}}}]}}
+                         if "Category" in roles and visual not in ("pieChart", "funnel", "scatterChart") else {}),
                       "vcObjects": {"title": [{"properties": {
                           "show": {"expr": {"Literal": {"Value": "true"}}},
                           "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]}}}

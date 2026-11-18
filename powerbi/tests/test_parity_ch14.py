@@ -10,6 +10,7 @@ import pandas as pd
 import pytest
 
 import harness
+from build_airline_base import static_title
 from dax import read_tmdl
 from engine import SourceModel
 from scaffold_pbip import tag
@@ -91,7 +92,7 @@ def test_pbip_covers_every_kpi_without_roles(expected):
 def test_report_pages_list_boxes_as_synced_slicers_and_a_visual_per_chart():
     manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
     report = json.loads((PBIP / "Chapter14_Airline_Operations.Report" / "report.json").read_text())
-    assert [p["displayName"] for p in report["sections"]] == [s["name"] for s in manifest["sheets"]]
+    assert [p["displayName"] for p in report["sections"]] == [static_title(s["name"]) for s in manifest["sheets"]]
     pages = {p["displayName"]: [json.loads(c["config"]) for c in p["visualContainers"]] for p in report["sections"]}
 
     def slicers(page):
