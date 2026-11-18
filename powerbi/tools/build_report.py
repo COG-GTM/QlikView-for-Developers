@@ -87,13 +87,15 @@ def field(kind: str, alias: str, prop: str) -> dict:
 
 def visual(name: str, vtype: str, pos: tuple, columns: list, meas: list, title: str | None,
            role_cols: str, role_meas: str | None, order_by: tuple | None = None, filters: list | None = None,
-           hidden: bool = False) -> dict:
+           z: int = 0, dropdown: bool = False) -> dict:
     x, y, w, h = pos
     tables = list(dict.fromkeys([t for t, _ in columns] + [t for t, _ in meas]))
     alias = {t: f"t{i}" for i, t in enumerate(tables)}
     select = [{**field("Column", alias[t], c), "Name": f"{t}.{c}"} for t, c in columns]
     select += [{**field("Measure", alias[t], m), "Name": f"{t}.{m}"} for t, m in meas]
-    proj = {role_cols: [{"queryRef": f"{t}.{c}", "active": True} for t, c in columns]}
+    # "active" marks a slicer's field; on a table it narrows the rendered columns to that one.
+    active = {"active": True} if vtype == "slicer" else {}
+    proj = {role_cols: [{"queryRef": f"{t}.{c}", **active} for t, c in columns]}
     if role_meas:
         proj.setdefault(role_meas, []).extend({"queryRef": f"{t}.{m}"} for t, m in meas)
     query = {"Version": 2, "From": [{"Name": a, "Entity": t, "Type": 0} for t, a in alias.items()], "Select": select}
@@ -104,13 +106,13 @@ def visual(name: str, vtype: str, pos: tuple, columns: list, meas: list, title: 
     if vtype == "slicer":
         # Qlik selections are global; synced slicers carry them across pages.
         single["syncGroup"] = {"groupName": "{}.{}".format(*columns[0]), "fieldChanges": True, "filterChanges": True}
+        single["objects"] = {"data": [{"properties": {"mode": {"expr": {"Literal": {
+            "Value": "'Dropdown'" if dropdown else "'Basic'"}}}}}]}
     if title:
         single["vcObjects"] = {"title": [{"properties": {"show": lit_bool(True), "text": lit(title)}}]}
-    config = {"name": name, "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": 0, "width": w, "height": h}}],
+    config = {"name": name, "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": w, "height": h}}],
               "singleVisual": single}
-    if hidden:
-        config["layouts"][0]["display"] = {"mode": "hidden"}
-    return {"x": x, "y": y, "z": 0, "width": w, "height": h, "config": json.dumps(config),
+    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config),
             "filters": json.dumps(filters or [])}
 
 
@@ -133,7 +135,7 @@ def top_n_filter(column: tuple, by: tuple, n: int) -> dict:
                                                        "Table": {"SourceRef": {"Source": "subquery"}}}}}]}}
 
 
-def chart_visual(chart: dict, by_key: dict, pos: tuple) -> dict:
+def chart_visual(chart: dict, by_key: dict, pos: tuple, z: int) -> dict:
     cols = [c for d in chart["dimensions"] for c in DIMENSIONS.get(d, [("Main Data", d)])]
     meas = [by_key[parity_key(e["expression"])] for e in chart["expressions"]]
     vtype = VISUAL_TYPES[chart["type"]]
@@ -142,35 +144,38 @@ def chart_visual(chart: dict, by_key: dict, pos: tuple) -> dict:
         filters = [top_n_filter(cols[0], meas[0], int(m.group(1)))]
         order = meas[0]
     if vtype == "tableEx":
-        return visual(chart["id"], vtype, pos, cols, meas, chart["caption"], "Values", "Values", order, filters)
-    return visual(chart["id"], vtype, pos, cols, meas, chart["caption"], "Category", "Y", order, filters)
+        return visual(chart["id"], vtype, pos, cols, meas, chart["caption"], "Values", "Values", order, filters, z)
+    return visual(chart["id"], vtype, pos, cols, meas, chart["caption"], "Category", "Y", order, filters, z)
 
 
 def page(i: int, spec: dict, charts: dict, by_key: dict, cols: dict, synced: list) -> dict:
     visuals = []
     boxes = slicers(spec, cols)
-    n = len(boxes)
     if spec["charts"]:
-        sw, sh = 220, (PAGE_H - 20 - 10 * (n - 1)) // n
-        for j, (oid, t, c) in enumerate(boxes):
-            visuals.append(visual(oid, "slicer", (10, 10 + j * (sh + 10), sw, sh), [(t, c)], [], None, "Values", None))
-        cw = PAGE_W - sw - 30
-        ch = (PAGE_H - 30) // len(spec["charts"])
-        for j, cid in enumerate(spec["charts"]):
-            visuals.append(chart_visual(charts[cid], by_key, (sw + 20, 10 + j * (ch + 10), cw, ch)))
-        # Hidden synced slicers let list boxes on other sheets filter this sheet's charts.
+        # Same layout as Chapter 06: dropdown slicers in rows above full-width charts. Fields whose
+        # list box sits on another sheet get a synced slicer here too, so Qlik's global selections
+        # (made on any sheet) filter these charts; Desktop does not reliably hide slicers, so they stay visible.
         here = {(t, c) for _, t, c in boxes}
         for oid, t, c in synced:
             if (t, c) not in here:
                 here.add((t, c))
-                visuals.append(visual(f"{spec['id']}_{oid}", "slicer", (0, 0, 160, 120), [(t, c)], [], None,
-                                      "Values", None, hidden=True))
+                boxes.append((f"{spec['id']}_{oid}", t, c))
+        per_row, sw, sh = 9, 135, 56
+        for j, (oid, t, c) in enumerate(boxes):
+            r, k = divmod(j, per_row)
+            visuals.append(visual(oid, "slicer", (10 + k * (sw + 5), 10 + r * (sh + 6), sw, sh), [(t, c)], [], c,
+                                  "Values", None, z=j, dropdown=True))
+        top = 10 + -(-len(boxes) // per_row) * (sh + 6) + 6
+        ch = (PAGE_H - top - 10 * len(spec["charts"])) // len(spec["charts"])
+        for j, cid in enumerate(spec["charts"]):
+            visuals.append(chart_visual(charts[cid], by_key, (10, top + j * (ch + 10), PAGE_W - 20, ch), len(boxes) + j))
     else:
         per_row = 5
         w, h = (PAGE_W - 10 * (per_row + 1)) // per_row, (PAGE_H - 40) // 3
         for j, (oid, t, c) in enumerate(boxes):
             r, k = divmod(j, per_row)
-            visuals.append(visual(oid, "slicer", (10 + k * (w + 10), 10 + r * (h + 10), w, h), [(t, c)], [], None, "Values", None))
+            visuals.append(visual(oid, "slicer", (10 + k * (w + 10), 10 + r * (h + 10), w, h), [(t, c)], [], None, "Values", None,
+                                  z=j))
     return {"name": spec["id"], "displayName": spec["name"], "displayOption": 1, "ordinal": i, "width": PAGE_W,
             "height": PAGE_H, "config": "{}", "filters": "[]", "visualContainers": visuals}
 
