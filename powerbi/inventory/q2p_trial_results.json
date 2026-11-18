@@ -1,0 +1,1290 @@
+{
+ "Chapter03__Solution_Chapter 3_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 10,
+  "generic_names": 1,
+  "measures": 7,
+  "measures_unconverted": 0,
+  "unconverted": [],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Main Data'.'%Carrier Group ID'",
+    "'Carrier Groups'.'%Carrier Group ID'"
+   ],
+   [
+    "'Main Data'.'%Airline ID'",
+    "Airlines.'%Airline ID'"
+   ],
+   [
+    "'Main Data'.'%Region Code'",
+    "'Carrier Operating Region'.'%Region Code'"
+   ],
+   [
+    "'Main Data'.'%Datasource ID'",
+    "'Flight Types'.'%Datasource ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Group ID'",
+    "'Aircraft Groups'.'%Aircraft Group ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Type ID'",
+    "'Aircraft Types'.'%Aircraft Type ID'"
+   ],
+   [
+    "'Main Data'.'%Distance Group ID'",
+    "'Distance Groups'.'%Distance Group ID'"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 28,
+  "pages": 2
+ },
+ "Chapter04__Solution_Chapter 4_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 14,
+  "generic_names": 1,
+  "measures": 7,
+  "measures_unconverted": 0,
+  "unconverted": [],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Main Data'.'%Carrier Group ID'",
+    "'Carrier Groups'.'%Carrier Group ID'"
+   ],
+   [
+    "'Main Data'.'%Airline ID'",
+    "Airlines.'%Airline ID'"
+   ],
+   [
+    "'Main Data'.'%Region Code'",
+    "'Carrier Operating Region'.'%Region Code'"
+   ],
+   [
+    "'Main Data'.'%Datasource ID'",
+    "'Flight Types'.'%Datasource ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Group ID'",
+    "'Aircraft Groups'.'%Aircraft Group ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Type ID'",
+    "'Aircraft Types'.'%Aircraft Type ID'"
+   ],
+   [
+    "'Main Data'.'%Distance Group ID'",
+    "'Distance Groups'.'%Distance Group ID'"
+   ],
+   [
+    "'Main Data'.'%Origin Airport ID'",
+    "'Origin Airports'.'%Origin Airport ID'"
+   ],
+   [
+    "'Main Data'.'%Destination Airport ID'",
+    "'Destination Airports'.'%Destination Airport ID'"
+   ],
+   [
+    "'Main Data'.'%Origin Airport Market ID'",
+    "'Origin Markets'.'%Origin Airport Market ID'"
+   ],
+   [
+    "'Main Data'.'%Destination Airport Market ID'",
+    "'Destination Markets'.'%Destination Airport Market ID'"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 44,
+  "pages": 2
+ },
+ "Chapter06__Solution_Chapter 6_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 14,
+  "generic_names": 1,
+  "measures": 7,
+  "measures_unconverted": 0,
+  "unconverted": [],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Main Data'.'%Carrier Group ID'",
+    "'Carrier Groups'.'%Carrier Group ID'"
+   ],
+   [
+    "'Main Data'.'%Airline ID'",
+    "Airlines.'%Airline ID'"
+   ],
+   [
+    "'Main Data'.'%Region Code'",
+    "'Carrier Operating Region'.'%Region Code'"
+   ],
+   [
+    "'Main Data'.'%Datasource ID'",
+    "'Flight Types'.'%Datasource ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Group ID'",
+    "'Aircraft Groups'.'%Aircraft Group ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Type ID'",
+    "'Aircraft Types'.'%Aircraft Type ID'"
+   ],
+   [
+    "'Main Data'.'%Distance Group ID'",
+    "'Distance Groups'.'%Distance Group ID'"
+   ],
+   [
+    "'Main Data'.'%Origin Airport ID'",
+    "'Origin Airports'.'%Origin Airport ID'"
+   ],
+   [
+    "'Main Data'.'%Destination Airport ID'",
+    "'Destination Airports'.'%Destination Airport ID'"
+   ],
+   [
+    "'Main Data'.'%Origin Airport Market ID'",
+    "'Origin Markets'.'%Origin Airport Market ID'"
+   ],
+   [
+    "'Main Data'.'%Destination Airport Market ID'",
+    "'Destination Markets'.'%Destination Airport Market ID'"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 44,
+  "pages": 2
+ },
+ "Chapter07__Solution_Chapter 7_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 14,
+  "generic_names": 1,
+  "measures": 26,
+  "measures_unconverted": 7,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Main Data'.'%Carrier Group ID'",
+    "'Carrier Groups'.'%Carrier Group ID'"
+   ],
+   [
+    "'Main Data'.'%Airline ID'",
+    "Airlines.'%Airline ID'"
+   ],
+   [
+    "'Main Data'.'%Region Code'",
+    "'Carrier Operating Region'.'%Region Code'"
+   ],
+   [
+    "'Main Data'.'%Datasource ID'",
+    "'Flight Types'.'%Datasource ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Group ID'",
+    "'Aircraft Groups'.'%Aircraft Group ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Type ID'",
+    "'Aircraft Types'.'%Aircraft Type ID'"
+   ],
+   [
+    "'Main Data'.'%Distance Group ID'",
+    "'Distance Groups'.'%Distance Group ID'"
+   ],
+   [
+    "'Main Data'.'%Origin Airport ID'",
+    "'Origin Airports'.'%Origin Airport ID'"
+   ],
+   [
+    "'Main Data'.'%Destination Airport ID'",
+    "'Destination Airports'.'%Destination Airport ID'"
+   ],
+   [
+    "'Main Data'.'%Origin Airport Market ID'",
+    "'Origin Markets'.'%Origin Airport Market ID'"
+   ],
+   [
+    "'Main Data'.'%Destination Airport Market ID'",
+    "'Destination Markets'.'%Destination Airport Market ID'"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 44,
+  "pages": 7
+ },
+ "Chapter08__Solution_Chapter 8_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 15,
+  "generic_names": 2,
+  "measures": 28,
+  "measures_unconverted": 7,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 40,
+  "pages": 7
+ },
+ "Chapter09__Solution_Chapter 9_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 23,
+  "generic_names": 8,
+  "measures": 28,
+  "measures_unconverted": 7,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ],
+   [
+    "Temp_Calendar_Range.MinDate",
+    "Calendar.Date"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 44,
+  "pages": 8
+ },
+ "Chapter09__Solution_Chapter 9_Concatenated tables": {
+  "exit": 0,
+  "err": "",
+  "tables": 20,
+  "generic_names": 7,
+  "measures": 28,
+  "measures_unconverted": 7,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 40,
+  "pages": 8
+ },
+ "Chapter09__Solution_Chapter 9_Link table": {
+  "exit": 0,
+  "err": "",
+  "tables": 23,
+  "generic_names": 8,
+  "measures": 28,
+  "measures_unconverted": 7,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 48,
+  "pages": 8
+ },
+ "Chapter09__Solution_Dimensionless Facts": {
+  "exit": 0,
+  "err": "",
+  "tables": 4,
+  "generic_names": 1,
+  "measures": 1,
+  "measures_unconverted": 0,
+  "unconverted": [],
+  "relationships": [
+   [
+    "Flights.'%Aircraft Type ID'",
+    "Aircrafts.'%Aircraft Type ID'"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document"
+  ],
+  "placeholder_paths": 0,
+  "pages": 1
+ },
+ "Chapter10__Crosstable example": {
+  "exit": 0,
+  "err": "",
+  "tables": 2,
+  "generic_names": 0,
+  "measures": 0,
+  "measures_unconverted": 0,
+  "unconverted": [],
+  "relationships": [],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Excel.Workbook"
+  ],
+  "placeholder_paths": 4,
+  "pages": 1
+ },
+ "Chapter10__Generic Load": {
+  "exit": 0,
+  "err": "",
+  "tables": 6,
+  "generic_names": 0,
+  "measures": 0,
+  "measures_unconverted": 0,
+  "unconverted": [],
+  "relationships": [],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Excel.Workbook"
+  ],
+  "placeholder_paths": 20,
+  "pages": 1
+ },
+ "Chapter10__Hierarchy example": {
+  "exit": 0,
+  "err": "",
+  "tables": 2,
+  "generic_names": 1,
+  "measures": 0,
+  "measures_unconverted": 0,
+  "unconverted": [],
+  "relationships": [
+   [
+    "'Sheet1$-ExpandedNodes'.Parent_ID",
+    "Table1.Parent_ID"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Excel.Workbook"
+  ],
+  "placeholder_paths": 4,
+  "pages": 1
+ },
+ "Chapter10__Production Planning": {
+  "exit": 0,
+  "err": "",
+  "tables": 3,
+  "generic_names": 1,
+  "measures": 0,
+  "measures_unconverted": 0,
+  "unconverted": [],
+  "relationships": [
+   [
+    "'Production Planning - Legacy'.Date",
+    "Calendar.Date"
+   ],
+   [
+    "Table1.Date",
+    "Calendar.Date"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document"
+  ],
+  "placeholder_paths": 4,
+  "pages": 1
+ },
+ "Chapter11__Solution_Chapter 11_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 24,
+  "generic_names": 8,
+  "measures": 43,
+  "measures_unconverted": 18,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ],
+   [
+    "'FTE % to Total'",
+    "SUM([# Equivalent FTEs]) / $(vTotalFTEs)"
+   ],
+   [
+    "FTEs",
+    "$(eFTEs)"
+   ],
+   [
+    "'# of Flights (thousands)'",
+    "$(eDeparturesPerformed_VarUnit(1000))"
+   ],
+   [
+    "'# of Flights (millions)'",
+    "$(eDeparturesPerformed_VarUnit(1000000))"
+   ],
+   [
+    "'Participation to the whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole per year'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])"
+   ],
+   [
+    "'Average Load Factor per Route'",
+    "AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', 'Table2'[Airline], [From - To Airport ID]), \"@value\", $(eLoadFactor)))"
+   ],
+   [
+    "Dimensionality",
+    "Dimensionality()"
+   ],
+   [
+    "'Avg Load Factor per Route'",
+    "``` SWITCH(Dimensionality() + 1, AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', [From - To Airport ID]), \"@value\", $(eLoadFactor))), AVERAGE(ADDCOLU"
+   ],
+   [
+    "vTotalFTEs",
+    "= SUM([# Equivalent FTEs])"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ],
+   [
+    "Temp_Calendar_Range.MinDate",
+    "Calendar.Date"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 48,
+  "pages": 10
+ },
+ "Chapter12__Solution_Chapter 12_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 24,
+  "generic_names": 8,
+  "measures": 58,
+  "measures_unconverted": 24,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ],
+   [
+    "'FTE % to Total'",
+    "SUM([# Equivalent FTEs]) / $(vTotalFTEs)"
+   ],
+   [
+    "FTEs",
+    "$(eFTEs)"
+   ],
+   [
+    "'# of Flights (thousands)'",
+    "$(eDeparturesPerformed_VarUnit(1000))"
+   ],
+   [
+    "'# of Flights (millions)'",
+    "$(eDeparturesPerformed_VarUnit(1000000))"
+   ],
+   [
+    "'Participation to the whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole per year'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])"
+   ],
+   [
+    "'Average Load Factor per Route'",
+    "AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', 'Table2'[Airline], [From - To Airport ID]), \"@value\", $(eLoadFactor)))"
+   ],
+   [
+    "Dimensionality",
+    "Dimensionality()"
+   ],
+   [
+    "'Avg Load Factor per Route'",
+    "``` SWITCH(Dimensionality() + 1, AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', [From - To Airport ID]), \"@value\", $(eLoadFactor))), AVERAGE(ADDCOLU"
+   ],
+   [
+    "'This expression will result in the total number of flights performed during 2011 by carriers operating in Latin America plus flights performed during 2010 by carriers operating as Domestic, but excluding Foreign Carriers from both sets.'",
+    "``` SUM({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> + <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}> -"
+   ],
+   [
+    "'Var %'",
+    "``` (SUM({$<$(vSetYTD)> } [# Departures Performed]) / SUM({$<$(vSetLYYTD)> } [# Departures Performed])) - 1 ```"
+   ],
+   [
+    "'YTD Flights'",
+    "SUM({$<$(vSetYTD)>} [# Departures Performed])"
+   ],
+   [
+    "'Current Month Flights'",
+    "SUM({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Previous Month'",
+    "SUM({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Two Months Ago'",
+    "SUM({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])"
+   ],
+   [
+    "vTotalFTEs",
+    "= SUM([# Equivalent FTEs])"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ],
+   [
+    "Temp_Calendar_Range.MinDate",
+    "Calendar.Date"
+   ],
+   [
+    "Table2.Period",
+    "'Master Calendar'.Period"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 48,
+  "pages": 13
+ },
+ "Chapter13__Solution_Chapter 13_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 23,
+  "generic_names": 8,
+  "measures": 63,
+  "measures_unconverted": 27,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ],
+   [
+    "'FTE % to Total'",
+    "SUM([# Equivalent FTEs]) / $(vTotalFTEs)"
+   ],
+   [
+    "FTEs",
+    "$(eFTEs)"
+   ],
+   [
+    "'# of Flights (thousands)'",
+    "$(eDeparturesPerformed_VarUnit(1000))"
+   ],
+   [
+    "'# of Flights (millions)'",
+    "$(eDeparturesPerformed_VarUnit(1000000))"
+   ],
+   [
+    "'Participation to the whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole per year'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])"
+   ],
+   [
+    "'Average Load Factor per Route'",
+    "AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', 'Table2'[Airline], [From - To Airport ID]), \"@value\", $(eLoadFactor)))"
+   ],
+   [
+    "Dimensionality",
+    "Dimensionality()"
+   ],
+   [
+    "'Avg Load Factor per Route'",
+    "``` SWITCH(Dimensionality() + 1, AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', [From - To Airport ID]), \"@value\", $(eLoadFactor))), AVERAGE(ADDCOLU"
+   ],
+   [
+    "'This expression will result in the total number of flights performed during 2011 by carriers operating in Latin America plus flights performed during 2010 by carriers operating as Domestic, but excluding Foreign Carriers from both sets.'",
+    "``` SUM({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> + <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}> -"
+   ],
+   [
+    "'Var %'",
+    "``` (SUM({$<$(vSetYTD)> } [# Departures Performed]) / SUM({$<$(vSetLYYTD)> } [# Departures Performed])) - 1 ```"
+   ],
+   [
+    "'YTD Flights'",
+    "SUM({$<$(vSetYTD)>} [# Departures Performed])"
+   ],
+   [
+    "'Current Month Flights'",
+    "SUM({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Previous Month'",
+    "SUM({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Two Months Ago'",
+    "SUM({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])"
+   ],
+   [
+    "'Total HC Change'",
+    "SUM([# M-Delta Total Employees])"
+   ],
+   [
+    "'Total HC Change MTD'",
+    "SUM({$<$(vSetMTD)>} [# M-Delta Total Employees])"
+   ],
+   [
+    "'Total HC Change YTD'",
+    "SUM({$<$(vSetYTD)>} [# M-Delta Total Employees])"
+   ],
+   [
+    "vTotalFTEs",
+    "= SUM([# Equivalent FTEs])"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ],
+   [
+    "Temp_Calendar_Range.MinDate",
+    "Calendar.Date"
+   ],
+   [
+    "Table2.Period",
+    "'Master Calendar'.Period"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 48,
+  "pages": 14
+ },
+ "Chapter14__Solution_Chapter 14_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 23,
+  "generic_names": 8,
+  "measures": 63,
+  "measures_unconverted": 27,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ],
+   [
+    "'FTE % to Total'",
+    "SUM([# Equivalent FTEs]) / $(vTotalFTEs)"
+   ],
+   [
+    "FTEs",
+    "$(eFTEs)"
+   ],
+   [
+    "'# of Flights (thousands)'",
+    "$(eDeparturesPerformed_VarUnit(1000))"
+   ],
+   [
+    "'# of Flights (millions)'",
+    "$(eDeparturesPerformed_VarUnit(1000000))"
+   ],
+   [
+    "'Participation to the whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole per year'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])"
+   ],
+   [
+    "'Average Load Factor per Route'",
+    "AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', 'Table2'[Airline], [From - To Airport ID]), \"@value\", $(eLoadFactor)))"
+   ],
+   [
+    "Dimensionality",
+    "Dimensionality()"
+   ],
+   [
+    "'Avg Load Factor per Route'",
+    "``` SWITCH(Dimensionality() + 1, AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', [From - To Airport ID]), \"@value\", $(eLoadFactor))), AVERAGE(ADDCOLU"
+   ],
+   [
+    "'This expression will result in the total number of flights performed during 2011 by carriers operating in Latin America plus flights performed during 2010 by carriers operating as Domestic, but excluding Foreign Carriers from both sets.'",
+    "``` SUM({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> + <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}> -"
+   ],
+   [
+    "'Var %'",
+    "``` (SUM({$<$(vSetYTD)> } [# Departures Performed]) / SUM({$<$(vSetLYYTD)> } [# Departures Performed])) - 1 ```"
+   ],
+   [
+    "'YTD Flights'",
+    "SUM({$<$(vSetYTD)>} [# Departures Performed])"
+   ],
+   [
+    "'Current Month Flights'",
+    "SUM({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Previous Month'",
+    "SUM({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Two Months Ago'",
+    "SUM({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])"
+   ],
+   [
+    "'Total HC Change'",
+    "SUM([# M-Delta Total Employees])"
+   ],
+   [
+    "'Total HC Change MTD'",
+    "SUM({$<$(vSetMTD)>} [# M-Delta Total Employees])"
+   ],
+   [
+    "'Total HC Change YTD'",
+    "SUM({$<$(vSetYTD)>} [# M-Delta Total Employees])"
+   ],
+   [
+    "vTotalFTEs",
+    "= SUM([# Equivalent FTEs])"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ],
+   [
+    "Temp_Calendar_Range.MinDate",
+    "Calendar.Date"
+   ],
+   [
+    "Table2.Period",
+    "'Master Calendar'.Period"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 48,
+  "pages": 15
+ },
+ "Chapter15__Solution_Chapter 15_Airline Operations": {
+  "exit": 0,
+  "err": "",
+  "tables": 24,
+  "generic_names": 8,
+  "measures": 63,
+  "measures_unconverted": 27,
+  "unconverted": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ],
+   [
+    "'FTE % to Total'",
+    "SUM([# Equivalent FTEs]) / $(vTotalFTEs)"
+   ],
+   [
+    "FTEs",
+    "$(eFTEs)"
+   ],
+   [
+    "'# of Flights (thousands)'",
+    "$(eDeparturesPerformed_VarUnit(1000))"
+   ],
+   [
+    "'# of Flights (millions)'",
+    "$(eDeparturesPerformed_VarUnit(1000000))"
+   ],
+   [
+    "'Participation to the whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole per year'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])"
+   ],
+   [
+    "'Average Load Factor per Route'",
+    "AVERAGE(ADDCOLUMNS(SUMMARIZE('Main Data', 'Main Data'[Airline], [From - To Airport ID]), \"@value\", $(eLoadFactor)))"
+   ],
+   [
+    "Dimensionality",
+    "Dimensionality()"
+   ],
+   [
+    "'Avg Load Factor per Route'",
+    "``` SWITCH(Dimensionality() + 1, AVERAGE(ADDCOLUMNS(SUMMARIZE('Main Data', [From - To Airport ID]), \"@value\", $(eLoadFactor))), AVERAGE(ADDC"
+   ],
+   [
+    "'This expression will result in the total number of flights performed during 2011 by carriers operating in Latin America plus flights performed during 2010 by carriers operating as Domestic, but excluding Foreign Carriers from both sets.'",
+    "``` SUM({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> + <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}> -"
+   ],
+   [
+    "'Var %'",
+    "``` (SUM({$<$(vSetYTD)> } [# Departures Performed]) / SUM({$<$(vSetLYYTD)> } [# Departures Performed])) - 1 ```"
+   ],
+   [
+    "'YTD Flights'",
+    "SUM({$<$(vSetYTD)>} [# Departures Performed])"
+   ],
+   [
+    "'Current Month Flights'",
+    "SUM({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Previous Month'",
+    "SUM({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Two Months Ago'",
+    "SUM({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])"
+   ],
+   [
+    "'Total HC Change'",
+    "SUM([# M-Delta Total Employees])"
+   ],
+   [
+    "'Total HC Change MTD'",
+    "SUM({$<$(vSetMTD)>} [# M-Delta Total Employees])"
+   ],
+   [
+    "'Total HC Change YTD'",
+    "SUM({$<$(vSetYTD)>} [# M-Delta Total Employees])"
+   ],
+   [
+    "vTotalFTEs",
+    "= SUM([# Equivalent FTEs])"
+   ]
+  ],
+  "relationships": [
+   [
+    "'Main Data'.'# Ramp-To-Ramp Time'",
+    "Calendar.Date"
+   ],
+   [
+    "'Aircraft Types'.'Aircraft Begin Date'",
+    "Calendar.Date"
+   ],
+   [
+    "Temp_Calendar_Range.MinDate",
+    "Calendar.Date"
+   ],
+   [
+    "'Main Data'.Period",
+    "'Master Calendar'.Period"
+   ],
+   [
+    "'Main Data'.'%Carrier Group ID'",
+    "'Carrier Groups'.'%Carrier Group ID'"
+   ],
+   [
+    "'Main Data'.'%Airline ID'",
+    "Airlines.'%Airline ID'"
+   ],
+   [
+    "'Main Data'.'%Region Code'",
+    "'Carrier Operating Region'.'%Region Code'"
+   ],
+   [
+    "'Main Data'.'%Datasource ID'",
+    "'Flight Types'.'%Datasource ID'"
+   ],
+   [
+    "'Main Data'.'%Aircraft Type ID'",
+    "'Aircraft Types'.'%Aircraft Type ID'"
+   ],
+   [
+    "'Main Data'.'%Distance Group ID'",
+    "'Distance Groups'.'%Distance Group ID'"
+   ],
+   [
+    "'Main Data'.'%Origin Airport ID'",
+    "'Origin Airports'.'%Origin Airport ID'"
+   ],
+   [
+    "'Main Data'.'%Destination Airport ID'",
+    "'Destination Airports'.'%Destination Airport ID'"
+   ],
+   [
+    "'Main Data'.'%Origin Airport Market ID'",
+    "'Origin Markets'.'%Origin Airport Market ID'"
+   ],
+   [
+    "'Main Data'.'%Destination Airport Market ID'",
+    "'Destination Markets'.'%Destination Airport Market ID'"
+   ]
+  ],
+  "sources": [
+   "Source = Csv.Document",
+   "Source = Qvd.Document"
+  ],
+  "placeholder_paths": 52,
+  "pages": 15
+ }
+}
