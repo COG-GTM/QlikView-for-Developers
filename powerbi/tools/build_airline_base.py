@@ -547,8 +547,6 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> t
     sections, unmapped = [], {}
     for ordinal, (sheet, object_ids) in enumerate(sheet_objects(manifest, doc).items()):
         sheet_name = next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet)
-        if sheet_name.startswith("="):  # a calculated sheet title: its static text and field names
-            sheet_name = re.sub(r"\s*&\s*", " ", re.sub(r"'([^']*)'|\[([^\]]*)\]", lambda x: x[1] or x[2], sheet_name[1:]))
         visuals, slicers = [], []
         for oid in object_ids:
             if oid in boxes:
