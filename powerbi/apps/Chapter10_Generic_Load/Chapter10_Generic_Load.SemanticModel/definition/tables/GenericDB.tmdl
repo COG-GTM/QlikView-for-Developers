@@ -1,6 +1,54 @@
 table GenericDB
 	lineageTag: 627c7a52-2a6a-5b3a-82b9-2b4437af3460
 
+	measure 'Color Count' = COUNTA('GenericDB'[Color])
+		formatString: 0
+		lineageTag: 5d1e62de-29e5-5ce8-a61a-e507f115f099
+
+		annotation ParityKey = 649d925bbfa0
+		annotation QlikExpression = Count(Color)
+		annotation QlikObjects = CHK01#1 (parity/checks; the Qlik sheet has no charts)
+
+	measure 'Weight Count' = COUNTA('GenericDB'[Weight])
+		formatString: 0
+		lineageTag: ddcd1808-c59c-5a3a-980c-63df147a21ed
+
+		annotation ParityKey = 7a5ef6f25f7e
+		annotation QlikExpression = Count(Weight)
+		annotation QlikObjects = CHK02#1 (parity/checks; the Qlik sheet has no charts)
+
+	measure 'Diameter Count' = COUNTA('GenericDB'[Diameter])
+		formatString: 0
+		lineageTag: 0014ad53-996e-56b2-baf4-baaa6747ff32
+
+		annotation ParityKey = 01188ff5d6a1
+		annotation QlikExpression = Count(Diameter)
+		annotation QlikObjects = CHK03#1 (parity/checks; the Qlik sheet has no charts)
+
+	measure 'Total Value' = SUM('GenericDB'[Value])
+		formatString: #,0
+		lineageTag: 51a243c4-ae36-56d4-8935-2e6e553c19c5
+
+		annotation ParityKey = cdc7b1fc9254
+		annotation QlikExpression = Sum(Value)
+		annotation QlikObjects = CHK04#1 (parity/checks; the Qlik sheet has no charts)
+
+	measure 'Thickness Count' = COUNTA('GenericDB'[Thickness])
+		formatString: 0
+		lineageTag: d43257f7-c83f-5133-9b24-4da46d68f040
+
+		annotation ParityKey = 7536b9e8b4d3
+		annotation QlikExpression = Count(Thickness)
+		annotation QlikObjects = CHK05#1 (parity/checks; the Qlik sheet has no charts)
+
+	measure 'Objects' = DISTINCTCOUNT('GenericDB'[Object])
+		formatString: 0
+		lineageTag: 7426e7ff-0e1f-5a50-9221-e1fee7c4d92f
+
+		annotation ParityKey = b273dcdde38f
+		annotation QlikExpression = Count(DISTINCT Object)
+		annotation QlikObjects = CHK06#1 (parity/checks; the Qlik sheet has no charts)
+
 	column Object
 		dataType: string
 		lineageTag: 4ce4d1e1-edaf-56f0-9f43-82133629d91a

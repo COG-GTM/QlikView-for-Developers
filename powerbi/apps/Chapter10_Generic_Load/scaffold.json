@@ -8,6 +8,13 @@
   "GenericDB.Value": "GenericDB",
   "GenericDB.Thickness": "GenericDB"
  },
- "measures": [],
+ "measures": [
+  "Color Count",
+  "Weight Count",
+  "Diameter Count",
+  "Total Value",
+  "Thickness Count",
+  "Objects"
+ ],
  "needs_hand_written_dax": []
 }

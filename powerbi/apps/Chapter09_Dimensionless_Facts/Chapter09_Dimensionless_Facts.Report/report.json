@@ -1,0 +1,37 @@
+{
+  "config": "{\"version\": \"5.59\", \"themeCollection\": {}, \"activeSectionIndex\": 0}",
+  "layoutOptimization": 0,
+  "resourcePackages": [],
+  "sections": [
+    {
+      "name": "ReportSection",
+      "displayName": "Main",
+      "displayOption": 1,
+      "ordinal": 0,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 260,
+          "height": 600,
+          "config": "{\"name\": \"LB01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 260, \"height\": 600}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircrafts.Aircraft Name\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"a\", \"Entity\": \"Aircrafts\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"a\"}}, \"Property\": \"Aircraft Name\"}, \"Name\": \"Aircrafts.Aircraft Name\"}]}, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Basic'\"}}}}}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Aircraft Name'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 300,
+          "y": 20,
+          "z": 1,
+          "width": 900,
+          "height": 600,
+          "config": "{\"name\": \"CH01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 300, \"y\": 20, \"z\": 1, \"width\": 900, \"height\": 600}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Aircrafts.Aircraft Group\", \"active\": true}], \"Y\": [{\"queryRef\": \"Flights.Flights by Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"a\", \"Entity\": \"Aircrafts\", \"Type\": 0}, {\"Name\": \"f\", \"Entity\": \"Flights\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"a\"}}, \"Property\": \"Aircraft Group\"}, \"Name\": \"Aircrafts.Aircraft Group\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Flights by Group\"}, \"Name\": \"Flights.Flights by Group\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Flights by Group'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ]
+    }
+  ]
+}

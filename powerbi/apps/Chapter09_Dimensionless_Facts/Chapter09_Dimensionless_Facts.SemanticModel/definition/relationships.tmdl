@@ -1,0 +1,3 @@
+relationship 0ed195e1-fbe1-5d16-9dec-95563d3d5e9b
+	fromColumn: Flights.'%Aircraft Type ID'
+	toColumn: Aircrafts.'%Aircraft Type ID'

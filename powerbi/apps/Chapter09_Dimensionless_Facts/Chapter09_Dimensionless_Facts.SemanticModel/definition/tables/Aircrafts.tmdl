@@ -1,0 +1,65 @@
+table Aircrafts
+	lineageTag: 58b2e0e4-d593-5a5d-b623-03de2bae1f02
+
+	column '%Aircraft Type ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: afbaa4db-a632-5659-9ca5-61da249a97f1
+		summarizeBy: none
+		sourceColumn: %Aircraft Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Group'
+		dataType: string
+		lineageTag: 8a448e83-8919-5697-b104-3932e86bc68e
+		summarizeBy: none
+		sourceColumn: Aircraft Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column Manufacturer
+		dataType: string
+		lineageTag: 9fa71f19-21dc-5422-b3c2-3da004697bc8
+		summarizeBy: none
+		sourceColumn: Manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Name'
+		dataType: string
+		lineageTag: 27fbaa82-e74b-597b-bc8e-508e1952b1d6
+		summarizeBy: none
+		sourceColumn: Aircraft Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Short Name'
+		dataType: string
+		lineageTag: 9471c335-c7bb-5ce6-9362-e6a4c56d8689
+		summarizeBy: none
+		sourceColumn: Aircraft Short Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Aircrafts = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Chapter09/Aircrafts.parquet"),
+				    Selected = Table.SelectColumns(Source, {"AC_TYPEID", "Aircraft Group", "Manufacturer", "Aircraft Name", "Aircraft Short Name"}),
+				    Renamed = Table.RenameColumns(Selected, {{"AC_TYPEID", "%Aircraft Type ID"}}),
+				    // Temp_Aircraft_Type_ID + CONCATENATE LOAD DISTINCT ... RESIDENT Flights WHERE NOT Exists(): one row per Flights key without an Aircrafts row
+				    FlightKeys = Table.Distinct(Table.SelectColumns(fnReadParquet("Chapter09/Flights.parquet"), {"%Aircraft Type ID"})),
+				    MissingKeys = Table.RemoveColumns(Table.NestedJoin(FlightKeys, {"%Aircraft Type ID"}, Renamed, {"%Aircraft Type ID"}, "Known", JoinKind.LeftAnti), {"Known"}),
+				    // QlikView keeps the key's text as read from Flights.csv (zero-padded to 3 digits, e.g. "007"); Parquet holds the number
+				    WithName = Table.AddColumn(MissingKeys, "Aircraft Name", each "Unknown: " & Text.PadStart(Text.From([#"%Aircraft Type ID"]), 3, "0"), type text),
+				    WithGroup = Table.AddColumn(WithName, "Aircraft Group", each "Unknown", type text),
+				    WithManufacturer = Table.AddColumn(WithGroup, "Manufacturer", each "UNKNOWN", type text),
+				    WithShortName = Table.AddColumn(WithManufacturer, "Aircraft Short Name", each "???", type text),
+				    Unknown = Table.SelectColumns(WithShortName, Table.ColumnNames(Renamed)),
+				    Combined = Table.Combine({Renamed, Unknown}),
+				    Typed = Table.TransformColumnTypes(Combined, {{"%Aircraft Type ID", Int64.Type}, {"Aircraft Group", type text}, {"Manufacturer", type text}, {"Aircraft Name", type text}, {"Aircraft Short Name", type text}})
+				in
+				    Typed

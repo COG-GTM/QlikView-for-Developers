@@ -6,10 +6,6 @@ and a Qlik field maps to the column whose ``sourceColumn`` (or name) is that fie
 Each expected result id gets one query:
   grand total -> EVALUATE ROW("value", [Measure])
   grain       -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2], "value", [Measure])
-  table check -> EVALUATE GROUPBY('T', 'T'[c1], 'T'[c2], "__rows", SUMX(CURRENTGROUP(), 1))
-                 (rows of the Qlik table per field combination; when the Power BI table holds more
-                 columns than the Qlik table, e.g. a GENERIC LOAD pivoted into one table, only rows
-                 where one of the Qlik table's non-key fields is not blank)
 """
 from __future__ import annotations
 
@@ -64,24 +60,6 @@ def column_for(model: dict, field: str) -> dict | None:
     return hits[0] if hits else None
 
 
-def table_query(model: dict, fields: list[str], keys: set[str]) -> tuple[str | None, str | None]:
-    cols = [column_for(model, f) for f in fields]
-    if None in cols:
-        return None, f"no column for {[f for f, c in zip(fields, cols) if c is None]}"
-    tables = {c["table"] for c in cols}
-    if len(tables) != 1:
-        return None, f"fields are spread over Power BI tables {sorted(tables)}"
-    table = tables.pop()
-    src = dax_table(table)
-    others = {c["name"] for c in model["columns"] if c["table"] == table and not c["name"].endswith("__num")}
-    if others - {c["name"] for c in cols}:
-        attrs = [c for f, c in zip(fields, cols) if f not in keys] or cols
-        cond = " || ".join(f"NOT ISBLANK({dax_col(table, c['name'])})" for c in attrs)
-        src = f"FILTER({src}, {cond})"
-    group = ", ".join(dax_col(table, c["name"]) for c in cols)
-    return f'EVALUATE GROUPBY({src}, {group}, "__rows", SUMX(CURRENTGROUP(), 1))', None
-
-
 def write_queries(app: str, pbip: Path) -> str:
     expected = load_expected(app)
     model = read_tmdl(pbip)
@@ -92,16 +70,7 @@ def write_queries(app: str, pbip: Path) -> str:
                 raise ValueError(f"ParityKey {k} is on two measures: {by_key[k]['name']!r} and {m['name']!r}")
             by_key[k] = m
     queries, unmapped = [], []
-    keys = set(expected.get("key_fields", []))
     for k in expected["kpis"]:
-        if k.get("kind") == "table" and k["status"] == "ok":
-            for r in k["results"]:
-                query, reason = table_query(model, r["grain"], keys)
-                if query:
-                    queries.append({"id": r["id"], "measure": None, "grain": r["grain"], "query": query})
-                else:
-                    unmapped.append({"id": r["id"], "reason": reason})
-            continue
         measure = by_key.get(k["parity_key"])
         if k["status"] != "ok":
             continue
