@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from build_airline_base import static_title
 
 import harness
-from build_airline_base import static_title
 from dax import read_tmdl
 from engine import SourceModel
 from scaffold_pbip import tag
