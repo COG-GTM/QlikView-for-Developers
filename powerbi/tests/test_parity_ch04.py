@@ -59,15 +59,27 @@ def test_report_has_both_sheets_and_charts():
     charts = {c["name"]: c["singleVisual"] for c in configs if c["name"] in ("CH01", "CH02")}
     assert charts["CH01"]["visualType"] == "clusteredColumnChart"
     assert charts["CH02"]["visualType"] == "tableEx"
-    def slicers(section, hidden):
+    def slicers(section):
         return [c for c in map(json.loads, (v["config"] for v in section["visualContainers"]))
-                if c["singleVisual"]["visualType"] == "slicer" and ("display" in c["layouts"][0]) == hidden]
+                if c["singleVisual"]["visualType"] == "slicer"]
     main, dash = report["sections"]
-    assert [c["name"] for c in slicers(main, False)][:1] == ["LB09"] and len(slicers(main, False)) == 13
-    assert len(slicers(dash, False)) == 7 and not slicers(main, True)
-    groups = {s["singleVisual"]["syncGroup"]["groupName"] for s in slicers(main, False)}
-    dash_groups = {s["singleVisual"]["syncGroup"]["groupName"] for s in slicers(dash, False) + slicers(dash, True)}
-    assert groups <= dash_groups, "every Main list box must filter the Dashboard charts"
+    assert [c["name"] for c in slicers(main)][:1] == ["LB09"] and len(slicers(main)) == 13
+    # 7 Dashboard list boxes plus a synced slicer for each of the 9 Main-only fields
+    assert len(slicers(dash)) == 16 and not any("display" in c["layouts"][0] for c in configs)
+    groups = {s["singleVisual"]["syncGroup"]["groupName"] for s in slicers(main)}
+    assert groups <= {s["singleVisual"]["syncGroup"]["groupName"] for s in slicers(dash)}, \
+        "every Main list box must filter the Dashboard charts"
+    for section in report["sections"]:
+        boxes = [(v["x"], v["y"], v["x"] + v["width"], v["y"] + v["height"]) for v in section["visualContainers"]]
+        assert all(a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1]
+                   for i, a in enumerate(boxes) for b in boxes[i + 1:]), f"{section['displayName']}: visuals overlap"
+        assert all(0 <= x0 and 0 <= y0 and x1 <= 1280 and y1 <= 720 for x0, y0, x1, y1 in boxes)
+        assert len({v["z"] for v in section["visualContainers"]}) == len(boxes)
+    table = charts["CH02"]["projections"]["Values"]
+    assert [p["queryRef"] for p in table] == ["Main Data.From - To City", "Main Data.# of Flights",
+                                              "Main Data.# of Enplanned Passengers", "Main Data.Transported Freight",
+                                              "Main Data.Transported Mail"]
+    assert not any("active" in p for p in table)
     top = next(json.loads(v["filters"]) for v in report["sections"][1]["visualContainers"]
                if json.loads(v["config"])["name"] == "CH02")
     assert top[0]["type"] == "TopN" and top[0]["filter"]["From"][0]["Expression"]["Subquery"]["Query"]["Top"] == 10

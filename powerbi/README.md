@@ -54,6 +54,9 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   from the Chapter 15 builder): its 12 source-model tables match the inventory, the rebuilt Aircraft Types equals
   the QVD the script stores, all 42 KPI expressions and 18 list boxes evaluate, and 103 DAX queries plus 11 relationship
   checks are generated; the report has one page per QlikView sheet, list boxes rebuilt as slicers.
+* Chapter 14 (Airline Operations, `apps/Chapter14_Airline_Operations`, built from the Chapter 15
+  base without Section Access): its 13 unreduced source-model tables match the inventory, all 92
+  KPI expressions evaluate, and 182 DAX queries (no role) are generated.
 * Chapter 11 (Airline Operations, `apps/Chapter11_Airline_Operations`, built by
   `tools/build_airline_ch11.py` from the Chapter 15 base): its 13 source-model tables match the
   inventory, all 66 KPI expressions evaluate, and 133 DAX queries are generated (no Section Access).
@@ -62,7 +65,8 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   evaluate, and 85 DAX queries are generated.
 * Chapter 04 (`apps/Chapter04_Airline_Operations`): scaffolded plain-load model (12 tables,
   11 relationships, 4 measures) with Main and Dashboard report pages (all 20 list boxes
-  as slicers, from captions in the .qvw; the search object SO01 has no equivalent); all 8 KPI expressions
+  as slicers, from captions in the .qvw, plus a synced Dashboard dropdown for each Main-only field so
+  Main selections filter the charts; the search object SO01 has no equivalent); all 8 KPI expressions
   match pyqvd + pandas on the original QVD, and 20 DAX queries plus 11 relationship checks
   are generated. Origin/Destination Airports differ from the inventory only by the
   documented superset exceptions.
