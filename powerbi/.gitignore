@@ -8,8 +8,11 @@ parity/expected/*.json.gz
 !parity/expected/Chapter09__Solution_Dimensionless Facts.json.gz
 !parity/expected/Chapter10__Crosstable example.json.gz
 !parity/expected/Chapter10__Generic Load.json.gz
+!parity/expected/Chapter11__Solution_Chapter 11_Airline Operations.json.gz
 !parity/expected/Chapter08__Solution_Chapter 8_Airline Operations.json.gz
 !parity/expected/Chapter15__Solution_Chapter 15_Airline Operations.json.gz
+!parity/expected/Chapter06__Solution_Chapter 6_Airline Operations.json.gz
+!parity/expected/Chapter13__Solution_Chapter 13_Airline Operations.json.gz
 parity/reports/
 __pycache__/
 .pytest_cache/

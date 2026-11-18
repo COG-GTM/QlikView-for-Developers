@@ -1,0 +1,67 @@
+table 'Group B'
+	lineageTag: 87ff5187-d2c1-5c46-9dba-05efdd089fc6
+
+	column 'Group B Period'
+		dataType: int64
+		formatString: 0
+		lineageTag: 03163ced-811d-51e1-8553-7a1e9b204152
+		summarizeBy: none
+		sourceColumn: Group B Period
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group B Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bedd79c-d841-592f-9b9b-ddaa257e36b4
+		summarizeBy: none
+		sourceColumn: Group B Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group B Month'
+		dataType: string
+		sortByColumn: 'Group B Month__num'
+		lineageTag: 42effc72-68f1-5441-a57a-915e31658b15
+		summarizeBy: none
+		sourceColumn: Group B Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group B Month__num'
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: bb07dbe9-2815-5719-8cb3-d3f775c76dde
+		summarizeBy: none
+		sourceColumn: Group B Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group B Year - Month'
+		dataType: string
+		sortByColumn: 'Group B Year - Month__num'
+		lineageTag: 18630d92-bfab-598a-83c8-c8df591a02c3
+		summarizeBy: none
+		sourceColumn: Group B Year - Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group B Year - Month__num'
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: fdf6500a-2514-5e3c-bf7b-9ddc9790c5b2
+		summarizeBy: none
+		sourceColumn: Group B Year - Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Group B' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(#"Master Calendar", {"Period", "Year", "Month", "Month__num", "Year - Month", "Year - Month__num"}),
+				    Renamed = Table.RenameColumns(Source, {{"Period", "Group B Period"}, {"Year", "Group B Year"}, {"Month", "Group B Month"}, {"Month__num", "Group B Month__num"}, {"Year - Month", "Group B Year - Month"}, {"Year - Month__num", "Group B Year - Month__num"}})
+				in
+				    Renamed

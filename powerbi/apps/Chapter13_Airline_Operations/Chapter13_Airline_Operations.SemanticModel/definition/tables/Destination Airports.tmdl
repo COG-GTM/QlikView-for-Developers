@@ -1,0 +1,31 @@
+table 'Destination Airports'
+	lineageTag: 8ac13270-0e6b-5722-a197-689dbde77cb9
+
+	column '%Destination Airport ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 294cef9a-2d92-52ca-9540-c13a46865657
+		summarizeBy: none
+		sourceColumn: %Destination Airport ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Airport'
+		dataType: string
+		lineageTag: 9e41114f-799a-5d24-9dd4-5e5d5c13692b
+		summarizeBy: none
+		sourceColumn: Destination Airport
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Destination Airports' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Destination Airports.parquet"), {"%Destination Airport ID", "Destination Airport"}),
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Destination Airport ID"))),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Destination Airport ID"])),
+				    Typed = Table.TransformColumnTypes(Kept, {{"%Destination Airport ID", Int64.Type}, {"Destination Airport", type text}})
+				in
+				    Typed
