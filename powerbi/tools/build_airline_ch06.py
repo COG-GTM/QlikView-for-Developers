@@ -6,7 +6,8 @@ CSVs), so none of the Chapter 15 base model's transformations apply (no master c
 script itself; this script adds the report pages that reproduce the Main and Dashboard sheets. Each list box
 becomes a slicer on the field its caption names, and the multi box becomes one dropdown slicer per field. The
 object ids, captions and multi box fields were read from the .qvw document block, because the manifest only
-records object ids.
+records object ids. Slicers on the same field share a sync group, and Main-only fields get a hidden synced slicer on
+Dashboard, so selections carry across pages as Qlik's shared selection state does.
 
     python powerbi/tools/build_airline_ch06.py [--data-root C:\\path\\to\\powerbi\\data\\parquet\\]
 """
@@ -64,18 +65,33 @@ def visual(oid: str, title: str, vtype: str, pos: tuple, cats: list[str], measur
             "Expression": {"SourceRef": {"Source": "m"}}, "Property": sort}}}]
     title_obj = [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}},
                                  "text": {"expr": {"Literal": {"Value": f"'{title}'"}}}}}]
+    filters = [topn_filter(oid, cats[0], sort, 10)] if sort else []
     config = {"name": tag(SLUG, "visual", oid), "layouts": [{"id": 0, "position": {
         "x": x, "y": y, "z": z, "width": w, "height": h}}],
         "singleVisual": {"visualType": vtype, "projections": projections, "prototypeQuery": query,
                          "drillFilterOtherVisuals": True, "vcObjects": {"title": title_obj}}}
-    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
+    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config), "filters": json.dumps(filters)}
+
+
+def topn_filter(oid: str, field: str, measure: str, n: int) -> dict:
+    col = lambda src: {"Column": {"Expression": {"SourceRef": src}, "Property": field}}  # noqa: E731
+    sub = {"Version": 2, "From": [{"Name": "m", "Entity": MD, "Type": 0}],
+           "Select": [{**col({"Source": "m"}), "Name": "field"}],
+           "OrderBy": [{"Direction": 2, "Expression": {"Measure": {
+               "Expression": {"SourceRef": {"Source": "m"}}, "Property": measure}}}], "Top": n}
+    return {"name": tag(SLUG, "filter", oid), "expression": col({"Entity": MD}), "type": "TopN", "howCreated": 1,
+            "filter": {"Version": 2, "From": [{"Name": "subquery", "Expression": {"Subquery": {"Query": sub}}, "Type": 2},
+                                              {"Name": "m", "Entity": MD, "Type": 0}],
+                       "Where": [{"Condition": {"In": {"Expressions": [col({"Source": "m"})],
+                                                       "Table": {"SourceRef": {"Source": "subquery"}}}}}]}}
 
 
 def lit(v: str) -> dict:
     return {"expr": {"Literal": {"Value": v}}}
 
 
-def slicer(oid: str, title: str, table: str, field: str, pos: tuple, z: int, dropdown: bool) -> dict:
+def slicer(oid: str, title: str, table: str, field: str, pos: tuple, z: int, dropdown: bool,
+           hidden: bool = False) -> dict:
     x, y, w, h = pos
     ref = f"{table}.{field}"
     config = {"name": tag(SLUG, "visual", oid, field), "layouts": [{"id": 0, "position": {
@@ -85,9 +101,12 @@ def slicer(oid: str, title: str, table: str, field: str, pos: tuple, z: int, dro
                                             "Select": [{"Column": {"Expression": {"SourceRef": {"Source": "t"}},
                                                                    "Property": field}, "Name": ref}]},
                          "drillFilterOtherVisuals": True,
+                         "syncGroup": {"groupName": field, "fieldChanges": True, "filterChanges": True},
                          "objects": {"data": [{"properties": {"mode": lit("'Dropdown'" if dropdown else "'Basic'")}}]},
                          "vcObjects": {"title": [{"properties": {"show": lit("true"),
                                                                  "text": lit("'" + title.replace("'", "''") + "'")}}]}}}
+    if hidden:
+        config["singleVisual"]["display"] = {"mode": "hidden"}
     return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
 
 
@@ -116,6 +135,10 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
     top = [(oid, f, f) for oid, f in LIST_BOXES["Dashboard"]] + [(mb_id, f"{mb_caption}: {f}", f) for f in mb_fields]
     dash = [slicer(oid, title, tables[f], f, (10 + 157 * (i % 8), 10 + 62 * (i // 8), 152, 56), i, True)
             for i, (oid, title, f) in enumerate(top)]
+    on_dash = {f for _, _, f in top}
+    hidden = [(oid, f) for oid, f in LIST_BOXES["Main"] if f not in on_dash]
+    dash += [slicer(oid, f, tables[f], f, (10 + 157 * ((len(top) + i) % 8), 10 + 62 * ((len(top) + i) // 8), 152, 56),
+                    len(dash) + i, True, hidden=True) for i, (oid, f) in enumerate(hidden)]
     dash += [visual(*v, z=len(dash) + i) for i, v in enumerate(VISUALS)]
     report = root / f"{SLUG}.Report" / "report.json"
     report.write_text(json.dumps({

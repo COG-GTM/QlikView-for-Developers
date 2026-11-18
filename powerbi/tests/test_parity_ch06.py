@@ -73,7 +73,18 @@ def test_every_kpi_has_a_dax_query_and_report_uses_model_measures():
     assert (main["displayName"], dash["displayName"]) == ("Main", "Dashboard")
     configs = [json.loads(vc["config"])["singleVisual"] for p in (main, dash) for vc in p["visualContainers"]]
     types = [c["visualType"] for c in configs]
-    assert types.count("slicer") == 22 + 6 and types.count("clusteredColumnChart") == types.count("tableEx") == 1
+    assert types.count("slicer") == 22 + 6 + 2 and types.count("clusteredColumnChart") == types.count("tableEx") == 1
+    slicers = [c for c in configs if c["visualType"] == "slicer"]
+    hidden = {c["syncGroup"]["groupName"] for c in slicers if c.get("display", {}).get("mode") == "hidden"}
+    assert hidden == {"Origin State", "Destination State"}
+    dash_groups = {json.loads(vc["config"])["singleVisual"].get("syncGroup", {}).get("groupName")
+                   for vc in dash["visualContainers"]}
+    assert {c["syncGroup"]["groupName"] for c in slicers} <= dash_groups
+    (ch02,) = [vc for vc in dash["visualContainers"] if json.loads(vc["config"])["singleVisual"]["visualType"] == "tableEx"]
+    (topn,) = json.loads(ch02["filters"])
+    sub = topn["filter"]["From"][0]["Expression"]["Subquery"]["Query"]
+    assert (topn["type"], sub["Top"], sub["OrderBy"][0]["Expression"]["Measure"]["Property"]) == \
+        ("TopN", 10, "# of Flights")
     for c in configs:
         (entity,) = [f["Entity"] for f in c["prototypeQuery"]["From"]]
         model = (tables / f"{entity}.tmdl").read_text() if entity != "Main Data" else tmdl
