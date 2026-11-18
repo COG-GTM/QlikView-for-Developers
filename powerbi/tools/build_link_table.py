@@ -87,8 +87,8 @@ GAPS = [
     "Operating Region, Carrier Group, Carrier Name (Dashboard, Analysis, Reports); 11 origin / destination / carrier / "
     "distance fields (Associations); Aircraft Name, Year (Data Consistency). Associations' 'Aircraft Type' (LB10) and "
     "'Aircraft Group' (LB11) name no field of this model and are not migrated.",
-    "Multi boxes (MB01 'Flight Information', MB02 'Aircraft'; fields not recoverable), text objects, search "
-    "object, buttons, bookmark object, current selections box, "
+    "Multi boxes MB01 'Flight Information' and MB02 'Aircraft' -> one slicer per field they contain, on the Dashboard, "
+    "Analysis and Reports pages. Text objects, search object, buttons, bookmark object, current selections box, "
     "container, statistics box and table box have no Power BI equivalent and are not migrated; gauges become cards "
     "and the radar, mekko, grid, funnel and block charts are not rebuilt (their measures are in the model).",
 ]
@@ -266,6 +266,12 @@ ASSOCIATIONS = [C(MD, "Destination Country"), C(MD, "Destination State"), C(MD, 
                 C(MD, "Origin Country"), C(MD, "Origin State"), C(MD, "Origin City"), C(LT, "Carrier Name"),
                 C("Distance Groups", "Distance Interval"), C("Flight Types", "Flight Type"),
                 C("Carrier Operating Region", "Carrier's Operating Region"), C("Carrier Groups", "Carrier Group")]
+# Multi boxes -> one slicer per field (field list after the caption / id in the document block), below the charts:
+MULTI_BOXES = [C(MD, "Destination City"), C(MD, "Destination Country"), C("Distance Groups", "Distance Interval"),
+               C(MD, "From - To City"), C(MD, "Origin City"), C(MD, "Origin Country"),  # MB01 'Flight Information'
+               C("Aircraft Types", "Aircraft Name"), C("Aircraft Types", "Aircraft Engine Type"),  # MB02 'Aircraft'
+               C("Aircraft Types", "Aircraft Number Of Engines"), C("Aircraft Types", "Aircraft Manufacturer"),
+               C("Aircraft Types", "Aircraft Manufacturer Country"), C("Aircraft Types", "Aircraft Age Classification")]
 # Data Consistency sheet LB34 / LB35:
 CONSISTENCY = [C("Aircraft Types", "Aircraft Name"), C(LT, "Year")]
 PAGES = [
@@ -323,9 +329,13 @@ def report() -> dict:
         else:
             fields = CONSISTENCY if page == "Data Consistency" else SLICERS
             vcs = [visual(page, i, "slicer", (20, 20 + i * 98, 200, 92), {"Values": [f]}) for i, f in enumerate(fields)]
+            if page != "Data Consistency":
+                vcs += [visual(page, len(vcs) + i, "slicer", (240 + (i % 6) * 172, 730 + (i // 6) * 170, 165, 160),
+                               {"Values": [f]}) for i, f in enumerate(MULTI_BOXES)]
         vcs += [visual(page, len(vcs) + i, vt, pos, roles, title) for i, (vt, pos, roles, title) in enumerate(visuals)]
+        height = 1080 if page not in ("Associations", "Data Consistency") else 720
         sections.append({"name": f"ReportSection{n}", "displayName": page, "displayOption": 1, "ordinal": n,
-                         "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": vcs})
+                         "width": 1280, "height": height, "config": "{}", "filters": "[]", "visualContainers": vcs})
     return {"config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
             "layoutOptimization": 0, "resourcePackages": [], "sections": sections}
 

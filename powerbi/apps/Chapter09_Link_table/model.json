@@ -146,6 +146,6 @@
   "Field and table comments from Comments.xls (COMMENT ... USING) are not migrated; config.qvs / tracerowcount.qvs are not in the repo and only set paths / log row counts.",
   "Calculated dimension: the Flight Type deal status -> calculated column on Flight Types.",
   "List boxes -> slicers on the field named by the list box's caption: Year, Quarter, Month, Flight Type, Carrier's Operating Region, Carrier Group, Carrier Name (Dashboard, Analysis, Reports); 11 origin / destination / carrier / distance fields (Associations); Aircraft Name, Year (Data Consistency). Associations' 'Aircraft Type' (LB10) and 'Aircraft Group' (LB11) name no field of this model and are not migrated.",
-  "Multi boxes (MB01 'Flight Information', MB02 'Aircraft'; fields not recoverable), text objects, search object, buttons, bookmark object, current selections box, container, statistics box and table box have no Power BI equivalent and are not migrated; gauges become cards and the radar, mekko, grid, funnel and block charts are not rebuilt (their measures are in the model)."
+  "Multi boxes MB01 'Flight Information' and MB02 'Aircraft' -> one slicer per field they contain, on the Dashboard, Analysis and Reports pages. Text objects, search object, buttons, bookmark object, current selections box, container, statistics box and table box have no Power BI equivalent and are not migrated; gauges become cards and the radar, mekko, grid, funnel and block charts are not rebuilt (their measures are in the model)."
  ]
 }
