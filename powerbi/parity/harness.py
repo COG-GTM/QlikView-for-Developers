@@ -132,7 +132,7 @@ def table_snapshot(model: SourceModel, table: str, fields: list[str]) -> dict:
 
 
 def cmd_source(app: str) -> dict:
-    manifest = json.loads((INVENTORY / "manifests" / f"{app}.json").read_text())
+    manifest = json.loads((INVENTORY / "manifests" / f"{app}.json").read_text(encoding="utf-8"))
     started = time.time()
     result = {"app": app, "baseline": "no selections", "kpis": []}
     try:

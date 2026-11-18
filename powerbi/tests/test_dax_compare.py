@@ -118,3 +118,18 @@ def test_compare_reports_relationship_integrity(expected):
 def test_compare_flags_missing_relationship_results(expected):
     report = compare.compare(expected, _as_dax_results(expected), relationship_ids=["REL:a -> b"])
     assert report["relationship_summary"] == {"missing": 1}
+
+
+def test_compare_reports_queries_run_dax_recorded_as_failed():
+    """run_dax.ps1 keeps going past a failing query (e.g. OLS under -Role) and records {"id", "error"}."""
+    expected = {"app": "X", "kpis": [{"kpi": "K#1", "label": "L", "status": "ok", "results": [
+        {"id": "K#1@Carrier Name", "grain": ["Carrier Name"], "rows": [["A", 1.0]]},
+        {"id": "K#1@total", "grain": [], "rows": [[1.0]]}]}]}
+    err = "Column 'Carrier Name' in table 'Main Data' cannot be found or may not be used in this expression."
+    results = {"app": "X", "results": [{"id": "K#1@Carrier Name", "error": err},
+                                       {"id": "K#1@total", "columns": ["v"], "rows": [[1.0]]},
+                                       {"id": "REL:a", "error": err}]}
+    report = compare.compare(expected, results, relationship_ids=["REL:a"])
+    assert report["summary"] == {"error": 1, "pass": 1}
+    assert report["results"][0]["error"] == err
+    assert report["relationship_summary"] == {"error": 1}

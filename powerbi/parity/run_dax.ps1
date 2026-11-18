@@ -67,25 +67,37 @@ if ($Role) { $connStr += ";Roles=$Role" }
 $conn = New-Object Microsoft.AnalysisServices.AdomdClient.AdomdConnection($connStr)
 $conn.Open()
 $results = New-Object System.Collections.Generic.List[object]
+$failed = 0
 try {
     foreach ($q in @(@($spec.queries) + @($spec.relationships) | Where-Object { $_ })) {
-        $cmd = $conn.CreateCommand()
-        $cmd.CommandText = $q.query
-        $reader = $cmd.ExecuteReader()
-        $columns = @(for ($i = 0; $i -lt $reader.FieldCount; $i++) { $reader.GetName($i) })
-        $rows = New-Object System.Collections.Generic.List[object]
-        while ($reader.Read()) {
-            $row = @(for ($i = 0; $i -lt $reader.FieldCount; $i++) {
-                $v = $reader.GetValue($i)
-                if ($v -is [System.DBNull]) { $null }
-                elseif ($v -is [datetime]) { $v.ToString('yyyy-MM-ddTHH:mm:ss') }
-                else { $v }
-            })
-            $rows.Add($row)
+        # One failing query (e.g. a column hidden by object-level security for -Role) must not stop the run:
+        # record its error and go on; the script exits non-zero at the end if any query failed.
+        $reader = $null
+        try {
+            $cmd = $conn.CreateCommand()
+            $cmd.CommandText = $q.query
+            $reader = $cmd.ExecuteReader()
+            $columns = @(for ($i = 0; $i -lt $reader.FieldCount; $i++) { $reader.GetName($i) })
+            $rows = New-Object System.Collections.Generic.List[object]
+            while ($reader.Read()) {
+                $row = @(for ($i = 0; $i -lt $reader.FieldCount; $i++) {
+                    $v = $reader.GetValue($i)
+                    if ($v -is [System.DBNull]) { $null }
+                    elseif ($v -is [datetime]) { $v.ToString('yyyy-MM-ddTHH:mm:ss') }
+                    else { $v }
+                })
+                $rows.Add($row)
+            }
+            $results.Add([ordered]@{ id = $q.id; columns = $columns; rows = $rows })
+            Write-Host ("{0}: {1} rows" -f $q.id, $rows.Count)
         }
-        $reader.Close()
-        $results.Add([ordered]@{ id = $q.id; columns = $columns; rows = $rows })
-        Write-Host ("{0}: {1} rows" -f $q.id, $rows.Count)
+        catch {
+            $failed++
+            $msg = $_.Exception.Message
+            $results.Add([ordered]@{ id = $q.id; error = $msg })
+            Write-Warning ("{0}: {1}" -f $q.id, $msg)
+        }
+        finally { if ($reader) { $reader.Close() } }
     }
 }
 finally { $conn.Close() }
@@ -95,7 +107,12 @@ $doc = [ordered]@{
     produced_by = "run_dax.ps1 via ADOMD.NET on $env:COMPUTERNAME against $Server" + $(if ($Role) { " as role $Role" } else { "" })
     role        = $(if ($Role) { $Role } else { $null })
     executed_at = (Get-Date).ToUniversalTime().ToString('o')
+    failed      = $failed
     results     = $results
 }
 $doc | ConvertTo-Json -Depth 8 -Compress | Set-Content -Path $Out -Encoding UTF8
 Write-Host "wrote $Out"
+if ($failed) {
+    Write-Error ("{0} of {1} queries failed; see the 'error' entries in $Out" -f $failed, $results.Count) -ErrorAction Continue
+    exit 1
+}

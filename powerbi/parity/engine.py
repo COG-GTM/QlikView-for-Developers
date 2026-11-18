@@ -49,11 +49,11 @@ def ql(value: str) -> str:
 class SourceModel:
     def __init__(self, app: str):
         self.app = app
-        self.manifest = json.loads((INVENTORY / "manifests" / f"{app}.json").read_text())
+        self.manifest = json.loads((INVENTORY / "manifests" / f"{app}.json").read_text(encoding="utf-8"))
         self.con = duckdb.connect()
         self.table_check: list[dict] = []
         overlay = MODELS / f"{app}.overlay.json"
-        self.overlay = json.loads(overlay.read_text()) if overlay.exists() else {}
+        self.overlay = json.loads(overlay.read_text(encoding="utf-8")) if overlay.exists() else {}
         self._build()
         self.columns = {t: [r[0] for r in self.con.execute(f"DESCRIBE {qi(t)}").fetchall()] for t in self.tables}
         self.rows = {t: self.con.execute(f"SELECT count(*) FROM {qi(t)}").fetchone()[0] for t in self.tables}
@@ -64,7 +64,7 @@ class SourceModel:
     def _build(self):
         override = MODELS / f"{self.app}.sql"
         if override.exists():
-            sql = (override.read_text().replace("{parquet}", (POWERBI / "data" / "parquet").as_posix())
+            sql = (override.read_text(encoding="utf-8").replace("{parquet}", (POWERBI / "data" / "parquet").as_posix())
                    .replace("{repo}", REPO.as_posix()))
             self.con.execute(sql)
             self.model_source = override.relative_to(REPO).as_posix()
@@ -73,7 +73,7 @@ class SourceModel:
                 "AND table_type IN ('VIEW', 'BASE TABLE')"
             ).fetchall()]
             return
-        catalog = json.loads(CATALOG.read_text())
+        catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
         script = (INVENTORY / self.manifest["script"]["file"]).read_text(encoding="utf-8")
         plain = plain_tables(script)
         wanted = [t["name"] for t in self.manifest["data_model"]["tables"] if not t["name"].startswith("$$")]

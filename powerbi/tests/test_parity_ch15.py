@@ -151,3 +151,14 @@ def test_null_fact_keys_point_at_a_placeholder_member():
         (tables / "Main Data.tmdl").read_text()
     assert '#table({"%Airline ID", "Airline"}, {{-1, null}})' in (tables / "Airlines.tmdl").read_text()
     assert '#table({"%Carrier Group ID", "Carrier Group"}, {{-1, null}})' in (tables / "Carrier Groups.tmdl").read_text()
+
+
+def test_expected_labels_are_the_manifest_text(expected):
+    """Labels and objects keep their typographic characters (’, —): every read and write is explicit UTF-8."""
+    manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text(encoding="utf-8"))
+    labels = {(k["object"], k["label"]) for k in manifest["kpis"]}
+    got = {(k["object"], k["label"]) for k in expected["kpis"]}
+    assert got <= labels
+    text = json.dumps(expected["kpis"], ensure_ascii=False)
+    assert "\ufffd" not in text and "\u00e2\u0080" not in text
+    assert {"% vs the Carrier\u2019s whole", "% vs the Carrier\u2019s whole per year"} <= {k["label"] for k in expected["kpis"]}

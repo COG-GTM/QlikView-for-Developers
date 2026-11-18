@@ -284,7 +284,10 @@ GAPS = [
     "Employment Statistics rows of Main Data (they have no %Datasource ID). Users outside every role (dataset owners) see "
     "all rows, which QlikView never showed in this document.",
     "OMIT Carrier Name (NOCARRIER) -> object-level security: Carrier Name has columnPermission none for that role; measures "
-    "and calculated columns that reference it fail for that role instead of returning null as in QlikView.",
+    "and calculated columns that reference it fail for that role instead of returning null as in QlikView, so a visual "
+    "that groups by Carrier Name or uses such a measure (# of Carriers, % vs the Carrier's whole, Carrier, Avg Load "
+    "Factor per Route (by level)) shows a Power BI error, not a blank. A NOCARRIER parity run has 43 failing queries by "
+    "design; the other 151 equal ADMIN's.",
     "Master Calendar: QlikView keeps one row per day (1,065) because the script's LOAD DISTINCTs sit under a non-distinct "
     "preceding Load *; Power BI keeps one row per month (36) so Period can be the one side of the relationship. Measures "
     "over Main Data are unaffected; counts over calendar rows would differ.",

@@ -101,3 +101,8 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   result set is.
 * Qlik's associative model is approximated by left joins from the largest table; measures
   over dimension-only fields with unassociated rows may need an app-specific model view.
+* Section Access `OMIT` becomes object-level security, which errors instead of blanking:
+  under a role whose OLS hides a column (Ch15 `NOCARRIER`: `Carrier Name`), every query or
+  visual that groups by it or uses a measure referencing it fails with "Column ... cannot
+  be found", where QlikView shows nulls. `run_dax.ps1 -Role` records those as per-query
+  `error` entries, finishes the run and exits non-zero; `compare` reports them as `error`.

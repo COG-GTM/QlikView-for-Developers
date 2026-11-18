@@ -74,7 +74,16 @@ def compare_result(expected: dict, actual: dict | None, rel: float, abs_: float,
             "mismatches": len(diffs), "examples": diffs[:5]}
 
 
+def errored(expected_id: str, actual: dict | None) -> dict | None:
+    """A query run_dax.ps1 recorded as failed (e.g. a column hidden by object-level security for the role)."""
+    if actual and "error" in actual:
+        return {"id": expected_id, "status": "error", "error": actual["error"]}
+    return None
+
+
 def check_relationship(result: dict) -> dict:
+    if "error" in result:
+        return {"id": result["id"], "status": "error", "unmatched_keys": 0, "unmatched_rows": 0, "duplicate_keys": 0}
     row = dict(zip([c.strip("[]") for c in result["columns"]], result["rows"][0])) if result.get("rows") else {}
     counts = {k: int(row.get(k) or 0) for k in ("unmatched_keys", "unmatched_rows", "duplicate_keys")}
     status = "fail" if not row or counts["duplicate_keys"] else "warn" if counts["unmatched_keys"] else "pass"
@@ -126,14 +135,16 @@ def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6, relation
                         "reason": k.get("reason")})
             continue
         for r in k["results"]:
-            out.append({"kpi": k["kpi"], "label": k["label"],
-                        **compare_result(r, actual.get(r["id"]), rel, abs_, known)})
+            out.append({"kpi": k["kpi"], "label": k["label"], **(errored(r["id"], actual.get(r["id"]))
+                        or compare_result(r, actual.get(r["id"]), rel, abs_, known))})
     for t in expected_doc.get("tables", []):
-        out.append({"kpi": "table", "label": t["table"], **compare_table(t, actual.get(t["id"]))})
+        out.append({"kpi": "table", "label": t["table"],
+                    **(errored(t["id"], actual.get(t["id"])) or compare_table(t, actual.get(t["id"])))})
     for o in expected_doc.get("objects", []):
         for r in o["results"]:
-            check = compare_result(r, actual.get(r["id"]), rel, abs_) if o["type"] == "row count" \
-                else compare_rowset(r, actual.get(r["id"]), known)
+            check = errored(r["id"], actual.get(r["id"])) or (
+                compare_result(r, actual.get(r["id"]), rel, abs_) if o["type"] == "row count"
+                else compare_rowset(r, actual.get(r["id"]), known))
             out.append({"kpi": o["object"], "label": o["type"], **check})
     summary = {}
     for r in out:
@@ -158,12 +169,13 @@ def compare_files(app: str, results: Path, rel: float, abs_: float) -> int:
     exceptions = json.loads(exc.read_text(encoding="utf-8")) if exc.exists() else []
     report = compare(expected, json.loads(results.read_text(encoding="utf-8-sig")), rel, abs_, rel_ids, exceptions)
     REPORTS.mkdir(exist_ok=True)
-    (REPORTS / f"{app}.json").write_text(json.dumps(report, indent=1, ensure_ascii=False) + "\n")
+    (REPORTS / f"{app}.json").write_text(json.dumps(report, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     lines = [f"# Parity: {app}", "", f"DAX results: {report['produced_by']}", "",
              "Summary: " + ", ".join(f"{k}: {v}" for k, v in sorted(report["summary"].items())), "",
              "| Result | KPI | Status | Rows | Mismatches |", "|---|---|---|---:|---:|"]
     for r in report["results"]:
-        lines.append(f"| {r['id']} | {r['label']} | {r['status']} | {r.get('rows', '')} | {r.get('mismatches', '')} |")
+        lines.append(f"| {r['id']} | {r['label']} | {r['status']} | {r.get('rows', '')} "
+                     f"| {r.get('mismatches', r.get('error', ''))} |")
     if report["relationships"]:
         lines += ["", "Relationships: " + ", ".join(f"{k}: {v}" for k, v in sorted(report["relationship_summary"].items())),
                   "", "| Relationship | Status | Unmatched keys | Unmatched rows | Duplicate keys |",
@@ -172,7 +184,7 @@ def compare_files(app: str, results: Path, rel: float, abs_: float) -> int:
             lines.append(f"| {r['id'][4:]} | {r['status']} | {r['unmatched_keys']} | {r['unmatched_rows']} "
                          f"| {r['duplicate_keys']} |")
     md = REPORTS / f"{app}.md"
-    md.write_text("\n".join(lines) + "\n")
+    md.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"{report['summary']} relationships {report['relationship_summary']} -> {show(md)}")
     ok = set(report["summary"]) <= {"pass", "known_difference", "unsupported", "model_unavailable"}
     return 0 if ok and set(report["relationship_summary"]) <= {"pass", "warn"} else 1

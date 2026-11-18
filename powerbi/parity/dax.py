@@ -166,10 +166,10 @@ def write_queries(app: str, pbip: Path) -> str:
     DAX.mkdir(exist_ok=True)
     out = DAX / f"{app}.queries.json"
     overlay = MODELS / f"{app}.overlay.json"
-    role = json.loads(overlay.read_text()).get("parity_role") if overlay.exists() else None
+    role = json.loads(overlay.read_text(encoding="utf-8")).get("parity_role") if overlay.exists() else None
     relationships = [relationship_query(r) for r in read_relationships(pbip)]
     out.write_text(json.dumps({"app": app, "pbip": show(pbip), **({"role": role} if role else {}), "queries": queries,
                                "relationships": relationships,
-                               "unmapped": unmapped}, indent=1, ensure_ascii=False) + "\n")
+                               "unmapped": unmapped}, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     return (f"{len(queries)} DAX queries, {len(relationships)} relationship checks, "
             f"{len(unmapped)} unmapped -> {show(out)}")
