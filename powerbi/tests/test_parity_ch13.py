@@ -166,3 +166,14 @@ def test_list_boxes_become_slicers_and_every_chart_has_a_visual():
     placed = {cid for page in manifest["sheets"] for cid in charts
               if tag(PBIP.name, "visual", page["id"], cid) in names}
     assert placed == charts
+
+
+def test_text_measures_are_not_plotted_and_slicers_sync_across_pages():
+    for page in json.loads(REPORT.read_text())["sections"]:
+        for container in page["visualContainers"]:
+            visual = json.loads(container["config"])["singleVisual"]
+            for role in ("Y", "X", "Size", "Values"):
+                if visual["visualType"] not in ("tableEx", "pivotTable", "card"):
+                    assert {"queryRef": "Main Data.Carrier"} not in visual["projections"].get(role, [])
+            if visual["visualType"] == "slicer":
+                assert visual["syncGroup"]["groupName"] == visual["projections"]["Values"][0]["queryRef"]

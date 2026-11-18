@@ -556,7 +556,10 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> t
                     raise SystemExit(f"{oid}: no model field for dimension {d!r}")
                 dims.append(fields[d])
             names = list(dict.fromkeys(measures[k["parity_key"]]["name"] for k in ks))
+            text = [mz["name"] for mz in measures.values() if mz["name"] in names and mz["fmt"] is None]
             visual, drole, mrole, most = VISUALS.get(types[oid], ("tableEx", "Values", "Values", None))
+            if mrole not in ("Values",):  # text-valued measures (e.g. 'Carrier') cannot be plotted: tooltips
+                names = [n for n in names if n not in text]
             if most and len(names) > most:
                 visual, drole, mrole = "clusteredColumnChart", "Category", "Y"
             if not dims and visual not in ("gauge",):
@@ -566,7 +569,9 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> t
                 roles.update({r: [("Main Data", n)] for r, n in zip(("X", "Y", "Size"), names)})
             else:
                 roles.setdefault(mrole, []).extend(("Main Data", n) for n in names)
-            visuals.append((oid, captions[oid], visual, roles, set(names)))
+            if text and mrole != "Values":
+                roles["Tooltips"] = [("Main Data", n) for n in text]
+            visuals.append((oid, captions[oid], visual, roles, set(names) | set(text)))
         daxes = " ".join(mz["dax"] for mz in measures.values() if any(mz["name"] in v[4] for v in visuals))
         for state in ("Group A", "Group B"):  # the state's list boxes sit in containers: its period slicer
             if f"'{state}'" in daxes:
@@ -610,6 +615,9 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple]) ->
                   "singleVisual": {"visualType": visual, "projections": projections, "prototypeQuery": {
                       "Version": 2, "From": [{"Name": a, "Entity": t, "Type": 0} for t, a in aliases.items()],
                       "Select": select}, "drillFilterOtherVisuals": True,
+                      # QlikView selections are global: slicers on the same field are synced across pages
+                      **({"syncGroup": {"groupName": select[0]["Name"], "fieldChanges": True, "filterChanges": True}}
+                         if visual == "slicer" else {}),
                       "vcObjects": {"title": [{"properties": {
                           "show": {"expr": {"Literal": {"Value": "true"}}},
                           "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]}}}
