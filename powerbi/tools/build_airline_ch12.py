@@ -218,7 +218,7 @@ def configure() -> None:
     base.NULL_KEY_FIELDS = []
     # CH43 divides by $(vTotalFTEs) = '= Sum([# Equivalent FTEs])', evaluated once over the selection
     fte = f"SUM({base.m('# Equivalent FTEs')})"
-    base.MEASURES.pop("f0af66ad7007")
+    base.MEASURES.pop("f0af66ad7007", None)
     base.MEASURES[base.parity_key("Sum([# Equivalent FTEs]) / Sum(TOTAL [# Equivalent FTEs])")] = (
         "FTE % to Total", f"DIVIDE({fte}, CALCULATE({fte}, ALLSELECTED()))", base.PCT)
     cal = base.c(base.CAL, "Period")
