@@ -1,0 +1,43 @@
+{
+ "app": "Chapter03__Solution_Chapter 3_Airline Operations",
+ "generated_by": "powerbi/tools/scaffold_pbip.py",
+ "measures": [
+  {
+   "name": "# of Flights",
+   "parity_key": "d2e7e8fd68bb",
+   "kpis": [
+    "CH01#1",
+    "CH02#1"
+   ],
+   "dax": "SUM('Main Data'[# Departures Performed])"
+  },
+  {
+   "name": "# of Enplanned Passengers",
+   "parity_key": "d73490b733fa",
+   "kpis": [
+    "CH01#2",
+    "CH02#2"
+   ],
+   "dax": "SUM('Main Data'[# Transported Passengers])"
+  },
+  {
+   "name": "Transported Freight",
+   "parity_key": "f43d5cdd79ce",
+   "kpis": [
+    "CH01#3",
+    "CH02#3"
+   ],
+   "dax": "SUM('Main Data'[# Transported Freight])"
+  },
+  {
+   "name": "Transported Mail",
+   "parity_key": "31d9ac1fbe90",
+   "kpis": [
+    "CH01#4",
+    "CH02#4"
+   ],
+   "dax": "SUM('Main Data'[# Transported Mail])"
+  }
+ ],
+ "needs_hand_written_dax": []
+}

@@ -1,0 +1,8 @@
+line-length = 130
+target-version = "py312"
+
+[lint]
+select = ["E", "F", "W", "I"]
+
+[lint.isort]
+known-first-party = ["qvd", "qlik_script", "convert_sources", "verify_conversion", "scaffold_pbip", "qlik_expr", "engine", "harness", "dax", "compare", "conftest"]

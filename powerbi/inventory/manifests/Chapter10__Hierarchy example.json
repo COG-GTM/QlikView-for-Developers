@@ -1,0 +1,211 @@
+{
+ "app": "Hierarchy example.qvw",
+ "path": "Chapter10/Hierarchy example.qvw",
+ "chapter": "Chapter10",
+ "qvw_bytes": 165376,
+ "last_reload": "2012-05-28 07:42:04",
+ "script": {
+  "file": "scripts/Chapter10__Hierarchy example.qvs",
+  "tabs": [
+   "Main"
+  ],
+  "hidden_script": false,
+  "features": {
+   "hierarchy": 1
+  },
+  "sources": [
+   {
+    "path": "Hierarchy example.xls",
+    "format": "biff, embedded labels, table is Sheet1$",
+    "kind": "Excel (biff)",
+    "resolved": "Chapter10/Hierarchy example.xls"
+   }
+  ],
+  "stores": [],
+  "includes": [],
+  "table_labels": [],
+  "script_variables": [
+   {
+    "kind": "SET",
+    "name": "ThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "DecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyDecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyFormat",
+    "value": "'$#,##0.00;-$#,##0.00'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimeFormat",
+    "value": "'hh:mm:ss'"
+   },
+   {
+    "kind": "SET",
+    "name": "DateFormat",
+    "value": "'DD/MM/YY'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimestampFormat",
+    "value": "'DD/MM/YY hh:mm:ss[.fff]'"
+   },
+   {
+    "kind": "SET",
+    "name": "MonthNames",
+    "value": "'ene;feb;mar;abr;may;jun;jul;ago;sep;oct;nov;dic'"
+   },
+   {
+    "kind": "SET",
+    "name": "DayNames",
+    "value": "'lun;mar;mié;jue;vie;sáb;dom'"
+   }
+  ],
+  "lines": 31
+ },
+ "data_model": {
+  "tables": [
+   {
+    "name": "Sheet1$-ExpandedNodes",
+    "fields": 11,
+    "key_fields": 0,
+    "rows": 10,
+    "role": "fact (likely)"
+   },
+   {
+    "name": "$$SysTable 1",
+    "fields": 3,
+    "key_fields": 2,
+    "rows": 11,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 2",
+    "fields": 3,
+    "key_fields": 1,
+    "rows": 1,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 3",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 11,
+    "role": "system/synthetic"
+   }
+  ],
+  "key_fields": [],
+  "fields_by_table": {
+   "Sheet1$-ExpandedNodes": [
+    "Parent_ID",
+    "Child_ID",
+    "Parent",
+    "Child",
+    "Child1",
+    "Child2",
+    "Child3",
+    "Child4",
+    "ParentName",
+    "Path",
+    "Depth"
+   ]
+  },
+  "groups": []
+ },
+ "variables": [],
+ "config_variables": {
+  "CD": "F:",
+  "QvPath": "C:\\Program Files\\QlikView",
+  "QvRoot": "C:",
+  "QvWorkPath": "C:\\Users\\Mike\\Dropbox\\QlikView Book MG\\Chapter 7\\Workfiles",
+  "QvWorkRoot": "C:",
+  "WinPath": "C:\\Windows",
+  "WinRoot": "C:",
+  "ErrorMode": "",
+  "StripComments": "",
+  "OpenUrlTimeout": "",
+  "ScriptErrorCount": "0",
+  "ScriptErrorList": "",
+  "ScriptError": "",
+  "ThousandSep": ",",
+  "DecimalSep": ".",
+  "MoneyThousandSep": ",",
+  "MoneyDecimalSep": ".",
+  "MoneyFormat": "$#,##0.00;-$#,##0.00",
+  "TimeFormat": "hh:mm:ss",
+  "DateFormat": "DD/MM/YY",
+  "TimestampFormat": "DD/MM/YY hh:mm:ss[.fff]",
+  "MonthNames": "ene;feb;mar;abr;may;jun;jul;ago;sep;oct;nov;dic",
+  "DayNames": "lun;mar;mié;jue;vie;sáb;dom",
+  "ScriptErrorDetails": ""
+ },
+ "sheets": [
+  {
+   "name": "Main",
+   "id": "SH01"
+  }
+ ],
+ "objects": {
+  "ids": [
+   "SH01",
+   "LB02",
+   "TB01",
+   "LB01"
+  ],
+  "by_type": {
+   "sheet": 1,
+   "list box": 2,
+   "table box": 1
+  }
+ },
+ "charts": [],
+ "kpis": [],
+ "converter_assessment": {
+  "verdict": "model-only",
+  "input_needed": "QVW is not readable by Qlik-To-PowerBI (QVF/JSON only); fed QVW-derived intermediate JSON from this manifest",
+  "trial": {
+   "exit": 0,
+   "tmdl_tables": 2,
+   "generic_table_names": 1,
+   "dax_measures": 0,
+   "dax_measures_unconverted": 0,
+   "relationships": [
+    [
+     "'Sheet1$-ExpandedNodes'.Parent_ID",
+     "Table1.Parent_ID"
+    ]
+   ],
+   "report_pages": 1,
+   "reported_fidelity": "100% (not credible: unconverted Qlik syntax counted as exact)"
+  },
+  "unconverted_measures": [],
+  "chart_types": []
+ },
+ "pbip_plan": {
+  "relationships_from_keys": [],
+  "fact_tables": [
+   "Sheet1$-ExpandedNodes"
+  ],
+  "rls": null
+ },
+ "gaps": [
+  "HIERARCHY(): no M equivalent emitted; use PATH()/PATHITEM() calculated columns",
+  "Synthetic/system tables in model: $$SysTable 1, $$SysTable 2, $$SysTable 3",
+  "QlikView-only/approximate objects: table box×1 (map to slicers/bookmarks/cards/field parameters/buttons manually)"
+ ]
+}

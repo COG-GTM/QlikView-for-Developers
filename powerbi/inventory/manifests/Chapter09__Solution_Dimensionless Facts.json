@@ -1,0 +1,261 @@
+{
+ "app": "Solution_Dimensionless Facts.qvw",
+ "path": "Chapter09/Solution_Dimensionless Facts.qvw",
+ "chapter": "Chapter09",
+ "qvw_bytes": 189184,
+ "last_reload": "2012-07-17 21:17:32",
+ "script": {
+  "file": "scripts/Chapter09__Solution_Dimensionless Facts.qvs",
+  "tabs": [
+   "Main"
+  ],
+  "hidden_script": false,
+  "features": {
+   "concatenate": 1,
+   "resident": 2,
+   "exists": 1,
+   "drop": 1
+  },
+  "sources": [],
+  "stores": [],
+  "includes": [],
+  "table_labels": [
+   "Aircrafts",
+   "Flights",
+   "Temp_Aircraft_Type_ID"
+  ],
+  "script_variables": [
+   {
+    "kind": "SET",
+    "name": "ThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "DecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyDecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyFormat",
+    "value": "'$#,##0.00;-$#,##0.00'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimeFormat",
+    "value": "'hh:mm:ss'"
+   },
+   {
+    "kind": "SET",
+    "name": "DateFormat",
+    "value": "'DD/MM/YY'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimestampFormat",
+    "value": "'DD/MM/YY hh:mm:ss[.fff]'"
+   },
+   {
+    "kind": "SET",
+    "name": "MonthNames",
+    "value": "'ene;feb;mar;abr;may;jun;jul;ago;sep;oct;nov;dic'"
+   },
+   {
+    "kind": "SET",
+    "name": "DayNames",
+    "value": "'lun;mar;mié;jue;vie;sáb;dom'"
+   }
+  ],
+  "lines": 56
+ },
+ "data_model": {
+  "tables": [
+   {
+    "name": "Aircrafts",
+    "fields": 5,
+    "key_fields": 1,
+    "rows": 229,
+    "role": "dimension"
+   },
+   {
+    "name": "Flights",
+    "fields": 8,
+    "key_fields": 1,
+    "rows": 542,
+    "role": "fact (likely)"
+   },
+   {
+    "name": "$$SysTable 2",
+    "fields": 3,
+    "key_fields": 2,
+    "rows": 13,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 3",
+    "fields": 3,
+    "key_fields": 1,
+    "rows": 2,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 4",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 12,
+    "role": "system/synthetic"
+   }
+  ],
+  "key_fields": [
+   {
+    "field": "%Aircraft Type ID",
+    "cardinality": 229,
+    "tags": "$key, $numeric, $integer"
+   }
+  ],
+  "fields_by_table": {
+   "Aircrafts": [
+    "%Aircraft Type ID",
+    "Aircraft Group",
+    "Manufacturer",
+    "Aircraft Name",
+    "Aircraft Short Name"
+   ],
+   "Flights": [
+    "%Aircraft Type ID",
+    "Year",
+    "Month (#)",
+    "# Departures Scheduled",
+    "# Departures Performed",
+    "# Available Seats",
+    "# Transported Passengers",
+    "# Transported Freight"
+   ]
+  },
+  "groups": []
+ },
+ "variables": [],
+ "config_variables": {
+  "CD": "F:",
+  "QvPath": "C:\\Program Files\\QlikView",
+  "QvRoot": "C:",
+  "QvWorkPath": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 1 - 9\\QlikView Development\\Airline Operations\\Side examples\\Chapter 5",
+  "QvWorkRoot": "C:",
+  "WinPath": "C:\\Windows",
+  "WinRoot": "C:",
+  "ErrorMode": "",
+  "StripComments": "",
+  "OpenUrlTimeout": "",
+  "ScriptErrorCount": "0",
+  "ScriptErrorList": "",
+  "ScriptError": "",
+  "ThousandSep": ",",
+  "DecimalSep": ".",
+  "MoneyThousandSep": ",",
+  "MoneyDecimalSep": ".",
+  "MoneyFormat": "$#,##0.00;-$#,##0.00",
+  "TimeFormat": "hh:mm:ss",
+  "DateFormat": "DD/MM/YY",
+  "TimestampFormat": "DD/MM/YY hh:mm:ss[.fff]",
+  "MonthNames": "ene;feb;mar;abr;may;jun;jul;ago;sep;oct;nov;dic",
+  "DayNames": "lun;mar;mié;jue;vie;sáb;dom"
+ },
+ "sheets": [
+  {
+   "name": "Main",
+   "id": "SH01"
+  }
+ ],
+ "objects": {
+  "ids": [
+   "SH01",
+   "CH01",
+   "LB01"
+  ],
+  "by_type": {
+   "sheet": 1,
+   "chart": 1,
+   "list box": 1
+  }
+ },
+ "charts": [
+  {
+   "id": "CH01",
+   "caption": "Flights by Group",
+   "type": "Bar Chart",
+   "dimensions": [
+    "Aircraft Group"
+   ],
+   "expressions": [
+    {
+     "label": "(no label)",
+     "expression": "Sum ([# Departures Performed]) /1000"
+    }
+   ]
+  }
+ ],
+ "kpis": [
+  {
+   "object": "CH01",
+   "caption": "Flights by Group",
+   "label": "(no label)",
+   "qlik": "Sum ([# Departures Performed]) /1000",
+   "expanded": "Sum ([# Departures Performed]) /1000",
+   "qlik_semantics": [],
+   "dims": [
+    "Aircraft Group"
+   ]
+  }
+ ],
+ "converter_assessment": {
+  "verdict": "partial",
+  "input_needed": "QVW is not readable by Qlik-To-PowerBI (QVF/JSON only); fed QVW-derived intermediate JSON from this manifest",
+  "trial": {
+   "exit": 0,
+   "tmdl_tables": 4,
+   "generic_table_names": 1,
+   "dax_measures": 1,
+   "dax_measures_unconverted": 0,
+   "relationships": [
+    [
+     "Flights.'%Aircraft Type ID'",
+     "Aircrafts.'%Aircraft Type ID'"
+    ]
+   ],
+   "report_pages": 1,
+   "reported_fidelity": "100% (not credible: unconverted Qlik syntax counted as exact)"
+  },
+  "unconverted_measures": [],
+  "chart_types": [
+   "Bar Chart"
+  ]
+ },
+ "pbip_plan": {
+  "relationships_from_keys": [
+   {
+    "key": "%Aircraft Type ID",
+    "tables": [
+     "Aircrafts",
+     "Flights"
+    ]
+   }
+  ],
+  "fact_tables": [
+   "Flights"
+  ],
+  "rls": null
+ },
+ "gaps": [
+  "Synthetic/system tables in model: $$SysTable 2, $$SysTable 3, $$SysTable 4"
+ ]
+}

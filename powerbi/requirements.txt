@@ -1,0 +1,11 @@
+# Conversion (QVD/Access/Excel/CSV -> Parquet), verification and the parity harness.
+# Access databases additionally need mdbtools (apt-get install mdbtools) on Linux / WSL.
+numpy==2.5.4
+pandas==3.1.0
+pyarrow==26.0.0
+duckdb==2.0.0
+xlrd==2.0.2
+openpyxl==3.1.5
+# tests only: independent QVD reader used to cross-check powerbi/tools/qvd.py
+pyqvd==2.4.0
+pytest==8.3.3

@@ -1,0 +1,2885 @@
+{
+ "app": "Solution_Chapter 12_Airline Operations.qvw",
+ "path": "Chapter12/Solution_Chapter 12_Airline Operations.qvw",
+ "chapter": "Chapter12",
+ "qvw_bytes": 34021632,
+ "last_reload": "2012-10-21 18:48:28",
+ "script": {
+  "file": "scripts/Chapter12__Solution_Chapter 12_Airline Operations.qvs",
+  "tabs": [
+   "Information",
+   "Main",
+   "Includes",
+   "Mapping",
+   "Comments",
+   "Main Data",
+   "Employment Data",
+   "Calendar",
+   "Airlines",
+   "Aircrafts",
+   "Airports",
+   "Metrics"
+  ],
+  "hidden_script": false,
+  "features": {
+   "mapping_load": 3,
+   "applymap": 2,
+   "join": 1,
+   "keep": 2,
+   "concatenate": 6,
+   "resident": 5,
+   "autogenerate": 1,
+   "inline": 1,
+   "preceding_load": 3,
+   "store_qvd": 1,
+   "sql_select": 2,
+   "include": 3,
+   "if_block": 1,
+   "peek": 2,
+   "exists": 13,
+   "autonumber": 2,
+   "iterno_while": 1,
+   "comment_using": 2,
+   "drop": 6,
+   "dollar_expansion_in_script": 21,
+   "date_parse": 2
+  },
+  "sources": [
+   {
+    "path": "$(vFolderSourceData)CSVs\\Aircraft_Manufacturers.csv",
+    "format": "txt, codepage is 1252, embedded labels, delimiter is ';', msq",
+    "kind": "CSV",
+    "resolved": "Data Files/CSVs/Aircraft_Manufacturers.csv"
+   },
+   {
+    "path": "$(vFolderSourceData)Excel\\Comments.xls",
+    "format": "biff, embedded labels, table is Tables$",
+    "kind": "Excel (biff)",
+    "resolved": "Data Files/Excel/Comments.xls"
+   },
+   {
+    "path": "$(vFolderSourceData)Excel\\Comments.xls",
+    "format": "biff, embedded labels, table is Fields$",
+    "kind": "Excel (biff)",
+    "resolved": "Data Files/Excel/Comments.xls"
+   },
+   {
+    "path": "$(vFolderSourceData)QVDs\\Flight Data.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Flight Data.qvd"
+   },
+   {
+    "path": "$(vFolderSourceData)QVDs\\T_F41SCHEDULE_P1A_EMP.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/T_F41SCHEDULE_P1A_EMP.qvd"
+   },
+   {
+    "path": "$(vFolderSourceData)QVDs\\Carrier Groups.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Carrier Groups.qvd"
+   },
+   {
+    "path": "$(vFolderSourceData)QVDs\\Airlines.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Airlines.qvd"
+   },
+   {
+    "path": "$(vFolderSourceData)QVDs\\Carrier Operating Region.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Carrier Operating Region.qvd"
+   },
+   {
+    "path": "$(vFolderSourceData)QVDs\\Flight Types.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Flight Types.qvd"
+   },
+   {
+    "path": "$(vFolderSourceData)CSVs\\Aircraft_Base_File.csv",
+    "format": "txt, codepage is 1252, embedded labels, delimiter is ';', msq",
+    "kind": "CSV",
+    "resolved": "Data Files/CSVs/Aircraft_Base_File.csv"
+   },
+   {
+    "path": "$(vFolderSourceData)CSVs\\Aircraft_Group.csv",
+    "format": "txt, codepage is 1252, embedded labels, delimiter is ';', msq",
+    "kind": "CSV",
+    "resolved": "Data Files/CSVs/Aircraft_Group.csv"
+   },
+   {
+    "path": "$(vFolderSourceData)QVDs\\Distance Groups.qvd",
+    "format": "qvd",
+    "kind": "QVD",
+    "resolved": "Data Files/QVDs/Distance Groups.qvd"
+   },
+   {
+    "path": "$(vFolderSourceData)CSVs\\Origin Markets.csv",
+    "format": "txt, codepage is 1252, embedded labels, delimiter is '\\t', msq",
+    "kind": "CSV",
+    "resolved": "Data Files/CSVs/Origin Markets.csv"
+   },
+   {
+    "path": "$(vFolderSourceData)CSVs\\Destination Markets.csv",
+    "format": "txt, codepage is 1252, embedded labels, delimiter is '\\t', msq",
+    "kind": "CSV",
+    "resolved": "Data Files/CSVs/Destination Markets.csv"
+   },
+   {
+    "path": "Origin Airports",
+    "format": "SQL via OLE DB",
+    "kind": "MS Access (Jet OLEDB)",
+    "resolved": "Data Files/MDBs/Dimension Tables.mdb (table: Origin Airports)"
+   },
+   {
+    "path": "Destination Airports",
+    "format": "SQL via OLE DB",
+    "kind": "MS Access (Jet OLEDB)",
+    "resolved": "Data Files/MDBs/Dimension Tables.mdb (table: Destination Airports)"
+   }
+  ],
+  "stores": [
+   {
+    "table": "Aircraft Types",
+    "path": "'$(vFolderSourceData)QVDs\\Aircraft Types Transformed.qvd' (qvd)"
+   }
+  ],
+  "includes": [
+   "config.qvs",
+   "tracerowcount.qvs",
+   "SetVariables.txt"
+  ],
+  "table_labels": [
+   "Map_Manufacturer_Country",
+   "Map_Table_Comments",
+   "Map_Field_Comments",
+   "Main Data",
+   "Temp_Calendar_Range",
+   "Master Calendar",
+   "Carrier Groups",
+   "Airlines",
+   "Carrier Operating Region",
+   "Flight Types",
+   "Aircraft Types",
+   "Distance Groups",
+   "Origin Airports",
+   "Destination Airports",
+   "Origin Markets",
+   "Destination Markets"
+  ],
+  "script_variables": [
+   {
+    "kind": "SET",
+    "name": "ThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "DecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyDecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyFormat",
+    "value": "'$#,##0.00;-$#,##0.00'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimeFormat",
+    "value": "'hh:mm:ss'"
+   },
+   {
+    "kind": "SET",
+    "name": "DateFormat",
+    "value": "'YYYY-MM-DD'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimestampFormat",
+    "value": "'YYYY-MM-DD hh:mm:ss[.fff]'"
+   },
+   {
+    "kind": "SET",
+    "name": "MonthNames",
+    "value": "'Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec'"
+   },
+   {
+    "kind": "SET",
+    "name": "DayNames",
+    "value": "'Mon;Tue;Wed;Thu;Fri;Sat;Sun'"
+   },
+   {
+    "kind": "SET",
+    "name": "vLoadMainData",
+    "value": "'Y'"
+   },
+   {
+    "kind": "SET",
+    "name": "HidePrefix",
+    "value": "'%'"
+   },
+   {
+    "kind": "LET",
+    "name": "vMinDate",
+    "value": "Peek('MinDate', 0, 'Temp_Calendar_Range')"
+   },
+   {
+    "kind": "LET",
+    "name": "vMaxDate",
+    "value": "Peek('MaxDate', 0, 'Temp_Calendar_Range')"
+   },
+   {
+    "kind": "LET",
+    "name": "vMinDate",
+    "value": "Null()"
+   },
+   {
+    "kind": "LET",
+    "name": "vMaxDate",
+    "value": "Null()"
+   }
+  ],
+  "lines": 395
+ },
+ "data_model": {
+  "tables": [
+   {
+    "name": "Main Data",
+    "fields": 56,
+    "key_fields": 11,
+    "rows": 1258763,
+    "role": "fact (likely)"
+   },
+   {
+    "name": "Master Calendar",
+    "fields": 7,
+    "key_fields": 1,
+    "rows": 1065,
+    "role": "dimension"
+   },
+   {
+    "name": "Carrier Groups",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 8,
+    "role": "dimension"
+   },
+   {
+    "name": "Airlines",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 337,
+    "role": "dimension"
+   },
+   {
+    "name": "Carrier Operating Region",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 8,
+    "role": "dimension"
+   },
+   {
+    "name": "Flight Types",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 4,
+    "role": "dimension"
+   },
+   {
+    "name": "Aircraft Types",
+    "fields": 11,
+    "key_fields": 1,
+    "rows": 180,
+    "role": "dimension"
+   },
+   {
+    "name": "Distance Groups",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 22,
+    "role": "dimension"
+   },
+   {
+    "name": "Origin Airports",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 2124,
+    "role": "dimension"
+   },
+   {
+    "name": "Destination Airports",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 2185,
+    "role": "dimension"
+   },
+   {
+    "name": "Origin Markets",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 1860,
+    "role": "dimension"
+   },
+   {
+    "name": "Destination Markets",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 1918,
+    "role": "dimension"
+   },
+   {
+    "name": "INLFED",
+    "fields": 2,
+    "key_fields": 0,
+    "rows": 3,
+    "role": "dimension"
+   },
+   {
+    "name": "$$SysTable 13",
+    "fields": 3,
+    "key_fields": 2,
+    "rows": 94,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 14",
+    "fields": 3,
+    "key_fields": 1,
+    "rows": 13,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 15",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 83,
+    "role": "system/synthetic"
+   }
+  ],
+  "key_fields": [
+   {
+    "field": "%Airline ID",
+    "cardinality": 338,
+    "tags": "$key, $hidden, $numeric, $integer"
+   },
+   {
+    "field": "%Carrier Group ID",
+    "cardinality": 8,
+    "tags": "$key, $hidden, $numeric, $integer"
+   },
+   {
+    "field": "%Region Code",
+    "cardinality": 7,
+    "tags": "$key, $hidden, $ascii, $text"
+   },
+   {
+    "field": "%Origin Airport ID",
+    "cardinality": 2124,
+    "tags": "$key, $hidden, $numeric, $integer"
+   },
+   {
+    "field": "%Origin Airport Market ID",
+    "cardinality": 1859,
+    "tags": "$key, $hidden, $numeric, $integer, $timestamp, $date"
+   },
+   {
+    "field": "%Destination Airport ID",
+    "cardinality": 2185,
+    "tags": "$key, $hidden, $numeric, $integer"
+   },
+   {
+    "field": "%Destination Airport Market ID",
+    "cardinality": 1917,
+    "tags": "$key, $hidden, $numeric, $integer, $timestamp, $date"
+   },
+   {
+    "field": "%Aircraft Type ID",
+    "cardinality": 180,
+    "tags": "$key, $hidden, $numeric, $integer"
+   },
+   {
+    "field": "%Distance Group ID",
+    "cardinality": 22,
+    "tags": "$key, $hidden, $numeric, $integer"
+   },
+   {
+    "field": "%Datasource ID",
+    "cardinality": 4,
+    "tags": "$key, $hidden, $ascii, $text"
+   },
+   {
+    "field": "Period",
+    "cardinality": 36,
+    "tags": "$key, $numeric, $integer"
+   }
+  ],
+  "fields_by_table": {
+   "Main Data": [
+    "# Departures Scheduled",
+    "# Departures Performed",
+    "# Payload",
+    "Distance",
+    "# Available Seats",
+    "# Transported Passengers",
+    "# Transported Freight",
+    "# Transported Mail",
+    "# Ramp-To-Ramp Time",
+    "# Air Time",
+    "Unique Carrier",
+    "Carrier Code",
+    "Carrier Name",
+    "Origin Airport Code",
+    "Origin City",
+    "Origin State Code",
+    "Origin State FIPS",
+    "Origin State",
+    "Origin Country Code",
+    "Origin Country",
+    "Destination Airport Code",
+    "Destination City",
+    "Destination State Code",
+    "Destination State FIPS",
+    "Destination State",
+    "Destination Country Code",
+    "Destination Country",
+    "Period",
+    "From - To Airport Code",
+    "From - To Airport ID",
+    "From - To City",
+    "From - To State Code",
+    "From - To State",
+    "# Full Time Employees",
+    "# Part Time Employees",
+    "# Total Employees",
+    "# Equivalent FTEs"
+   ],
+   "Master Calendar": [
+    "Period",
+    "Year",
+    "Month",
+    "Year - Month",
+    "Quarter",
+    "QuarterID",
+    "PeriodID"
+   ],
+   "Carrier Groups": [
+    "Carrier Group"
+   ],
+   "Airlines": [
+    "Airline"
+   ],
+   "Carrier Operating Region": [
+    "Carrier's Operating Region"
+   ],
+   "Flight Types": [
+    "Flight Type"
+   ],
+   "Aircraft Types": [
+    "Aircraft Name",
+    "Aircraft Manufacturer",
+    "Aircraft Manufacturer Country",
+    "Aircraft Name Full",
+    "Aircraft Name Abbreviated",
+    "Aircraft Begin Date",
+    "Aircraft End Date",
+    "Aircraft Age Classification",
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ],
+   "Distance Groups": [
+    "Distance Interval"
+   ],
+   "Origin Airports": [
+    "Origin Airport"
+   ],
+   "Destination Airports": [
+    "Destination Airport"
+   ],
+   "Origin Markets": [
+    "Origin Market"
+   ],
+   "Destination Markets": [
+    "Destination Market"
+   ],
+   "INLFED": [
+    "Metric Name",
+    "eMetric"
+   ]
+  },
+  "groups": [
+   {
+    "name": "Time",
+    "type": "drill-down",
+    "fields": [
+     "Year",
+     "Month"
+    ]
+   },
+   {
+    "name": "Airline_Origin_Destination",
+    "type": "cyclic",
+    "fields": [
+     "Airline",
+     "Origin Country",
+     "Destination Country"
+    ]
+   }
+  ]
+ },
+ "variables": [
+  {
+   "name": "eLoadFactor",
+   "definition": "(Sum ([# Transported Passengers]) / Sum ([# Available Seats]))"
+  },
+  {
+   "name": "ePerformedVsScheduled",
+   "definition": "(Sum([# Departures Performed]) / Sum([# Departures Scheduled]))"
+  },
+  {
+   "name": "eAirTime",
+   "definition": "(Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "eEnplanedPassengers",
+   "definition": "(Sum ([# Transported Passengers]) / 1000000)"
+  },
+  {
+   "name": "eDeparturesPerformed",
+   "definition": "(Sum ([# Departures Performed]) / 1000)"
+  },
+  {
+   "name": "eRevenuePassengerMiles",
+   "definition": "(Sum ([# Transported Passengers] * Distance) / 1000000)"
+  },
+  {
+   "name": "eAvailableSeatMiles",
+   "definition": "(Sum ([# Available Seats] * Distance) / 1000000)"
+  },
+  {
+   "name": "eAvailableSeats",
+   "definition": "(Sum ([# Available Seats]) / 1000000)"
+  },
+  {
+   "name": "vLoadMainData",
+   "definition": "Y"
+  },
+  {
+   "name": "vFolderSourceData",
+   "definition": "..\\Data Files\\"
+  },
+  {
+   "name": "vTop",
+   "definition": "10"
+  },
+  {
+   "name": "vTotalFTEs",
+   "definition": "= Sum([# Equivalent FTEs])"
+  },
+  {
+   "name": "eFTEs",
+   "definition": "Sum([# Equivalent FTEs])"
+  },
+  {
+   "name": "eDeparturesPerformed_VarUnit",
+   "definition": "Sum([# Departures Performed]) / $1"
+  }
+ ],
+ "config_variables": {
+  "CD": "F:",
+  "QvPath": "C:\\Program Files\\QlikView",
+  "QvRoot": "C:",
+  "QvWorkPath": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 1 - 11\\QlikView Development\\Airline Operations\\Apps",
+  "QvWorkRoot": "C:",
+  "WinPath": "C:\\Windows",
+  "WinRoot": "C:",
+  "ErrorMode": "",
+  "StripComments": "",
+  "OpenUrlTimeout": "",
+  "ScriptErrorCount": "0",
+  "ScriptErrorList": "",
+  "ScriptError": "",
+  "ThousandSep": ",",
+  "DecimalSep": ".",
+  "MoneyThousandSep": ",",
+  "MoneyDecimalSep": ".",
+  "MoneyFormat": "$#,##0.00;-$#,##0.00",
+  "TimeFormat": "hh:mm:ss",
+  "DateFormat": "YYYY-MM-DD",
+  "TimestampFormat": "YYYY-MM-DD hh:mm:ss[.fff]",
+  "MonthNames": "Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec",
+  "DayNames": "Mon;Tue;Wed;Thu;Fri;Sat;Sun",
+  "FLOPPY": "G:",
+  "HidePrefix": "%",
+  "FLOPPY2": "H:"
+ },
+ "sheets": [
+  {
+   "name": "Dashboard",
+   "id": "SH03"
+  },
+  {
+   "name": "Analysis",
+   "id": "SH_Analysis"
+  },
+  {
+   "name": "Reports",
+   "id": "SH05"
+  },
+  {
+   "name": "Associations",
+   "id": "SH01"
+  },
+  {
+   "name": "Gauge Styles",
+   "id": "SH04"
+  },
+  {
+   "name": "Other Charts",
+   "id": "SH06"
+  },
+  {
+   "name": "Other representations",
+   "id": "SH08"
+  },
+  {
+   "name": "Data Consistency",
+   "id": "SH09"
+  },
+  {
+   "name": "Variables",
+   "id": "SH10"
+  },
+  {
+   "name": "Advanced Expressions",
+   "id": "SH11"
+  },
+  {
+   "name": "Set Analysis",
+   "id": "SH12"
+  },
+  {
+   "name": "Point In Time Reporting",
+   "id": "SH13"
+  },
+  {
+   "name": "Comparative Analysis",
+   "id": "SH15"
+  }
+ ],
+ "objects": {
+  "ids": [
+   "LB27",
+   "CH15",
+   "CH01",
+   "CH02",
+   "CH03",
+   "LB39",
+   "LB43",
+   "LB44",
+   "LB45",
+   "LB38",
+   "LB40",
+   "LB41",
+   "LB42",
+   "LB37",
+   "SH03",
+   "TX02",
+   "TX03",
+   "TX04",
+   "TX01",
+   "CH05",
+   "LB28",
+   "MB02",
+   "LB32",
+   "CH07",
+   "CH06",
+   "LB30",
+   "LB31",
+   "SO01",
+   "BU01",
+   "BU03",
+   "BU02",
+   "CS01",
+   "LB33",
+   "LB29",
+   "MB01",
+   "CH54",
+   "BM01",
+   "TX05",
+   "SH_Analysis",
+   "CT01",
+   "CH04",
+   "SB01",
+   "CH51",
+   "SH05",
+   "CH21",
+   "CH22",
+   "SH01",
+   "LB04",
+   "LB01",
+   "LB13",
+   "LB07",
+   "LB02",
+   "LB06",
+   "LB05",
+   "LB03",
+   "LB15",
+   "LB10",
+   "LB12",
+   "LB11",
+   "LB09",
+   "SH04",
+   "CH14",
+   "CH12",
+   "CH13",
+   "CH09",
+   "CH11",
+   "CH08",
+   "SH06",
+   "CH41",
+   "CH28",
+   "CH26",
+   "CH27",
+   "CH24",
+   "CH25",
+   "SH08",
+   "CH38",
+   "SH09",
+   "TB01",
+   "LB34",
+   "LB35",
+   "SH10",
+   "IB01",
+   "SL01",
+   "CH45",
+   "CH42",
+   "CH43",
+   "CH44",
+   "LB36",
+   "CH46",
+   "SH11",
+   "TX06",
+   "CH49",
+   "CH48",
+   "CH47",
+   "CH56",
+   "CH50",
+   "CH52",
+   "CH55",
+   "CH53",
+   "SH12",
+   "CH57",
+   "CH59",
+   "CH58",
+   "SH13",
+   "CH65",
+   "CH62",
+   "CH61",
+   "CH60",
+   "SH15",
+   "CT02",
+   "CT03",
+   "CH67",
+   "CH66",
+   "CS03",
+   "CS02"
+  ],
+  "by_type": {
+   "list box": 32,
+   "chart": 47,
+   "sheet": 13,
+   "text object": 6,
+   "multi box": 2,
+   "search object": 1,
+   "button": 3,
+   "current selections": 3,
+   "bookmark object": 1,
+   "container": 3,
+   "statistics box": 1,
+   "table box": 1,
+   "input box": 1,
+   "slider/calendar": 1
+  }
+ },
+ "charts": [
+  {
+   "id": "CH01",
+   "caption": "Traffic per Year",
+   "type": "Line Chart",
+   "dimensions": [
+    "Time"
+   ],
+   "expressions": [
+    {
+     "label": "# of Flights",
+     "expression": "Sum ([# Departures Performed])"
+    },
+    {
+     "label": "# of Enplanned Passengers",
+     "expression": "Sum ([# Transported Passengers])"
+    },
+    {
+     "label": "Transported Freight",
+     "expression": "Sum ([# Transported Freight])"
+    },
+    {
+     "label": "Transported Mail",
+     "expression": "Sum ([# Transported Mail])"
+    }
+   ]
+  },
+  {
+   "id": "CH02",
+   "caption": "Top 10 Routes",
+   "type": "Straight Table",
+   "dimensions": [
+    "From - To City"
+   ],
+   "expressions": [
+    {
+     "label": "Flights",
+     "expression": "Sum ([# Departures Performed])"
+    },
+    {
+     "label": "Passengers",
+     "expression": "Sum ([# Transported Passengers])"
+    },
+    {
+     "label": "Freight",
+     "expression": "Sum ([# Transported Freight])"
+    },
+    {
+     "label": "Mail",
+     "expression": "Sum ([# Transported Mail])"
+    }
+   ]
+  },
+  {
+   "id": "CH03",
+   "caption": "# of Passengers/Available Seats (x 1 million) by Flight Type",
+   "type": "Combo Chart",
+   "dimensions": [
+    "Flight Type"
+   ],
+   "expressions": [
+    {
+     "label": "# of Passengers",
+     "expression": "$(eEnplanedPassengers)"
+    },
+    {
+     "label": "# of Available Seats",
+     "expression": "$(eAvailableSeats)"
+    },
+    {
+     "label": "Load Factor",
+     "expression": "=$(eLoadFactor)"
+    }
+   ]
+  },
+  {
+   "id": "CH04",
+   "caption": "Transported passengers vs mail",
+   "type": "Scatter Chart",
+   "dimensions": [
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "# Transported Mail",
+     "expression": "Sum ([# Transported Mail])"
+    },
+    {
+     "label": "# Transported Passengers",
+     "expression": "Sum ([# Transported Passengers])"
+    },
+    {
+     "label": "(no label)",
+     "expression": "Sum([# Departures Performed])"
+    }
+   ]
+  },
+  {
+   "id": "CH05",
+   "caption": "Load Factor %",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Load Factor %",
+     "expression": "$(eLoadFactor)"
+    }
+   ]
+  },
+  {
+   "id": "CH06",
+   "caption": "Performed vs Scheduled",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Performed vs Scheduled",
+     "expression": "$(ePerformedVsScheduled)"
+    }
+   ]
+  },
+  {
+   "id": "CH07",
+   "caption": "Air Time %",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Air Time %",
+     "expression": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])"
+    }
+   ]
+  },
+  {
+   "id": "CH08",
+   "caption": "Air Time %",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Air Time %",
+     "expression": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])"
+    }
+   ]
+  },
+  {
+   "id": "CH09",
+   "caption": "Air Time %",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Air Time %",
+     "expression": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])"
+    }
+   ]
+  },
+  {
+   "id": "CH11",
+   "caption": "Air Time %",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Air Time %",
+     "expression": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])"
+    }
+   ]
+  },
+  {
+   "id": "CH12",
+   "caption": "Air Time %",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Air Time %",
+     "expression": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])"
+    }
+   ]
+  },
+  {
+   "id": "CH13",
+   "caption": "Air Time %",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Air Time %",
+     "expression": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])"
+    }
+   ]
+  },
+  {
+   "id": "CH14",
+   "caption": "Air Time %",
+   "type": "Gauge Chart",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Air Time %",
+     "expression": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])"
+    }
+   ]
+  },
+  {
+   "id": "CH15",
+   "caption": "Market Share",
+   "type": "Pie Chart",
+   "dimensions": [
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "Market Share",
+     "expression": "Sum([# Transported Passengers])"
+    },
+    {
+     "label": "Carrier",
+     "expression": "if(count(distinct [Carrier Name]) = 1, [Carrier Name], 'Others')"
+    }
+   ]
+  },
+  {
+   "id": "CH21",
+   "caption": "KPIs per Airline",
+   "type": "Straight Table",
+   "dimensions": [
+    "Airline_Origin_Destination"
+   ],
+   "expressions": [
+    {
+     "label": "Load Factor %",
+     "expression": "$(eLoadFactor)"
+    },
+    {
+     "label": "Performed vs scheduled flights",
+     "expression": "$(ePerformedVsScheduled)"
+    },
+    {
+     "label": "Air time %",
+     "expression": "$(eAirTime)"
+    }
+   ]
+  },
+  {
+   "id": "CH22",
+   "caption": "Enplaned passengers (millions)",
+   "type": "Pivot Table",
+   "dimensions": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "expressions": [
+    {
+     "label": "Enplaned passengers (millions)",
+     "expression": "$(eEnplanedPassengers)"
+    },
+    {
+     "label": "Departures Performed (thousands)",
+     "expression": "$(eDeparturesPerformed)"
+    }
+   ]
+  },
+  {
+   "id": "CH24",
+   "caption": "Radar Chart",
+   "type": "Radar Chart",
+   "dimensions": [
+    "Month"
+   ],
+   "expressions": [
+    {
+     "label": "(no label)",
+     "expression": "$(eEnplanedPassengers)"
+    }
+   ]
+  },
+  {
+   "id": "CH25",
+   "caption": "Mekko Chart",
+   "type": "Mekko Chart",
+   "dimensions": [
+    "Flight Type",
+    "Year"
+   ],
+   "expressions": [
+    {
+     "label": "(no label)",
+     "expression": "$(eEnplanedPassengers)"
+    }
+   ]
+  },
+  {
+   "id": "CH26",
+   "caption": "Grid Chart",
+   "type": "Grid Chart",
+   "dimensions": [
+    "Year",
+    "Quarter",
+    "Flight Type"
+   ],
+   "expressions": [
+    {
+     "label": "(no label)",
+     "expression": "$(eEnplanedPassengers)"
+    }
+   ]
+  },
+  {
+   "id": "CH27",
+   "caption": "Funnel Chart",
+   "type": "Funnel Chart",
+   "dimensions": [
+    "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))"
+   ],
+   "expressions": [
+    {
+     "label": "Transported passengers",
+     "expression": "$(eEnplanedPassengers)"
+    }
+   ]
+  },
+  {
+   "id": "CH28",
+   "caption": "Block Chart",
+   "type": "Block Chart",
+   "dimensions": [
+    "Destination Country",
+    "Destination City"
+   ],
+   "expressions": [
+    {
+     "label": "(no label)",
+     "expression": "$(eEnplanedPassengers)"
+    }
+   ]
+  },
+  {
+   "id": "CH38",
+   "caption": "Other representations",
+   "type": "Straight Table",
+   "dimensions": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ],
+   "expressions": [
+    {
+     "label": "Linear gauge",
+     "expression": "$(eLoadFactor)"
+    },
+    {
+     "label": "Load Factor %",
+     "expression": "$(eLoadFactor)"
+    },
+    {
+     "label": "Traffic light",
+     "expression": "$(ePerformedVsScheduled)"
+    },
+    {
+     "label": "Performed vs scheduled flights",
+     "expression": "$(ePerformedVsScheduled)"
+    },
+    {
+     "label": "Mini chart",
+     "expression": "$(eAirTime)"
+    },
+    {
+     "label": "Air time %",
+     "expression": "$(eAirTime)"
+    }
+   ]
+  },
+  {
+   "id": "CH41",
+   "caption": "Traffic per Year by Flight Type",
+   "type": "Line Chart",
+   "dimensions": [
+    "Flight Type",
+    "Month"
+   ],
+   "expressions": [
+    {
+     "label": "Load factor %",
+     "expression": "$(eLoadFactor)"
+    }
+   ]
+  },
+  {
+   "id": "CH42",
+   "caption": "Top N Flights",
+   "type": "Bar Chart",
+   "dimensions": [
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "Flights",
+     "expression": "Sum([# Departures Performed])"
+    }
+   ]
+  },
+  {
+   "id": "CH43",
+   "caption": "FTE % to Total",
+   "type": "Straight Table",
+   "dimensions": [
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "FTE % to Total",
+     "expression": "Sum([# Equivalent FTEs]) / $(vTotalFTEs)"
+    }
+   ]
+  },
+  {
+   "id": "CH44",
+   "caption": "FTEs",
+   "type": "Straight Table",
+   "dimensions": [
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "FTEs",
+     "expression": "$(eFTEs)"
+    }
+   ]
+  },
+  {
+   "id": "CH45",
+   "caption": "# of Flights",
+   "type": "Straight Table",
+   "dimensions": [
+    "Carrier Group"
+   ],
+   "expressions": [
+    {
+     "label": "# of Flights",
+     "expression": "$(eDeparturesPerformed_VarUnit(1))"
+    },
+    {
+     "label": "# of Flights (thousands)",
+     "expression": "$(eDeparturesPerformed_VarUnit(1000))"
+    },
+    {
+     "label": "# of Flights (millions)",
+     "expression": "$(eDeparturesPerformed_VarUnit(1000000))"
+    }
+   ]
+  },
+  {
+   "id": "CH46",
+   "caption": "# of Flights by Carrier Group",
+   "type": "Pie Chart",
+   "dimensions": [
+    "Carrier Group"
+   ],
+   "expressions": [
+    {
+     "label": "(no label)",
+     "expression": "$($(=eMetric))"
+    }
+   ]
+  },
+  {
+   "id": "CH47",
+   "caption": "Using the TOTAL Qualifier",
+   "type": "Pivot Table",
+   "dimensions": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "expressions": [
+    {
+     "label": "Enplaned passengers (millions)",
+     "expression": "$(eEnplanedPassengers)"
+    },
+    {
+     "label": "Departures Performed (thousands)",
+     "expression": "$(eDeparturesPerformed)"
+    },
+    {
+     "label": "Participation to the whole",
+     "expression": "Sum([# Departures Performed]) / Sum(TOTAL [# Departures Performed])"
+    },
+    {
+     "label": "% vs the Carrier’s whole",
+     "expression": "Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])"
+    },
+    {
+     "label": "% vs the Carrier’s whole per year",
+     "expression": "Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])"
+    }
+   ]
+  },
+  {
+   "id": "CH48",
+   "caption": "Carrier Classification by # of Interstate Routes",
+   "type": "Straight Table",
+   "dimensions": [
+    "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])"
+   ],
+   "expressions": [
+    {
+     "label": "# of Carriers",
+     "expression": "Count(DISTINCT [Carrier Name])"
+    }
+   ]
+  },
+  {
+   "id": "CH49",
+   "caption": "Average Load Factor per Route per Airline",
+   "type": "Straight Table",
+   "dimensions": [
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "Average Load Factor per Route",
+     "expression": "Avg(Aggr($(eLoadFactor), Airline, [From - To Airport ID]))"
+    },
+    {
+     "label": "Airline's Global Load Factor",
+     "expression": "$(eLoadFactor)"
+    }
+   ]
+  },
+  {
+   "id": "CH50",
+   "caption": "Load Factor % Heat Map",
+   "type": "Pivot Table",
+   "dimensions": [
+    "Carrier Name",
+    "Year",
+    "Month"
+   ],
+   "expressions": [
+    {
+     "label": "Load Factor %",
+     "expression": "$(eLoadFactor)"
+    }
+   ]
+  },
+  {
+   "id": "CH51",
+   "caption": "Load Factor % Heat Map",
+   "type": "Pivot Table",
+   "dimensions": [
+    "Carrier Name",
+    "Year",
+    "Month"
+   ],
+   "expressions": [
+    {
+     "label": "Load Factor %",
+     "expression": "$(eLoadFactor)"
+    }
+   ]
+  },
+  {
+   "id": "CH52",
+   "caption": "# of Carriers by Interval",
+   "type": "Straight Table",
+   "dimensions": [
+    "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')"
+   ],
+   "expressions": [
+    {
+     "label": "# of Carriers",
+     "expression": "Count(DISTINCT [Carrier Name])"
+    }
+   ]
+  },
+  {
+   "id": "CH53",
+   "caption": "# of Airlines vs Load Factor %",
+   "type": "Bar Chart",
+   "dimensions": [
+    "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')"
+   ],
+   "expressions": [
+    {
+     "label": "# of Airlines",
+     "expression": "Count(DISTINCT [Carrier Name])"
+    }
+   ]
+  },
+  {
+   "id": "CH54",
+   "caption": "# of Airlines vs Load Factor %",
+   "type": "Bar Chart",
+   "dimensions": [
+    "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')"
+   ],
+   "expressions": [
+    {
+     "label": "# of Airlines",
+     "expression": "Count(DISTINCT [Carrier Name])"
+    }
+   ]
+  },
+  {
+   "id": "CH55",
+   "caption": "The Dimensionality function",
+   "type": "Pivot Table",
+   "dimensions": [
+    "Carrier Group",
+    "Airline",
+    "Aircraft Name"
+   ],
+   "expressions": [
+    {
+     "label": "Departures Performed (thousands)",
+     "expression": "$(eDeparturesPerformed)"
+    },
+    {
+     "label": "Dimensionality",
+     "expression": "Dimensionality()"
+    }
+   ]
+  },
+  {
+   "id": "CH56",
+   "caption": "Pick Function example: Avg Load Factor per Route",
+   "type": "Pivot Table",
+   "dimensions": [
+    "Flight Type",
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "Avg Load Factor per Route",
+     "expression": "Pick(Dimensionality() + 1,\n\tAvg(Aggr($(eLoadFactor), [From - To Airport ID])),\n\tAvg(Aggr($(eLoadFactor), [From - To Airport ID], [Flight Type])),\n\tAvg(Aggr($(eLoadFactor), [From - To Airport ID], [Flight Type], [Carrier Group])),\n\tAvg(Aggr($(eLoadFactor), [From - To Airport ID], [Carrier Group], [Flight Type], [Carrier Name])))"
+    },
+    {
+     "label": "Direct Load Factor",
+     "expression": "$(eLoadFactor)"
+    }
+   ]
+  },
+  {
+   "id": "CH57",
+   "caption": "Basic Set Analysis Examples",
+   "type": "Pivot Table",
+   "dimensions": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "Foreign Carriers' flights",
+     "expression": "Sum({$<[Carrier Group] = {'Foreign Carriers'}>} [# Departures Performed])"
+    },
+    {
+     "label": "Domestic and Latin America (2010)",
+     "expression": "Sum({$<[Carrier's Operating Region] = {'Domestic', 'Latin America'}, Year = {2010}>} [# Departures Performed])"
+    },
+    {
+     "label": "2010 Flights",
+     "expression": "Sum({$<Year = {2010}>} [# Departures Performed])"
+    },
+    {
+     "label": "2011 Flights",
+     "expression": "Sum({$<Year = {2011}>} [# Departures Performed])"
+    },
+    {
+     "label": "='Current Year Flights (' & Max(Year) & ')'",
+     "expression": "Sum({$<Year = {$(=Max(Year))}>} [# Departures Performed])"
+    },
+    {
+     "label": "='Previous Year Flights (' & (Max(Year) - 1) & ')'",
+     "expression": "Sum({$<Year = {$(=Max(Year)-1)}>} [# Departures Performed])"
+    }
+   ]
+  },
+  {
+   "id": "CH58",
+   "caption": "Set Operators Example",
+   "type": "Pivot Table",
+   "dimensions": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "This expression will result in the total number of flights performed during 2011 by carriers operating in Latin America plus flights performed during 2010 by carriers operating as Domestic, but excluding Foreign Carriers from both sets.",
+     "expression": "Sum({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> \n\t+ <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}>\n\t- <[Carrier Group] = {'Foreign Carrier'}>} [# Departures Performed])"
+    }
+   ]
+  },
+  {
+   "id": "CH59",
+   "caption": "Element Functions example",
+   "type": "Straight Table",
+   "dimensions": [
+    "Year"
+   ],
+   "expressions": [
+    {
+     "label": "Total flights for years that are not selected/associated",
+     "expression": "Sum({1<Year = e(Year)>} [# Departures Performed])"
+    }
+   ]
+  },
+  {
+   "id": "CH60 — YTD Flights 2011 vs 2010",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Var %",
+     "expression": "(Sum({$<$(vSetYTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetLYYTD)> } [# Departures Performed]))\n\t- 1"
+    }
+   ]
+  },
+  {
+   "id": "CH61 — MTD Flights 2011 vs 2010",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Var %",
+     "expression": "(Sum({$<$(vSetMTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetLYMTD)> } [# Departures Performed]))\n\t- 1"
+    }
+   ]
+  },
+  {
+   "id": "CH62 — Dec, 2011 vs",
+   "dimensions": [],
+   "expressions": [
+    {
+     "label": "Var %",
+     "expression": "(Sum({$<$(vSetMTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetPreviousMonth)> } [# Departures Performed]))\n\t- 1"
+    }
+   ]
+  },
+  {
+   "id": "CH65",
+   "caption": "Point In Time Analysis",
+   "type": "Straight Table",
+   "dimensions": [
+    "Carrier Name"
+   ],
+   "expressions": [
+    {
+     "label": "YTD Flights",
+     "expression": "Sum({$<$(vSetYTD)>} [# Departures Performed])"
+    },
+    {
+     "label": "Current Month Flights",
+     "expression": "Sum({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])"
+    },
+    {
+     "label": "Flights Previous Month",
+     "expression": "Sum({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])"
+    },
+    {
+     "label": "Flights Two Months Ago",
+     "expression": "Sum({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])"
+    }
+   ]
+  },
+  {
+   "id": "CH66",
+   "caption": "Group A vs Group B",
+   "type": "Bar Chart",
+   "dimensions": [
+    "Period"
+   ],
+   "expressions": [
+    {
+     "label": "Group A",
+     "expression": "Sum({[Group A] * $} [# Departures Performed])"
+    },
+    {
+     "label": "Group B",
+     "expression": "Sum({[Group B] * $} [# Departures Performed])"
+    }
+   ]
+  },
+  {
+   "id": "CH67",
+   "caption": "Group A vs Group B",
+   "type": "Straight Table",
+   "dimensions": [
+    "Period"
+   ],
+   "expressions": [
+    {
+     "label": "Group A",
+     "expression": "Sum({[Group A] * $} [# Departures Performed])"
+    },
+    {
+     "label": "Group B",
+     "expression": "Sum({[Group B] * $} [# Departures Performed])"
+    }
+   ]
+  }
+ ],
+ "kpis": [
+  {
+   "object": "CH01",
+   "caption": "Traffic per Year",
+   "label": "# of Flights",
+   "qlik": "Sum ([# Departures Performed])",
+   "expanded": "Sum ([# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "Time"
+   ]
+  },
+  {
+   "object": "CH01",
+   "caption": "Traffic per Year",
+   "label": "# of Enplanned Passengers",
+   "qlik": "Sum ([# Transported Passengers])",
+   "expanded": "Sum ([# Transported Passengers])",
+   "qlik_semantics": [],
+   "dims": [
+    "Time"
+   ]
+  },
+  {
+   "object": "CH01",
+   "caption": "Traffic per Year",
+   "label": "Transported Freight",
+   "qlik": "Sum ([# Transported Freight])",
+   "expanded": "Sum ([# Transported Freight])",
+   "qlik_semantics": [],
+   "dims": [
+    "Time"
+   ]
+  },
+  {
+   "object": "CH01",
+   "caption": "Traffic per Year",
+   "label": "Transported Mail",
+   "qlik": "Sum ([# Transported Mail])",
+   "expanded": "Sum ([# Transported Mail])",
+   "qlik_semantics": [],
+   "dims": [
+    "Time"
+   ]
+  },
+  {
+   "object": "CH02",
+   "caption": "Top 10 Routes",
+   "label": "Flights",
+   "qlik": "Sum ([# Departures Performed])",
+   "expanded": "Sum ([# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "From - To City"
+   ]
+  },
+  {
+   "object": "CH02",
+   "caption": "Top 10 Routes",
+   "label": "Passengers",
+   "qlik": "Sum ([# Transported Passengers])",
+   "expanded": "Sum ([# Transported Passengers])",
+   "qlik_semantics": [],
+   "dims": [
+    "From - To City"
+   ]
+  },
+  {
+   "object": "CH02",
+   "caption": "Top 10 Routes",
+   "label": "Freight",
+   "qlik": "Sum ([# Transported Freight])",
+   "expanded": "Sum ([# Transported Freight])",
+   "qlik_semantics": [],
+   "dims": [
+    "From - To City"
+   ]
+  },
+  {
+   "object": "CH02",
+   "caption": "Top 10 Routes",
+   "label": "Mail",
+   "qlik": "Sum ([# Transported Mail])",
+   "expanded": "Sum ([# Transported Mail])",
+   "qlik_semantics": [],
+   "dims": [
+    "From - To City"
+   ]
+  },
+  {
+   "object": "CH03",
+   "caption": "# of Passengers/Available Seats (x 1 million) by Flight Type",
+   "label": "# of Passengers",
+   "qlik": "$(eEnplanedPassengers)",
+   "expanded": "((Sum ([# Transported Passengers]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Flight Type"
+   ]
+  },
+  {
+   "object": "CH03",
+   "caption": "# of Passengers/Available Seats (x 1 million) by Flight Type",
+   "label": "# of Available Seats",
+   "qlik": "$(eAvailableSeats)",
+   "expanded": "((Sum ([# Available Seats]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Flight Type"
+   ]
+  },
+  {
+   "object": "CH03",
+   "caption": "# of Passengers/Available Seats (x 1 million) by Flight Type",
+   "label": "Load Factor",
+   "qlik": "=$(eLoadFactor)",
+   "expanded": "=((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Flight Type"
+   ]
+  },
+  {
+   "object": "CH04",
+   "caption": "Transported passengers vs mail",
+   "label": "# Transported Mail",
+   "qlik": "Sum ([# Transported Mail])",
+   "expanded": "Sum ([# Transported Mail])",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH04",
+   "caption": "Transported passengers vs mail",
+   "label": "# Transported Passengers",
+   "qlik": "Sum ([# Transported Passengers])",
+   "expanded": "Sum ([# Transported Passengers])",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH04",
+   "caption": "Transported passengers vs mail",
+   "label": "(no label)",
+   "qlik": "Sum([# Departures Performed])",
+   "expanded": "Sum([# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH05",
+   "caption": "Load Factor %",
+   "label": "Load Factor %",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH06",
+   "caption": "Performed vs Scheduled",
+   "label": "Performed vs Scheduled",
+   "qlik": "$(ePerformedVsScheduled)",
+   "expanded": "((Sum([# Departures Performed]) / Sum([# Departures Scheduled])))",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH07",
+   "caption": "Air Time %",
+   "label": "Air Time %",
+   "qlik": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "expanded": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH08",
+   "caption": "Air Time %",
+   "label": "Air Time %",
+   "qlik": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "expanded": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH09",
+   "caption": "Air Time %",
+   "label": "Air Time %",
+   "qlik": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "expanded": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH11",
+   "caption": "Air Time %",
+   "label": "Air Time %",
+   "qlik": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "expanded": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH12",
+   "caption": "Air Time %",
+   "label": "Air Time %",
+   "qlik": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "expanded": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH13",
+   "caption": "Air Time %",
+   "label": "Air Time %",
+   "qlik": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "expanded": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH14",
+   "caption": "Air Time %",
+   "label": "Air Time %",
+   "qlik": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "expanded": "Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])",
+   "qlik_semantics": [],
+   "dims": []
+  },
+  {
+   "object": "CH15",
+   "caption": "Market Share",
+   "label": "Market Share",
+   "qlik": "Sum([# Transported Passengers])",
+   "expanded": "Sum([# Transported Passengers])",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH15",
+   "caption": "Market Share",
+   "label": "Carrier",
+   "qlik": "if(count(distinct [Carrier Name]) = 1, [Carrier Name], 'Others')",
+   "expanded": "if(count(distinct [Carrier Name]) = 1, [Carrier Name], 'Others')",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH21",
+   "caption": "KPIs per Airline",
+   "label": "Load Factor %",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Airline_Origin_Destination"
+   ]
+  },
+  {
+   "object": "CH21",
+   "caption": "KPIs per Airline",
+   "label": "Performed vs scheduled flights",
+   "qlik": "$(ePerformedVsScheduled)",
+   "expanded": "((Sum([# Departures Performed]) / Sum([# Departures Scheduled])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Airline_Origin_Destination"
+   ]
+  },
+  {
+   "object": "CH21",
+   "caption": "KPIs per Airline",
+   "label": "Air time %",
+   "qlik": "$(eAirTime)",
+   "expanded": "((Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Airline_Origin_Destination"
+   ]
+  },
+  {
+   "object": "CH22",
+   "caption": "Enplaned passengers (millions)",
+   "label": "Enplaned passengers (millions)",
+   "qlik": "$(eEnplanedPassengers)",
+   "expanded": "((Sum ([# Transported Passengers]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH22",
+   "caption": "Enplaned passengers (millions)",
+   "label": "Departures Performed (thousands)",
+   "qlik": "$(eDeparturesPerformed)",
+   "expanded": "((Sum ([# Departures Performed]) / 1000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH24",
+   "caption": "Radar Chart",
+   "label": "(no label)",
+   "qlik": "$(eEnplanedPassengers)",
+   "expanded": "((Sum ([# Transported Passengers]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Month"
+   ]
+  },
+  {
+   "object": "CH25",
+   "caption": "Mekko Chart",
+   "label": "(no label)",
+   "qlik": "$(eEnplanedPassengers)",
+   "expanded": "((Sum ([# Transported Passengers]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Flight Type",
+    "Year"
+   ]
+  },
+  {
+   "object": "CH26",
+   "caption": "Grid Chart",
+   "label": "(no label)",
+   "qlik": "$(eEnplanedPassengers)",
+   "expanded": "((Sum ([# Transported Passengers]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Year",
+    "Quarter",
+    "Flight Type"
+   ]
+  },
+  {
+   "object": "CH27",
+   "caption": "Funnel Chart",
+   "label": "Transported passengers",
+   "qlik": "$(eEnplanedPassengers)",
+   "expanded": "((Sum ([# Transported Passengers]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))"
+   ]
+  },
+  {
+   "object": "CH28",
+   "caption": "Block Chart",
+   "label": "(no label)",
+   "qlik": "$(eEnplanedPassengers)",
+   "expanded": "((Sum ([# Transported Passengers]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Destination Country",
+    "Destination City"
+   ]
+  },
+  {
+   "object": "CH38",
+   "caption": "Other representations",
+   "label": "Linear gauge",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ]
+  },
+  {
+   "object": "CH38",
+   "caption": "Other representations",
+   "label": "Load Factor %",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ]
+  },
+  {
+   "object": "CH38",
+   "caption": "Other representations",
+   "label": "Traffic light",
+   "qlik": "$(ePerformedVsScheduled)",
+   "expanded": "((Sum([# Departures Performed]) / Sum([# Departures Scheduled])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ]
+  },
+  {
+   "object": "CH38",
+   "caption": "Other representations",
+   "label": "Performed vs scheduled flights",
+   "qlik": "$(ePerformedVsScheduled)",
+   "expanded": "((Sum([# Departures Performed]) / Sum([# Departures Scheduled])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ]
+  },
+  {
+   "object": "CH38",
+   "caption": "Other representations",
+   "label": "Mini chart",
+   "qlik": "$(eAirTime)",
+   "expanded": "((Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ]
+  },
+  {
+   "object": "CH38",
+   "caption": "Other representations",
+   "label": "Air time %",
+   "qlik": "$(eAirTime)",
+   "expanded": "((Sum ([# Air Time]) / Sum ([# Ramp-To-Ramp Time])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ]
+  },
+  {
+   "object": "CH41",
+   "caption": "Traffic per Year by Flight Type",
+   "label": "Load factor %",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Flight Type",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH42",
+   "caption": "Top N Flights",
+   "label": "Flights",
+   "qlik": "Sum([# Departures Performed])",
+   "expanded": "Sum([# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH43",
+   "caption": "FTE % to Total",
+   "label": "FTE % to Total",
+   "qlik": "Sum([# Equivalent FTEs]) / $(vTotalFTEs)",
+   "expanded": "Sum([# Equivalent FTEs]) / ( Sum([# Equivalent FTEs]))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH44",
+   "caption": "FTEs",
+   "label": "FTEs",
+   "qlik": "$(eFTEs)",
+   "expanded": "(Sum([# Equivalent FTEs]))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH45",
+   "caption": "# of Flights",
+   "label": "# of Flights",
+   "qlik": "$(eDeparturesPerformed_VarUnit(1))",
+   "expanded": "(Sum([# Departures Performed]) / 1)",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Group"
+   ]
+  },
+  {
+   "object": "CH45",
+   "caption": "# of Flights",
+   "label": "# of Flights (thousands)",
+   "qlik": "$(eDeparturesPerformed_VarUnit(1000))",
+   "expanded": "(Sum([# Departures Performed]) / 1000)",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Group"
+   ]
+  },
+  {
+   "object": "CH45",
+   "caption": "# of Flights",
+   "label": "# of Flights (millions)",
+   "qlik": "$(eDeparturesPerformed_VarUnit(1000000))",
+   "expanded": "(Sum([# Departures Performed]) / 1000000)",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Group"
+   ]
+  },
+  {
+   "object": "CH46",
+   "caption": "# of Flights by Carrier Group",
+   "label": "(no label)",
+   "qlik": "$($(=eMetric))",
+   "expanded": "$($(=eMetric))",
+   "qlik_semantics": [
+    "dollar_expansion"
+   ],
+   "dims": [
+    "Carrier Group"
+   ]
+  },
+  {
+   "object": "CH47",
+   "caption": "Using the TOTAL Qualifier",
+   "label": "Enplaned passengers (millions)",
+   "qlik": "$(eEnplanedPassengers)",
+   "expanded": "((Sum ([# Transported Passengers]) / 1000000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH47",
+   "caption": "Using the TOTAL Qualifier",
+   "label": "Departures Performed (thousands)",
+   "qlik": "$(eDeparturesPerformed)",
+   "expanded": "((Sum ([# Departures Performed]) / 1000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH47",
+   "caption": "Using the TOTAL Qualifier",
+   "label": "Participation to the whole",
+   "qlik": "Sum([# Departures Performed]) / Sum(TOTAL [# Departures Performed])",
+   "expanded": "Sum([# Departures Performed]) / Sum(TOTAL [# Departures Performed])",
+   "qlik_semantics": [
+    "total_qualifier"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH47",
+   "caption": "Using the TOTAL Qualifier",
+   "label": "% vs the Carrier’s whole",
+   "qlik": "Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])",
+   "expanded": "Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])",
+   "qlik_semantics": [
+    "total_qualifier"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH47",
+   "caption": "Using the TOTAL Qualifier",
+   "label": "% vs the Carrier’s whole per year",
+   "qlik": "Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])",
+   "expanded": "Sum([# Departures Performed]) / Sum(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])",
+   "qlik_semantics": [
+    "total_qualifier"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH48",
+   "caption": "Carrier Classification by # of Interstate Routes",
+   "label": "# of Carriers",
+   "qlik": "Count(DISTINCT [Carrier Name])",
+   "expanded": "Count(DISTINCT [Carrier Name])",
+   "qlik_semantics": [],
+   "dims": [
+    "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])"
+   ]
+  },
+  {
+   "object": "CH49",
+   "caption": "Average Load Factor per Route per Airline",
+   "label": "Average Load Factor per Route",
+   "qlik": "Avg(Aggr($(eLoadFactor), Airline, [From - To Airport ID]))",
+   "expanded": "Avg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), Airline, [From - To Airport ID]))",
+   "qlik_semantics": [
+    "aggr"
+   ],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH49",
+   "caption": "Average Load Factor per Route per Airline",
+   "label": "Airline's Global Load Factor",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH50",
+   "caption": "Load Factor % Heat Map",
+   "label": "Load Factor %",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH51",
+   "caption": "Load Factor % Heat Map",
+   "label": "Load Factor %",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Name",
+    "Year",
+    "Month"
+   ]
+  },
+  {
+   "object": "CH52",
+   "caption": "# of Carriers by Interval",
+   "label": "# of Carriers",
+   "qlik": "Count(DISTINCT [Carrier Name])",
+   "expanded": "Count(DISTINCT [Carrier Name])",
+   "qlik_semantics": [],
+   "dims": [
+    "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')"
+   ]
+  },
+  {
+   "object": "CH53",
+   "caption": "# of Airlines vs Load Factor %",
+   "label": "# of Airlines",
+   "qlik": "Count(DISTINCT [Carrier Name])",
+   "expanded": "Count(DISTINCT [Carrier Name])",
+   "qlik_semantics": [],
+   "dims": [
+    "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')"
+   ]
+  },
+  {
+   "object": "CH54",
+   "caption": "# of Airlines vs Load Factor %",
+   "label": "# of Airlines",
+   "qlik": "Count(DISTINCT [Carrier Name])",
+   "expanded": "Count(DISTINCT [Carrier Name])",
+   "qlik_semantics": [],
+   "dims": [
+    "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')"
+   ]
+  },
+  {
+   "object": "CH55",
+   "caption": "The Dimensionality function",
+   "label": "Departures Performed (thousands)",
+   "qlik": "$(eDeparturesPerformed)",
+   "expanded": "((Sum ([# Departures Performed]) / 1000))",
+   "qlik_semantics": [],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Aircraft Name"
+   ]
+  },
+  {
+   "object": "CH55",
+   "caption": "The Dimensionality function",
+   "label": "Dimensionality",
+   "qlik": "Dimensionality()",
+   "expanded": "Dimensionality()",
+   "qlik_semantics": [
+    "dimensionality"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Airline",
+    "Aircraft Name"
+   ]
+  },
+  {
+   "object": "CH56",
+   "caption": "Pick Function example: Avg Load Factor per Route",
+   "label": "Avg Load Factor per Route",
+   "qlik": "Pick(Dimensionality() + 1,\n\tAvg(Aggr($(eLoadFactor), [From - To Airport ID])),\n\tAvg(Aggr($(eLoadFactor), [From - To Airport ID], [Flight Type])),\n\tAvg(Aggr($(eLoadFactor), [From - To Airport ID], [Flight Type], [Carrier Group])),\n\tAvg(Aggr($(eLoadFactor), [From - To Airport ID], [Carrier Group], [Flight Type], [Carrier Name])))",
+   "expanded": "Pick(Dimensionality() + 1,\n\tAvg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), [From - To Airport ID])),\n\tAvg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), [From - To Airport ID], [Flight Type])),\n\tAvg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), [From - To Airport ID], [Flight Type], [Carrier Group])),\n\tAvg(Aggr(((Sum ([# Transported Passengers]) / Sum ([# Available Seats]))), [From - To Airport ID], [Carrier Group], [Flight Type], [Carrier Name])))",
+   "qlik_semantics": [
+    "aggr",
+    "dimensionality",
+    "pick_match"
+   ],
+   "dims": [
+    "Flight Type",
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH56",
+   "caption": "Pick Function example: Avg Load Factor per Route",
+   "label": "Direct Load Factor",
+   "qlik": "$(eLoadFactor)",
+   "expanded": "((Sum ([# Transported Passengers]) / Sum ([# Available Seats])))",
+   "qlik_semantics": [],
+   "dims": [
+    "Flight Type",
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH57",
+   "caption": "Basic Set Analysis Examples",
+   "label": "Foreign Carriers' flights",
+   "qlik": "Sum({$<[Carrier Group] = {'Foreign Carriers'}>} [# Departures Performed])",
+   "expanded": "Sum({$<[Carrier Group] = {'Foreign Carriers'}>} [# Departures Performed])",
+   "qlik_semantics": [
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH57",
+   "caption": "Basic Set Analysis Examples",
+   "label": "Domestic and Latin America (2010)",
+   "qlik": "Sum({$<[Carrier's Operating Region] = {'Domestic', 'Latin America'}, Year = {2010}>} [# Departures Performed])",
+   "expanded": "Sum({$<[Carrier's Operating Region] = {'Domestic', 'Latin America'}, Year = {2010}>} [# Departures Performed])",
+   "qlik_semantics": [
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH57",
+   "caption": "Basic Set Analysis Examples",
+   "label": "2010 Flights",
+   "qlik": "Sum({$<Year = {2010}>} [# Departures Performed])",
+   "expanded": "Sum({$<Year = {2010}>} [# Departures Performed])",
+   "qlik_semantics": [
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH57",
+   "caption": "Basic Set Analysis Examples",
+   "label": "2011 Flights",
+   "qlik": "Sum({$<Year = {2011}>} [# Departures Performed])",
+   "expanded": "Sum({$<Year = {2011}>} [# Departures Performed])",
+   "qlik_semantics": [
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH57",
+   "caption": "Basic Set Analysis Examples",
+   "label": "='Current Year Flights (' & Max(Year) & ')'",
+   "qlik": "Sum({$<Year = {$(=Max(Year))}>} [# Departures Performed])",
+   "expanded": "Sum({$<Year = {$(=Max(Year))}>} [# Departures Performed])",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH57",
+   "caption": "Basic Set Analysis Examples",
+   "label": "='Previous Year Flights (' & (Max(Year) - 1) & ')'",
+   "qlik": "Sum({$<Year = {$(=Max(Year)-1)}>} [# Departures Performed])",
+   "expanded": "Sum({$<Year = {$(=Max(Year)-1)}>} [# Departures Performed])",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH58",
+   "caption": "Set Operators Example",
+   "label": "This expression will result in the total number of flights performed during 2011 by carriers operating in Latin America plus flights performed during 2010 by carriers operating as Domestic, but excluding Foreign Carriers from both sets.",
+   "qlik": "Sum({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> \n\t+ <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}>\n\t- <[Carrier Group] = {'Foreign Carrier'}>} [# Departures Performed])",
+   "expanded": "Sum({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> \n\t+ <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}>\n\t- <[Carrier Group] = {'Foreign Carrier'}>} [# Departures Performed])",
+   "qlik_semantics": [
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Group",
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH59",
+   "caption": "Element Functions example",
+   "label": "Total flights for years that are not selected/associated",
+   "qlik": "Sum({1<Year = e(Year)>} [# Departures Performed])",
+   "expanded": "Sum({1<Year = e(Year)>} [# Departures Performed])",
+   "qlik_semantics": [
+    "set_analysis"
+   ],
+   "dims": [
+    "Year"
+   ]
+  },
+  {
+   "object": "CH60 — YTD Flights 2011 vs 2010",
+   "caption": null,
+   "label": "Var %",
+   "qlik": "(Sum({$<$(vSetYTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetLYYTD)> } [# Departures Performed]))\n\t- 1",
+   "expanded": "(Sum({$<$(vSetYTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetLYYTD)> } [# Departures Performed]))\n\t- 1",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": []
+  },
+  {
+   "object": "CH61 — MTD Flights 2011 vs 2010",
+   "caption": null,
+   "label": "Var %",
+   "qlik": "(Sum({$<$(vSetMTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetLYMTD)> } [# Departures Performed]))\n\t- 1",
+   "expanded": "(Sum({$<$(vSetMTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetLYMTD)> } [# Departures Performed]))\n\t- 1",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": []
+  },
+  {
+   "object": "CH62 — Dec, 2011 vs",
+   "caption": null,
+   "label": "Var %",
+   "qlik": "(Sum({$<$(vSetMTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetPreviousMonth)> } [# Departures Performed]))\n\t- 1",
+   "expanded": "(Sum({$<$(vSetMTD)> } [# Departures Performed])\n\t/\nSum({$<$(vSetPreviousMonth)> } [# Departures Performed]))\n\t- 1",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": []
+  },
+  {
+   "object": "CH65",
+   "caption": "Point In Time Analysis",
+   "label": "YTD Flights",
+   "qlik": "Sum({$<$(vSetYTD)>} [# Departures Performed])",
+   "expanded": "Sum({$<$(vSetYTD)>} [# Departures Performed])",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH65",
+   "caption": "Point In Time Analysis",
+   "label": "Current Month Flights",
+   "qlik": "Sum({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])",
+   "expanded": "Sum({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH65",
+   "caption": "Point In Time Analysis",
+   "label": "Flights Previous Month",
+   "qlik": "Sum({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])",
+   "expanded": "Sum({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH65",
+   "caption": "Point In Time Analysis",
+   "label": "Flights Two Months Ago",
+   "qlik": "Sum({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])",
+   "expanded": "Sum({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])",
+   "qlik_semantics": [
+    "dollar_expansion",
+    "set_analysis"
+   ],
+   "dims": [
+    "Carrier Name"
+   ]
+  },
+  {
+   "object": "CH66",
+   "caption": "Group A vs Group B",
+   "label": "Group A",
+   "qlik": "Sum({[Group A] * $} [# Departures Performed])",
+   "expanded": "Sum({[Group A] * $} [# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "Period"
+   ]
+  },
+  {
+   "object": "CH66",
+   "caption": "Group A vs Group B",
+   "label": "Group B",
+   "qlik": "Sum({[Group B] * $} [# Departures Performed])",
+   "expanded": "Sum({[Group B] * $} [# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "Period"
+   ]
+  },
+  {
+   "object": "CH67",
+   "caption": "Group A vs Group B",
+   "label": "Group A",
+   "qlik": "Sum({[Group A] * $} [# Departures Performed])",
+   "expanded": "Sum({[Group A] * $} [# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "Period"
+   ]
+  },
+  {
+   "object": "CH67",
+   "caption": "Group A vs Group B",
+   "label": "Group B",
+   "qlik": "Sum({[Group B] * $} [# Departures Performed])",
+   "expanded": "Sum({[Group B] * $} [# Departures Performed])",
+   "qlik_semantics": [],
+   "dims": [
+    "Period"
+   ]
+  }
+ ],
+ "converter_assessment": {
+  "verdict": "partial",
+  "input_needed": "QVW is not readable by Qlik-To-PowerBI (QVF/JSON only); fed QVW-derived intermediate JSON from this manifest",
+  "trial": {
+   "exit": 0,
+   "tmdl_tables": 24,
+   "generic_table_names": 8,
+   "dax_measures": 58,
+   "dax_measures_unconverted": 24,
+   "relationships": [
+    [
+     "'Main Data'.'# Ramp-To-Ramp Time'",
+     "Calendar.Date"
+    ],
+    [
+     "'Aircraft Types'.'Aircraft Begin Date'",
+     "Calendar.Date"
+    ],
+    [
+     "Temp_Calendar_Range.MinDate",
+     "Calendar.Date"
+    ],
+    [
+     "Table2.Period",
+     "'Master Calendar'.Period"
+    ]
+   ],
+   "report_pages": 13,
+   "reported_fidelity": "100% (not credible: unconverted Qlik syntax counted as exact)"
+  },
+  "unconverted_measures": [
+   [
+    "'# of Passengers'",
+    "$(eEnplanedPassengers)"
+   ],
+   [
+    "'# of Available Seats'",
+    "$(eAvailableSeats)"
+   ],
+   [
+    "'Load Factor'",
+    "=$(eLoadFactor)"
+   ],
+   [
+    "'Load Factor %'",
+    "$(eLoadFactor)"
+   ],
+   [
+    "'Performed vs Scheduled'",
+    "$(ePerformedVsScheduled)"
+   ],
+   [
+    "'Air time %'",
+    "$(eAirTime)"
+   ],
+   [
+    "'Departures Performed (thousands)'",
+    "$(eDeparturesPerformed)"
+   ],
+   [
+    "'FTE % to Total'",
+    "SUM([# Equivalent FTEs]) / $(vTotalFTEs)"
+   ],
+   [
+    "FTEs",
+    "$(eFTEs)"
+   ],
+   [
+    "'# of Flights (thousands)'",
+    "$(eDeparturesPerformed_VarUnit(1000))"
+   ],
+   [
+    "'# of Flights (millions)'",
+    "$(eDeparturesPerformed_VarUnit(1000000))"
+   ],
+   [
+    "'Participation to the whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name]> [# Departures Performed])"
+   ],
+   [
+    "'% vs the Carrier’s whole per year'",
+    "SUM([# Departures Performed]) / SUM(TOTAL <[Carrier Group], [Carrier Name], Year> [# Departures Performed])"
+   ],
+   [
+    "'Average Load Factor per Route'",
+    "AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', 'Table2'[Airline], [From - To Airport ID]), \"@value\", $(eLoadFactor)))"
+   ],
+   [
+    "Dimensionality",
+    "Dimensionality()"
+   ],
+   [
+    "'Avg Load Factor per Route'",
+    "``` SWITCH(Dimensionality() + 1, AVERAGE(ADDCOLUMNS(SUMMARIZE('Table2', [From - To Airport ID]), \"@value\", $(eLoadFactor))), AVERAGE(ADDCOLU"
+   ],
+   [
+    "'This expression will result in the total number of flights performed during 2011 by carriers operating in Latin America plus flights performed during 2010 by carriers operating as Domestic, but excluding Foreign Carriers from both sets.'",
+    "``` SUM({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> + <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}> -"
+   ],
+   [
+    "'Var %'",
+    "``` (SUM({$<$(vSetYTD)> } [# Departures Performed]) / SUM({$<$(vSetLYYTD)> } [# Departures Performed])) - 1 ```"
+   ],
+   [
+    "'YTD Flights'",
+    "SUM({$<$(vSetYTD)>} [# Departures Performed])"
+   ],
+   [
+    "'Current Month Flights'",
+    "SUM({$<$(vSetPreviousNMonth(0))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Previous Month'",
+    "SUM({$<$(vSetPreviousNMonth(1))>} [# Departures Performed])"
+   ],
+   [
+    "'Flights Two Months Ago'",
+    "SUM({$<$(vSetPreviousNMonth(2))>} [# Departures Performed])"
+   ],
+   [
+    "vTotalFTEs",
+    "= SUM([# Equivalent FTEs])"
+   ]
+  ],
+  "chart_types": [
+   "",
+   "Bar Chart",
+   "Block Chart",
+   "Combo Chart",
+   "Funnel Chart",
+   "Gauge Chart",
+   "Grid Chart",
+   "Line Chart",
+   "Mekko Chart",
+   "Pie Chart",
+   "Pivot Table",
+   "Radar Chart",
+   "Scatter Chart",
+   "Straight Table"
+  ]
+ },
+ "pbip_plan": {
+  "relationships_from_keys": [
+   {
+    "key": "%Airline ID",
+    "tables": [
+     "Main Data",
+     "Airlines"
+    ]
+   },
+   {
+    "key": "%Carrier Group ID",
+    "tables": [
+     "Main Data",
+     "Carrier Groups"
+    ]
+   },
+   {
+    "key": "%Region Code",
+    "tables": [
+     "Main Data",
+     "Carrier Operating Region"
+    ]
+   },
+   {
+    "key": "%Origin Airport ID",
+    "tables": [
+     "Main Data",
+     "Origin Airports"
+    ]
+   },
+   {
+    "key": "%Origin Airport Market ID",
+    "tables": [
+     "Main Data",
+     "Origin Markets"
+    ]
+   },
+   {
+    "key": "%Destination Airport ID",
+    "tables": [
+     "Main Data",
+     "Destination Airports"
+    ]
+   },
+   {
+    "key": "%Destination Airport Market ID",
+    "tables": [
+     "Main Data",
+     "Destination Markets"
+    ]
+   },
+   {
+    "key": "%Aircraft Type ID",
+    "tables": [
+     "Main Data",
+     "Aircraft Types"
+    ]
+   },
+   {
+    "key": "%Distance Group ID",
+    "tables": [
+     "Main Data",
+     "Distance Groups"
+    ]
+   },
+   {
+    "key": "%Datasource ID",
+    "tables": [
+     "Main Data",
+     "Flight Types"
+    ]
+   },
+   {
+    "key": "Period",
+    "tables": [
+     "Main Data",
+     "Master Calendar"
+    ]
+   }
+  ],
+  "fact_tables": [
+   "Main Data"
+  ],
+  "rls": null
+ },
+ "gaps": [
+  "Include files not in repo, cannot be extracted: config.qvs, tracerowcount.qvs, SetVariables.txt (defines vFolderSourceData etc.; source paths resolved by repo layout instead)",
+  "MS Access .mdb via Jet OLEDB: needs Access.Database M connector (32/64-bit ACE driver) or pre-export to CSV",
+  "QVD sources: Power BI cannot read QVD natively; converter emits Qvd.Document/placeholder CSV paths. Pre-convert QVDs to Parquet/CSV",
+  "MAPPING LOAD/ApplyMap: converter emits lookup table + no merge; hand-write M merge",
+  "Master calendar via AUTOGENERATE/WHILE/Peek: replace with DAX CALENDAR or M List.Dates; converter mis-relates Calendar.Date",
+  "COMMENT FIELDS/TABLES USING Comments.xls: map to TMDL descriptions manually",
+  "STORE INTO .qvd (QVD generator tab): ETL side effect, drop or move to dataflow",
+  "IF $(vLoadMainData) conditional load: no M equivalent; always load",
+  "LEFT KEEP: emulate with M inner merge/filter",
+  "22/85 chart expressions use Qlik-only semantics (TOTAL, Aggr, Dimensionality, inter-record, $-expansion...) needing hand-written DAX",
+  "Synthetic/system tables in model: $$SysTable 13, $$SysTable 14, $$SysTable 15",
+  "QlikView-only/approximate objects: text object×6, multi box×2, search object×1, button×3, current selections×3, bookmark object×1, container×3, statistics box×1, table box×1, input box×1, slider/calendar×1 (map to slicers/bookmarks/cards/field parameters/buttons manually)"
+ ]
+}

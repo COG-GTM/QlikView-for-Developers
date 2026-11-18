@@ -1,0 +1,15 @@
+{
+ "description": "Known, explained differences between the inventory row count (stored in the .qvw at the author's last reload) and the repo's source data. 'apps' is a regex on the manifest name.",
+ "exceptions": [
+  {
+   "apps": "Chapter0[4-8]__.*",
+   "table": "Origin Airports",
+   "reason": "Repo Dimension Tables.mdb (and Origin Airports.qvd) hold 6,209 airports; the .qvw was reloaded from an older copy of the .mdb with 2,104. The repo table is a superset: all 2,124 origin airport IDs used by Flight Data are present, so measures are unaffected; only unassociated airport rows differ."
+  },
+  {
+   "apps": "Chapter0[4-8]__.*",
+   "table": "Destination Airports",
+   "reason": "Repo Dimension Tables.mdb (and Destination Airports.qvd) hold 6,209 airports; the .qvw was reloaded from an older copy of the .mdb with 2,169. The repo table is a superset: all 2,185 destination airport IDs used by Flight Data are present, so measures are unaffected; only unassociated airport rows differ."
+  }
+ ]
+}

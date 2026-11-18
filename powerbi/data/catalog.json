@@ -1,0 +1,4137 @@
+{
+ "sources": {
+  "Chapter09/Aircrafts.csv": {
+   "kind": "CSV",
+   "sha256": "1fd584e44860df437b966f488033f561dfc5ba1768c0439c1d9e544c9f411af4",
+   "bytes": 10496,
+   "tables": [
+    {
+     "table": "Aircrafts",
+     "parquet": "powerbi/data/parquet/Chapter09/Aircrafts.parquet",
+     "source_rows": 147,
+     "rows": 147,
+     "columns": [
+      {
+       "name": "AC_TYPEID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Group",
+       "type": "string"
+      },
+      {
+       "name": "Manufacturer",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Name",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Short Name",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 5345
+    }
+   ],
+   "csv": {
+    "encoding": "cp1252",
+    "delimiter": ","
+   }
+  },
+  "Chapter09/Flights.csv": {
+   "kind": "CSV",
+   "sha256": "d1c3608be44ac0f870aae5ee77c24905b8233764ee1f0a575e157b461a119266",
+   "bytes": 19487,
+   "tables": [
+    {
+     "table": "Flights",
+     "parquet": "powerbi/data/parquet/Chapter09/Flights.parquet",
+     "source_rows": 542,
+     "rows": 542,
+     "columns": [
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Scheduled",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Performed",
+       "type": "int64"
+      },
+      {
+       "name": "# Available Seats",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Passengers",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Freight",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 13120
+    }
+   ],
+   "csv": {
+    "encoding": "utf-8-sig",
+    "delimiter": ","
+   }
+  },
+  "Chapter10/Crosstable example.xls": {
+   "kind": "Excel (biff)",
+   "sha256": "f72b4509d02801f74258a6104b9b698fd5ccbbcaa9c50059f368c59b61f1ef29",
+   "bytes": 26112,
+   "tables": [
+    {
+     "table": "Sheet1",
+     "parquet": "powerbi/data/parquet/Chapter10/Crosstable example/Sheet1.parquet",
+     "source_rows": 4,
+     "rows": 4,
+     "columns": [
+      {
+       "name": "Department",
+       "type": "string"
+      },
+      {
+       "name": "Jan",
+       "type": "int64"
+      },
+      {
+       "name": "Feb",
+       "type": "int64"
+      },
+      {
+       "name": "Mar",
+       "type": "int64"
+      },
+      {
+       "name": "Apr",
+       "type": "int64"
+      },
+      {
+       "name": "May",
+       "type": "int64"
+      },
+      {
+       "name": "Jun",
+       "type": "int64"
+      },
+      {
+       "name": "Jul",
+       "type": "int64"
+      },
+      {
+       "name": "Aug",
+       "type": "int64"
+      },
+      {
+       "name": "Sep",
+       "type": "int64"
+      },
+      {
+       "name": "Oct",
+       "type": "int64"
+      },
+      {
+       "name": "Nov",
+       "type": "int64"
+      },
+      {
+       "name": "Dec",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 4189
+    }
+   ]
+  },
+  "Chapter10/Employment Statistics - CrossTable.qvd": {
+   "kind": "QVD",
+   "sha256": "93938d43d3e6e5b259ffa8e76b93d2ab284a77c74535cf54d3c39a9425ebe2f6",
+   "bytes": 69501,
+   "tables": [
+    {
+     "table": "Employment Data",
+     "parquet": "powerbi/data/parquet/Chapter10/Employment Statistics - CrossTable.parquet",
+     "source_rows": 255,
+     "rows": 255,
+     "columns": [
+      {
+       "name": "%Key",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Group ID (Old)",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "01",
+       "type": "int64"
+      },
+      {
+       "name": "02",
+       "type": "int64"
+      },
+      {
+       "name": "03",
+       "type": "int64"
+      },
+      {
+       "name": "04",
+       "type": "int64"
+      },
+      {
+       "name": "05",
+       "type": "int64"
+      },
+      {
+       "name": "06",
+       "type": "int64"
+      },
+      {
+       "name": "07",
+       "type": "int64"
+      },
+      {
+       "name": "08",
+       "type": "int64"
+      },
+      {
+       "name": "09",
+       "type": "int64"
+      },
+      {
+       "name": "10",
+       "type": "int64"
+      },
+      {
+       "name": "11",
+       "type": "int64"
+      },
+      {
+       "name": "12",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 22589
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Employment Data",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\QlikView Files\\Cross Table - Employment Statistics.qvw",
+    "CreateUtcTime": "2012-06-02 21:54:46",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Chapter10/Generic DB.xlsx": {
+   "kind": "Excel (ooxml)",
+   "sha256": "d01190731b0fca4341b315e434a73d2d5910f6f8cc68c2c9c64fd45f3cfb19ec",
+   "bytes": 8238,
+   "tables": [
+    {
+     "table": "GenericDB",
+     "parquet": "powerbi/data/parquet/Chapter10/Generic DB/GenericDB.parquet",
+     "source_rows": 10,
+     "rows": 10,
+     "columns": [
+      {
+       "name": "Object",
+       "type": "string"
+      },
+      {
+       "name": "Attribute",
+       "type": "string"
+      },
+      {
+       "name": "Value",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1131
+    }
+   ]
+  },
+  "Chapter10/Hierarchy example.xls": {
+   "kind": "Excel (biff)",
+   "sha256": "090688c188485f91ae2bad6e294ae72257c304d6bbd3f76bc05a581f35dc3b5c",
+   "bytes": 25600,
+   "tables": [
+    {
+     "table": "Sheet1",
+     "parquet": "powerbi/data/parquet/Chapter10/Hierarchy example/Sheet1.parquet",
+     "source_rows": 10,
+     "rows": 10,
+     "columns": [
+      {
+       "name": "Parent_ID",
+       "type": "int64"
+      },
+      {
+       "name": "Child_ID",
+       "type": "int64"
+      },
+      {
+       "name": "Parent",
+       "type": "string"
+      },
+      {
+       "name": "Child",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1588
+    }
+   ]
+  },
+  "Data Files/CSVs/Aircraft_2010_Update.csv": {
+   "kind": "CSV",
+   "sha256": "a3567c0777242ab4529fdd46bce96a24dbe607fb1b391d616a27156a600ad996",
+   "bytes": 914,
+   "tables": [
+    {
+     "table": "Aircraft_2010_Update",
+     "parquet": "powerbi/data/parquet/Data Files/CSVs/Aircraft_2010_Update.parquet",
+     "source_rows": 9,
+     "rows": 9,
+     "columns": [
+      {
+       "name": "AC_TYPEID",
+       "type": "int64"
+      },
+      {
+       "name": "AC_GROUPNAME",
+       "type": "string"
+      },
+      {
+       "name": "SSD_NAME",
+       "type": "string"
+      },
+      {
+       "name": "MANUFACTURER",
+       "type": "string"
+      },
+      {
+       "name": "LONG_NAME",
+       "type": "string"
+      },
+      {
+       "name": "SHORT_NAME",
+       "type": "string"
+      },
+      {
+       "name": "BEGIN_DATE",
+       "type": "date"
+      },
+      {
+       "name": "END_DATE",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 3215
+    }
+   ],
+   "csv": {
+    "encoding": "cp1252",
+    "delimiter": ";"
+   }
+  },
+  "Data Files/CSVs/Aircraft_Base_File.csv": {
+   "kind": "CSV",
+   "sha256": "c63679d825516579f9b7ab3dfe88e815e6a83a2f316f7ad640d517dbf45f8fea",
+   "bytes": 26996,
+   "tables": [
+    {
+     "table": "Aircraft_Base_File",
+     "parquet": "powerbi/data/parquet/Data Files/CSVs/Aircraft_Base_File.parquet",
+     "source_rows": 369,
+     "rows": 369,
+     "columns": [
+      {
+       "name": "AC_TYPEID",
+       "type": "int64"
+      },
+      {
+       "name": "AC_GROUP",
+       "type": "int64"
+      },
+      {
+       "name": "SSD_NAME",
+       "type": "string"
+      },
+      {
+       "name": "MANUFACTURER",
+       "type": "string"
+      },
+      {
+       "name": "LONG_NAME",
+       "type": "string"
+      },
+      {
+       "name": "SHORT_NAME",
+       "type": "string"
+      },
+      {
+       "name": "BEGIN_DATE",
+       "type": "date"
+      },
+      {
+       "name": "END_DATE",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 13518
+    }
+   ],
+   "csv": {
+    "encoding": "cp1252",
+    "delimiter": ";"
+   }
+  },
+  "Data Files/CSVs/Aircraft_Group.csv": {
+   "kind": "CSV",
+   "sha256": "ce2476cb14badf701659a499695b7f713e0438a3000cc7acaea5188e6414efb8",
+   "bytes": 310,
+   "tables": [
+    {
+     "table": "Aircraft_Group",
+     "parquet": "powerbi/data/parquet/Data Files/CSVs/Aircraft_Group.parquet",
+     "source_rows": 9,
+     "rows": 9,
+     "columns": [
+      {
+       "name": "Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Engine Type",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Number Of Engines",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1396
+    }
+   ],
+   "csv": {
+    "encoding": "cp1252",
+    "delimiter": ";"
+   }
+  },
+  "Data Files/CSVs/Aircraft_Manufacturers.csv": {
+   "kind": "CSV",
+   "sha256": "a6fc174608939b14ed1db77292c1a90f527c322f903876101b0f26a80065131a",
+   "bytes": 2093,
+   "tables": [
+    {
+     "table": "Aircraft_Manufacturers",
+     "parquet": "powerbi/data/parquet/Data Files/CSVs/Aircraft_Manufacturers.parquet",
+     "source_rows": 85,
+     "rows": 85,
+     "columns": [
+      {
+       "name": "Company",
+       "type": "string"
+      },
+      {
+       "name": "Country",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1716
+    }
+   ],
+   "csv": {
+    "encoding": "cp1252",
+    "delimiter": ";"
+   }
+  },
+  "Data Files/CSVs/Destination Markets.csv": {
+   "kind": "CSV",
+   "sha256": "6ee419cfb5cae3daa24876e77b942bddc4892d4a771874bc8c541631453fff9b",
+   "bytes": 46092,
+   "tables": [
+    {
+     "table": "Destination Markets",
+     "parquet": "powerbi/data/parquet/Data Files/CSVs/Destination Markets.parquet",
+     "source_rows": 1903,
+     "rows": 1903,
+     "columns": [
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "Destination Market",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 23777
+    }
+   ],
+   "csv": {
+    "encoding": "cp1252",
+    "delimiter": "\t"
+   }
+  },
+  "Data Files/CSVs/Origin Markets.csv": {
+   "kind": "CSV",
+   "sha256": "fe4119d9b36096e426a4645622b317eb3b95a8d447d8339e4a9f156c1bbe2e9a",
+   "bytes": 44579,
+   "tables": [
+    {
+     "table": "Origin Markets",
+     "parquet": "powerbi/data/parquet/Data Files/CSVs/Origin Markets.parquet",
+     "source_rows": 1841,
+     "rows": 1841,
+     "columns": [
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "Origin Market",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 23026
+    }
+   ],
+   "csv": {
+    "encoding": "cp1252",
+    "delimiter": "\t"
+   }
+  },
+  "Data Files/Excel/Comments.xls": {
+   "kind": "Excel (biff)",
+   "sha256": "ccb4a715ef2c173ac9919d631d15c5aac388b5b409795042f4ca887a5492fea5",
+   "bytes": 24576,
+   "tables": [
+    {
+     "table": "Tables",
+     "parquet": "powerbi/data/parquet/Data Files/Excel/Comments/Tables.parquet",
+     "source_rows": 1,
+     "rows": 1,
+     "columns": [
+      {
+       "name": "TableName",
+       "type": "string"
+      },
+      {
+       "name": "Comment",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1237
+    },
+    {
+     "table": "Fields",
+     "parquet": "powerbi/data/parquet/Data Files/Excel/Comments/Fields.parquet",
+     "source_rows": 10,
+     "rows": 10,
+     "columns": [
+      {
+       "name": "FieldName",
+       "type": "string"
+      },
+      {
+       "name": "Comment",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1296
+    }
+   ]
+  },
+  "Data Files/MDBs/Dimension Tables.mdb": {
+   "kind": "MS Access",
+   "sha256": "f075eb93274971458183e4e922ced4eeee52e45994fd40d66e74a171214adb20",
+   "bytes": 4100096,
+   "tables": [
+    {
+     "table": "Aircraft Configuration",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Aircraft Configuration.parquet",
+     "source_rows": 4,
+     "rows": 4,
+     "columns": [
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Configuration",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1067
+    },
+    {
+     "table": "Aircraft Types",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Aircraft Types.parquet",
+     "source_rows": 379,
+     "rows": 379,
+     "columns": [
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Type",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 5745
+    },
+    {
+     "table": "Airlines",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Airlines.parquet",
+     "source_rows": 1548,
+     "rows": 1548,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "Airline",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 23921
+    },
+    {
+     "table": "Carrier Groups",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Carrier Groups.parquet",
+     "source_rows": 8,
+     "rows": 8,
+     "columns": [
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1891
+    },
+    {
+     "table": "Carrier Operating Region",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Carrier Operating Region.parquet",
+     "source_rows": 6,
+     "rows": 6,
+     "columns": [
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier's Operating Region",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 872
+    },
+    {
+     "table": "Destination Airports",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Destination Airports.parquet",
+     "source_rows": 6209,
+     "rows": 6209,
+     "columns": [
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "Destination Airport",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 109280
+    },
+    {
+     "table": "Destination World Areas",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Destination World Areas.parquet",
+     "source_rows": 208,
+     "rows": 208,
+     "columns": [
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Destination World Area",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 3089
+    },
+    {
+     "table": "Distance Groups",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Distance Groups.parquet",
+     "source_rows": 22,
+     "rows": 22,
+     "columns": [
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Distance Interval",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1078
+    },
+    {
+     "table": "Flight Types",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Flight Types.parquet",
+     "source_rows": 4,
+     "rows": 4,
+     "columns": [
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "Flight Type",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 912
+    },
+    {
+     "table": "Origin Airports",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Origin Airports.parquet",
+     "source_rows": 6209,
+     "rows": 6209,
+     "columns": [
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "Origin Airport",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 109248
+    },
+    {
+     "table": "Origin Markets",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Origin Markets.parquet",
+     "source_rows": 5606,
+     "rows": 5606,
+     "columns": [
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "Origin Market",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 60485
+    },
+    {
+     "table": "Origin World Areas",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Origin World Areas.parquet",
+     "source_rows": 211,
+     "rows": 211,
+     "columns": [
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Origin World Area",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 3097
+    },
+    {
+     "table": "Service Classes",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Service Classes.parquet",
+     "source_rows": 4,
+     "rows": 4,
+     "columns": [
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "Service Class",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 981
+    },
+    {
+     "table": "Aircraft Groups",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Aircraft Groups.parquet",
+     "source_rows": 9,
+     "rows": 9,
+     "columns": [
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Group",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1055
+    },
+    {
+     "table": "L_CITY_MARKET_ID_ImportErrors",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/L_CITY_MARKET_ID_ImportErrors.parquet",
+     "source_rows": 3161,
+     "rows": 3161,
+     "columns": [
+      {
+       "name": "Error",
+       "type": "string"
+      },
+      {
+       "name": "Field",
+       "type": "string"
+      },
+      {
+       "name": "Row",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 9226
+    },
+    {
+     "table": "Destination Markets",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/Destination Markets.parquet",
+     "source_rows": 5606,
+     "rows": 5606,
+     "columns": [
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "Destination Market",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 60513
+    },
+    {
+     "table": "L_CITY_MARKET_ID_ImportErrors1",
+     "parquet": "powerbi/data/parquet/Data Files/MDBs/Dimension Tables/L_CITY_MARKET_ID_ImportErrors1.parquet",
+     "source_rows": 3161,
+     "rows": 3161,
+     "columns": [
+      {
+       "name": "Error",
+       "type": "string"
+      },
+      {
+       "name": "Field",
+       "type": "string"
+      },
+      {
+       "name": "Row",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 9251
+    }
+   ]
+  },
+  "Data Files/QVDs/Aircraft Configuration.qvd": {
+   "kind": "QVD",
+   "sha256": "fb392a7c1ffe5dffd4e5df03a301ca250fb4a8acc6c1d1195066fef417d513fc",
+   "bytes": 2411,
+   "tables": [
+    {
+     "table": "Aircraft Configuration",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Aircraft Configuration.parquet",
+     "source_rows": 6,
+     "rows": 6,
+     "columns": [
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Configuration",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1241
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Aircraft Configuration",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:37",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Aircraft Groups.qvd": {
+   "kind": "QVD",
+   "sha256": "1937f1089eb202ba6c63240eef120d395e711bb02c67afaee161221bef9020af",
+   "bytes": 2508,
+   "tables": [
+    {
+     "table": "Aircraft Groups",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Aircraft Groups.parquet",
+     "source_rows": 10,
+     "rows": 10,
+     "columns": [
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Group",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1201
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Aircraft Groups",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:37",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Aircraft Types Transformed.qvd": {
+   "kind": "QVD",
+   "sha256": "649d60b1da4ff57f43ab6a969fc99cdeb289051a61e7cf0a50f4210c3cf6a540",
+   "bytes": 28597,
+   "tables": [
+    {
+     "table": "Aircraft Types",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Aircraft Types Transformed.parquet",
+     "source_rows": 180,
+     "rows": 180,
+     "columns": [
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Name",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Manufacturer",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Manufacturer Country",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Name Full",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Name Abbreviated",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Begin Date",
+       "type": "date"
+      },
+      {
+       "name": "Aircraft End Date",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Age Classification",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Engine Type",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Number Of Engines",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 10107
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Aircraft Types",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Final Pack\\Chapters 1 - 11\\QlikView Development\\Airline Operations\\Apps\\Solution_Chapter 8_Airline Operations.qvw",
+    "CreateUtcTime": "2012-11-11 01:53:45",
+    "QvBuildNo": "11414"
+   }
+  },
+  "Data Files/QVDs/Aircraft Types.qvd": {
+   "kind": "QVD",
+   "sha256": "8a408bf651e2f53a64cb0036780e2e03b0609595365e61de8a8b55ec5517eeb1",
+   "bytes": 15468,
+   "tables": [
+    {
+     "table": "Aircraft Types",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Aircraft Types.parquet",
+     "source_rows": 379,
+     "rows": 379,
+     "columns": [
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Type",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 5745
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Aircraft Types",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:37",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Airlines.qvd": {
+   "kind": "QVD",
+   "sha256": "25aa98592077461284873cd60793f8675e714ce8883c7de26b1c36f184c37474",
+   "bytes": 65239,
+   "tables": [
+    {
+     "table": "Airlines",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Airlines.parquet",
+     "source_rows": 1548,
+     "rows": 1548,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "Airline",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 23921
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Airlines",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:37",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Carrier Decode.qvd": {
+   "kind": "QVD",
+   "sha256": "0c786bd7a5420af0edf0cc3714a271a886a5fb7fa587407dcc9c068d4b3a7650",
+   "bytes": 194705,
+   "tables": [
+    {
+     "table": "Carrier Decode",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Carrier Decode.parquet",
+     "source_rows": 2420,
+     "rows": 2420,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Entity",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Entity",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Carrier World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group ID (Old)",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Region Code",
+       "type": "string"
+      },
+      {
+       "name": "Start Date",
+       "type": "date"
+      },
+      {
+       "name": "End Date",
+       "type": "date"
+      }
+     ],
+     "parquet_bytes": 81550
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Carrier Decode",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:37",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Carrier Groups.qvd": {
+   "kind": "QVD",
+   "sha256": "c6ab1c73b549b07dc52ca1c23eadc9688f36ba7f153959e05366a6394577c060",
+   "bytes": 3072,
+   "tables": [
+    {
+     "table": "Carrier Groups",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Carrier Groups.parquet",
+     "source_rows": 8,
+     "rows": 8,
+     "columns": [
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1891
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Carrier Groups",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:37",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Carrier Operating Region.qvd": {
+   "kind": "QVD",
+   "sha256": "a51e37f6b9535c3861b330f0865243e54ceff392e79fec84cd76a6228cf9babb",
+   "bytes": 2222,
+   "tables": [
+    {
+     "table": "Carrier Operating Region",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Carrier Operating Region.parquet",
+     "source_rows": 6,
+     "rows": 6,
+     "columns": [
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier's Operating Region",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 872
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Carrier Operating Region",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:37",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Destination Airports.qvd": {
+   "kind": "QVD",
+   "sha256": "1237b40a071ea1fa3e59652bcb063764cb4fad72fdf3845197ab9bed23484c47",
+   "bytes": 329884,
+   "tables": [
+    {
+     "table": "Destination Airports",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Destination Airports.parquet",
+     "source_rows": 6209,
+     "rows": 6209,
+     "columns": [
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "Destination Airport",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 109280
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Destination Airports",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:38",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Destination Markets.qvd": {
+   "kind": "QVD",
+   "sha256": "7b23e5c55c0292c18dcdff45e68b938b818b7c7188ef63c039053b5e4a8071b5",
+   "bytes": 190351,
+   "tables": [
+    {
+     "table": "Destination Markets",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Destination Markets.parquet",
+     "source_rows": 5606,
+     "rows": 5606,
+     "columns": [
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "Destination Market",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 69040
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Destination Markets",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:38",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Destination World Areas.qvd": {
+   "kind": "QVD",
+   "sha256": "03081e7098dc1537d074d760e4045601f0a955dd19307fa1b2d60ec0b2276561",
+   "bytes": 10238,
+   "tables": [
+    {
+     "table": "Destination World Areas",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Destination World Areas.parquet",
+     "source_rows": 333,
+     "rows": 333,
+     "columns": [
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Destination World Area",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 4422
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Destination World Areas",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:38",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Distance Groups.qvd": {
+   "kind": "QVD",
+   "sha256": "9805ed575790acc552516a53923120b9ac951aed59a4ecc465e66663e2566b6b",
+   "bytes": 2823,
+   "tables": [
+    {
+     "table": "Distance Groups",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Distance Groups.parquet",
+     "source_rows": 25,
+     "rows": 25,
+     "columns": [
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Distance Interval",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1116
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Distance Groups",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:38",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Flight Data.qvd": {
+   "kind": "QVD",
+   "sha256": "a2f04e5403a8c6185e36a4025a1db62c28d34621325448a200bb07fbe28864a3",
+   "bytes": 94915210,
+   "tables": [
+    {
+     "table": "AllData",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Flight Data.parquet",
+     "source_rows": 1256075,
+     "rows": 1256075,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Unique Carrier Entity Code",
+       "type": "string"
+      },
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "# Departures Scheduled",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Performed",
+       "type": "int64"
+      },
+      {
+       "name": "# Payload",
+       "type": "int64"
+      },
+      {
+       "name": "Distance",
+       "type": "int64"
+      },
+      {
+       "name": "# Available Seats",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Passengers",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Freight",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Mail",
+       "type": "int64"
+      },
+      {
+       "name": "# Ramp-To-Ramp Time",
+       "type": "int64"
+      },
+      {
+       "name": "# Air Time",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Origin Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin City",
+       "type": "string"
+      },
+      {
+       "name": "Origin State Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Origin State",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country",
+       "type": "string"
+      },
+      {
+       "name": "Destination Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination City",
+       "type": "string"
+      },
+      {
+       "name": "Destination State Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Destination State",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Quarter",
+       "type": "string"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      },
+      {
+       "name": "From - To Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To Airport ID",
+       "type": "string"
+      },
+      {
+       "name": "From - To City",
+       "type": "string"
+      },
+      {
+       "name": "From - To State Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To State",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 59529547
+    }
+   ],
+   "qvd_header": {
+    "TableName": "AllData",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - T_T100_SEGMENT_ALL_CARRIER.qvw",
+    "CreateUtcTime": "2012-07-20 19:59:55",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Flight Types.qvd": {
+   "kind": "QVD",
+   "sha256": "21ac2787b66dc7d1fa7879a025563d6e90af2c41389b61450016e6ff3683fb78",
+   "bytes": 2107,
+   "tables": [
+    {
+     "table": "Flight Types",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Flight Types.parquet",
+     "source_rows": 4,
+     "rows": 4,
+     "columns": [
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "Flight Type",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 912
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Flight Types",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:38",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Origin Airports.qvd": {
+   "kind": "QVD",
+   "sha256": "9a10874df88d87c55775d05746f0622def9965202b04e5826cd9e9319c5ac313",
+   "bytes": 329869,
+   "tables": [
+    {
+     "table": "Origin Airports",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Origin Airports.parquet",
+     "source_rows": 6209,
+     "rows": 6209,
+     "columns": [
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "Origin Airport",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 109248
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Origin Airports",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:38",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Origin Markets.qvd": {
+   "kind": "QVD",
+   "sha256": "30d5fe14ae9706a45fdc8e1605e7bb1b3eccb0b20a211c6c630866bfa95ae9e1",
+   "bytes": 190336,
+   "tables": [
+    {
+     "table": "Origin Markets",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Origin Markets.parquet",
+     "source_rows": 5606,
+     "rows": 5606,
+     "columns": [
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "Origin Market",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 69012
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Origin Markets",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:38",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Origin World Areas.qvd": {
+   "kind": "QVD",
+   "sha256": "141480e2a2912e72efe60f9924da31b2180b7687f8906bc68a643bdf6714d86b",
+   "bytes": 10223,
+   "tables": [
+    {
+     "table": "Origin World Areas",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Origin World Areas.parquet",
+     "source_rows": 333,
+     "rows": 333,
+     "columns": [
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Origin World Area",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 4382
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Origin World Areas",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:38",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/Service Classes.qvd": {
+   "kind": "QVD",
+   "sha256": "d293d0f2e8b54cef7bff1921c98665b625ad11c9b5e737f8e49def1ab96aa1fb",
+   "bytes": 2825,
+   "tables": [
+    {
+     "table": "Service Classes",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/Service Classes.parquet",
+     "source_rows": 14,
+     "rows": 14,
+     "columns": [
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "Service Class",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1128
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Service Classes",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\Extract Dimension Tables.qvw",
+    "CreateUtcTime": "2012-07-20 01:16:37",
+    "QvBuildNo": "11282"
+   }
+  },
+  "Data Files/QVDs/T_F41SCHEDULE_P1A_EMP.qvd": {
+   "kind": "QVD",
+   "sha256": "fa4321e5adfc44949ae205e90066b031a2376d642c14880094d0692e5b8b789d",
+   "bytes": 106580,
+   "tables": [
+    {
+     "table": "Employment Statistics",
+     "parquet": "powerbi/data/parquet/Data Files/QVDs/T_F41SCHEDULE_P1A_EMP.parquet",
+     "source_rows": 2688,
+     "rows": 2688,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "# Full Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Part Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Total Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Equivalent FTEs",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      }
+     ],
+     "parquet_bytes": 40754
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Employment Statistics",
+    "CreatorDoc": "C:\\Users\\Mike\\Projects\\Other\\Airlines\\Book Files\\Chapters 10 - 15\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - T_F41SCHEDULE_P1A_EMP.qvw",
+    "CreateUtcTime": "2012-07-20 01:23:16",
+    "QvBuildNo": "11282"
+   }
+  },
+  "QVD/Source/Aircraft Configuration.qvd": {
+   "kind": "QVD",
+   "sha256": "e25f40909d7c47a175d9e8b1316f376907b0a2afb9fbd19a461acd69799f0b81",
+   "bytes": 2413,
+   "tables": [
+    {
+     "table": "Aircraft Configuration",
+     "parquet": "powerbi/data/parquet/QVD/Source/Aircraft Configuration.parquet",
+     "source_rows": 6,
+     "rows": 6,
+     "columns": [
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Configuration",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1241
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Aircraft Configuration",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Aircraft Groups.qvd": {
+   "kind": "QVD",
+   "sha256": "4be6a95f64d32d3f43e80386c6b57e2c087edb8c73322feec47d93cd6120fc91",
+   "bytes": 2510,
+   "tables": [
+    {
+     "table": "Aircraft Groups",
+     "parquet": "powerbi/data/parquet/QVD/Source/Aircraft Groups.parquet",
+     "source_rows": 10,
+     "rows": 10,
+     "columns": [
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Group",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1201
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Aircraft Groups",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Aircraft Types.qvd": {
+   "kind": "QVD",
+   "sha256": "c462f27f4a5104b8835b430d7bb909773257a0251f222c4f13f9ff7924ec0434",
+   "bytes": 15470,
+   "tables": [
+    {
+     "table": "Aircraft Types",
+     "parquet": "powerbi/data/parquet/QVD/Source/Aircraft Types.parquet",
+     "source_rows": 379,
+     "rows": 379,
+     "columns": [
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Type",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 5745
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Aircraft Types",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Airlines.qvd": {
+   "kind": "QVD",
+   "sha256": "acd301df0eee80212817082fc928f7fdb4ddf72c5516fcd3ec406740730fd877",
+   "bytes": 65241,
+   "tables": [
+    {
+     "table": "Airlines",
+     "parquet": "powerbi/data/parquet/QVD/Source/Airlines.parquet",
+     "source_rows": 1548,
+     "rows": 1548,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "Airline",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 23921
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Airlines",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Carrier Decode.qvd": {
+   "kind": "QVD",
+   "sha256": "fd3c5390d36cbda702766aa80bb8a712663c3d64cb064cecc5b5edb8aa495492",
+   "bytes": 194707,
+   "tables": [
+    {
+     "table": "Carrier Decode",
+     "parquet": "powerbi/data/parquet/QVD/Source/Carrier Decode.parquet",
+     "source_rows": 2420,
+     "rows": 2420,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Entity",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Entity",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Carrier World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group ID (Old)",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Region Code",
+       "type": "string"
+      },
+      {
+       "name": "Start Date",
+       "type": "date"
+      },
+      {
+       "name": "End Date",
+       "type": "date"
+      }
+     ],
+     "parquet_bytes": 81550
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Carrier Decode",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Carrier Groups.qvd": {
+   "kind": "QVD",
+   "sha256": "3ba989e3c779f6943f433cc824381340d90a066d711beec90554390d0d374233",
+   "bytes": 3074,
+   "tables": [
+    {
+     "table": "Carrier Groups",
+     "parquet": "powerbi/data/parquet/QVD/Source/Carrier Groups.parquet",
+     "source_rows": 8,
+     "rows": 8,
+     "columns": [
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1891
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Carrier Groups",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Carrier Operating Region.qvd": {
+   "kind": "QVD",
+   "sha256": "5f4e46c2ca24f7fab7ad86d011b32254c37117fbf2fc1f7242d66197c9d06dfa",
+   "bytes": 2224,
+   "tables": [
+    {
+     "table": "Carrier Operating Region",
+     "parquet": "powerbi/data/parquet/QVD/Source/Carrier Operating Region.parquet",
+     "source_rows": 6,
+     "rows": 6,
+     "columns": [
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier's Operating Region",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 872
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Carrier Operating Region",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Destination Airports.qvd": {
+   "kind": "QVD",
+   "sha256": "6213ac3bd3450b9b59df8c0c248ddd462840768a1bab48abd7bc19d546d6b1b8",
+   "bytes": 329886,
+   "tables": [
+    {
+     "table": "Destination Airports",
+     "parquet": "powerbi/data/parquet/QVD/Source/Destination Airports.parquet",
+     "source_rows": 6209,
+     "rows": 6209,
+     "columns": [
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "Destination Airport",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 109280
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Destination Airports",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:01",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Destination Markets.qvd": {
+   "kind": "QVD",
+   "sha256": "024d0adc8e02eaed235112b0cba25a6254ebd7e228af6070290066bf67ac3956",
+   "bytes": 190353,
+   "tables": [
+    {
+     "table": "Destination Markets",
+     "parquet": "powerbi/data/parquet/QVD/Source/Destination Markets.parquet",
+     "source_rows": 5606,
+     "rows": 5606,
+     "columns": [
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "Destination Market",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 69040
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Destination Markets",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:01",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Destination World Areas.qvd": {
+   "kind": "QVD",
+   "sha256": "a50706858052b111f21ccc73edb224329fbe9a927842320efac3569e425b6464",
+   "bytes": 10240,
+   "tables": [
+    {
+     "table": "Destination World Areas",
+     "parquet": "powerbi/data/parquet/QVD/Source/Destination World Areas.parquet",
+     "source_rows": 333,
+     "rows": 333,
+     "columns": [
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Destination World Area",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 4422
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Destination World Areas",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:01",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Distance Groups.qvd": {
+   "kind": "QVD",
+   "sha256": "b69e989271189b7bd8ba7d1f6b16b5a70a584288ea344b6066b6a3a4628fba05",
+   "bytes": 2825,
+   "tables": [
+    {
+     "table": "Distance Groups",
+     "parquet": "powerbi/data/parquet/QVD/Source/Distance Groups.parquet",
+     "source_rows": 25,
+     "rows": 25,
+     "columns": [
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Distance Interval",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1116
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Distance Groups",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:01",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Flight Data.qvd": {
+   "kind": "QVD",
+   "sha256": "899c7bf21f1b4051fa4bf4d925d5ab914efe5753d0043a283b4b770e1f815163",
+   "bytes": 94915202,
+   "tables": [
+    {
+     "table": "AllData",
+     "parquet": "powerbi/data/parquet/QVD/Source/Flight Data.parquet",
+     "source_rows": 1256075,
+     "rows": 1256075,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Unique Carrier Entity Code",
+       "type": "string"
+      },
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "# Departures Scheduled",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Performed",
+       "type": "int64"
+      },
+      {
+       "name": "# Payload",
+       "type": "int64"
+      },
+      {
+       "name": "Distance",
+       "type": "int64"
+      },
+      {
+       "name": "# Available Seats",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Passengers",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Freight",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Mail",
+       "type": "int64"
+      },
+      {
+       "name": "# Ramp-To-Ramp Time",
+       "type": "int64"
+      },
+      {
+       "name": "# Air Time",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Origin Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin City",
+       "type": "string"
+      },
+      {
+       "name": "Origin State Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Origin State",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country",
+       "type": "string"
+      },
+      {
+       "name": "Destination Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination City",
+       "type": "string"
+      },
+      {
+       "name": "Destination State Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Destination State",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Quarter",
+       "type": "string"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      },
+      {
+       "name": "From - To Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To Airport ID",
+       "type": "string"
+      },
+      {
+       "name": "From - To City",
+       "type": "string"
+      },
+      {
+       "name": "From - To State Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To State",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 59529547
+    }
+   ],
+   "qvd_header": {
+    "TableName": "AllData",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - T_T100_SEGMENT_ALL_CARRIER.qvw",
+    "CreateUtcTime": "2012-10-22 00:46:53",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Flight Types.qvd": {
+   "kind": "QVD",
+   "sha256": "3391e1aea53a5d329907c3f031c9568a48beafb4494817f932fe4ca5a68e1306",
+   "bytes": 2111,
+   "tables": [
+    {
+     "table": "Flight Types",
+     "parquet": "powerbi/data/parquet/QVD/Source/Flight Types.parquet",
+     "source_rows": 4,
+     "rows": 4,
+     "columns": [
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "Flight Type",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 912
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Flight Types",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:01",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Origin Airports.qvd": {
+   "kind": "QVD",
+   "sha256": "3cd6ce75d70c3d365a7f38c3985cc6846e50135b4d200370bbb8d50e915aa7b8",
+   "bytes": 329871,
+   "tables": [
+    {
+     "table": "Origin Airports",
+     "parquet": "powerbi/data/parquet/QVD/Source/Origin Airports.parquet",
+     "source_rows": 6209,
+     "rows": 6209,
+     "columns": [
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "Origin Airport",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 109248
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Origin Airports",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Origin Markets.qvd": {
+   "kind": "QVD",
+   "sha256": "7ce73b15b924d7955fde2399e91d788c4c3ed2979bd3f4c56e62c98ee0e46fae",
+   "bytes": 190338,
+   "tables": [
+    {
+     "table": "Origin Markets",
+     "parquet": "powerbi/data/parquet/QVD/Source/Origin Markets.parquet",
+     "source_rows": 5606,
+     "rows": 5606,
+     "columns": [
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "Origin Market",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 69012
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Origin Markets",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:01",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Origin World Areas.qvd": {
+   "kind": "QVD",
+   "sha256": "052c0f77accb272e70742b8c4375c280d4c4e95206b62a7830cad7b3952ee2e4",
+   "bytes": 10225,
+   "tables": [
+    {
+     "table": "Origin World Areas",
+     "parquet": "powerbi/data/parquet/QVD/Source/Origin World Areas.parquet",
+     "source_rows": 333,
+     "rows": 333,
+     "columns": [
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Origin World Area",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 4382
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Origin World Areas",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:01",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/Service Classes.qvd": {
+   "kind": "QVD",
+   "sha256": "45c2fcf33ba11743eb142a3d5768cf58d1caf57bd7bda004ca211307b987a035",
+   "bytes": 2827,
+   "tables": [
+    {
+     "table": "Service Classes",
+     "parquet": "powerbi/data/parquet/QVD/Source/Service Classes.parquet",
+     "source_rows": 14,
+     "rows": 14,
+     "columns": [
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "Service Class",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 1128
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Service Classes",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - Dimension Tables.qvw",
+    "CreateUtcTime": "2012-10-22 00:49:00",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/T_F41SCHEDULE_P1A_EMP.qvd": {
+   "kind": "QVD",
+   "sha256": "835d2a8220b9fcd1a5e452ea861c2d199e0f564f888ca9e981af25ed437f5724",
+   "bytes": 106576,
+   "tables": [
+    {
+     "table": "Employment Statistics",
+     "parquet": "powerbi/data/parquet/QVD/Source/T_F41SCHEDULE_P1A_EMP.parquet",
+     "source_rows": 2688,
+     "rows": 2688,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "# Full Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Part Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Total Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Equivalent FTEs",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      }
+     ],
+     "parquet_bytes": 40754
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Employment Statistics",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - T_F41SCHEDULE_P1A_EMP.qvw",
+    "CreateUtcTime": "2012-10-22 00:47:24",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/T_T100_SEGMENT_ALL_CARRIER_2009.QVD": {
+   "kind": "QVD",
+   "sha256": "5f4f98c6a8e304629613e585e0b261a597612ccfb876e680df37f666a02bdf6b",
+   "bytes": 31773977,
+   "tables": [
+    {
+     "table": "Data 2009",
+     "parquet": "powerbi/data/parquet/QVD/Source/T_T100_SEGMENT_ALL_CARRIER_2009.parquet",
+     "source_rows": 405258,
+     "rows": 405258,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Unique Carrier Entity Code",
+       "type": "string"
+      },
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "# Departures Scheduled",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Performed",
+       "type": "int64"
+      },
+      {
+       "name": "# Payload",
+       "type": "int64"
+      },
+      {
+       "name": "Distance",
+       "type": "int64"
+      },
+      {
+       "name": "# Available Seats",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Passengers",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Freight",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Mail",
+       "type": "int64"
+      },
+      {
+       "name": "# Ramp-To-Ramp Time",
+       "type": "int64"
+      },
+      {
+       "name": "# Air Time",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Origin Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin City",
+       "type": "string"
+      },
+      {
+       "name": "Origin State Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Origin State",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country",
+       "type": "string"
+      },
+      {
+       "name": "Destination Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination City",
+       "type": "string"
+      },
+      {
+       "name": "Destination State Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Destination State",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Quarter",
+       "type": "string"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      },
+      {
+       "name": "From - To Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To Airport ID",
+       "type": "string"
+      },
+      {
+       "name": "From - To City",
+       "type": "string"
+      },
+      {
+       "name": "From - To State Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To State",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 20450649
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Data 2009",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - T_T100_SEGMENT_ALL_CARRIER.qvw",
+    "CreateUtcTime": "2012-10-22 00:46:08",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/T_T100_SEGMENT_ALL_CARRIER_2010.QVD": {
+   "kind": "QVD",
+   "sha256": "1adadfc6b459c7c20a7c2d3475e904122b6ea079e0b542dfaf3d2a8d3633bb48",
+   "bytes": 32927858,
+   "tables": [
+    {
+     "table": "Data 2010",
+     "parquet": "powerbi/data/parquet/QVD/Source/T_T100_SEGMENT_ALL_CARRIER_2010.parquet",
+     "source_rows": 422130,
+     "rows": 422130,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Unique Carrier Entity Code",
+       "type": "string"
+      },
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "# Departures Scheduled",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Performed",
+       "type": "int64"
+      },
+      {
+       "name": "# Payload",
+       "type": "int64"
+      },
+      {
+       "name": "Distance",
+       "type": "int64"
+      },
+      {
+       "name": "# Available Seats",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Passengers",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Freight",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Mail",
+       "type": "int64"
+      },
+      {
+       "name": "# Ramp-To-Ramp Time",
+       "type": "int64"
+      },
+      {
+       "name": "# Air Time",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Origin Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin City",
+       "type": "string"
+      },
+      {
+       "name": "Origin State Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Origin State",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country",
+       "type": "string"
+      },
+      {
+       "name": "Destination Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination City",
+       "type": "string"
+      },
+      {
+       "name": "Destination State Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Destination State",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Quarter",
+       "type": "string"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      },
+      {
+       "name": "From - To Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To Airport ID",
+       "type": "string"
+      },
+      {
+       "name": "From - To City",
+       "type": "string"
+      },
+      {
+       "name": "From - To State Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To State",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 21046206
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Data 2010",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - T_T100_SEGMENT_ALL_CARRIER.qvw",
+    "CreateUtcTime": "2012-10-22 00:46:28",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Source/T_T100_SEGMENT_ALL_CARRIER_2011.QVD": {
+   "kind": "QVD",
+   "sha256": "dfedd65622727c6766b26d5b32b7c54ba598f1ba41a48616b03eda3c1572dd52",
+   "bytes": 33756508,
+   "tables": [
+    {
+     "table": "Data 2011",
+     "parquet": "powerbi/data/parquet/QVD/Source/T_T100_SEGMENT_ALL_CARRIER_2011.parquet",
+     "source_rows": 428687,
+     "rows": 428687,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Unique Carrier Entity Code",
+       "type": "string"
+      },
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "# Departures Scheduled",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Performed",
+       "type": "int64"
+      },
+      {
+       "name": "# Payload",
+       "type": "int64"
+      },
+      {
+       "name": "Distance",
+       "type": "int64"
+      },
+      {
+       "name": "# Available Seats",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Passengers",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Freight",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Mail",
+       "type": "int64"
+      },
+      {
+       "name": "# Ramp-To-Ramp Time",
+       "type": "int64"
+      },
+      {
+       "name": "# Air Time",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Origin Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin City",
+       "type": "string"
+      },
+      {
+       "name": "Origin State Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Origin State",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country",
+       "type": "string"
+      },
+      {
+       "name": "Destination Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination City",
+       "type": "string"
+      },
+      {
+       "name": "Destination State Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Destination State",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Quarter",
+       "type": "string"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      },
+      {
+       "name": "From - To Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To Airport ID",
+       "type": "string"
+      },
+      {
+       "name": "From - To City",
+       "type": "string"
+      },
+      {
+       "name": "From - To State Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To State",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 18351827
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Data 2011",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\QVD Extract - T_T100_SEGMENT_ALL_CARRIER.qvw",
+    "CreateUtcTime": "2012-10-22 00:46:47",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Transformed/Aggregated Flight Data.qvd": {
+   "kind": "QVD",
+   "sha256": "89db7378f3cefc669ee1f1a829196f37ce956a66e267ecc9971dc9a1aeb15fea",
+   "bytes": 4439154,
+   "tables": [
+    {
+     "table": "Flight Data",
+     "parquet": "powerbi/data/parquet/QVD/Transformed/Aggregated Flight Data.parquet",
+     "source_rows": 100091,
+     "rows": 100091,
+     "columns": [
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Unique Carrier Entity Code",
+       "type": "string"
+      },
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Quarter",
+       "type": "string"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      },
+      {
+       "name": "# Departures Scheduled",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Performed",
+       "type": "int64"
+      },
+      {
+       "name": "# Payload",
+       "type": "int64"
+      },
+      {
+       "name": "# Available Seats",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Passengers",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Freight",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Mail",
+       "type": "int64"
+      },
+      {
+       "name": "# Ramp-To-Ramp Time",
+       "type": "int64"
+      },
+      {
+       "name": "# Air Time",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 3057813
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Flight Data",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\Solution_Transform - Flight Data.qvw",
+    "CreateUtcTime": "2012-10-22 01:26:30",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Transformed/Aircraft Types Transformed.qvd": {
+   "kind": "QVD",
+   "sha256": "753e705bc7552ad435dc3a96778fa2c101d6bf076f784a1afa978042b3b44188",
+   "bytes": 33913,
+   "tables": [
+    {
+     "table": "Aircraft Types",
+     "parquet": "powerbi/data/parquet/QVD/Transformed/Aircraft Types Transformed.parquet",
+     "source_rows": 378,
+     "rows": 378,
+     "columns": [
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Name",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Manufacturer",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Manufacturer Country",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Name Full",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Name Abbreviated",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Begin Date",
+       "type": "date"
+      },
+      {
+       "name": "Aircraft End Date",
+       "type": "int64"
+      },
+      {
+       "name": "Aircraft Age Classification",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Engine Type",
+       "type": "string"
+      },
+      {
+       "name": "Aircraft Number Of Engines",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 15368
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Aircraft Types",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\Transform - Aircrafts.qvw",
+    "CreateUtcTime": "2012-10-22 01:01:34",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Transformed/Employment Statistics.QVD": {
+   "kind": "QVD",
+   "sha256": "7d6ccd35b3f9ef8af07dcbc2ce49baf5d3bfdac434712aece7f49b95943d4ca4",
+   "bytes": 185252,
+   "tables": [
+    {
+     "table": "Employment",
+     "parquet": "powerbi/data/parquet/QVD/Transformed/Employment Statistics.parquet",
+     "source_rows": 2688,
+     "rows": 2688,
+     "columns": [
+      {
+       "name": "# M-Delta Total Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# M-Delta Full Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# M-Delta Part Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# M-Delta Equivalent FTEs",
+       "type": "int64"
+      },
+      {
+       "name": "# Q-Delta Total Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Q-Delta Full Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Q-Delta Part Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Q-Delta Equivalent FTEs",
+       "type": "int64"
+      },
+      {
+       "name": "# Y-Delta Total Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Y-Delta Full Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Y-Delta Part Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Y-Delta Equivalent FTEs",
+       "type": "int64"
+      },
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "# Total Employees",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "# Full Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Part Time Employees",
+       "type": "int64"
+      },
+      {
+       "name": "# Equivalent FTEs",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 78265
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Employment",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\Transform - Employment Data.qvw",
+    "CreateUtcTime": "2012-10-22 01:35:44",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Transformed/Transformed - Carrier Decode.qvd": {
+   "kind": "QVD",
+   "sha256": "722785b90a7af106a1273e5239a6f7e0580824484d573c74dd6ad14a9817dbed",
+   "bytes": 565999,
+   "tables": [
+    {
+     "table": "Final_Carrier Decode",
+     "parquet": "powerbi/data/parquet/QVD/Transformed/Transformed - Carrier Decode.parquet",
+     "source_rows": 16254,
+     "rows": 16254,
+     "columns": [
+      {
+       "name": "%Key_Interval",
+       "type": "string"
+      },
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Entity",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Entity",
+       "type": "string"
+      },
+      {
+       "name": "Unique Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Carrier World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group ID (Old)",
+       "type": "int64"
+      },
+      {
+       "name": "Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "Region Code",
+       "type": "string"
+      },
+      {
+       "name": "Start Date",
+       "type": "date"
+      },
+      {
+       "name": "End Date",
+       "type": "date"
+      },
+      {
+       "name": "Interval_Start",
+       "type": "int64"
+      },
+      {
+       "name": "Interval_End",
+       "type": "int64"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "int64"
+      },
+      {
+       "name": "YearMonth",
+       "type": "int64"
+      },
+      {
+       "name": "%Key_CarrierDecode",
+       "type": "string"
+      }
+     ],
+     "parquet_bytes": 75987
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Final_Carrier Decode",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\Solution_Transform - Carrier Decode.qvw",
+    "CreateUtcTime": "2012-10-22 01:47:22",
+    "QvBuildNo": "11414"
+   }
+  },
+  "QVD/Transformed/Transformed - Flight Data.qvd": {
+   "kind": "QVD",
+   "sha256": "910c126fdb8c7bda9560c6373808fd87adbe2ceeebe0b70c859484cf2d8c9390",
+   "bytes": 94915659,
+   "tables": [
+    {
+     "table": "Flight Data",
+     "parquet": "powerbi/data/parquet/QVD/Transformed/Transformed - Flight Data.parquet",
+     "source_rows": 1256075,
+     "rows": 1256075,
+     "columns": [
+      {
+       "name": "%Unique Carrier Entity Code",
+       "type": "string"
+      },
+      {
+       "name": "OLD_Carrier Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Airline ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Unique Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "%Region Code",
+       "type": "string"
+      },
+      {
+       "name": "%Origin Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Origin World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Sequence ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination Airport Market ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Destination World Area Code",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Type ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Aircraft Configuration ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Distance Group ID",
+       "type": "int64"
+      },
+      {
+       "name": "%Service Class ID",
+       "type": "string"
+      },
+      {
+       "name": "%Datasource ID",
+       "type": "string"
+      },
+      {
+       "name": "# Departures Scheduled",
+       "type": "int64"
+      },
+      {
+       "name": "# Departures Performed",
+       "type": "int64"
+      },
+      {
+       "name": "# Payload",
+       "type": "int64"
+      },
+      {
+       "name": "Distance",
+       "type": "int64"
+      },
+      {
+       "name": "# Available Seats",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Passengers",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Freight",
+       "type": "int64"
+      },
+      {
+       "name": "# Transported Mail",
+       "type": "int64"
+      },
+      {
+       "name": "# Ramp-To-Ramp Time",
+       "type": "int64"
+      },
+      {
+       "name": "# Air Time",
+       "type": "int64"
+      },
+      {
+       "name": "Unique Carrier",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Code",
+       "type": "string"
+      },
+      {
+       "name": "Carrier Name",
+       "type": "string"
+      },
+      {
+       "name": "Origin Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin City",
+       "type": "string"
+      },
+      {
+       "name": "Origin State Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Origin State",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Origin Country",
+       "type": "string"
+      },
+      {
+       "name": "Destination Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination City",
+       "type": "string"
+      },
+      {
+       "name": "Destination State Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination State FIPS",
+       "type": "int64"
+      },
+      {
+       "name": "Destination State",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country Code",
+       "type": "string"
+      },
+      {
+       "name": "Destination Country",
+       "type": "string"
+      },
+      {
+       "name": "Year",
+       "type": "int64"
+      },
+      {
+       "name": "Period",
+       "type": "int64"
+      },
+      {
+       "name": "Quarter",
+       "type": "string"
+      },
+      {
+       "name": "Month (#)",
+       "type": "int64"
+      },
+      {
+       "name": "Month",
+       "type": "string",
+       "sort_by": "Month__num"
+      },
+      {
+       "name": "Month__num",
+       "type": "float64",
+       "dual_number_of": "Month"
+      },
+      {
+       "name": "From - To Airport Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To Airport ID",
+       "type": "string"
+      },
+      {
+       "name": "From - To City",
+       "type": "string"
+      },
+      {
+       "name": "From - To State Code",
+       "type": "string"
+      },
+      {
+       "name": "From - To State",
+       "type": "string"
+      },
+      {
+       "name": "%Carrier Group ID",
+       "type": "int64"
+      }
+     ],
+     "parquet_bytes": 45779558
+    }
+   ],
+   "qvd_header": {
+    "TableName": "Flight Data",
+    "CreatorDoc": "C:\\Users\\Mike\\Dropbox\\QlikView Book\\Book Files\\Final Pack\\Chapters 12 - 14\\QlikView Development\\Airline Operations\\2.Workbooks\\Solution_Transform - Carrier Decode v2.qvw",
+    "CreateUtcTime": "2012-11-11 09:42:37",
+    "QvBuildNo": "11414"
+   }
+  }
+ },
+ "generator": {
+  "script": "powerbi/tools/convert_sources.py",
+  "pyarrow": "26.0.0"
+ }
+}

@@ -1,0 +1,251 @@
+{
+ "app": "Generic Load.qvw",
+ "path": "Chapter10/Generic Load.qvw",
+ "chapter": "Chapter10",
+ "qvw_bytes": 154624,
+ "last_reload": "2012-09-29 19:51:58",
+ "script": {
+  "file": "scripts/Chapter10__Generic Load.qvs",
+  "tabs": [
+   "Main"
+  ],
+  "hidden_script": false,
+  "features": {
+   "generic_load": 1
+  },
+  "sources": [
+   {
+    "path": "Generic DB.xlsx",
+    "format": "ooxml, embedded labels, table is GenericDB",
+    "kind": "Excel (ooxml)",
+    "resolved": "Chapter10/Generic DB.xlsx"
+   }
+  ],
+  "stores": [],
+  "includes": [],
+  "table_labels": [],
+  "script_variables": [
+   {
+    "kind": "SET",
+    "name": "ThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "DecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyThousandSep",
+    "value": "','"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyDecimalSep",
+    "value": "'.'"
+   },
+   {
+    "kind": "SET",
+    "name": "MoneyFormat",
+    "value": "'$#,##0.00;-$#,##0.00'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimeFormat",
+    "value": "'hh:mm:ss'"
+   },
+   {
+    "kind": "SET",
+    "name": "DateFormat",
+    "value": "'DD/MM/YY'"
+   },
+   {
+    "kind": "SET",
+    "name": "TimestampFormat",
+    "value": "'DD/MM/YY hh:mm:ss[.fff]'"
+   },
+   {
+    "kind": "SET",
+    "name": "MonthNames",
+    "value": "'ene;feb;mar;abr;may;jun;jul;ago;sep;oct;nov;dic'"
+   },
+   {
+    "kind": "SET",
+    "name": "DayNames",
+    "value": "'lun;mar;mié;jue;vie;sáb;dom'"
+   }
+  ],
+  "lines": 22
+ },
+ "data_model": {
+  "tables": [
+   {
+    "name": "GenericDB.Color",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 3,
+    "role": "fact (likely)"
+   },
+   {
+    "name": "GenericDB.Weight",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 2,
+    "role": "dimension"
+   },
+   {
+    "name": "GenericDB.Diameter",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 3,
+    "role": "dimension"
+   },
+   {
+    "name": "GenericDB.Value",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 1,
+    "role": "dimension"
+   },
+   {
+    "name": "GenericDB.Thickness",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 1,
+    "role": "dimension"
+   },
+   {
+    "name": "$$SysTable 5",
+    "fields": 3,
+    "key_fields": 2,
+    "rows": 10,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 6",
+    "fields": 3,
+    "key_fields": 1,
+    "rows": 5,
+    "role": "system/synthetic"
+   },
+   {
+    "name": "$$SysTable 7",
+    "fields": 2,
+    "key_fields": 1,
+    "rows": 6,
+    "role": "system/synthetic"
+   }
+  ],
+  "key_fields": [
+   {
+    "field": "Object",
+    "cardinality": 3,
+    "tags": "$key, $ascii, $text"
+   }
+  ],
+  "fields_by_table": {
+   "GenericDB.Color": [
+    "Object",
+    "Color"
+   ],
+   "GenericDB.Weight": [
+    "Object",
+    "Weight"
+   ],
+   "GenericDB.Diameter": [
+    "Object",
+    "Diameter"
+   ],
+   "GenericDB.Value": [
+    "Object",
+    "Value"
+   ],
+   "GenericDB.Thickness": [
+    "Object",
+    "Thickness"
+   ]
+  },
+  "groups": []
+ },
+ "variables": [],
+ "config_variables": {
+  "CD": "F:",
+  "QvPath": "C:\\Program Files\\QlikView",
+  "QvRoot": "C:",
+  "QvWorkPath": "C:\\Users\\Mike\\Dropbox\\QlikView Book MG\\Chapter 9\\6068_09 5th Draft\\Workfiles",
+  "QvWorkRoot": "C:",
+  "WinPath": "C:\\Windows",
+  "WinRoot": "C:",
+  "ErrorMode": "",
+  "StripComments": "",
+  "OpenUrlTimeout": "",
+  "ScriptErrorCount": "0",
+  "ScriptErrorList": "",
+  "ScriptError": "",
+  "ThousandSep": ",",
+  "DecimalSep": ".",
+  "MoneyThousandSep": ",",
+  "MoneyDecimalSep": ".",
+  "MoneyFormat": "$#,##0.00;-$#,##0.00",
+  "TimeFormat": "hh:mm:ss",
+  "DateFormat": "DD/MM/YY",
+  "TimestampFormat": "DD/MM/YY hh:mm:ss[.fff]",
+  "MonthNames": "ene;feb;mar;abr;may;jun;jul;ago;sep;oct;nov;dic",
+  "DayNames": "lun;mar;mié;jue;vie;sáb;dom"
+ },
+ "sheets": [
+  {
+   "name": "Main",
+   "id": "SH01"
+  }
+ ],
+ "objects": {
+  "ids": [
+   "SH01"
+  ],
+  "by_type": {
+   "sheet": 1
+  }
+ },
+ "charts": [],
+ "kpis": [],
+ "converter_assessment": {
+  "verdict": "model-only",
+  "input_needed": "QVW is not readable by Qlik-To-PowerBI (QVF/JSON only); fed QVW-derived intermediate JSON from this manifest",
+  "trial": {
+   "exit": 0,
+   "tmdl_tables": 6,
+   "generic_table_names": 0,
+   "dax_measures": 0,
+   "dax_measures_unconverted": 0,
+   "relationships": [],
+   "report_pages": 1,
+   "reported_fidelity": "100% (not credible: unconverted Qlik syntax counted as exact)"
+  },
+  "unconverted_measures": [],
+  "chart_types": []
+ },
+ "pbip_plan": {
+  "relationships_from_keys": [
+   {
+    "key": "Object",
+    "tables": [
+     "GenericDB.Color",
+     "GenericDB.Weight",
+     "GenericDB.Diameter",
+     "GenericDB.Value",
+     "GenericDB.Thickness"
+    ]
+   }
+  ],
+  "fact_tables": [
+   "GenericDB.Color"
+  ],
+  "rls": null
+ },
+ "gaps": [
+  "GENERIC LOAD: converter emits per-attribute tables; hand-write M pivot to one table",
+  "Synthetic/system tables in model: $$SysTable 5, $$SysTable 6, $$SysTable 7"
+ ]
+}

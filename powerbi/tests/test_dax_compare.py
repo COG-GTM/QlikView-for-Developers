@@ -1,0 +1,63 @@
+"""DAX side: scaffolded PBIP maps every Ch03 KPI to a measure, and compare() catches differences."""
+import copy
+import json
+
+import pytest
+
+import compare
+import dax
+import harness
+import scaffold_pbip
+from conftest import CH03
+
+
+@pytest.fixture(scope="module")
+def expected():
+    return harness.load_expected(CH03)
+
+
+def test_committed_scaffold_is_up_to_date(tmp_path, monkeypatch):
+    monkeypatch.setattr(scaffold_pbip, "APPS", tmp_path)
+    out = scaffold_pbip.scaffold(CH03, "C:\\QlikView-for-Developers\\powerbi\\data\\parquet\\")
+    committed = scaffold_pbip.APPS.__class__(harness.REPO / "powerbi/apps" / out.name)
+    for f in out.rglob("*"):
+        if f.is_file():
+            assert f.read_bytes() == (committed / f.relative_to(out)).read_bytes(), f.relative_to(out)
+
+
+def test_every_ch03_result_gets_a_dax_query(tmp_path, monkeypatch, expected):
+    monkeypatch.setattr(dax, "DAX", tmp_path)
+    dax.write_queries(CH03, harness.REPO / "powerbi/apps/Chapter03_Airline_Operations")
+    spec = json.loads((tmp_path / f"{CH03}.queries.json").read_text())
+    assert spec["unmapped"] == []
+    ids = {r["id"] for k in expected["kpis"] for r in k["results"]}
+    assert {q["id"] for q in spec["queries"]} == ids
+    q = next(q for q in spec["queries"] if q["id"] == "CH01#1@Year+Month")
+    assert q["query"] == "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], 'Main Data'[Month], \"value\", [# of Flights])"
+
+
+def _as_dax_results(expected):
+    """Shape the expected rows like ADOMD output: dims as strings/datetimes, values as ints, zero rows dropped."""
+    results = []
+    for k in expected["kpis"]:
+        for r in k["results"]:
+            rows = [[str(x) for x in row[:-1]] + [int(row[-1])] for row in r["rows"] if row[-1]]
+            results.append({"id": r["id"], "columns": r["grain"] + ["[value]"], "rows": rows})
+    return {"app": expected["app"], "produced_by": "test", "results": results}
+
+
+def test_compare_passes_on_identical_results(expected):
+    report = compare.compare(expected, _as_dax_results(expected))
+    assert set(report["summary"]) == {"pass"}
+
+
+def test_compare_flags_wrong_and_missing_results(expected):
+    results = _as_dax_results(expected)
+    bad = copy.deepcopy(results)
+    year = next(r for r in bad["results"] if r["id"] == "CH01#1@Year")
+    year["rows"][0][-1] += 1
+    bad["results"] = [r for r in bad["results"] if r["id"] != "CH02#4@total"]
+    report = compare.compare(expected, bad)
+    status = {r["id"]: r["status"] for r in report["results"]}
+    assert status["CH01#1@Year"] == "fail" and status["CH02#4@total"] == "missing"
+    assert report["summary"]["pass"] == len(status) - 2

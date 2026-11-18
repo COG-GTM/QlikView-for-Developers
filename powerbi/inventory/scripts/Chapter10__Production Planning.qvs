@@ -1,0 +1,38 @@
+///$tab Main
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='$#,##0.00;-$#,##0.00';
+SET TimeFormat='hh:mm:ss';
+SET DateFormat='DD/MM/YY';
+SET TimestampFormat='DD/MM/YY hh:mm:ss[.fff]';
+SET MonthNames='ene;feb;mar;abr;may;jun;jul;ago;sep;oct;nov;dic';
+SET DayNames='lun;mar;mié;jue;vie;sáb;dom';
+
+Directory;
+LOAD Date, 
+     [Plant #], 
+     [Product Line ID], 
+     [Estimated Production]
+FROM
+[Production Planning - Legacy.txt]
+(txt, codepage is 1252, embedded labels, delimiter is '\t', msq, filters(
+Remove(Row, Pos(Top, 6)),
+Remove(Row, Pos(Top, 4)),
+Remove(Row, Pos(Top, 3)),
+Remove(Row, Pos(Top, 2)),
+Remove(Row, Pos(Top, 1)),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'Total'))),
+Unwrap(Col, Pos(Top, 5)),
+Remove(Row, RowCnd(Compound,
+	RowCnd(CellValue, 1, StrCnd(contain, 'Date')),
+	RowCnd(Interval, Pos(Top, 2), Pos(Bottom, 1), Select(1, 0))
+)),
+Replace(1, top, StrCnd(null))
+));
+
+
+
+
+
