@@ -1,0 +1,34 @@
+table 'Carrier Groups'
+	lineageTag: 387f5144-4b6b-5b41-a408-162e2de84b0d
+
+	column '%Carrier Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0c4ffcde-bdb0-5912-bf77-2bf8a431b2d0
+		summarizeBy: none
+		sourceColumn: %Carrier Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier Group'
+		dataType: string
+		lineageTag: f6998b58-60bb-5b49-9a3b-98828d26786c
+		summarizeBy: none
+		sourceColumn: Carrier Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Carrier Groups' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Carrier Groups.parquet"), {"%Carrier Group ID", "Carrier Group"}),
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Carrier Group ID"))),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Carrier Group ID"])),
+				    Missing = List.Difference(FactKeys, Table.Column(Kept, "%Carrier Group ID")),
+				    Unknown = Table.FromColumns({Missing, List.Repeat({"Unknown"}, List.Count(Missing))}, {"%Carrier Group ID", "Carrier Group"}),
+				    Combined = Table.Combine({Kept, Unknown}),
+				    Typed = Table.TransformColumnTypes(Combined, {{"%Carrier Group ID", Int64.Type}, {"Carrier Group", type text}})
+				in
+				    Typed
