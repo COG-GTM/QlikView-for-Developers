@@ -83,5 +83,6 @@
    "query": "EVALUATE ROW(\"value\", [Objects])"
   }
  ],
+ "relationships": [],
  "unmapped": []
 }

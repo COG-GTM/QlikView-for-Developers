@@ -10,6 +10,9 @@ Each expected result id gets one query:
 Sheet objects without expressions (parity/objects/<app>.json):
   table/list box -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2])   (the distinct rows it shows)
   row count      -> EVALUATE ROW("value", COUNTROWS('T'))
+Each relationship in ``relationships.tmdl`` gets an integrity query (id ``REL:<from> -> <to>``):
+distinct many-side keys with no match on the one side, the many-side rows they cover, and
+duplicated one-side keys.
 """
 from __future__ import annotations
 
@@ -56,6 +59,42 @@ def read_tmdl(pbip: Path) -> dict:
             elif current is not None and (m := re.match(r"^\t\tannotation ParityKey\s*=\s*(\S+)", line)):
                 current.setdefault("keys", []).append(m.group(1))
     return model
+
+
+COLREF_RE = re.compile(r"^('(?:[^']|'')*'|[^.]+)\.('(?:[^']|'')*'|.+)$")
+
+
+def read_relationships(pbip: Path) -> list[dict]:
+    path = next(pbip.glob("*.SemanticModel")) / "definition" / "relationships.tmdl"
+    if not path.exists():
+        return []
+    rels, current = [], None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if m := re.match(r"^relationship (.+)$", line):
+            current = {"name": m.group(1).strip(), "active": True, "to_many": False}
+            rels.append(current)
+        elif current is None:
+            continue
+        elif m := re.match(r"^	(fromColumn|toColumn):\s*(.+)$", line):
+            t, c = COLREF_RE.match(m.group(2).strip()).groups()
+            current[m.group(1)] = (unquote_tmdl(t), unquote_tmdl(c))
+        elif re.match(r"^	isActive:\s*false\s*$", line):
+            current["active"] = False
+        elif re.match(r"^	toCardinality:\s*many\s*$", line):
+            current["to_many"] = True
+    return [r for r in rels if "fromColumn" in r and "toColumn" in r]
+
+
+def relationship_query(rel: dict) -> dict:
+    (ft, fc), (tt, tc) = rel["fromColumn"], rel["toColumn"]
+    f, t = dax_col(ft, fc), dax_col(tt, tc)
+    dups = "0" if rel["to_many"] else f"COUNTROWS(ALLNOBLANKROW({dax_table(tt)})) - COUNTROWS(ALLNOBLANKROW({t}))"
+    query = (f'DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW({f}), NOT ISBLANK({f})), "k", {f}), '
+             f'SELECTCOLUMNS(ALLNOBLANKROW({t}), "k", {t})) '
+             f'EVALUATE ROW("unmatched_keys", COUNTROWS(missing) + 0, '
+             f'"unmatched_rows", CALCULATE(COUNTROWS({dax_table(ft)}), REMOVEFILTERS(), TREATAS(missing, {f})) + 0, '
+             f'"duplicate_keys", {dups})')
+    return {"id": f"REL:{f} -> {t}", "active": rel["active"], "query": query}
 
 
 def column_for(model: dict, field: str) -> dict | None:
@@ -119,6 +158,8 @@ def write_queries(app: str, pbip: Path) -> str:
             queries.append({"id": r["id"], "object": o["object"], "grain": r["grain"], "query": query})
     DAX.mkdir(exist_ok=True)
     out = DAX / f"{app}.queries.json"
-    out.write_text(json.dumps({"app": app, "pbip": show(pbip), "queries": queries,
+    relationships = [relationship_query(r) for r in read_relationships(pbip)]
+    out.write_text(json.dumps({"app": app, "pbip": show(pbip), "queries": queries, "relationships": relationships,
                                "unmapped": unmapped}, indent=1, ensure_ascii=False) + "\n")
-    return f"{len(queries)} DAX queries, {len(unmapped)} unmapped -> {show(out)}"
+    return (f"{len(queries)} DAX queries, {len(relationships)} relationship checks, "
+            f"{len(unmapped)} unmapped -> {show(out)}")
