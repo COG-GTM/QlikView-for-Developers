@@ -1,0 +1,99 @@
+table 'Master Calendar'
+	lineageTag: 48873ae9-bc81-5733-ae1f-15e1407daa55
+
+	column Period
+		dataType: int64
+		lineageTag: c85c5aa6-07d7-594a-97f9-f14f93373274
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		lineageTag: b9129390-0cc0-5b43-be0d-9e195232656c
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		sortByColumn: Month__num
+		lineageTag: dec59c31-f06e-52b4-824c-41a369e9d9c1
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month__num
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: dec2a139-ce82-5cb6-a722-f256a416731b
+		summarizeBy: none
+		sourceColumn: Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year - Month'
+		dataType: string
+		sortByColumn: 'Year - Month__num'
+		lineageTag: 6c3fdaa8-6003-58cc-b6e6-d485af42a9d5
+		summarizeBy: none
+		sourceColumn: Year - Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year - Month__num'
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: d422e2ed-37a1-5f09-9329-bcb554bddd0d
+		summarizeBy: none
+		sourceColumn: Year - Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: fe6f7109-80e4-5c70-b609-8a6f483be316
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuarterID
+		dataType: int64
+		formatString: 0
+		lineageTag: ca56ab32-2039-578e-86e2-4f92b1c28ecb
+		summarizeBy: none
+		sourceColumn: QuarterID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PeriodID
+		dataType: int64
+		formatString: 0
+		lineageTag: 277ede6a-f868-5355-90bb-fd618fe40cab
+		summarizeBy: none
+		sourceColumn: PeriodID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Master Calendar' = m
+		mode: import
+		source =
+				let
+				    Periods = List.RemoveNulls(fnFactKeys("Period")),
+				    MinDate = #date(Number.IntegerDivide(List.Min(Periods), 100), Number.Mod(List.Min(Periods), 100), 1),
+				    MaxDate = #date(Number.IntegerDivide(List.Max(Periods), 100), Number.Mod(List.Max(Periods), 100), 1),
+				    Months = List.Generate(() => MinDate, each _ <= MaxDate, each Date.AddMonths(_, 1)),
+				    Base = Table.FromList(Months, Splitter.SplitByNothing(), {"MonthStart"}),
+				    Indexed = Table.AddIndexColumn(Base, "PeriodID", 1, 1),
+				    Cols = Table.AddColumn(Indexed, "Fields", each [Period = Date.Year([MonthStart]) * 100 + Date.Month([MonthStart]), Year = Date.Year([MonthStart]), Month = Date.ToText([MonthStart], "MMM", "en-US"), Month__num = Date.Month([MonthStart]), #"Year - Month" = Date.ToText([MonthStart], "yyyy-MM", "en-US"), #"Year - Month__num" = Number.From([MonthStart]), Quarter = "Q" & Text.From(Number.RoundUp(Date.Month([MonthStart]) / 3)), QuarterID = (Date.Year([MonthStart]) - Date.Year(MinDate)) * 4 + Number.RoundUp(Date.Month([MonthStart]) / 3) - Number.RoundUp(Date.Month(MinDate) / 3) + 1]),
+				    Expanded = Table.ExpandRecordColumn(Cols, "Fields", {"Period", "Year", "Month", "Month__num", "Year - Month", "Year - Month__num", "Quarter", "QuarterID"}),
+				    Selected = Table.SelectColumns(Expanded, {"Period", "Year", "Month", "Month__num", "Year - Month", "Year - Month__num", "Quarter", "QuarterID", "PeriodID"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"Period", Int64.Type}, {"Year", Int64.Type}, {"Month", type text}, {"Month__num", type number}, {"Year - Month", type text}, {"Year - Month__num", type number}, {"Quarter", type text}, {"QuarterID", Int64.Type}, {"PeriodID", Int64.Type}})
+				in
+				    Typed
