@@ -139,3 +139,11 @@ def test_compare_flags_a_missing_and_a_wrong_row(expected):
     status = {r["id"]: r["status"] for r in report["results"]}
     assert status[tb["id"]] == "fail" and status["LB02@Date"] == "fail"
     assert status["ROWS@Production Planning - Legacy"] == "pass"
+
+
+def test_compare_keeps_text_labels_exact(expected):
+    bad = copy.deepcopy(_as_dax_results(expected))
+    tb = next(r for r in bad["results"] if r["id"].startswith("TB01@"))
+    tb["rows"] = [[d, p, str(int(pl)), e] for d, p, pl, e in tb["rows"]]  # '03' -> '3'
+    status = {r["id"]: r["status"] for r in compare.compare(expected, bad)["results"]}
+    assert status[tb["id"]] == "fail"

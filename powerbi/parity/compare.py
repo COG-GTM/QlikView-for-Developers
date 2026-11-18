@@ -68,8 +68,15 @@ def compare_rowset(expected: dict, actual: dict | None) -> dict:
     if actual is None:
         return {"id": expected["id"], "status": "missing"}
     n = len(expected["grain"])
-    exp = {tuple(norm_dim(x) for x in r[:n]) for r in expected["rows"]}
-    act = {tuple(norm_dim(x) for x in r[:n]) for r in actual["rows"]}
+    # A column the source holds as text (e.g. Product Line ID '03') is compared as text, so a
+    # label that lost its leading zero ('3') fails instead of matching numerically.
+    text = [any(isinstance(r[i], str) for r in expected["rows"]) for i in range(n)]
+
+    def key(r):
+        return tuple(str(x) if t and x is not None else norm_dim(x) for x, t in zip(r[:n], text))
+
+    exp = {key(r) for r in expected["rows"]}
+    act = {key(r) for r in actual["rows"]}
     diffs = [{"dims": list(k), "source": k in exp, "dax": k in act} for k in sorted(exp ^ act, key=str)]
     return {"id": expected["id"], "status": "pass" if not diffs else "fail", "rows": len(exp),
             "mismatches": len(diffs), "examples": diffs[:5]}
