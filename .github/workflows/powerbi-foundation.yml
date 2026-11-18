@@ -44,6 +44,7 @@ jobs:
           python powerbi/parity/harness.py queries --app "Chapter08__Solution_Chapter 8_Airline Operations" --pbip powerbi/apps/Chapter08_Airline_Operations
           python powerbi/tools/build_ch09_concatenated_tables.py
           python powerbi/parity/harness.py queries --app "Chapter09__Solution_Chapter 9_Concatenated tables" --pbip powerbi/apps/Chapter09_Concatenated_tables
+          python powerbi/parity/harness.py queries --app "Chapter13__Solution_Chapter 13_Airline Operations" --pbip powerbi/apps/Chapter13_Airline_Operations
           git status --porcelain -- powerbi/parity powerbi/apps
           git diff --exit-code -- powerbi/parity/expected powerbi/parity/dax powerbi/apps
           test -z "$(git status --porcelain --untracked-files=all -- powerbi/parity/dax powerbi/apps)"

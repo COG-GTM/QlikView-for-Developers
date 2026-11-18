@@ -1,18 +1,24 @@
-"""Generate the Chapter 15 Airline Operations PBIP: the reusable base model for the Airline chapters.
+"""Generate the Airline Operations PBIPs: the Chapter 15 base model and the chapters derived from it.
 
 Chapter 15's load script transforms its tables (concatenated facts, master calendar, WHERE Exists, 'Unknown'
 members, inline tables, Section Access), so scaffold_pbip.py cannot generate it. This script writes the same
 PBIP layout with hand-written Power Query, relationships, RLS/OLS roles and DAX measures. Every measure carries
 the ParityKey of the Qlik expression(s) it replaces; build() fails if a KPI with source-side parity has none.
 
-    python powerbi/tools/build_airline_base.py [--data-root C:\\path\\to\\powerbi\\data\\parquet\\]
+Chapter 13 has the same script without the hidden Section Access script: no roles, no INLFED %FLIGHTTYPE table
+(its metric picker is then the first inline table, INLFED), and the unreduced model. It also gets one report page
+per QlikView sheet, with a visual per chart bound to the measures and fields the chart's KPIs use.
+
+    python powerbi/tools/build_airline_base.py [--app Chapter15|Chapter13|all] [--data-root C:\\path\\to\\parquet\\]
 """
 from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -21,8 +27,23 @@ from scaffold_pbip import APPS, CATALOG, POWERBI, TYPE_MAP, show, tag, tname  # 
 sys.path.insert(0, str(POWERBI / "parity"))
 from harness import kpi_list, parity_key  # noqa: E402
 
-APP = "Chapter15__Solution_Chapter 15_Airline Operations"
-SLUG = "Chapter15_Airline_Operations"
+
+@dataclass(frozen=True)
+class AirlineApp:
+    app: str
+    slug: str
+    section_access: bool  # hidden script: Section Access, RLS/OLS roles and the INLFED %FLIGHTTYPE table
+    metric_table: str  # the Metric Name / eMetric inline table
+    report_pages: bool  # one report page per QlikView sheet (else a single empty page)
+
+
+CH15 = AirlineApp("Chapter15__Solution_Chapter 15_Airline Operations", "Chapter15_Airline_Operations", True,
+                  "INLFED-1", False)
+CH13 = AirlineApp("Chapter13__Solution_Chapter 13_Airline Operations", "Chapter13_Airline_Operations", False,
+                  "INLFED", True)
+AIRLINE_APPS = {"Chapter15": CH15, "Chapter13": CH13}
+CFG = CH15
+APP, SLUG = CFG.app, CFG.slug
 DEFAULT_ROOT = "C:\\QlikView-for-Developers\\powerbi\\data\\parquet\\"
 FLIGHT = "QVD/Source/Flight Data.parquet"
 EMPLOYMENT = "QVD/Transformed/Employment Statistics.parquet"
@@ -156,7 +177,7 @@ MEASURES = {
     "f72a33049af9": ("# of Flights (thousands)", f"DIVIDE({FLIGHTS}, 1000)", DEC),
     "0437729d9522": ("# of Flights (millions)", f"DIVIDE({FLIGHTS}, 1000000)", DEC),
     "b8cda7856288": ("Selected Metric",
-                     "SWITCH(SELECTEDVALUE('INLFED-1'[eMetric]), "
+                     "SWITCH(SELECTEDVALUE(@METRIC[eMetric]), "
                      f"\"eDeparturesPerformed\", DIVIDE({FLIGHTS}, 1000), "
                      f"\"eEnplanedPassengers\", DIVIDE(SUM({m('# Transported Passengers')}), 1000000), "
                      f"\"eAirTime\", DIVIDE(SUM({m('# Air Time')}), SUM({m('# Ramp-To-Ramp Time')})))", DEC),
@@ -278,9 +299,22 @@ GAPS = [
     "carriers whose value falls in the segment at query time, so RLS and selections apply as in QlikView. The row-level "
     "Flight Type deal status -> calculated column on Flight Types.",
     "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
-    "$($(=eMetric)) -> SWITCH over SELECTEDVALUE('INLFED-1'[eMetric]); blank without a single Metric Name selected, "
+    "$($(=eMetric)) -> SWITCH over SELECTEDVALUE(@METRIC[eMetric]); blank without a single Metric Name selected, "
     "like QlikView's empty expansion.",
 ]
+
+NO_SECTION_ACCESS_DIMENSION_GAP = (
+    "Dimension rows: no Section Access, so nothing is reduced (Main Data keeps the Employment Statistics rows; "
+    "Airlines 337, Carrier Operating Region 8 as in QlikView). Null-key 'Unknown' members the script adds for null "
+    "fact keys are not loaded: they associate with nothing in QlikView and would wrongly match blank keys in Power BI.")
+
+
+def gaps() -> list[str]:
+    out = [g.replace("@METRIC", tname(CFG.metric_table)) for g in GAPS]
+    if CFG.section_access:
+        return out
+    return [NO_SECTION_ACCESS_DIMENSION_GAP if g.startswith("Dimension rows:") else g for g in out
+            if not g.startswith(("Section Access", "OMIT"))]
 
 
 def catalog_types() -> dict[str, dict[str, str]]:
@@ -352,10 +386,11 @@ def table_specs(types: dict) -> dict[str, dict]:
             last = "WithPlaceholder"
         steps.append(f"Typed = Table.TransformColumnTypes({last}, {m_types(cols)})")
         specs[name] = {"cols": cols, "m": m_let(steps, "Typed")}
-    specs["INLFED"] = {"cols": [("Flight Type", "string"), ("%FLIGHTTYPE", "string")], "m": m_let([
-        "Source = #table(type table [#\"Flight Type\" = text, #\"%FLIGHTTYPE\" = text], {"
-        + ", ".join(f'{{"{v}", "{k}"}}' for k, v in FLIGHT_TYPES.items()) + "})"], "Source")}
-    specs["INLFED-1"] = {"cols": [("Metric Name", "string"), ("eMetric", "string")], "m": m_let([
+    if CFG.section_access:
+        specs["INLFED"] = {"cols": [("Flight Type", "string"), ("%FLIGHTTYPE", "string")], "m": m_let([
+            "Source = #table(type table [#\"Flight Type\" = text, #\"%FLIGHTTYPE\" = text], {"
+            + ", ".join(f'{{"{v}", "{k}"}}' for k, v in FLIGHT_TYPES.items()) + "})"], "Source")}
+    specs[CFG.metric_table] = {"cols": [("Metric Name", "string"), ("eMetric", "string")], "m": m_let([
         "Source = #table(type table [#\"Metric Name\" = text, eMetric = text], {"
         + ", ".join(f'{{"{a}", "{b}"}}' for a, b in METRICS) + "})"], "Source")}
     for table, col, qlik, values, label, _ in SEGMENTS:
@@ -393,8 +428,7 @@ def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: l
         dtype, _, fmt = TYPE_MAP[typ]
         lines += [f"\tcolumn {tname(col)}", f"\t\tdataType: {dtype}"]
         sort = spec.get("sort", {}).get(col) or (f"{col}__num" if f"{col}__num" in names else None)
-        if (col.startswith("%") and name not in ("INLFED",)) or col.endswith("__num") or \
-                (col == "Period" and name == "Main Data") or col in spec.get("sort", {}).values():
+        if hidden_column(name, col, spec):
             lines.append("\t\tisHidden")
         if sort:
             lines.append(f"\t\tsortByColumn: {tname(sort)}")
@@ -417,11 +451,121 @@ def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: l
     (path / f"{fname}.tmdl").write_text("\n".join(lines), encoding="utf-8")
 
 
+def hidden_column(name: str, col: str, spec: dict) -> bool:
+    return (col.startswith("%") and name not in ("INLFED",)) or col.endswith("__num") or \
+        (col == "Period" and name == "Main Data") or col in spec.get("sort", {}).values()
+
+
 def relationships() -> list[tuple[str, str, str, str]]:
     rels = [("Main Data", key, name, key) for name, _, key, _, _ in DIMENSIONS]
     rels.append(("Main Data", "Period", "Master Calendar", "Period"))
-    rels.append(("Flight Types", "Flight Type", "INLFED", "Flight Type"))  # Section Access reduction path
+    if CFG.section_access:
+        rels.append(("Flight Types", "Flight Type", "INLFED", "Flight Type"))  # Section Access reduction path
     return rels
+
+
+# QlikView chart type -> (Power BI visual, field role, measure role, max measures)
+VISUALS = {
+    "Line Chart": ("lineChart", "Category", "Y", None), "Radar Chart": ("lineChart", "Category", "Y", None),
+    "Bar Chart": ("clusteredColumnChart", "Category", "Y", None),
+    "Combo Chart": ("clusteredColumnChart", "Category", "Y", None),
+    "Pie Chart": ("pieChart", "Category", "Y", 1), "Funnel Chart": ("funnel", "Category", "Y", 1),
+    "Block Chart": ("treemap", "Group", "Values", 1), "Gauge Chart": ("gauge", None, "Y", 1),
+    "Scatter Chart": ("scatterChart", "Category", None, 3),
+    "Straight Table": ("tableEx", "Values", "Values", None), "Pivot Table": ("pivotTable", "Rows", "Values", None),
+    "Mekko Chart": ("pivotTable", "Rows", "Values", None), "Grid Chart": ("pivotTable", "Rows", "Values", None),
+}
+
+
+def sheet_charts(manifest: dict) -> dict[str, list[str]]:
+    """Chart ids per sheet id: the .qvw lists each sheet's objects after the sheet (leading ones: first sheet)."""
+    sheets = [sh["id"] for sh in manifest["sheets"]]
+    out, current = {sh: [] for sh in sheets}, sheets[0]
+    charts = {ch["id"].split(" ")[0] for ch in manifest["charts"]}
+    for oid in manifest["objects"]["ids"]:
+        if oid in out:
+            current = oid
+        elif oid in charts:
+            out[current].append(oid)
+    return out
+
+
+def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> list[dict]:
+    fields = {}
+    for name, spec in specs.items():
+        for col, _ in spec["cols"]:
+            if not hidden_column(name, col, spec):
+                fields.setdefault(col, (name, col))
+    fields.update({q: (t, col) for t, col, q, _, _ in CALC_DIMS})
+    fields.update({q: (t, col) for t, col, q, _, _, _ in SEGMENTS})
+    kpis = kpi_list(manifest)
+    captions = {ch["id"].split(" ")[0]: ch.get("caption") or ch["id"].split(" \u2014 ", 1)[-1] for ch in manifest["charts"]}
+    types = {ch["id"].split(" ")[0]: ch.get("type") for ch in manifest["charts"]}
+    sections = []
+    for ordinal, (sheet, chart_ids) in enumerate(sheet_charts(manifest).items()):
+        sheet_name = next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet)
+        visuals = []
+        for cid in chart_ids:
+            ks = [k for k in kpis if k["kpi"].split("#")[0] == cid]
+            if not ks:
+                continue
+            grain = max(ks[0]["grains"], key=len)  # drill groups: deepest level; cyclic groups: first field
+            dims = []
+            for d in grain:
+                if d not in fields:
+                    raise SystemExit(f"{cid}: no model field for dimension {d!r}")
+                dims.append(fields[d])
+            names = list(dict.fromkeys(measures[k["parity_key"]]["name"] for k in ks))
+            visual, drole, mrole, most = VISUALS.get(types[cid], ("tableEx", "Values", "Values", None))
+            if most and len(names) > most:
+                visual, drole, mrole = "clusteredColumnChart", "Category", "Y"
+            if not dims and visual not in ("gauge",):
+                visual, drole, mrole = ("card", None, "Values") if len(names) == 1 else ("tableEx", None, "Values")
+            roles = {drole: dims} if drole and dims else {}
+            if visual == "scatterChart":
+                roles.update({r: [("Main Data", n)] for r, n in zip(("X", "Y", "Size"), names)})
+            else:
+                roles.setdefault(mrole, []).extend(("Main Data", n) for n in names)
+            visuals.append((cid, captions[cid], visual, roles, set(names)))
+        if not visuals:  # sheets of list boxes / table boxes only: slicers and the row-level table they filter
+            visuals = [(f"{sheet}-{col}", col, "slicer", {"Values": [fields[col]]}, set())
+                       for col in ("Year", "Flight Type", "Carrier Group")]
+            visuals.append((f"{sheet}-table", sheet_name, "tableEx",
+                            {"Values": [fields["Carrier Group"], fields["Carrier Name"], ("Main Data", "# of Flights")]},
+                            {"# of Flights"}))
+        sections.append({"name": "ReportSection" + tag(SLUG, "page", sheet).replace("-", "")[:20],
+                         "displayName": sheet_name, "displayOption": 1, "ordinal": ordinal, "width": 1280,
+                         "height": 720, "config": json.dumps({"QlikSheet": sheet}), "filters": "[]",
+                         "visualContainers": visual_containers(sheet, visuals)})
+    return sections
+
+
+def visual_containers(sheet: str, visuals: list[tuple]) -> list[dict]:
+    cols = min(len(visuals), 3 if len(visuals) <= 6 else 4)
+    rows = math.ceil(len(visuals) / cols)
+    w, h = (1280 - 10 * (cols + 1)) // cols, (720 - 10 * (rows + 1)) // rows
+    out = []
+    for z, (vid, title, visual, roles, measure_names) in enumerate(visuals):
+        x, y = 10 + (z % cols) * (w + 10), 10 + (z // cols) * (h + 10)
+        aliases, select, projections = {}, [], {}
+        for role, refs in roles.items():
+            for table, col in refs:
+                alias = aliases.setdefault(table, f"t{len(aliases)}")
+                ref = f"{table}.{col}"
+                kind = "Measure" if table == "Main Data" and col in measure_names else "Column"
+                if ref not in {s_["Name"] for s_ in select}:
+                    select.append({kind: {"Expression": {"SourceRef": {"Source": alias}}, "Property": col}, "Name": ref})
+                projections.setdefault(role, []).append({"queryRef": ref})
+        pos = {"x": x, "y": y, "z": z, "width": w, "height": h}
+        config = {"name": tag(SLUG, "visual", sheet, vid), "layouts": [{"id": 0, "position": pos}],
+                  "singleVisual": {"visualType": visual, "projections": projections, "prototypeQuery": {
+                      "Version": 2, "From": [{"Name": a, "Entity": t, "Type": 0} for t, a in aliases.items()],
+                      "Select": select}, "drillFilterOtherVisuals": True,
+                      "vcObjects": {"title": [{"properties": {
+                          "show": {"expr": {"Literal": {"Value": "true"}}},
+                          "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]}}}
+        out.append({**pos, "config": json.dumps(config), "filters": "[]"})
+    return out
 
 
 def role_tmdl(user: str) -> str:
@@ -445,20 +589,26 @@ def role_tmdl(user: str) -> str:
     return "\n".join(lines)
 
 
-def build(data_root: str = DEFAULT_ROOT) -> Path:
+def build(data_root: str = DEFAULT_ROOT, cfg: AirlineApp = CH15) -> Path:
+    global CFG, APP, SLUG
+    CFG, APP, SLUG = cfg, cfg.app, cfg.slug
     manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
     root = APPS / SLUG
     sm, rp = root / f"{SLUG}.SemanticModel", root / f"{SLUG}.Report"
+    roles = SECTION_ACCESS if cfg.section_access else {}
     for d in (sm / "definition" / "tables", sm / "definition" / "roles", rp):
         d.mkdir(parents=True, exist_ok=True)
         for f in d.glob("*.tmdl"):
             f.unlink()
+    if not roles:
+        (sm / "definition" / "roles").rmdir()
     measures: dict[str, dict] = {}
     for k in kpi_list(manifest):
         pk = k["parity_key"]
         if pk not in MEASURES:
             raise SystemExit(f"{k['kpi']}: no measure for ParityKey {pk}: {k['expression']}")
-        mz = measures.setdefault(pk, {"parity_key": pk, "name": MEASURES[pk][0], "dax": MEASURES[pk][1],
+        mz = measures.setdefault(pk, {"parity_key": pk, "name": MEASURES[pk][0],
+                                      "dax": MEASURES[pk][1].replace("@METRIC", tname(cfg.metric_table)),
                                       "fmt": MEASURES[pk][2], "kpis": [], "qlik": " ".join(k["expression"].split())})
         mz["kpis"].append(k["kpi"])
         for d in k["dims"]:
@@ -476,11 +626,11 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
         rels += [f"relationship {tag(SLUG, 'rel', ft, fc, tt)}", f"\tfromColumn: {tname(ft)}.{tname(fc)}",
                  f"\ttoColumn: {tname(tt)}.{tname(tc)}", ""]
     (sm / "definition" / "relationships.tmdl").write_text("\n".join(rels), encoding="utf-8")
-    for user in SECTION_ACCESS:
+    for user in roles:
         (sm / "definition" / "roles" / f"{user}.tmdl").write_text(role_tmdl(user), encoding="utf-8")
     (sm / "definition" / "database.tmdl").write_text("database\n\tcompatibilityLevel: 1567\n\n", encoding="utf-8")
     refs = "\n".join(f"ref table {tname(t)}" for t in specs) + "\n\n" + \
-        "\n".join(f"ref role {tname(u)}" for u in SECTION_ACCESS)
+        "\n".join(f"ref role {tname(u)}" for u in roles)
     order = ["DataRoot", "fnReadParquet", "fnFactKeys", *specs]
     (sm / "definition" / "model.tmdl").write_text(
         "model Model\n\tculture: en-US\n\tdefaultPowerBIDataSourceVersion: powerBI_V3\n\tsourceQueryCulture: en-US\n"
@@ -514,8 +664,9 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
     (rp / "report.json").write_text(json.dumps({
         "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
         "layoutOptimization": 0, "resourcePackages": [],
-        "sections": [{"name": "ReportSection", "displayName": "Page 1", "displayOption": 1, "ordinal": 0,
-                      "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": []}]},
+        "sections": report_sections(manifest, specs, measures) if cfg.report_pages else [
+            {"name": "ReportSection", "displayName": "Page 1", "displayOption": 1, "ordinal": 0,
+             "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": []}]},
         indent=2) + "\n")
     (root / f"{SLUG}.pbip").write_text(json.dumps(
         {"version": "1.0", "artifacts": [{"report": {"path": f"{SLUG}.Report"}}], "settings": {"enableAutoRecovery": True}},
@@ -529,17 +680,21 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
                                    for t, col, q, d, _ in CALC_DIMS]
                                   + [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q,
                                       "dax": "segment table + '# of Carriers'"} for t, col, q, _, _, _ in SEGMENTS],
-         "roles": {u: {"flight_types": v, "omit": o} for u, (v, o) in SECTION_ACCESS.items()},
-         "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
-    print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(SECTION_ACCESS)} roles, "
+         "roles": {u: {"flight_types": v, "omit": o} for u, (v, o) in roles.items()},
+         "semantic_gaps": gaps()}, indent=1, ensure_ascii=False) + "\n")
+    print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(roles)} roles, "
           f"{len(measures)} measures, {len(CALC_DIMS)} calculated columns")
     return root
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--app", choices=[*AIRLINE_APPS, "all"], default="all")
     ap.add_argument("--data-root", default=DEFAULT_ROOT)
-    build(ap.parse_args(argv).data_root)
+    args = ap.parse_args(argv)
+    for name, cfg in AIRLINE_APPS.items():
+        if args.app in (name, "all"):
+            build(args.data_root, cfg)
     return 0
 
 
