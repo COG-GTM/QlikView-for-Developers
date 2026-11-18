@@ -68,10 +68,17 @@ def test_every_kpi_has_a_dax_query_and_report_uses_model_measures():
     assert len(queries["relationships"]) == 11
     tmdl = (PBIP / "Chapter06_Airline_Operations.SemanticModel/definition/tables/Main Data.tmdl").read_text()
     report = json.loads((PBIP / "Chapter06_Airline_Operations.Report/report.json").read_text())
-    (page,) = report["sections"]
-    assert page["displayName"] == "Dashboard" and len(page["visualContainers"]) == 2
-    for vc in page["visualContainers"]:
-        for sel in json.loads(vc["config"])["singleVisual"]["prototypeQuery"]["Select"]:
+    tables = PBIP / "Chapter06_Airline_Operations.SemanticModel/definition/tables"
+    main, dash = report["sections"]
+    assert (main["displayName"], dash["displayName"]) == ("Main", "Dashboard")
+    configs = [json.loads(vc["config"])["singleVisual"] for p in (main, dash) for vc in p["visualContainers"]]
+    types = [c["visualType"] for c in configs]
+    assert types.count("slicer") == 22 + 6 and types.count("clusteredColumnChart") == types.count("tableEx") == 1
+    for c in configs:
+        (entity,) = [f["Entity"] for f in c["prototypeQuery"]["From"]]
+        model = (tables / f"{entity}.tmdl").read_text() if entity != "Main Data" else tmdl
+        for sel in c["prototypeQuery"]["Select"]:
             kind, prop = ("measure", sel["Measure"]["Property"]) if "Measure" in sel else \
                 ("column", sel["Column"]["Property"])
-            assert f"\t{kind} {prop if prop.isidentifier() else repr(prop)}" in tmdl.replace('"', "'"), prop
+            name = prop if prop.replace(" ", "").isalnum() and " " not in prop else "'" + prop.replace("'", "''") + "'"
+            assert f"\t{kind} {name}" in model, (entity, prop)
