@@ -44,6 +44,9 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   Chapter 10 Production Planning: the source model reproduces the report-file cleanup and
   its 50 rows equal the rows stored in the .qvw (test decodes them). The DAX
   side is generated and ready to run on Windows; it has not been run yet.
+* Chapter 07 (`apps/Chapter07_Airline_Operations`, built from the Chapter 15 base by
+  `tools/build_ch07_airline.py`): 41/41 KPIs evaluate, 12 base measures + `Deal Status`, 83 DAX
+  queries generated, 7 report pages (one per sheet).
 * Chapter 15 (Airline Operations base model, `apps/Chapter15_Airline_Operations`): its 14
   source-model tables match the inventory (after reproducing Section Access reduction for
   ADMIN), all 92 KPI expressions evaluate, and 182 DAX queries (role ADMIN) are generated.
