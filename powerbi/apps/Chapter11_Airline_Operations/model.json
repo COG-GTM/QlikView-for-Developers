@@ -277,6 +277,13 @@
  ],
  "report_pages": {
   "Dashboard": [
+   "LB29",
+   "LB28",
+   "LB33",
+   "LB27",
+   "LB32",
+   "LB31",
+   "LB30",
    "CH01",
    "CH02",
    "CH03",
@@ -284,7 +291,35 @@
    "CH06",
    "CH07",
    "CH15"
+  ],
+  "Associations": [
+   "LB01",
+   "LB02",
+   "LB03",
+   "LB04",
+   "LB05",
+   "LB06",
+   "LB07",
+   "LB09",
+   "LB12",
+   "LB13",
+   "LB15"
+  ],
+  "Data Consistency": [
+   "LB34",
+   "LB35"
+  ],
+  "Variables": [
+   "LB36",
+   "CH46",
+   "CH45",
+   "CH44",
+   "CH43"
   ]
+ },
+ "unmapped_list_boxes": {
+  "LB10": "Aircraft Type",
+  "LB11": "Aircraft Group"
  },
  "semantic_gaps": [
   "Derived from the Chapter 15 base model: Chapter 11's 66 chart expressions are 26 distinct Qlik expressions, all of which the base model already migrates, so the measures, segment tables and calculated column are shared (the metric picker reads INLFED, Chapter 11's name for that inline table).",
@@ -298,6 +333,6 @@
   "Set analysis value modifiers use KEEPFILTERS: identical to QlikView with no selections (the parity baseline); with a slicer selection on the same field Power BI intersects where QlikView replaces the selection.",
   "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the carriers whose value falls in the segment at query time. The row-level Flight Type deal status -> calculated column.",
   "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields; $($(=eMetric)) -> SWITCH over SELECTEDVALUE(INLFED[eMetric]).",
-  "Report: the Dashboard sheet's charts are rebuilt as one page; the other sheets' expressions are measures in the model. QlikView-only objects (list/multi boxes, buttons, bookmarks, input box, slider, search, statistics box) map to slicers and Power BI's own bookmarks / filter pane and are not generated."
+  "Report: pages Dashboard (its charts + list boxes), Associations and Data Consistency (list boxes) and Variables (Metric Name list box + the metric picker / FTE charts); the other sheets' expressions are measures in the model and their list boxes are the same linked objects as the Dashboard's. List boxes -> slicers on the field their caption names; LB10 'Aircraft Type' and LB11 'Aircraft Group' name no field of the model (Chapter 11 drops %Aircraft Group Type) and are not rebuilt. Multi boxes, current selections, buttons, bookmarks, input box, slider, search object, statistics box and the Data Consistency table box map to Power BI's filter pane / bookmarks and are not generated."
  ]
 }

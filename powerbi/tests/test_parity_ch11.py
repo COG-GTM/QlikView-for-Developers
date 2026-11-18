@@ -114,5 +114,16 @@ def test_model_follows_the_chapter_11_script():
     assert "\t/// The number of engines on the aircraft\n\tcolumn 'Aircraft Number Of Engines'" in aircraft
     assert "Aircraft_Base_File.parquet" in aircraft and "Aircraft_Manufacturers.parquet" in aircraft
     report = json.loads((PBIP / "Chapter11_Airline_Operations.Report" / "report.json").read_text())
-    assert [s["displayName"] for s in report["sections"]] == ["Dashboard"]
-    assert len(report["sections"][0]["visualContainers"]) == 7
+    pages = {s["displayName"]: [json.loads(v["config"])["singleVisual"] for v in s["visualContainers"]]
+             for s in report["sections"]}
+    assert list(pages) == ["Dashboard", "Associations", "Data Consistency", "Variables"]
+    assert [v["visualType"] for v in pages["Dashboard"]].count("slicer") == 7 and len(pages["Dashboard"]) == 14
+    columns = {(c["table"], c["name"]) for c in read_tmdl(PBIP)["columns"]}
+    measures = {m["name"] for m in read_tmdl(PBIP)["measures"]}
+    for visuals in pages.values():  # every slicer / chart field exists in the model
+        for v in visuals:
+            entities = {f["Name"]: f["Entity"] for f in v["prototypeQuery"]["From"]}
+            for sel in v["prototypeQuery"]["Select"]:
+                kind, ref = next(iter(sel.items()))
+                prop, entity = ref["Property"], entities[ref["Expression"]["SourceRef"]["Source"]]
+                assert (entity, prop) in columns if kind == "Column" else prop in measures, sel["Name"]
