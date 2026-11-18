@@ -795,6 +795,7 @@
   "FTE % to Total (CH43): $(vTotalFTEs) is '= Sum([# Equivalent FTEs])', evaluated once in the selection, so the denominator is the selection-wide total -> CALCULATE(..., ALLSELECTED()); the inventory expansion had dropped the '=' (each carrier divided by itself) and is corrected to Sum(TOTAL ...) in the manifest.",
   "$($(=eMetric)) -> SWITCH over SELECTEDVALUE(INLFED[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion.",
   "List boxes whose caption is no model field are not rebuilt as slicers: LB10 'Aircraft Type', LB11 'Aircraft Group' (no such field in the model nor in the .qvw's stored data model).",
+  "Selections stay global as in QlikView: each field's slicers share a sync group, with a hidden copy on the pages that lack the field.",
   "Report pages carry the sheets' list boxes as slicers only; charts, multi boxes, text objects, buttons, search, current selections, containers and the other Qlik-only objects are listed per page in model.json (report.not_rebuilt) and are not rebuilt yet."
  ]
 }

@@ -19,7 +19,7 @@
    "grain": [
     "Estimated Production"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Production Planning - Legacy'[Estimated Production])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Production Planning - Legacy'[Estimated Production]), NOT ISBLANK('Production Planning - Legacy'[Estimated Production]))"
   },
   {
    "id": "LB02@Date",
@@ -27,7 +27,7 @@
    "grain": [
     "Date"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Production Planning - Legacy'[Date])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Production Planning - Legacy'[Date]), NOT ISBLANK('Production Planning - Legacy'[Date]))"
   },
   {
    "id": "ROWS@Production Planning - Legacy",

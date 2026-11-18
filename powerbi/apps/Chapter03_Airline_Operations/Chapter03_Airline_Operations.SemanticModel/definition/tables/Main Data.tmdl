@@ -55,6 +55,7 @@ table 'Main Data'
 
 	column '%Unique Carrier Code'
 		dataType: string
+		isHidden
 		lineageTag: 0e64239e-0101-50af-9ab4-ac3ada7c816d
 		summarizeBy: none
 		sourceColumn: %Unique Carrier Code
@@ -63,6 +64,7 @@ table 'Main Data'
 
 	column '%Unique Carrier Entity Code'
 		dataType: string
+		isHidden
 		lineageTag: 2a65ecb1-9c03-5109-a015-99dce9e3dca6
 		summarizeBy: none
 		sourceColumn: %Unique Carrier Entity Code
@@ -80,6 +82,7 @@ table 'Main Data'
 
 	column '%Origin Airport ID'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 8958216c-4500-5a5a-bc7f-727a6607db69
 		summarizeBy: none
@@ -89,6 +92,7 @@ table 'Main Data'
 
 	column '%Origin Airport Sequence ID'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 02036dbc-1abc-5e5d-b0bb-931c0dcc4680
 		summarizeBy: none
@@ -98,6 +102,7 @@ table 'Main Data'
 
 	column '%Origin Airport Market ID'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 432953d6-5237-5b2b-b926-afc6068cde4f
 		summarizeBy: none
@@ -107,6 +112,7 @@ table 'Main Data'
 
 	column '%Origin World Area Code'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: ccd41a67-699b-5d6e-aee0-b2cdc8f06e43
 		summarizeBy: none
@@ -116,6 +122,7 @@ table 'Main Data'
 
 	column '%Destination Airport ID'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 3c4b9457-57a5-5cb6-8d55-17fa786fad72
 		summarizeBy: none
@@ -125,6 +132,7 @@ table 'Main Data'
 
 	column '%Destination Airport Sequence ID'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: deec48fb-0c08-5d56-8ac2-a071e4e8717e
 		summarizeBy: none
@@ -134,6 +142,7 @@ table 'Main Data'
 
 	column '%Destination Airport Market ID'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 752be7f0-4b7e-5165-af7f-6f8e2cf41df0
 		summarizeBy: none
@@ -143,6 +152,7 @@ table 'Main Data'
 
 	column '%Destination World Area Code'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 335534bf-bf0a-576f-bdcf-c65b001a2ab7
 		summarizeBy: none
@@ -172,6 +182,7 @@ table 'Main Data'
 
 	column '%Aircraft Configuration ID'
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 925fea5b-2ccd-5b36-a0cf-c5ec57d508dc
 		summarizeBy: none
@@ -191,6 +202,7 @@ table 'Main Data'
 
 	column '%Service Class ID'
 		dataType: string
+		isHidden
 		lineageTag: e57dcef8-d416-5eae-86ef-42ac88138760
 		summarizeBy: none
 		sourceColumn: %Service Class ID
@@ -436,7 +448,6 @@ table 'Main Data'
 
 	column Year
 		dataType: int64
-		formatString: 0
 		lineageTag: d0f40e76-2d19-54c8-b50a-bddc596978da
 		summarizeBy: none
 		sourceColumn: Year
@@ -445,7 +456,6 @@ table 'Main Data'
 
 	column Period
 		dataType: int64
-		formatString: 0
 		lineageTag: 96844340-1ddd-5169-ad95-d12c07c38ca8
 		summarizeBy: none
 		sourceColumn: Period
@@ -527,6 +537,19 @@ table 'Main Data'
 		sourceColumn: From - To State
 
 		annotation SummarizationSetBy = Automatic
+
+	hierarchy Time
+		lineageTag: 8f6f6e81-2ad5-5cdd-8c7f-b98880d8823a
+
+		level Year
+			lineageTag: 356a7525-25f5-546d-83e4-9e5561f08c5c
+			column: Year
+
+		level Month
+			lineageTag: 0e0da38a-787b-5960-a009-97434dc38b8c
+			column: Month
+
+		annotation QlikGroup = drill-down Time: Year > Month
 
 	partition 'Main Data' = m
 		mode: import

@@ -482,16 +482,21 @@ def role_tmdl(user: str) -> str:
 SLICER_W, SLICER_H, SLICERS_PER_ROW = 240, 160, 5
 
 
-def slicer(page: str, n: int, table: str, col: str) -> dict:
+def slicer(page: str, n: int, table: str, col: str, hidden: bool = False) -> dict:
+    """QlikView selections are global: every slicer of a field joins that field's sync group, and pages without the
+    field get a hidden copy so a selection made elsewhere still filters them."""
     x, y = 20 + n % SLICERS_PER_ROW * (SLICER_W + 10), 20 + n // SLICERS_PER_ROW * (SLICER_H + 10)
-    pos = {"x": x, "y": y, "z": n, "width": SLICER_W, "height": SLICER_H}
+    pos = {"x": 0, "y": 0, "z": n, "width": 120, "height": 60} if hidden else \
+        {"x": x, "y": y, "z": n, "width": SLICER_W, "height": SLICER_H}
     ref = f"{table}.{col}"
     return {**pos, "filters": "[]", "config": json.dumps({
-        "name": tag(SLUG, "visual", page, str(n)), "layouts": [{"id": 0, "position": pos}],
+        "name": tag(SLUG, "visual", page, str(n), *(["hidden"] if hidden else [])), "layouts": [{"id": 0, "position": pos}],
         "singleVisual": {"visualType": "slicer", "projections": {"Values": [{"queryRef": ref}]},
                          "prototypeQuery": {"Version": 2, "From": [{"Name": "t", "Entity": table, "Type": 0}],
                                             "Select": [{"Column": {"Expression": {"SourceRef": {"Source": "t"}},
                                                                    "Property": col}, "Name": ref}]},
+                         "syncGroup": {"groupName": f"{table}.{col}", "fieldChanges": True, "filterChanges": True},
+                         **({"display": {"mode": "hidden"}} if hidden else {}),
                          "drillFilterOtherVisuals": True}})}
 
 
@@ -511,6 +516,9 @@ def report_pages(specs: dict) -> tuple[list[dict], list[dict], list[str]]:
             if not col.startswith("%") and not col.endswith("__num"):
                 fields.setdefault(col, table)
     sections, pages, unmapped = [], [], {}
+    caption = inv["list_box_captions"]
+    synced = list(dict.fromkeys(caption[o] for sh in inv["sheets"] for o in sh["objects"]
+                                if caption.get(o) in fields))
     for n, sheet in enumerate(inv["sheets"]):
         name = re.sub(r"^='(.*?)'\s*&\s*", r"\1", sheet["name"]).replace("[", "").replace("]", "")
         lbs = [o for o in sheet["objects"] if o in inv["list_box_captions"]]
@@ -519,8 +527,10 @@ def report_pages(specs: dict) -> tuple[list[dict], list[dict], list[str]]:
         sections.append({"name": f"ReportSection{n:02d}", "displayName": name, "displayOption": 1, "ordinal": n,
                          "width": 1280, "height": max(720, 40 + -(-len(mapped) // SLICERS_PER_ROW) * (SLICER_H + 10)),
                          "config": "{}", "filters": "[]",
-                         "visualContainers": [slicer(sheet["id"], i, fields[inv["list_box_captions"][o]],
-                                                     inv["list_box_captions"][o]) for i, o in enumerate(mapped)]})
+                         "visualContainers": [slicer(sheet["id"], i, fields[caption[o]], caption[o])
+                                              for i, o in enumerate(mapped)]
+                         + [slicer(sheet["id"], len(mapped) + i, fields[f], f, hidden=True)
+                            for i, f in enumerate(f for f in synced if f not in {caption[o] for o in mapped})]})
         pages.append({"sheet": sheet["id"], "page": name,
                       "slicers": {o: f"{fields[inv['list_box_captions'][o]]}[{inv['list_box_captions'][o]}]"
                                   for o in mapped},
@@ -529,6 +539,8 @@ def report_pages(specs: dict) -> tuple[list[dict], list[dict], list[str]]:
     if unmapped:
         gaps_out.append("List boxes whose caption is no model field are not rebuilt as slicers: " + ", ".join(
             f"{o} '{c}'" for o, c in sorted(unmapped.items())) + " (no such field in the model nor in the .qvw's stored data model).")
+    gaps_out.append("Selections stay global as in QlikView: each field's slicers share a sync group, with a hidden copy "
+                    "on the pages that lack the field.")
     gaps_out.append("Report pages carry the sheets' list boxes as slicers only; charts, multi boxes, text objects, "
                     "buttons, search, current selections, containers and the other Qlik-only objects are listed per "
                     "page in model.json (report.not_rebuilt) and are not rebuilt yet.")

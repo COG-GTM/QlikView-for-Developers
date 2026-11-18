@@ -95,6 +95,11 @@ def test_report_pages_rebuild_list_boxes_as_slicers():
     assert len(report["sections"]) == len(inv["sheets"]) == 15
     slicers = [json.loads(v["config"])["singleVisual"] for s in report["sections"] for v in s["visualContainers"]]
     assert all(v["visualType"] == "slicer" for v in slicers)
+    groups = {}  # QlikView selections are global: every page carries every synced field, visible or hidden
+    for sec in report["sections"]:
+        for v in sec["visualContainers"]:
+            groups.setdefault(json.loads(v["config"])["singleVisual"]["syncGroup"]["groupName"], set()).add(sec["name"])
+    assert "Master Calendar.Year" in groups and all(len(p) == 15 for p in groups.values())
     dashboard = model["report"][0]["slicers"]
     assert dashboard["LB33"] == "Main Data[Carrier Name]" and dashboard["LB32"] == "Master Calendar[Year]"
     assert model["report"][9]["slicers"]["LB36"] == "INLFED[Metric Name]"

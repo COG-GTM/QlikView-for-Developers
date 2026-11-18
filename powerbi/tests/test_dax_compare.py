@@ -1,4 +1,4 @@
-"""DAX side: scaffolded PBIP maps every Ch03 KPI to a measure, and compare() catches differences."""
+"""DAX side: the Ch03 PBIP maps every Ch03 KPI to a measure, and compare() catches differences."""
 import copy
 import json
 
@@ -7,7 +7,7 @@ import pytest
 import compare
 import dax
 import harness
-import scaffold_pbip
+import build_ch03_airline
 from conftest import CH03
 
 
@@ -16,10 +16,10 @@ def expected():
     return harness.load_expected(CH03)
 
 
-def test_committed_scaffold_is_up_to_date(tmp_path, monkeypatch):
-    monkeypatch.setattr(scaffold_pbip, "APPS", tmp_path)
-    out = scaffold_pbip.scaffold(CH03, "C:\\QlikView-for-Developers\\powerbi\\data\\parquet\\")
-    committed = scaffold_pbip.APPS.__class__(harness.REPO / "powerbi/apps" / out.name)
+def test_committed_app_is_up_to_date(tmp_path, monkeypatch):
+    monkeypatch.setattr(build_ch03_airline, "APPS", tmp_path)
+    out = build_ch03_airline.build()
+    committed = harness.REPO / "powerbi/apps" / out.name
     for f in out.rglob("*"):
         if f.is_file():
             assert f.read_bytes() == (committed / f.relative_to(out)).read_bytes(), f.relative_to(out)
@@ -30,7 +30,8 @@ def test_every_ch03_result_gets_a_dax_query(tmp_path, monkeypatch, expected):
     dax.write_queries(CH03, harness.REPO / "powerbi/apps/Chapter03_Airline_Operations")
     spec = json.loads((tmp_path / f"{CH03}.queries.json").read_text())
     assert spec["unmapped"] == []
-    ids = {r["id"] for k in expected["kpis"] for r in k["results"]}
+    ids = {r["id"] for k in expected["kpis"] for r in k["results"]} | \
+        {r["id"] for o in expected["objects"] for r in o["results"]}
     assert {q["id"] for q in spec["queries"]} == ids
     q = next(q for q in spec["queries"] if q["id"] == "CH01#1@Year+Month")
     assert q["query"] == "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], 'Main Data'[Month], \"value\", [# of Flights])"
@@ -43,6 +44,9 @@ def _as_dax_results(expected):
         for r in k["results"]:
             rows = [[str(x) for x in row[:-1]] + [int(row[-1])] for row in r["rows"] if row[-1]]
             results.append({"id": r["id"], "columns": r["grain"] + ["[value]"], "rows": rows})
+    for o in expected.get("objects", []):
+        for r in o["results"]:
+            results.append({"id": r["id"], "columns": r["grain"], "rows": [[str(x) for x in row] for row in r["rows"]]})
     return {"app": expected["app"], "produced_by": "test", "results": results}
 
 
