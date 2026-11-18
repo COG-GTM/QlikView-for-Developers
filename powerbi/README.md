@@ -47,7 +47,8 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   source-model tables match the inventory (after reproducing Section Access reduction for
   ADMIN), all 92 KPI expressions evaluate, and 182 DAX queries (role ADMIN) are generated.
 * Chapter 04 (`apps/Chapter04_Airline_Operations`): scaffolded plain-load model (12 tables,
-  11 relationships, 4 measures) with Main and Dashboard report pages; all 8 KPI expressions
+  11 relationships, 4 measures) with Main and Dashboard report pages (all 20 list boxes
+  as slicers, from captions in the .qvw; the search object SO01 has no equivalent); all 8 KPI expressions
   match pyqvd + pandas on the original QVD, and 20 DAX queries plus 11 relationship checks
   are generated. Origin/Destination Airports differ from the inventory only by the
   documented superset exceptions.

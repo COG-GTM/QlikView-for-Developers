@@ -59,6 +59,10 @@ def test_report_has_both_sheets_and_charts():
     charts = {c["name"]: c["singleVisual"] for c in configs if c["name"] in ("CH01", "CH02")}
     assert charts["CH01"]["visualType"] == "clusteredColumnChart"
     assert charts["CH02"]["visualType"] == "tableEx"
+    slicers = {s["displayName"]: [c["name"] for c in map(json.loads, (v["config"] for v in s["visualContainers"]))
+                                  if c["singleVisual"]["visualType"] == "slicer"] for s in report["sections"]}
+    assert len(slicers["Main"]) == 13 and len(slicers["Dashboard"]) == 7
+    assert all(oid.startswith("LB") for ids in slicers.values() for oid in ids)
     top = json.loads(report["sections"][1]["visualContainers"][-1]["filters"])
     assert top[0]["type"] == "TopN" and top[0]["filter"]["From"][0]["Expression"]["Subquery"]["Query"]["Top"] == 10
 

@@ -19,7 +19,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S00\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB09\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Distance Groups.Distance Interval\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Distance Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Distance Interval\"}, \"Name\": \"Distance Groups.Distance Interval\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -28,7 +28,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 264, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Quarter\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Main Data.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB11\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 264, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Groups.Aircraft Group\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Group\"}, \"Name\": \"Aircraft Groups.Aircraft Group\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -37,7 +37,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S02\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 518, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Month\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB12\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 518, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -46,7 +46,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S03\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 772, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Airlines.Airline\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Airlines\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Airline\"}, \"Name\": \"Airlines.Airline\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB10\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 772, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Types.Aircraft Type\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Type\"}, \"Name\": \"Aircraft Types.Aircraft Type\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -55,7 +55,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S04\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1026, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB15\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1026, \"y\": 10, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -64,7 +64,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S05\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB03\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination City\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination City\"}, \"Name\": \"Main Data.Destination City\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -73,7 +73,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S06\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 264, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB05\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 264, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin State\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin State\"}, \"Name\": \"Main Data.Origin State\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -82,7 +82,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S07\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 518, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Groups.Aircraft Group\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Group\"}, \"Name\": \"Aircraft Groups.Aircraft Group\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB06\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 518, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin City\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin City\"}, \"Name\": \"Main Data.Origin City\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -91,7 +91,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S08\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 772, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Types.Aircraft Type\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Type\"}, \"Name\": \"Aircraft Types.Aircraft Type\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB02\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 772, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination State\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination State\"}, \"Name\": \"Main Data.Destination State\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -100,7 +100,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S09\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1026, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Distance Groups.Distance Interval\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Distance Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Distance Interval\"}, \"Name\": \"Distance Groups.Distance Interval\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB07\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1026, \"y\": 246, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -109,7 +109,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S10\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 482, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Origin Airports.Origin Airport\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Origin Airports\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin Airport\"}, \"Name\": \"Origin Airports.Origin Airport\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB13\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 482, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -118,7 +118,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S11\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 264, \"y\": 482, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Destination Airports.Destination Airport\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Destination Airports\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination Airport\"}, \"Name\": \"Destination Airports.Destination Airport\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 264, \"y\": 482, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Destination Country\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination Country\"}, \"Name\": \"Main Data.Destination Country\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
@@ -127,16 +127,7 @@
           "z": 0,
           "width": 244,
           "height": 226,
-          "config": "{\"name\": \"SH01_S12\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 518, \"y\": 482, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Origin Markets.Origin Market\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Origin Markets\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin Market\"}, \"Name\": \"Origin Markets.Origin Market\"}]}, \"drillFilterOtherVisuals\": true}}",
-          "filters": "[]"
-        },
-        {
-          "x": 772,
-          "y": 482,
-          "z": 0,
-          "width": 244,
-          "height": 226,
-          "config": "{\"name\": \"SH01_S13\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 772, \"y\": 482, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Destination Markets.Destination Market\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Destination Markets\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination Market\"}, \"Name\": \"Destination Markets.Destination Market\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "config": "{\"name\": \"LB04\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 518, \"y\": 482, \"z\": 0, \"width\": 244, \"height\": 226}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Origin Country\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin Country\"}, \"Name\": \"Main Data.Origin Country\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         }
       ]
@@ -156,44 +147,62 @@
           "y": 10,
           "z": 0,
           "width": 220,
-          "height": 132,
-          "config": "{\"name\": \"SH02_S00\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 10, \"z\": 0, \"width\": 220, \"height\": 132}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "height": 91,
+          "config": "{\"name\": \"LB32\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 10, \"z\": 0, \"width\": 220, \"height\": 91}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Year\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
           "x": 10,
-          "y": 152,
+          "y": 111,
           "z": 0,
           "width": 220,
-          "height": 132,
-          "config": "{\"name\": \"SH02_S01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 152, \"z\": 0, \"width\": 220, \"height\": 132}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Month\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "height": 91,
+          "config": "{\"name\": \"LB31\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 111, \"z\": 0, \"width\": 220, \"height\": 91}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Quarter\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Main Data.Quarter\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
           "x": 10,
-          "y": 294,
+          "y": 212,
           "z": 0,
           "width": 220,
-          "height": 132,
-          "config": "{\"name\": \"SH02_S02\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 294, \"z\": 0, \"width\": 220, \"height\": 132}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Airlines.Airline\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Airlines\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Airline\"}, \"Name\": \"Airlines.Airline\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "height": 91,
+          "config": "{\"name\": \"LB30\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 212, \"z\": 0, \"width\": 220, \"height\": 91}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Month\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
           "x": 10,
-          "y": 436,
+          "y": 313,
           "z": 0,
           "width": 220,
-          "height": 132,
-          "config": "{\"name\": \"SH02_S03\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 436, \"z\": 0, \"width\": 220, \"height\": 132}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Origin Markets.Origin Market\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Origin Markets\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Origin Market\"}, \"Name\": \"Origin Markets.Origin Market\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "height": 91,
+          "config": "{\"name\": \"LB29\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 313, \"z\": 0, \"width\": 220, \"height\": 91}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {
           "x": 10,
-          "y": 578,
+          "y": 414,
           "z": 0,
           "width": 220,
-          "height": 132,
-          "config": "{\"name\": \"SH02_S04\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 578, \"z\": 0, \"width\": 220, \"height\": 132}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Destination Markets.Destination Market\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Destination Markets\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Destination Market\"}, \"Name\": \"Destination Markets.Destination Market\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "height": 91,
+          "config": "{\"name\": \"LB28\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 414, \"z\": 0, \"width\": 220, \"height\": 91}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 10,
+          "y": 515,
+          "z": 0,
+          "width": 220,
+          "height": 91,
+          "config": "{\"name\": \"LB26\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 515, \"z\": 0, \"width\": 220, \"height\": 91}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Aircraft Groups.Aircraft Group\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Aircraft Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Aircraft Group\"}, \"Name\": \"Aircraft Groups.Aircraft Group\"}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 10,
+          "y": 616,
+          "z": 0,
+          "width": 220,
+          "height": 91,
+          "config": "{\"name\": \"LB27\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 616, \"z\": 0, \"width\": 220, \"height\": 91}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"drillFilterOtherVisuals\": true}}",
           "filters": "[]"
         },
         {

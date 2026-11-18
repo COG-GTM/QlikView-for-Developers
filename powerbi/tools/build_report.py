@@ -16,21 +16,21 @@ from harness import parity_key  # noqa: E402
 
 PAGE_W, PAGE_H = 1280, 720
 
-# Sheet layouts per app: slicer fields per page, charts by Qlik object id.
+# Sheet layouts per app: list boxes (Qlik id, caption = field) become slicers, charts by Qlik id.
+# Captions are read from the .qvw document block, where each object's caption precedes its id.
 LAYOUTS = {
     "Chapter04__Solution_Chapter 4_Airline Operations": [
-        {"name": "Main", "id": "SH01", "slicers": [
-            ("Main Data", "Year"), ("Main Data", "Quarter"), ("Main Data", "Month"),
-            ("Airlines", "Airline"), ("Carrier Groups", "Carrier Group"),
-            ("Carrier Operating Region", "Carrier's Operating Region"), ("Flight Types", "Flight Type"),
-            ("Aircraft Groups", "Aircraft Group"), ("Aircraft Types", "Aircraft Type"),
-            ("Distance Groups", "Distance Interval"), ("Origin Airports", "Origin Airport"),
-            ("Destination Airports", "Destination Airport"), ("Origin Markets", "Origin Market"),
-            ("Destination Markets", "Destination Market")], "charts": []},
-        {"name": "Dashboard", "id": "SH02", "slicers": [
-            ("Main Data", "Year"), ("Main Data", "Month"), ("Airlines", "Airline"),
-            ("Origin Markets", "Origin Market"), ("Destination Markets", "Destination Market")],
-         "charts": ["CH01", "CH02"]},
+        {"name": "Main", "id": "SH01", "charts": [], "list_boxes": [
+            ("LB09", "Distance Interval"), ("LB11", "Aircraft Group"), ("LB12", "Flight Type"),
+            ("LB10", "Aircraft Type"), ("LB15", "Carrier Group"), ("LB03", "Destination City"),
+            ("LB05", "Origin State"), ("LB06", "Origin City"), ("LB02", "Destination State"),
+            ("LB07", "Carrier Name"), ("LB13", "Carrier's Operating Region"),
+            ("LB01", "Destination Country"), ("LB04", "Origin Country")]},
+        {"name": "Dashboard", "id": "SH02", "charts": ["CH01", "CH02"], "list_boxes": [
+            ("LB32", "Year"), ("LB31", "Quarter"), ("LB30", "Month"), ("LB29", "Carrier Group"),
+            ("LB28", "Carrier's Operating Region"), ("LB26", "Aircraft Group"), ("LB27", "Flight Type")],
+         # SO01 (search object) has no Power BI equivalent; slicers have built-in search.
+         "gaps": ["SO01"]},
     ],
 }
 # Qlik dimension -> model columns (a Qlik drill group becomes a drillable axis).
@@ -52,6 +52,29 @@ def measures(pbip: Path) -> dict[str, tuple[str, str]]:
             elif name and (m := re.match(r"\t\tannotation ParityKey = (\w+)", line)):
                 out[m.group(1)] = (table, name)
     return out
+
+
+def columns(pbip: Path) -> dict[str, str]:
+    """Visible column name -> table, from the TMDL."""
+    out = {}
+    for f in sorted((pbip.parent / f"{pbip.name}.SemanticModel" / "definition" / "tables").glob("*.tmdl")):
+        table = None
+        for line in f.read_text().splitlines():
+            if line.startswith("table "):
+                table = line[6:].strip().strip("'").replace("''", "'")
+            elif m := re.match(r"\tcolumn ('(?:[^']|'')+'|\S+)", line):
+                name = m.group(1).strip("'").replace("''", "'")
+                if not name.startswith("%"):
+                    out.setdefault(name, table)
+    return out
+
+
+def slicers(spec: dict, cols: dict) -> list[tuple[str, str, str]]:
+    """(object id, table, field) per list box; fails on a caption that is not a model field."""
+    missing = [cap for _, cap in spec["list_boxes"] if cap not in cols]
+    if missing:
+        raise SystemExit(f"{spec['name']}: list boxes {missing} match no model field")
+    return [(oid, cols[cap], cap) for oid, cap in spec["list_boxes"]]
 
 
 def lit(s: str) -> dict:
@@ -117,23 +140,24 @@ def chart_visual(chart: dict, by_key: dict, pos: tuple) -> dict:
     return visual(chart["id"], vtype, pos, cols, meas, chart["caption"], "Category", "Y", order, filters)
 
 
-def page(i: int, spec: dict, charts: dict, by_key: dict) -> dict:
+def page(i: int, spec: dict, charts: dict, by_key: dict, cols: dict) -> dict:
     visuals = []
-    n = len(spec["slicers"])
+    boxes = slicers(spec, cols)
+    n = len(boxes)
     if spec["charts"]:
         sw, sh = 220, (PAGE_H - 20 - 10 * (n - 1)) // n
-        for j, (t, c) in enumerate(spec["slicers"]):
-            visuals.append(visual(f"{spec['id']}_S{j:02d}", "slicer", (10, 10 + j * (sh + 10), sw, sh), [(t, c)], [], None, "Values", None))
+        for j, (oid, t, c) in enumerate(boxes):
+            visuals.append(visual(oid, "slicer", (10, 10 + j * (sh + 10), sw, sh), [(t, c)], [], None, "Values", None))
         cw = PAGE_W - sw - 30
         ch = (PAGE_H - 30) // len(spec["charts"])
         for j, cid in enumerate(spec["charts"]):
             visuals.append(chart_visual(charts[cid], by_key, (sw + 20, 10 + j * (ch + 10), cw, ch)))
     else:
-        cols = 5
-        w, h = (PAGE_W - 10 * (cols + 1)) // cols, (PAGE_H - 40) // 3
-        for j, (t, c) in enumerate(spec["slicers"]):
-            r, k = divmod(j, cols)
-            visuals.append(visual(f"{spec['id']}_S{j:02d}", "slicer", (10 + k * (w + 10), 10 + r * (h + 10), w, h), [(t, c)], [], None, "Values", None))
+        per_row = 5
+        w, h = (PAGE_W - 10 * (per_row + 1)) // per_row, (PAGE_H - 40) // 3
+        for j, (oid, t, c) in enumerate(boxes):
+            r, k = divmod(j, per_row)
+            visuals.append(visual(oid, "slicer", (10 + k * (w + 10), 10 + r * (h + 10), w, h), [(t, c)], [], None, "Values", None))
     return {"name": spec["id"], "displayName": spec["name"], "displayOption": 1, "ordinal": i, "width": PAGE_W,
             "height": PAGE_H, "config": "{}", "filters": "[]", "visualContainers": visuals}
 
@@ -142,9 +166,10 @@ def build(app: str, pbip_dir: Path) -> Path:
     manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{app}.json").read_text())
     charts = {c["id"]: c for c in manifest["charts"]}
     by_key = measures(pbip_dir / pbip_dir.name)
+    cols = columns(pbip_dir / pbip_dir.name)
     report = {"config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
               "layoutOptimization": 0, "resourcePackages": [],
-              "sections": [page(i, s, charts, by_key) for i, s in enumerate(LAYOUTS[app])]}
+              "sections": [page(i, s, charts, by_key, cols) for i, s in enumerate(LAYOUTS[app])]}
     out = pbip_dir / f"{pbip_dir.name}.Report" / "report.json"
     out.write_text(json.dumps(report, indent=2) + "\n")
     return out
