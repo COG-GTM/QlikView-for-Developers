@@ -1,0 +1,12 @@
+{
+ "app": "Chapter10__Generic Load",
+ "why": "The app's only sheet (Main) has no charts, so there are no Qlik expressions to compare. These checks pin the GENERIC LOAD output itself: every Object's value of each attribute table (GenericDB.Color, .Weight, .Diameter, .Value, .Thickness) and how many objects have each attribute.",
+ "checks": [
+  {"object": "CHK01", "label": "Color by Object", "expression": "Count(Color)", "dims": ["Object", "Color"]},
+  {"object": "CHK02", "label": "Weight by Object", "expression": "Count(Weight)", "dims": ["Object", "Weight"]},
+  {"object": "CHK03", "label": "Diameter by Object", "expression": "Count(Diameter)", "dims": ["Object", "Diameter"]},
+  {"object": "CHK04", "label": "Value by Object", "expression": "Sum(Value)", "dims": ["Object"]},
+  {"object": "CHK05", "label": "Thickness by Object", "expression": "Count(Thickness)", "dims": ["Object", "Thickness"]},
+  {"object": "CHK06", "label": "Objects", "expression": "Count(DISTINCT Object)", "dims": []}
+ ]
+}
