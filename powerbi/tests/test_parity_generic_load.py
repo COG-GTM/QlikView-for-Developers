@@ -50,15 +50,15 @@ def _simulate_dax(spec: dict, table: pd.DataFrame) -> dict:
     results = []
     for q in spec["queries"]:
         q_text = q["query"]
-        assert q_text.startswith("EVALUATE GROUPBY(") and q_text.endswith(', "value", SUMX(CURRENTGROUP(), 1))'), q_text
-        filt = re.match(r"EVALUATE GROUPBY\(FILTER\('GenericDB', NOT ISBLANK\('GenericDB'\[(\w+)\]\)\), (.+), \"value\"", q_text)
+        assert q_text.startswith("EVALUATE GROUPBY(") and q_text.endswith(', "__rows", SUMX(CURRENTGROUP(), 1))'), q_text
+        filt = re.match(r"EVALUATE GROUPBY\(FILTER\('GenericDB', NOT ISBLANK\('GenericDB'\[(\w+)\]\)\), (.+), \"__rows\"", q_text)
         group_part = filt.group(2) if filt else q_text[len("EVALUATE GROUPBY('GenericDB', "):]
-        cols = re.findall(r"'GenericDB'\[(\w+)\]", group_part.split(', "value"')[0])
+        cols = re.findall(r"'GenericDB'\[(\w+)\]", group_part.split(', "__rows"')[0])
         df = table if not filt else table[table[filt.group(1)].notna()]
-        g = df.groupby(cols, dropna=False).size().reset_index(name="value")
+        g = df.groupby(cols, dropna=False).size().reset_index(name="__rows")
         rows = [[None if pd.isna(x) else (x.item() if hasattr(x, "item") else x) for x in r]
                 for r in g.itertuples(index=False)]
-        results.append({"id": q["id"], "columns": cols + ["[value]"], "rows": rows})
+        results.append({"id": q["id"], "columns": cols + ["[__rows]"], "rows": rows})
     return {"app": APP, "produced_by": "pandas simulation of the PBIP", "results": results}
 
 
@@ -88,7 +88,7 @@ def test_dax_queries_map_every_table(tmp_path, monkeypatch, expected):
     spec = (tmp_path / f"{APP}.queries.json").read_text()
     assert '"unmapped": []' in spec
     assert "EVALUATE GROUPBY(FILTER('GenericDB', NOT ISBLANK('GenericDB'[Color])), 'GenericDB'[Object], " \
-           "'GenericDB'[Color], \\\"value\\\", SUMX(CURRENTGROUP(), 1))" in spec
+           "'GenericDB'[Color], \\\"__rows\\\", SUMX(CURRENTGROUP(), 1))" in spec
 
 
 def test_simulated_pbip_passes_and_wrong_pivot_fails(tmp_path, monkeypatch, expected, workbook_rows):
@@ -111,3 +111,14 @@ def test_committed_expected_results_are_reproducible(tmp_path, monkeypatch):
     monkeypatch.setattr(harness, "EXPECTED", tmp_path)
     harness.write_expected(APP)
     assert (tmp_path / f"{APP}.json.gz").read_bytes() == committed
+
+
+def test_count_column_does_not_collide_with_a_grouped_column(tmp_path, monkeypatch):
+    """DAX column names are case-insensitive: GenericDB has a column named Value, so the count can't be "value"."""
+    import json
+    monkeypatch.setattr(dax, "DAX", tmp_path)
+    dax.write_queries(APP, PBIP)
+    for q in json.loads((tmp_path / f"{APP}.queries.json").read_text())["queries"]:
+        grouped = {c.lower() for c in re.findall(r"'GenericDB'\[(\w+)\]", q["query"].split(", \"__rows\"")[0])}
+        names = {n.lower() for n in re.findall(r', "(\w+)", SUMX', q["query"])}
+        assert names and not names & grouped, q["query"]

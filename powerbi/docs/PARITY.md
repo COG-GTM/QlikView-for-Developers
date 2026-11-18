@@ -40,7 +40,7 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   column by `sourceColumn`. Each result id becomes
   `EVALUATE ROW("value", [M])` or `EVALUATE SUMMARIZECOLUMNS('T'[c1], …, "value", [M])`.
   KPIs without an annotated measure are listed under `unmapped`.
-  A table check becomes `EVALUATE GROUPBY('T', 'T'[c1], …, "value", SUMX(CURRENTGROUP(), 1))`
+  A table check becomes `EVALUATE GROUPBY('T', 'T'[c1], …, "__rows", SUMX(CURRENTGROUP(), 1))`
   over the Power BI table holding all its fields; when that table has more columns (a
   `GENERIC LOAD` pivoted into one table) it is filtered to rows where the Qlik table's
   attribute column is not blank.

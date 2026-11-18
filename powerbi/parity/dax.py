@@ -6,7 +6,7 @@ and a Qlik field maps to the column whose ``sourceColumn`` (or name) is that fie
 Each expected result id gets one query:
   grand total -> EVALUATE ROW("value", [Measure])
   grain       -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2], "value", [Measure])
-  table check -> EVALUATE GROUPBY('T', 'T'[c1], 'T'[c2], "value", SUMX(CURRENTGROUP(), 1))
+  table check -> EVALUATE GROUPBY('T', 'T'[c1], 'T'[c2], "__rows", SUMX(CURRENTGROUP(), 1))
                  (rows of the Qlik table per field combination; when the Power BI table holds more
                  columns than the Qlik table, e.g. a GENERIC LOAD pivoted into one table, only rows
                  where one of the Qlik table's non-key fields is not blank)
@@ -79,7 +79,7 @@ def table_query(model: dict, fields: list[str], keys: set[str]) -> tuple[str | N
         cond = " || ".join(f"NOT ISBLANK({dax_col(table, c['name'])})" for c in attrs)
         src = f"FILTER({src}, {cond})"
     group = ", ".join(dax_col(table, c["name"]) for c in cols)
-    return f'EVALUATE GROUPBY({src}, {group}, "value", SUMX(CURRENTGROUP(), 1))', None
+    return f'EVALUATE GROUPBY({src}, {group}, "__rows", SUMX(CURRENTGROUP(), 1))', None
 
 
 def write_queries(app: str, pbip: Path) -> str:
