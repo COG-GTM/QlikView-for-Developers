@@ -112,13 +112,12 @@ GAPS = [
     "carriers whose value falls in the segment at query time. The row-level Flight Type deal status -> calculated column.",
     "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields; "
     "$($(=eMetric)) -> SWITCH over SELECTEDVALUE(INLFED[eMetric]).",
-    "Report: pages Dashboard (its charts + list boxes), Associations and Data Consistency (list boxes) and Variables "
-    "(Metric Name list box + the metric picker / FTE charts); the other sheets' expressions are measures in the model and "
-    "their list boxes are the same linked objects as the Dashboard's. List boxes -> slicers on the field their caption "
-    "names; LB10 'Aircraft Type' and LB11 'Aircraft Group' name no field of the model (Chapter 11 drops "
-    "%Aircraft Group Type) and are not rebuilt. Multi boxes, current selections, buttons, bookmarks, input box, slider, "
-    "search object, statistics box and the Data Consistency table box map to Power BI's filter pane / bookmarks and are "
-    "not generated.",
+    "Report: one page per QlikView sheet with every chart of the sheet (base report_sections). List boxes -> slicers "
+    "on the field their caption names, each field synced on every page (hidden where the sheet had no list box for it). "
+    "MB01/MB02 multi boxes and LB10 'Aircraft Type' / LB11 'Aircraft Group' name no field of the model (Chapter 11 "
+    "drops %Aircraft Group Type) and are not rebuilt. CH02 keeps its Top 10 (by # of Flights, descending). Current "
+    "selections, buttons, bookmarks, input box, slider, search object, statistics box and table boxes map to Power BI's "
+    "filter pane / bookmarks and are not generated.",
 ]
 
 TOP_N = {"CH02": 10}  # Qlik 'Top 10 Routes': max dimension values by the first expression
@@ -300,6 +299,11 @@ def with_top_n(sections: list[dict]) -> None:
                     measure = next(x["Measure"]["Property"] for x in query["Select"] if "Measure" in x)
                     vc["filters"] = json.dumps(top_n_filter(entities[col["Expression"]["SourceRef"]["Source"]],
                                                             col["Property"], measure, n))
+                    alias = next(x["Measure"]["Expression"]["SourceRef"]["Source"] for x in query["Select"]
+                                 if "Measure" in x)
+                    query["OrderBy"] = [{"Direction": 2, "Expression": {"Measure": {
+                        "Expression": {"SourceRef": {"Source": alias}}, "Property": measure}}}]
+                    vc["config"] = json.dumps(cfg)
 
 
 def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "parquet") -> Path:
