@@ -80,6 +80,9 @@ def test_flight_employment_and_point_in_time_kpis_match_pandas(expected, flights
     ftes = employment.groupby("Carrier Name")["# Equivalent FTEs"].sum()
     assert {r[0]: r[1] for r in _results(expected, "CH44#1")["Carrier Name"]} == \
         {k: float(v) for k, v in ftes.items()}
+    share = {r[0]: r[1] for r in _results(expected, "CH43#1")["Carrier Name"]}  # $(vTotalFTEs): '=' variable
+    assert share == pytest.approx({k: v / ftes.sum() for k, v in ftes.items() if v}, rel=1e-12)
+    assert _total(expected, "CH43#1") == pytest.approx(1.0)
     delta = employment.groupby("Carrier Name")["# M-Delta Total Employees"].sum()
     assert {r[0]: r[1] for r in _results(expected, "CH69#3")["Carrier Name"]} == \
         {k: float(v) for k, v in delta.items() if not pd.isna(v)}

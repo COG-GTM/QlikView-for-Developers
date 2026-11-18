@@ -138,11 +138,11 @@
   },
   {
    "name": "FTE % to Total",
-   "parity_key": "f0af66ad7007",
+   "parity_key": "9f20a3cefdc3",
    "kpis": [
     "CH43#1"
    ],
-   "dax": "DIVIDE(SUM('Main Data'[# Equivalent FTEs]), SUM('Main Data'[# Equivalent FTEs]))"
+   "dax": "DIVIDE(SUM('Main Data'[# Equivalent FTEs]), CALCULATE(SUM('Main Data'[# Equivalent FTEs]), ALLSELECTED()))"
   },
   {
    "name": "FTEs",
