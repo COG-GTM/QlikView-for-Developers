@@ -1,0 +1,134 @@
+table 'Link Table'
+	lineageTag: 2edb16a4-4bf5-5cb5-9d84-3ad7bc342e20
+
+	column '%Key Field'
+		dataType: string
+		isHidden
+		lineageTag: f47d8e27-547a-51b4-a507-93870b43f484
+		summarizeBy: none
+		sourceColumn: %Key Field
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		lineageTag: 15e83f4d-4488-5587-becb-b7a69225ddcf
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Period
+		dataType: int64
+		lineageTag: 26cdb5f2-bdd9-57e3-8c81-88174192e3dd
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month (#)'
+		dataType: int64
+		formatString: 0
+		lineageTag: fcf65bfa-a67a-591d-8a42-c300a2fa2605
+		summarizeBy: none
+		sourceColumn: Month (#)
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		sortByColumn: Month__num
+		lineageTag: 82c960c2-7f62-5069-8e64-818da9617ff2
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month__num
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 9b7b5464-2188-54da-b156-f1fa2c02ce95
+		summarizeBy: none
+		sourceColumn: Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: 37311c24-1af4-55e2-84c2-621bd662ad7c
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Airline ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c4075524-dacc-5a92-90ee-42572a340be0
+		summarizeBy: none
+		sourceColumn: %Airline ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Unique Carrier Code'
+		dataType: string
+		isHidden
+		lineageTag: bc8bb2e9-e5ee-5084-ba09-ea40798b86a0
+		summarizeBy: none
+		sourceColumn: %Unique Carrier Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%Carrier Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 15449b24-bef2-5811-8579-41700f44a8e9
+		summarizeBy: none
+		sourceColumn: %Carrier Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unique Carrier'
+		dataType: string
+		lineageTag: 0c656af3-4238-5a75-861d-7cd29496b393
+		summarizeBy: none
+		sourceColumn: Unique Carrier
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier Code'
+		dataType: string
+		lineageTag: f06b47ca-fe75-5197-abb6-e0f32de980db
+		summarizeBy: none
+		sourceColumn: Carrier Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Carrier Name'
+		dataType: string
+		lineageTag: d8dde7af-3932-5ff4-a42b-144d7d3a8534
+		summarizeBy: none
+		sourceColumn: Carrier Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Link Table' = m
+		mode: import
+		source =
+				let
+				    Flight = fnReadParquet("Data Files/QVDs/Flight Data.parquet"),
+				    FlightKeyed = Table.AddColumn(Flight, "%Key Field", each fnText(_[#"Period"]) & " | " & fnText(_[#"%Airline ID"]) & " | " & fnText(_[#"%Unique Carrier Code"]) & " | " & fnText(_[#"%Carrier Group ID"]), type text),
+				    FlightLinks = Table.Buffer(Table.Distinct(Table.SelectColumns(FlightKeyed, {"%Key Field", "Year", "Period", "Month (#)", "Month", "Month__num", "Quarter", "%Airline ID", "%Unique Carrier Code", "%Carrier Group ID", "Unique Carrier", "Carrier Code", "Carrier Name"}))),
+				    Employment = fnReadParquet("Data Files/QVDs/T_F41SCHEDULE_P1A_EMP.parquet"),
+				    EmploymentKeyed = Table.AddColumn(Employment, "%Key Field", each fnText(_[#"Period"]) & " | " & fnText(_[#"%Airline ID"]) & " | " & fnText(_[#"%Unique Carrier Code"]) & " | " & fnText(_[#"%Carrier Group ID"]), type text),
+				    WithQuarter = Table.AddColumn(EmploymentKeyed, "Quarter", each "Q" & Text.From(Number.RoundUp([#"Month (#)"] / 3)), type text),
+				    EmploymentLinks = Table.Distinct(Table.SelectColumns(WithQuarter, {"%Key Field", "Year", "Period", "Month (#)", "Month", "Month__num", "Quarter", "%Airline ID", "%Unique Carrier Code", "%Carrier Group ID", "Unique Carrier", "Carrier Code", "Carrier Name"})),
+				    // Where Not Exists([%TEMP Key Field], [%Key Field]): employment keys no flight row has,
+				    NewKeys = Table.NestedJoin(EmploymentLinks, {"%Key Field"}, FlightLinks, {"%Key Field"}, "Flight", JoinKind.LeftAnti),
+				    Combined = Table.Combine({FlightLinks, Table.RemoveColumns(NewKeys, {"Flight"})}),
+				    Typed = Table.TransformColumnTypes(Combined, {{"%Key Field", type text}, {"Year", Int64.Type}, {"Period", Int64.Type}, {"Month (#)", Int64.Type}, {"Month", type text}, {"Month__num", type number}, {"Quarter", type text}, {"%Airline ID", Int64.Type}, {"%Unique Carrier Code", type text}, {"%Carrier Group ID", Int64.Type}, {"Unique Carrier", type text}, {"Carrier Code", type text}, {"Carrier Name", type text}})
+				in
+				    Typed

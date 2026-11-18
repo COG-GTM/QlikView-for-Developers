@@ -1,0 +1,151 @@
+{
+ "app": "Chapter09__Solution_Chapter 9_Link table",
+ "generated_by": "powerbi/tools/build_link_table.py",
+ "measures": [
+  {
+   "name": "# of Flights",
+   "parity_key": "1baea265cccd",
+   "kpis": [
+    "CH01#1",
+    "CH02#1",
+    "CH04#3"
+   ],
+   "dax": "SUM('Main Data'[# Departures Performed])"
+  },
+  {
+   "name": "# of Enplanned Passengers",
+   "parity_key": "7f15ad08b3bb",
+   "kpis": [
+    "CH01#2",
+    "CH02#2",
+    "CH04#2",
+    "CH15#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Passengers])"
+  },
+  {
+   "name": "Transported Freight",
+   "parity_key": "aea8a21aee5f",
+   "kpis": [
+    "CH01#3",
+    "CH02#3"
+   ],
+   "dax": "SUM('Main Data'[# Transported Freight])"
+  },
+  {
+   "name": "Transported Mail",
+   "parity_key": "e0ca719214a7",
+   "kpis": [
+    "CH01#4",
+    "CH02#4",
+    "CH04#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Mail])"
+  },
+  {
+   "name": "# of Passengers (millions)",
+   "parity_key": "0c8ca154aacf",
+   "kpis": [
+    "CH03#1",
+    "CH22#1",
+    "CH24#1",
+    "CH25#1",
+    "CH26#1",
+    "CH27#1",
+    "CH28#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000)"
+  },
+  {
+   "name": "# of Available Seats (millions)",
+   "parity_key": "8dfad31060e3",
+   "kpis": [
+    "CH03#2"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Available Seats]), 1000000)"
+  },
+  {
+   "name": "Load Factor",
+   "parity_key": "213681cc0d2a",
+   "kpis": [
+    "CH03#3",
+    "CH05#1",
+    "CH21#1",
+    "CH38#1",
+    "CH38#2",
+    "CH41#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))"
+  },
+  {
+   "name": "Performed vs Scheduled",
+   "parity_key": "7588bff24d2c",
+   "kpis": [
+    "CH06#1",
+    "CH21#2",
+    "CH38#3",
+    "CH38#4"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Departures Performed]), SUM('Main Data'[# Departures Scheduled]))"
+  },
+  {
+   "name": "Air Time %",
+   "parity_key": "cd4c4a3c94f4",
+   "kpis": [
+    "CH07#1",
+    "CH08#1",
+    "CH09#1",
+    "CH11#1",
+    "CH12#1",
+    "CH13#1",
+    "CH14#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Carrier",
+   "parity_key": "90777bd5df7f",
+   "kpis": [
+    "CH15#2"
+   ],
+   "dax": "IF(DISTINCTCOUNTNOBLANK('Link Table'[Carrier Name]) = 1, MAX('Link Table'[Carrier Name]), \"Others\")"
+  },
+  {
+   "name": "Air Time % (CH21)",
+   "parity_key": "a1ec8a2cb5ee",
+   "kpis": [
+    "CH21#3",
+    "CH38#5",
+    "CH38#6"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Departures Performed (thousands)",
+   "parity_key": "072410d4365a",
+   "kpis": [
+    "CH22#2"
+   ],
+   "dax": "DIVIDE([# of Flights], 1000)"
+  }
+ ],
+ "calculated_dimensions": [
+  {
+   "table": "Flight Types",
+   "column": "Deal Status",
+   "parity_key": "caa19c70b731",
+   "qlik": "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))",
+   "dax": "SWITCH([Flight Type], \"Domestic, US Carriers Only\", \"Open\", \"International, Foreign Carriers\", \"Negotiating\", \"Closed\")"
+  }
+ ],
+ "semantic_gaps": [
+  "Link table: [Link Table] is not unique on [%Key Field] (10,073 rows, 10,068 keys; five Antonov keys carry Carrier Codes ADB and AUQ), so Main Data and Employment Statistics relate to it many-to-many, filtered from the link table. As in QlikView, a flight row of such a key counts once in totals and under each of its Carrier Codes.",
+  "Fields on the link table (Year, Month, Quarter, Period, carrier names, Airlines, Carrier Groups) filter both facts; fields on one fact (e.g. Flight Type) do not filter the link table or the other fact. QlikView propagates selections in every direction; with no selections (the parity baseline) the results are the same.",
+  "Null-key 'Unknown' members the script adds (Carrier Groups: 12 flight rows without a carrier group) are not loaded: they associate with nothing in QlikView and would wrongly match blank keys in Power BI (7 vs 8 rows).",
+  "Aircraft Types: MAPPING LOAD / ApplyMap -> left merge on the first Country per manufacturer ('Unknown' when missing); LEFT JOIN -> merge; the script's STORE into Aircraft Types Transformed.qvd is not reproduced. QlikView trims unquoted text in delimited files, so the Aircraft_Group.csv labels are trimmed.",
+  "Field and table comments from Comments.xls (COMMENT ... USING) are not migrated; config.qvs / tracerowcount.qvs are not in the repo and only set paths / log row counts.",
+  "Calculated dimension: the Flight Type deal status -> calculated column on Flight Types.",
+  "List boxes -> slicers. The .qvw's list-box field bindings and captions are not recoverable from the file, so the slicers use the model fields the document's objects reference (a list box's caption is normally its field): Year, Quarter, Month, Carrier Group, Flight Type, Carrier Name on every page (LB27-LB33) and 13 dimension fields on the Associations page (LB01-LB15). LB34 / LB35 (Data Consistency) are not mapped to a field.",
+  "Multi boxes (MB01, MB02), text objects, search object, buttons, bookmark object, current selections box, container, statistics box and table box have no Power BI equivalent and are not migrated; gauges become cards and the radar, mekko, grid, funnel and block charts are not rebuilt (their measures are in the model)."
+ ]
+}
