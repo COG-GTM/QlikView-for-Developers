@@ -112,3 +112,9 @@ def test_report_pages_list_boxes_as_synced_slicers_and_a_visual_per_chart():
     names = {v["name"] for vs in pages.values() for v in vs}
     assert {cid for page in manifest["sheets"] for cid in charts
             if tag(PBIP.name, "visual", page["id"], cid) in names} == charts
+
+
+def test_known_differences_only_cover_the_sun_country_spelling(expected):
+    exc = json.loads((POWERBI / "parity" / "exceptions" / f"{APP}.json").read_text())
+    ids = {r["id"] for k in expected["kpis"] for r in k["results"]}
+    assert exc and all(e["id"] in ids and e["dims"][0].startswith("Sun Country Airlines d/b/a M") for e in exc)
