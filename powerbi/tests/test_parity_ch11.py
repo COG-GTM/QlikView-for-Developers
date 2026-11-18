@@ -119,9 +119,14 @@ def test_model_follows_the_chapter_11_script():
     report = json.loads((PBIP / "Chapter11_Airline_Operations.Report" / "report.json").read_text())
     pages = {s["displayName"]: [json.loads(v["config"])["singleVisual"] for v in s["visualContainers"]]
              for s in report["sections"]}
-    assert list(pages) == ["Dashboard", "Associations", "Data Consistency", "Variables"]
-    shown = {p: [v for v in vs if "display" not in v] for p, vs in pages.items()}
-    assert [v["visualType"] for v in shown["Dashboard"]].count("slicer") == 7 and len(shown["Dashboard"]) == 14
+    manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
+    assert list(pages) == [sh["name"] for sh in manifest["sheets"]]  # one page per sheet
+    charts = {json.loads(v["config"])["name"] for s in report["sections"] for v in s["visualContainers"]}
+    from scaffold_pbip import tag
+    sheet_of = {json.loads(s["config"])["QlikSheet"] for s in report["sections"]}
+    for k in harness.kpi_list(manifest):  # every chart of the .qvw is a visual on some page
+        oid = k["kpi"].split("#")[0]
+        assert any(tag("Chapter11_Airline_Operations", "visual", sh, oid) in charts for sh in sheet_of), oid
     groups = {p: {v["syncGroup"]["groupName"] for v in vs if v["visualType"] == "slicer"} for p, vs in pages.items()}
     assert len(groups["Dashboard"]) == 16 and all(g == groups["Dashboard"] for g in groups.values())  # global selections
     top = [json.loads(v["filters"]) for s in report["sections"] for v in s["visualContainers"] if json.loads(v["filters"])]

@@ -276,50 +276,22 @@
   }
  ],
  "report_pages": {
-  "Dashboard": [
-   "LB29",
-   "LB28",
-   "LB33",
-   "LB27",
-   "LB32",
-   "LB31",
-   "LB30",
-   "CH01",
-   "CH02",
-   "CH03",
-   "CH05",
-   "CH06",
-   "CH07",
-   "CH15"
-  ],
-  "Associations": [
-   "LB01",
-   "LB02",
-   "LB03",
-   "LB04",
-   "LB05",
-   "LB06",
-   "LB07",
-   "LB09",
-   "LB12",
-   "LB13",
-   "LB15"
-  ],
-  "Data Consistency": [
-   "LB34",
-   "LB35"
-  ],
-  "Variables": [
-   "LB36",
-   "CH46",
-   "CH45",
-   "CH44",
-   "CH43"
-  ]
+  "Dashboard": 21,
+  "Analysis": 21,
+  "Reports": 18,
+  "Associations": 17,
+  "Gauge Styles": 22,
+  "Other Charts": 22,
+  "Other representations": 17,
+  "Data Consistency": 17,
+  "Variables": 21,
+  "Advanced Expressions": 24
  },
  "unmapped_list_boxes": {
-  "LB10": "Aircraft Type",
-  "LB11": "Aircraft Group"
+  "MB01": "Flight Information",
+  "MB02": "Aircraft",
+  "LB11": "Aircraft Group",
+  "LB10": "Aircraft Type"
  },
  "semantic_gaps": [
   "Derived from the Chapter 15 base model: Chapter 11's 66 chart expressions are 26 distinct Qlik expressions, all of which the base model already migrates, so the measures, segment tables and calculated column are shared (the metric picker reads INLFED, Chapter 11's name for that inline table).",
