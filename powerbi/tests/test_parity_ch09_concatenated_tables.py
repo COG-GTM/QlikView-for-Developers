@@ -162,3 +162,15 @@ def test_report_pages_have_the_sheets_charts_and_slicers():
                         "MB02": "Aircraft"}
 
 
+def test_case_variant_carrier_is_a_listed_known_difference(expected):
+    import compare
+    results = [{"id": r["id"], "rows": [row for row in r["rows"]
+                                        if r["id"] != "CH15#2@Carrier Name" or "d/b/a Mn" not in row[0]]}
+               for k in expected["kpis"] for r in k["results"]]
+    doc = {"app": APP, "results": results}
+    assert compare.compare(expected, doc)["summary"] == {"pass": 84, "fail": 1}
+    exceptions = json.loads((compare.EXCEPTIONS / f"{APP}.json").read_text())
+    report = compare.compare(expected, doc, exceptions=exceptions)
+    assert report["summary"] == {"pass": 84, "known_difference": 1}
+    names = {row[0] for r in results if r["id"] == "CH15#2@Carrier Name" for row in r["rows"]}
+    assert {n.casefold() for n in names} == {n.casefold() for n in names if "d/b/a Mn" not in n}
