@@ -1,0 +1,31 @@
+table 'Origin Airports'
+	lineageTag: 9e3e10ee-7e0f-5b39-b4d6-251681e43650
+
+	column '%Origin Airport ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e3c1b388-6371-5578-ae01-8f3ae0c95b62
+		summarizeBy: none
+		sourceColumn: %Origin Airport ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Origin Airport'
+		dataType: string
+		lineageTag: 6b59fe58-8af8-549c-9400-580fb5b5fd67
+		summarizeBy: none
+		sourceColumn: Origin Airport
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Origin Airports' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(fnReadParquet("Data Files/MDBs/Dimension Tables/Origin Airports.parquet"), {"%Origin Airport ID", "Origin Airport"}),
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Origin Airport ID"))),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Origin Airport ID"])),
+				    Typed = Table.TransformColumnTypes(Kept, {{"%Origin Airport ID", Int64.Type}, {"Origin Airport", type text}})
+				in
+				    Typed

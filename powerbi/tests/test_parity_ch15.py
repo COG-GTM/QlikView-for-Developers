@@ -125,7 +125,8 @@ def test_roles_reproduce_section_access():
     assert "columnPermission 'Carrier Name' = none" in roles["NOCARRIER"]
     assert all("columnPermission" not in roles[u] for u in roles if u != "NOCARRIER")
     for text in roles.values():  # reduction also restricts dimension rows, as in QlikView
-        assert {"'Aircraft Types'", "'Origin Markets'", "'Master Calendar'", "'Group A'"} <= \
+        assert {"Airlines", "'Carrier Groups'", "'Carrier Operating Region'", "'Aircraft Types'", "'Origin Markets'",
+                "'Master Calendar'", "'Group A'"} <= \
             set(re.findall(r"^\ttablePermission ('[^']+'|\w+) = ", text, re.M))
     assert "'Flight Types'[Flight Type] IN {\"Domestic, US Carriers Only\"}" in roles["DU"]
     assert "PASSWORD" not in "".join(roles.values()) and "123" not in "".join(roles.values())
@@ -142,3 +143,11 @@ def test_element_functions_honour_their_set(flights):
     assert total(f"Sum({{1<Year = p({{1<Year={{2010}}>}} Year)>}} [{DEP}])") == by_year[2010]
     assert total(f"Sum({{1<Year = e({{1<Year={{2010}}>}} Year)>}} [{DEP}])") == by_year[2009] + by_year[2011]
     assert pd.isna(total(f"Sum({{1<Year = e(Year)>}} [{DEP}])"))
+
+
+def test_null_fact_keys_point_at_a_placeholder_member():
+    tables = SM / "tables"
+    assert 'Table.ReplaceValue(Combined, null, -1, Replacer.ReplaceValue, {"%Carrier Group ID", "%Airline ID"})' in \
+        (tables / "Main Data.tmdl").read_text()
+    assert '#table({"%Airline ID", "Airline"}, {{-1, null}})' in (tables / "Airlines.tmdl").read_text()
+    assert '#table({"%Carrier Group ID", "Carrier Group"}, {{-1, null}})' in (tables / "Carrier Groups.tmdl").read_text()

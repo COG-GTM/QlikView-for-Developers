@@ -3,6 +3,12 @@ role DF
 
 	tablePermission INLFED = INLFED[%FLIGHTTYPE] IN {"DOMESTIC_FOREIGN"}
 
+	tablePermission 'Carrier Groups' = 'Carrier Groups'[%Carrier Group ID] IN CALCULATETABLE(VALUES('Main Data'[%Carrier Group ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission Airlines = Airlines[%Airline ID] IN CALCULATETABLE(VALUES('Main Data'[%Airline ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Carrier Operating Region' = 'Carrier Operating Region'[%Region Code] IN CALCULATETABLE(VALUES('Main Data'[%Region Code]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
 	tablePermission 'Aircraft Types' = 'Aircraft Types'[%Aircraft Type ID] IN CALCULATETABLE(VALUES('Main Data'[%Aircraft Type ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
 
 	tablePermission 'Distance Groups' = 'Distance Groups'[%Distance Group ID] IN CALCULATETABLE(VALUES('Main Data'[%Distance Group ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
