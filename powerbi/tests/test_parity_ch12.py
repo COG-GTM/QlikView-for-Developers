@@ -140,3 +140,16 @@ def test_comparative_analysis_route_slicers_feed_the_group_measures():
     for state in ("Group A", "Group B"):
         (dax,) = [x for x in tmdl.splitlines() if x.startswith(f"\tmeasure '{state} Flights' = ")]
         assert f"ISFILTERED('{state} Route')" in dax and f"TREATAS(VALUES('{state}'[{state} Period])" in dax
+
+
+def test_known_differences_only_cover_the_sun_country_spelling(expected):
+    exc = json.loads((POWERBI / "parity" / "exceptions" / f"{APP}.json").read_text())
+    results = {r["id"]: r for k in expected["kpis"] for r in k["results"]}
+    assert len(exc) == 13
+    for e in exc:
+        assert "Sun Country" in e["reason"]
+        r = results[e["id"]]
+        if e["dims"] and str(e["dims"][0]).startswith("Sun Country"):
+            assert r["grain"] == ["Carrier Name"]
+        else:  # distinct-carrier counts: one carrier fewer in Power BI
+            assert e["dims"] in ([], *[row[:-1] for row in r["rows"]])
