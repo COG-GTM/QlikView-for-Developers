@@ -343,12 +343,15 @@ def table_specs(types: dict) -> dict[str, dict]:
     specs = {}
     emp_only = [x for x in EMPLOYMENT_COLS if x not in FLIGHT_COLS]
     md_cols = [(x, types[FLIGHT][x]) for x in FLIGHT_COLS] + [(x, types[EMPLOYMENT][x]) for x in emp_only]
-    specs["Main Data"] = {"cols": md_cols, "m": m_let([
-        f'Flight = Table.SelectColumns(fnReadParquet("{FLIGHT}"), {m_list(FLIGHT_COLS)})',
-        f'Employment = Table.SelectColumns(fnReadParquet("{EMPLOYMENT}"), {m_list(EMPLOYMENT_COLS)})',
-        "Combined = Table.Combine({Flight, Employment})",
-        f"Placeholder = Table.ReplaceValue(Combined, null, {NULL_KEY}, Replacer.ReplaceValue, {m_list(NULL_KEY_FIELDS)})",
-        f"Typed = Table.TransformColumnTypes(Placeholder, {m_types(md_cols)})"], "Typed")}
+    md_steps = [f'Flight = Table.SelectColumns(fnReadParquet("{FLIGHT}"), {m_list(FLIGHT_COLS)})',
+                f'Employment = Table.SelectColumns(fnReadParquet("{EMPLOYMENT}"), {m_list(EMPLOYMENT_COLS)})',
+                "Combined = Table.Combine({Flight, Employment})"]
+    if CFG.section_access:  # the placeholder member only exists so RLS-filtered dimensions keep null-key rows
+        md_steps.append(f"Placeholder = Table.ReplaceValue(Combined, null, {NULL_KEY}, Replacer.ReplaceValue, "
+                        f"{m_list(NULL_KEY_FIELDS)})")
+    md_steps.append(f"Typed = Table.TransformColumnTypes({'Placeholder' if CFG.section_access else 'Combined'}, "
+                    f"{m_types(md_cols)})")
+    specs["Main Data"] = {"cols": md_cols, "m": m_let(md_steps, "Typed")}
     cal_cols = [("Period", "int64"), ("Year", "int64"), ("Month", "string"), ("Month__num", "float64"),
                 ("Year - Month", "string"), ("Year - Month__num", "float64"), ("Quarter", "string"),
                 ("QuarterID", "int64"), ("PeriodID", "int64")]
@@ -381,7 +384,7 @@ def table_specs(types: dict) -> dict[str, dict]:
                       f'{m_list([key, labels[0]])})',
                       "Combined = Table.Combine({Kept, Unknown})"]
             last = "Combined"
-        if key in NULL_KEY_FIELDS:
+        if key in NULL_KEY_FIELDS and CFG.section_access:
             steps.append(f'WithPlaceholder = Table.Combine({{{last}, #table({m_list([key, *labels])}, '
                          f'{{{{{", ".join([str(NULL_KEY)] + ["null"] * len(labels))}}}}})}})')
             last = "WithPlaceholder"
