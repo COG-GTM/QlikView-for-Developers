@@ -30,15 +30,27 @@ def test_every_sheet_list_box_is_a_parity_object_and_a_slicer():
     for page in _report()["sections"]:
         for v in page["visualContainers"]:
             cfg = json.loads(v["config"])
-            if cfg["singleVisual"]["visualType"] == "slicer":
+            if cfg["singleVisual"]["visualType"] == "slicer" and "display" not in cfg["singleVisual"]:
                 slicers[cfg["name"].split("_")[-1]] = cfg["singleVisual"]["prototypeQuery"]["Select"][0]["Column"]["Property"]
     assert {k: v for k, v in slicers.items() if k != "SO01"} == objects
+
+
+def test_selections_are_synced_across_pages():
+    groups = {}
+    for page in _report()["sections"]:
+        for v in page["visualContainers"]:
+            sv = json.loads(v["config"])["singleVisual"]
+            if sv["visualType"] == "slicer":
+                field = sv["prototypeQuery"]["Select"][0]["Column"]["Property"]
+                assert sv["syncGroup"]["groupName"] == field
+                groups.setdefault(field, set()).add(page["displayName"])
+    assert all(pages == {"Main", "Dashboard"} for pages in groups.values()), groups
 
 
 def test_report_pages_mirror_qlik_sheets():
     pages = {p["displayName"]: p for p in _report()["sections"]}
     assert list(pages) == ["Main", "Dashboard"]
-    visuals = {json.loads(v["config"])["name"].split("_")[-1]: json.loads(v["config"])["singleVisual"]
+    visuals = {json.loads(v["config"])["name"].removeprefix(ch03.SLUG + "_"): json.loads(v["config"])["singleVisual"]
                for v in pages["Dashboard"]["visualContainers"]}
     ch01, ch02 = visuals["CH01"], visuals["CH02"]
     assert ch01["visualType"] == "clusteredColumnChart"
@@ -49,7 +61,7 @@ def test_report_pages_mirror_qlik_sheets():
     assert [p["queryRef"] for p in ch02["projections"]["Values"]] == \
         ["Main Data.From - To City"] + [f"Main Data.{m}" for m in measures]
     ch02_filters = json.loads(next(v for v in pages["Dashboard"]["visualContainers"]
-                                   if json.loads(v["config"])["name"].endswith("CH02"))["filters"])
+                                   if json.loads(v["config"])["name"].endswith("_CH02"))["filters"])
     assert ch02_filters[0]["type"] == "TopN"
     assert ch02_filters[0]["filter"]["From"][0]["Expression"]["Subquery"]["Query"]["Top"] == 10
 

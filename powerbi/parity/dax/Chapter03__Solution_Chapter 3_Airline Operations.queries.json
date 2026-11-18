@@ -156,7 +156,7 @@
    "grain": [
     "Destination Country"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination Country]), NOT ISBLANK('Main Data'[Destination Country]))"
   },
   {
    "id": "LB02@Destination State",
@@ -164,7 +164,7 @@
    "grain": [
     "Destination State"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination State])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination State]), NOT ISBLANK('Main Data'[Destination State]))"
   },
   {
    "id": "LB03@Destination City",
@@ -172,7 +172,7 @@
    "grain": [
     "Destination City"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination City])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination City]), NOT ISBLANK('Main Data'[Destination City]))"
   },
   {
    "id": "LB04@Origin Country",
@@ -180,7 +180,7 @@
    "grain": [
     "Origin Country"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin Country])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin Country]), NOT ISBLANK('Main Data'[Origin Country]))"
   },
   {
    "id": "LB05@Origin State",
@@ -188,7 +188,7 @@
    "grain": [
     "Origin State"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin State])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin State]), NOT ISBLANK('Main Data'[Origin State]))"
   },
   {
    "id": "LB06@Origin City",
@@ -196,7 +196,7 @@
    "grain": [
     "Origin City"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin City])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin City]), NOT ISBLANK('Main Data'[Origin City]))"
   },
   {
    "id": "LB07@Carrier Name",
@@ -204,7 +204,7 @@
    "grain": [
     "Carrier Name"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]))"
   },
   {
    "id": "LB09@Distance Interval",
@@ -212,7 +212,7 @@
    "grain": [
     "Distance Interval"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Distance Groups'[Distance Interval])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Distance Groups'[Distance Interval]), NOT ISBLANK('Distance Groups'[Distance Interval]))"
   },
   {
    "id": "LB10@Aircraft Type",
@@ -220,7 +220,7 @@
    "grain": [
     "Aircraft Type"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Type])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Type]), NOT ISBLANK('Aircraft Types'[Aircraft Type]))"
   },
   {
    "id": "LB11@Aircraft Group",
@@ -228,7 +228,7 @@
    "grain": [
     "Aircraft Group"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Groups'[Aircraft Group])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Aircraft Groups'[Aircraft Group]), NOT ISBLANK('Aircraft Groups'[Aircraft Group]))"
   },
   {
    "id": "LB12@Flight Type",
@@ -236,7 +236,7 @@
    "grain": [
     "Flight Type"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Flight Types'[Flight Type]), NOT ISBLANK('Flight Types'[Flight Type]))"
   },
   {
    "id": "LB13@Carrier's Operating Region",
@@ -244,7 +244,7 @@
    "grain": [
     "Carrier's Operating Region"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Operating Region'[Carrier's Operating Region])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Operating Region'[Carrier's Operating Region]), NOT ISBLANK('Carrier Operating Region'[Carrier's Operating Region]))"
   },
   {
    "id": "LB15@Carrier Group",
@@ -252,7 +252,7 @@
    "grain": [
     "Carrier Group"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group]), NOT ISBLANK('Carrier Groups'[Carrier Group]))"
   },
   {
    "id": "LB26@Aircraft Group",
@@ -260,7 +260,7 @@
    "grain": [
     "Aircraft Group"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Groups'[Aircraft Group])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Aircraft Groups'[Aircraft Group]), NOT ISBLANK('Aircraft Groups'[Aircraft Group]))"
   },
   {
    "id": "LB27@Flight Type",
@@ -268,7 +268,7 @@
    "grain": [
     "Flight Type"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Flight Types'[Flight Type]), NOT ISBLANK('Flight Types'[Flight Type]))"
   },
   {
    "id": "LB28@Carrier's Operating Region",
@@ -276,7 +276,7 @@
    "grain": [
     "Carrier's Operating Region"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Operating Region'[Carrier's Operating Region])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Operating Region'[Carrier's Operating Region]), NOT ISBLANK('Carrier Operating Region'[Carrier's Operating Region]))"
   },
   {
    "id": "LB29@Carrier Group",
@@ -284,7 +284,7 @@
    "grain": [
     "Carrier Group"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group]), NOT ISBLANK('Carrier Groups'[Carrier Group]))"
   },
   {
    "id": "LB30@Month",
@@ -292,7 +292,7 @@
    "grain": [
     "Month"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Month])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Month]), NOT ISBLANK('Main Data'[Month]))"
   },
   {
    "id": "LB31@Quarter",
@@ -300,7 +300,7 @@
    "grain": [
     "Quarter"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Quarter])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Quarter]), NOT ISBLANK('Main Data'[Quarter]))"
   },
   {
    "id": "LB32@Year",
@@ -308,7 +308,7 @@
    "grain": [
     "Year"
    ],
-   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year])"
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Year]), NOT ISBLANK('Main Data'[Year]))"
   }
  ],
  "relationships": [

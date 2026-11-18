@@ -68,6 +68,8 @@ GAPS = [
     "QlikView's synthetic $$SysTable tables are engine metadata, not data: not reproduced.",
     "SO01 search object (cross-field search over all fields): Power BI has no cross-field search box; each Dashboard "
     "slicer is search-enabled instead, and the search is a slicer on 'From - To City'.",
+    "QlikView selections are global; Power BI slicers are synced per field across both pages (hidden synced copies "
+    "for fields shown on only one page).",
     "QlikView list boxes show excluded values greyed; Power BI slicers hide or dim them depending on the visual's "
     "'Show items with no data' setting.",
 ]
@@ -165,14 +167,18 @@ def _title(text: str) -> dict:
                                       "text": {"expr": {"Literal": {"Value": json.dumps(text).replace('"', "'")}}}}}]}
 
 
-def _slicer(oid: str, field: str, x: int, y: int, w: int, h: int, z: int) -> dict:
+def _slicer(oid: str, field: str, x: int, y: int, w: int, h: int, z: int, hidden: bool = False) -> dict:
     sel, ref, table = _col(field)
     visual = {"visualType": "slicer", "projections": {"Values": [{"queryRef": ref, "active": True}]},
               "prototypeQuery": _query([sel], [table]),
               "objects": {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Basic'"}}}}}],
                           "general": [{"properties": {"selfFilterEnabled": {"expr": {"Literal": {"Value": "true"}}}}}]},
-              "vcObjects": _title(field)}
-    return _container(f"{SLUG}_{oid}", x, y, w, h, z, visual)
+              "vcObjects": _title(field),
+              # QlikView selections are global: every slicer on a field shares one sync group across pages.
+              "syncGroup": {"groupName": field, "fieldChanges": True, "filterChanges": True}}
+    if hidden:
+        visual["display"] = {"mode": "hidden"}
+    return _container(f"{SLUG}_{oid}" + ("_sync" if hidden else ""), x, y, w, h, z, visual)
 
 
 def _measure_refs(measures: list[dict]):
@@ -220,6 +226,13 @@ def sections(measures: list[dict]) -> list[dict]:
     dash.append(_slicer("SO01", "From - To City", 260, 20, 1000, 60, len(dash)))
     dash.append(traffic_per_year(measures, 260, 96, 1000, 300, len(dash)))
     dash.append(top_routes(measures, 260, 412, 1000, 300, len(dash)))
+    # Hidden synced copies carry each page's selections to the other, as QlikView's global selections do.
+    on_dash = {f for _, f in SHEET_DASHBOARD}
+    on_main = {f for _, f in SHEET_MAIN}
+    dash += [_slicer(oid, f, 0, 0, 120, 60, len(dash) + i, hidden=True)
+             for i, (oid, f) in enumerate(x for x in SHEET_MAIN if x[1] not in on_dash)]
+    main += [_slicer(oid, f, 0, 0, 120, 60, len(main) + i, hidden=True)
+             for i, (oid, f) in enumerate(x for x in SHEET_DASHBOARD + [("SO01", "From - To City")] if x[1] not in on_main)]
     return [{"name": f"{SLUG}_{sid}", "displayName": label, "displayOption": 1, "ordinal": i, "width": 1280,
              "height": 720 if sid == "SH01" else 760, "config": "{}", "filters": "[]", "visualContainers": vcs}
             for i, (sid, label, vcs) in enumerate([("SH01", "Main", main), ("SH02", "Dashboard", dash)])]
@@ -288,8 +301,8 @@ def build(data_root: str = DEFAULT_ROOT) -> Path:
          "measures": [{"name": x["name"], "parity_key": x["parity_key"], "kpis": x["kpis"], "dax": x["dax"]}
                       for x in measures.values()],
          "hierarchies": {HIERARCHY[0]: {"table": MD, "levels": HIERARCHY[1]}},
-         "pages": {p["displayName"]: [json.loads(v["config"])["name"].split("_")[-1] for v in p["visualContainers"]]
-                   for p in pages},
+         "pages": {p["displayName"]: [json.loads(v["config"])["name"].removeprefix(SLUG + "_")
+                                      for v in p["visualContainers"]] for p in pages},
          "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(DIMENSIONS)} relationships, {len(measures)} measures, "
           f"{sum(len(p['visualContainers']) for p in pages)} visuals on {len(pages)} pages")

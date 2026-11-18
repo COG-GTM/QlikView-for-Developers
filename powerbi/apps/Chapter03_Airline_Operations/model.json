@@ -63,7 +63,11 @@
    "LB12",
    "LB11",
    "LB10",
-   "LB09"
+   "LB09",
+   "LB32_sync",
+   "LB31_sync",
+   "LB30_sync",
+   "SO01_sync"
   ],
   "Dashboard": [
    "LB32",
@@ -75,12 +79,22 @@
    "LB26",
    "SO01",
    "CH01",
-   "CH02"
+   "CH02",
+   "LB01_sync",
+   "LB02_sync",
+   "LB03_sync",
+   "LB04_sync",
+   "LB05_sync",
+   "LB06_sync",
+   "LB07_sync",
+   "LB10_sync",
+   "LB09_sync"
   ]
  },
  "semantic_gaps": [
   "QlikView's synthetic $$SysTable tables are engine metadata, not data: not reproduced.",
   "SO01 search object (cross-field search over all fields): Power BI has no cross-field search box; each Dashboard slicer is search-enabled instead, and the search is a slicer on 'From - To City'.",
+  "QlikView selections are global; Power BI slicers are synced per field across both pages (hidden synced copies for fields shown on only one page).",
   "QlikView list boxes show excluded values greyed; Power BI slicers hide or dim them depending on the visual's 'Show items with no data' setting."
  ]
 }
