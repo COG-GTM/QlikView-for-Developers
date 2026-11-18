@@ -618,6 +618,150 @@
     "Month"
    ],
    "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Master Calendar'[Month], \"value\", [Load Factor])"
+  },
+  {
+   "id": "LB01@Destination Country",
+   "object": "LB01",
+   "grain": [
+    "Destination Country"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination Country]), NOT ISBLANK('Main Data'[Destination Country]))"
+  },
+  {
+   "id": "LB02@Destination State",
+   "object": "LB02",
+   "grain": [
+    "Destination State"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination State]), NOT ISBLANK('Main Data'[Destination State]))"
+  },
+  {
+   "id": "LB03@Destination City",
+   "object": "LB03",
+   "grain": [
+    "Destination City"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination City]), NOT ISBLANK('Main Data'[Destination City]))"
+  },
+  {
+   "id": "LB04@Origin Country",
+   "object": "LB04",
+   "grain": [
+    "Origin Country"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin Country]), NOT ISBLANK('Main Data'[Origin Country]))"
+  },
+  {
+   "id": "LB05@Origin State",
+   "object": "LB05",
+   "grain": [
+    "Origin State"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin State]), NOT ISBLANK('Main Data'[Origin State]))"
+  },
+  {
+   "id": "LB06@Origin City",
+   "object": "LB06",
+   "grain": [
+    "Origin City"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin City]), NOT ISBLANK('Main Data'[Origin City]))"
+  },
+  {
+   "id": "LB07@Carrier Name",
+   "object": "LB07",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]))"
+  },
+  {
+   "id": "LB09@Distance Interval",
+   "object": "LB09",
+   "grain": [
+    "Distance Interval"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Distance Groups'[Distance Interval]), NOT ISBLANK('Distance Groups'[Distance Interval]))"
+  },
+  {
+   "id": "LB12@Flight Type",
+   "object": "LB12",
+   "grain": [
+    "Flight Type"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Flight Types'[Flight Type]), NOT ISBLANK('Flight Types'[Flight Type]))"
+  },
+  {
+   "id": "LB13@Carrier's Operating Region",
+   "object": "LB13",
+   "grain": [
+    "Carrier's Operating Region"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Operating Region'[Carrier's Operating Region]), NOT ISBLANK('Carrier Operating Region'[Carrier's Operating Region]))"
+  },
+  {
+   "id": "LB27@Flight Type",
+   "object": "LB27",
+   "grain": [
+    "Flight Type"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Flight Types'[Flight Type]), NOT ISBLANK('Flight Types'[Flight Type]))"
+  },
+  {
+   "id": "LB28@Carrier's Operating Region",
+   "object": "LB28",
+   "grain": [
+    "Carrier's Operating Region"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Operating Region'[Carrier's Operating Region]), NOT ISBLANK('Carrier Operating Region'[Carrier's Operating Region]))"
+  },
+  {
+   "id": "LB30@Month",
+   "object": "LB30",
+   "grain": [
+    "Month"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Master Calendar'[Month]), NOT ISBLANK('Master Calendar'[Month]))"
+  },
+  {
+   "id": "LB31@Quarter",
+   "object": "LB31",
+   "grain": [
+    "Quarter"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Master Calendar'[Quarter]), NOT ISBLANK('Master Calendar'[Quarter]))"
+  },
+  {
+   "id": "LB32@Year",
+   "object": "LB32",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Master Calendar'[Year]), NOT ISBLANK('Master Calendar'[Year]))"
+  },
+  {
+   "id": "LB33@Carrier Name",
+   "object": "LB33",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]))"
+  },
+  {
+   "id": "LB34@Aircraft Name",
+   "object": "LB34",
+   "grain": [
+    "Aircraft Name"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Name]), NOT ISBLANK('Aircraft Types'[Aircraft Name]))"
+  },
+  {
+   "id": "LB35@Year",
+   "object": "LB35",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Master Calendar'[Year]), NOT ISBLANK('Master Calendar'[Year]))"
   }
  ],
  "relationships": [

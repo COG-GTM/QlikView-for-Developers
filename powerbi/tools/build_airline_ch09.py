@@ -74,8 +74,16 @@ GAPS = [
     "Calculated dimension (Flight Type deal status, Funnel Chart CH27) -> calculated column on Flight Types.",
     "Drill-down group Time (Year > Month) and cyclic group Airline_Origin_Destination -> parity at every level; "
     "in the report as a Year > Month hierarchy and separate visuals.",
-    "QlikView-only objects (multi boxes, search object, buttons, bookmark object, current selections, container, "
-    "statistics box, text objects) are approximated by slicers and cards; gauge styles (CH07-CH14) are one gauge.",
+    "List boxes -> slicers on the page of their sheet (field = the list box caption decoded from the .qvw): the "
+    "linked list boxes of the chart sheets (Year, Quarter, Month, Flight Type, Carrier Group, Carrier's Operating "
+    "Region, Carrier Name) are a dropdown slicer column on each chart page; Associations and Data Consistency get "
+    "their own pages. LB10 'Aircraft Type' and LB11 'Aircraft Group' are not migrated: Chapter 9's script loads no "
+    "such fields (the list boxes are empty in the .qvw too). Carrier Group slicers lack QlikView's 'Unknown' value, "
+    "which only the null-key member carries (see above), so LB15/LB29 have no parity check.",
+    "QlikView-only objects (multi boxes MB01/MB02, search object, buttons, bookmark object, current selections, "
+    "container, statistics box SB01, table box TB01, text objects) are not migrated; gauge styles (CH07-CH14) are one "
+    "gauge. Only native visuals are used: the Radar Chart (CH24) is a line chart, the Grid Chart (CH26) a matrix and "
+    "the Mekko Chart (CH25) a 100% stacked column chart.",
 ]
 
 
@@ -204,7 +212,8 @@ def meas(name: str) -> dict:
     return _field("Main Data", name, "Measure")
 
 
-def visual(page: str, idx: int, vtype: str, title: str, pos: tuple[int, int, int, int], roles: dict) -> dict:
+def visual(page: str, idx: int, vtype: str, title: str, pos: tuple[int, int, int, int], roles: dict,
+           dropdown: bool = False) -> dict:
     x, y, w, h = pos
     aliases, select, projections = {}, [], {}
     for role, fields in roles.items():
@@ -216,87 +225,139 @@ def visual(page: str, idx: int, vtype: str, title: str, pos: tuple[int, int, int
                 select.append({f["kind"]: {"Expression": {"SourceRef": {"Source": alias}}, "Property": f["prop"]},
                                "Name": ref})
             projections[role].append({"queryRef": ref})
+    single = {"visualType": vtype, "projections": projections,
+              "prototypeQuery": {"Version": 2, "From": [{"Name": a, "Entity": e, "Type": 0} for e, a in aliases.items()],
+                                 "Select": select},
+              "vcObjects": {"title": [{"properties": {
+                  "show": {"expr": {"Literal": {"Value": "true"}}},
+                  "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]},
+              "drillFilterOtherVisuals": True}
+    if dropdown:
+        single["objects"] = {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Dropdown'"}}}}}]}
     config = {"name": tag(SLUG, "visual", page, str(idx)),
               "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": idx, "width": w, "height": h}}],
-              "singleVisual": {
-                  "visualType": vtype, "projections": projections,
-                  "prototypeQuery": {"Version": 2,
-                                     "From": [{"Name": a, "Entity": e, "Type": 0} for e, a in aliases.items()],
-                                     "Select": select},
-                  "vcObjects": {"title": [{"properties": {
-                      "show": {"expr": {"Literal": {"Value": "true"}}},
-                      "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]},
-                  "drillFilterOtherVisuals": True}}
+              "singleVisual": single}
     return {"x": x, "y": y, "z": idx, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
 
 
 CAL, MD, FT = "Master Calendar", "Main Data", "Flight Types"
+# QlikView list boxes (object id -> table, field), decoded from the .qvw layout: a list box's caption is its field.
+LIST_BOXES = {
+    "LB01": (MD, "Destination Country"), "LB02": (MD, "Destination State"), "LB03": (MD, "Destination City"),
+    "LB04": (MD, "Origin Country"), "LB05": (MD, "Origin State"), "LB06": (MD, "Origin City"),
+    "LB07": (MD, "Carrier Name"), "LB09": ("Distance Groups", "Distance Interval"), "LB12": (FT, "Flight Type"),
+    "LB13": ("Carrier Operating Region", "Carrier's Operating Region"), "LB15": ("Carrier Groups", "Carrier Group"),
+    "LB27": (FT, "Flight Type"), "LB28": ("Carrier Operating Region", "Carrier's Operating Region"),
+    "LB29": ("Carrier Groups", "Carrier Group"), "LB30": (CAL, "Month"), "LB31": (CAL, "Quarter"),
+    "LB32": (CAL, "Year"), "LB33": (MD, "Carrier Name"), "LB34": ("Aircraft Types", "Aircraft Name"),
+    "LB35": (CAL, "Year"),
+}
+# List boxes whose field Chapter 9's script never loads (they show nothing in the .qvw either).
+UNMAPPED_LIST_BOXES = {"LB10": "Aircraft Type", "LB11": "Aircraft Group"}
+# Linked list boxes shown on every chart sheet (Dashboard, Analysis, Reports, Other Charts, Other representations)
+FILTER_PANEL = ["LB32", "LB31", "LB30", "LB27", "LB29", "LB28", "LB33"]
+PANEL_W, FRAME = 160, 1260
+
+
+def slicer(lb: str) -> tuple:
+    table, field = LIST_BOXES[lb]
+    return ("slicer", field, None, {"Values": [col(table, field)]}, lb)
+
+
+# (page, QlikView sheet, has the filter panel, visuals: (type, title, (x, y, w, h) in a 1260-wide frame, roles))
 PAGES = [
-    ("Dashboard", "SH03", [
-        ("slicer", "Year", (10, 10, 150, 150), {"Values": [col(CAL, "Year")]}),
-        ("slicer", "Month", (10, 170, 150, 300), {"Values": [col(CAL, "Month")]}),
-        ("slicer", "Carrier Group", (10, 480, 150, 230), {"Values": [col("Carrier Groups", "Carrier Group")]}),
-        ("gauge", "Load Factor %", (170, 10, 360, 170), {"Y": [meas("Load Factor")]}),
-        ("gauge", "Performed vs Scheduled", (540, 10, 360, 170), {"Y": [meas("Performed vs Scheduled")]}),
-        ("gauge", "Air Time %", (910, 10, 360, 170), {"Y": [meas("Air Time %")]}),
-        ("lineChart", "Traffic per Year", (170, 190, 550, 260),
-         {"Category": [col(CAL, "Year"), col(CAL, "Month")], "Y": [meas("# of Flights")]}),
+    ("Dashboard", "SH03", True, [
+        ("gauge", "Load Factor %", (10, 10, 410, 170), {"Y": [meas("Load Factor")]}),
+        ("gauge", "Performed vs Scheduled", (430, 10, 410, 170), {"Y": [meas("Performed vs Scheduled")]}),
+        ("gauge", "Air Time %", (850, 10, 410, 170), {"Y": [meas("Air Time %")]}),
+        ("lineChart", "Traffic per Year", (10, 190, 620, 260),
+         {"Category": [col(CAL, "Year"), col(CAL, "Month")],
+          "Y": [meas("# of Flights"), meas("# of Enplanned Passengers"), meas("Transported Freight"),
+                meas("Transported Mail")]}),
         ("lineClusteredColumnComboChart", "# of Passengers/Available Seats (x 1 million) by Flight Type",
-         (730, 190, 540, 260), {"Category": [col(FT, "Flight Type")],
+         (640, 190, 620, 260), {"Category": [col(FT, "Flight Type")],
                                 "Y": [meas("# of Passengers (millions)"), meas("# of Available Seats (millions)")],
                                 "Y2": [meas("Load Factor")]}),
-        ("tableEx", "Top 10 Routes", (170, 460, 550, 250),
+        ("tableEx", "Top 10 Routes", (10, 460, 620, 250),
          {"Values": [col(MD, "From - To City"), meas("# of Flights"), meas("# of Enplanned Passengers"),
                      meas("Transported Freight"), meas("Transported Mail")]}),
-        ("pieChart", "Market Share", (730, 460, 540, 250),
+        ("pieChart", "Market Share", (640, 460, 620, 250),
          {"Category": [col(MD, "Carrier Name")], "Y": [meas("# of Enplanned Passengers")]}),
     ]),
-    ("Analysis", "SH_Analysis", [
-        ("scatterChart", "Transported passengers vs mail", (10, 10, 1260, 700),
+    ("Analysis", "SH_Analysis", True, [
+        ("scatterChart", "Transported passengers vs mail", (10, 10, 1250, 700),
          {"Category": [col(MD, "Carrier Name")], "X": [meas("Transported Mail")],
           "Y": [meas("# of Enplanned Passengers")], "Size": [meas("# of Flights")]}),
     ]),
-    ("Reports", "SH05", [
-        ("tableEx", "KPIs per Airline", (10, 10, 620, 700),
+    ("Reports", "SH05", True, [
+        ("tableEx", "KPIs per Airline", (10, 10, 615, 700),
          {"Values": [col("Airlines", "Airline"), meas("Load Factor"), meas("Performed vs Scheduled"),
                      meas("Air Time % (CH21)")]}),
-        ("pivotTable", "Enplaned passengers (millions)", (640, 10, 630, 700),
+        ("pivotTable", "Enplaned passengers (millions)", (635, 10, 625, 700),
          {"Rows": [col("Carrier Groups", "Carrier Group"), col("Airlines", "Airline")],
           "Columns": [col(CAL, "Year"), col(CAL, "Month")],
           "Values": [meas("# of Passengers (millions)"), meas("Departures Performed (thousands)")]}),
     ]),
-    ("Other Charts", "SH06", [
+    ("Associations", "SH01", False, [
+        (*slicer(lb)[:2], (10 + (i % 6) * 210, 10 + (i // 6) * 355, 200, 345), *slicer(lb)[3:])
+        for i, lb in enumerate(["LB01", "LB02", "LB03", "LB04", "LB05", "LB06", "LB07", "LB09", "LB12", "LB13",
+                                "LB15"])
+    ]),
+    ("Other Charts", "SH06", True, [
         ("lineChart", "Traffic per Year by Flight Type", (10, 10, 620, 230),
          {"Category": [col(CAL, "Month")], "Series": [col(FT, "Flight Type")], "Y": [meas("Load Factor")]}),
-        ("radarChart", "Radar Chart", (640, 10, 630, 230),
+        ("lineChart", "Radar Chart", (640, 10, 620, 230),  # no native radar visual: same series as a line
          {"Category": [col(CAL, "Month")], "Y": [meas("# of Passengers (millions)")]}),
         ("hundredPercentStackedColumnChart", "Mekko Chart", (10, 250, 410, 230),
          {"Category": [col(CAL, "Year")], "Series": [col(FT, "Flight Type")],
           "Y": [meas("# of Passengers (millions)")]}),
-        ("matrix", "Grid Chart", (430, 250, 410, 230),
+        ("pivotTable", "Grid Chart", (430, 250, 410, 230),
          {"Rows": [col(CAL, "Year"), col(CAL, "Quarter")], "Columns": [col(FT, "Flight Type")],
           "Values": [meas("# of Passengers (millions)")]}),
-        ("funnel", "Funnel Chart", (850, 250, 420, 230),
+        ("funnel", "Funnel Chart", (850, 250, 410, 230),
          {"Category": [col(FT, "Deal Status")], "Y": [meas("# of Passengers (millions)")]}),
-        ("treemap", "Block Chart", (10, 490, 1260, 220),
+        ("treemap", "Block Chart", (10, 490, 1250, 220),
          {"Group": [col(MD, "Destination Country"), col(MD, "Destination City")],
           "Values": [meas("# of Passengers (millions)")]}),
     ]),
-    ("Other representations", "SH08", [
-        ("tableEx", "Other representations", (10, 10, 1260, 400),
+    ("Other representations", "SH08", True, [
+        ("tableEx", "Other representations", (10, 10, 1250, 400),
          {"Values": [col("Aircraft Types", "Aircraft Engine Type"), col("Aircraft Types", "Aircraft Number Of Engines"),
                      meas("Load Factor"), meas("Performed vs Scheduled"), meas("Air Time % (CH21)")]}),
+    ]),
+    ("Data Consistency", "SH09", False, [
+        (*slicer("LB35")[:2], (10, 10, 300, 300), *slicer("LB35")[3:]),
+        (*slicer("LB34")[:2], (320, 10, 400, 700), *slicer("LB34")[3:]),
     ]),
 ]
 
 
+def page_visuals(panel: bool, visuals: list) -> list[tuple]:
+    """Place the sheet's objects; chart sheets get the linked list boxes as a dropdown slicer column on the left."""
+    out = []
+    if panel:
+        h = 700 // len(FILTER_PANEL)
+        out += [(*slicer(lb)[:2], (10, 10 + i * h, PANEL_W - 20, h - 10), slicer(lb)[3], True, lb)
+                for i, lb in enumerate(FILTER_PANEL)]
+    for v in visuals:
+        vtype, title, (x, y, w, h), roles = v[:4]
+        lb = v[4] if len(v) > 4 else None
+        if panel:
+            scale = (1280 - PANEL_W - 10) / FRAME
+            x, w = PANEL_W + round(x * scale), round(w * scale)
+        out.append((vtype, title, (x, y, w, h), roles, False, lb))
+    return out
+
+
 def report() -> dict:
     sections = []
-    for i, (page, sheet, visuals) in enumerate(PAGES):
+    for i, (page, sheet, panel, visuals) in enumerate(PAGES):
+        placed = page_visuals(panel, visuals)
         sections.append({"name": tag(SLUG, "page", sheet).replace("-", "")[:20], "displayName": page,
                          "displayOption": 1, "ordinal": i, "width": 1280, "height": 720,
                          "config": json.dumps({"objects": {}, "QlikSheet": sheet}), "filters": "[]",
-                         "visualContainers": [visual(page, j, *v) for j, v in enumerate(visuals)]})
+                         "visualContainers": [visual(page, j, t, title, pos, roles, dd)
+                                              for j, (t, title, pos, roles, dd, _) in enumerate(placed)]})
     return {"config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
             "layoutOptimization": 0, "resourcePackages": [], "sections": sections}
 
@@ -385,7 +446,12 @@ def build(data_root: str = base.DEFAULT_ROOT) -> Path:
                       for x in measures.values()],
          "calculated_dimensions": [{"table": t, "column": c, "parity_key": parity_key(q), "qlik": q, "dax": d}
                                    for t, c, q, d, _ in calc],
-         "report_pages": [{"page": p, "qlik_sheet": s, "visuals": [v[1] for v in vs]} for p, s, vs in PAGES],
+         "report_pages": [{"page": p, "qlik_sheet": s,
+                           "visuals": [f"{t} ({lb})" if lb else t for _, t, _, _, _, lb in page_visuals(panel, vs)]}
+                          for p, s, panel, vs in PAGES],
+         "list_boxes": {lb: f"{t}[{f}]" for lb, (t, f) in LIST_BOXES.items()},
+         "unmapped_list_boxes": {lb: f"field {f!r} is not loaded by the Chapter 9 script"
+                                 for lb, f in UNMAPPED_LIST_BOXES.items()},
          "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(measures)} measures, "
           f"{len(calc)} calculated columns, {len(PAGES)} report pages")

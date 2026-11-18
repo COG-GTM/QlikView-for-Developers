@@ -89,7 +89,7 @@ def test_pbip_covers_every_kpi_and_has_no_chapter15_only_parts(expected):
     assert not {"PeriodID", "QuarterID"} & {c["name"] for c in model["columns"] if c["table"] == "Master Calendar"}
     queries = json.loads((POWERBI / "parity" / "dax" / f"{APP}.queries.json").read_text())
     assert queries["unmapped"] == [] and "role" not in queries
-    assert len(queries["queries"]) == sum(len(k["results"]) for k in expected["kpis"])
+    assert len(queries["queries"]) == sum(len(k["results"]) for k in expected["kpis"]) + len(expected["objects"])
     assert len(queries["relationships"]) == 11
 
 
@@ -112,8 +112,8 @@ def test_report_visuals_use_model_fields():
     model = read_tmdl(PBIP)
     fields = {(c["table"], c["name"]) for c in model["columns"]} | {(m["table"], m["name"]) for m in model["measures"]}
     report = json.loads((PBIP / "Chapter09_Airline_Operations.Report" / "report.json").read_text())
-    assert [s["displayName"] for s in report["sections"]] == \
-        ["Dashboard", "Analysis", "Reports", "Other Charts", "Other representations"]
+    assert [s["displayName"] for s in report["sections"]] == ["Dashboard", "Analysis", "Reports", "Associations",
+                                                              "Other Charts", "Other representations", "Data Consistency"]
     for s in report["sections"]:
         for v in s["visualContainers"]:
             q = json.loads(v["config"])["singleVisual"]["prototypeQuery"]
@@ -123,7 +123,50 @@ def test_report_visuals_use_model_fields():
                 assert (alias[body["Expression"]["SourceRef"]["Source"]], body["Property"]) in fields, sel["Name"]
 
 
+NATIVE_VISUALS = {"slicer", "gauge", "lineChart", "lineClusteredColumnComboChart", "tableEx", "pieChart", "scatterChart",
+                  "pivotTable", "hundredPercentStackedColumnChart", "funnel", "treemap"}
+
+
+def test_report_uses_native_visuals_and_keeps_chart_measures():
+    report = json.loads((PBIP / "Chapter09_Airline_Operations.Report" / "report.json").read_text())
+    visuals = {json.loads(v["config"])["singleVisual"]["visualType"] for s in report["sections"]
+               for v in s["visualContainers"]}
+    assert visuals <= NATIVE_VISUALS and not report["resourcePackages"]
+    traffic = next(json.loads(v["config"])["singleVisual"] for s in report["sections"] for v in s["visualContainers"]
+                   if "'Traffic per Year'" in v["config"])
+    assert [r["queryRef"] for r in traffic["projections"]["Y"]] == [
+        "Main Data.# of Flights", "Main Data.# of Enplanned Passengers", "Main Data.Transported Freight",
+        "Main Data.Transported Mail"]
+
+
 def test_dax_has_no_reserved_looking_vars():
     text = "".join(f.read_text() for f in (SM / "tables").glob("*.tmdl"))
     names = set(re.findall(r"\bVAR\s+(\w+)", text))
     assert not names & {"Levels", "Level", "Values", "Filter", "Table", "Date", "Time"}
+
+
+def test_list_boxes_become_slicers_and_parity_objects(expected):
+    """Every list box whose caption is a model field is a slicer; the parity objects check their values."""
+    import build_airline_ch09 as b
+    report = json.loads((PBIP / "Chapter09_Airline_Operations.Report" / "report.json").read_text())
+    slicers = {(s["displayName"], json.loads(v["config"])["singleVisual"]["projections"]["Values"][0]["queryRef"])
+               for s in report["sections"] for v in s["visualContainers"]
+               if json.loads(v["config"])["singleVisual"]["visualType"] == "slicer"}
+    by_page = {}
+    for page, ref in slicers:
+        by_page.setdefault(page, set()).add(ref)
+    panel = {".".join(b.LIST_BOXES[lb]) for lb in b.FILTER_PANEL}
+    assert all(by_page[p] == panel for p in ("Dashboard", "Analysis", "Reports", "Other Charts", "Other representations"))
+    assert by_page["Associations"] == {".".join(b.LIST_BOXES[lb]) for lb in
+                                       ("LB01", "LB02", "LB03", "LB04", "LB05", "LB06", "LB07", "LB09", "LB12", "LB13",
+                                        "LB15")}
+    assert by_page["Data Consistency"] == {"Master Calendar.Year", "Aircraft Types.Aircraft Name"}
+    objs = {o["object"]: o for o in expected["objects"]}
+    assert set(objs) == set(b.LIST_BOXES) - {"LB15", "LB29"}
+    assert all(objs[lb]["fields"] == [b.LIST_BOXES[lb][1]] and objs[lb]["status"] == "ok" for lb in objs)
+    assert not set(b.UNMAPPED_LIST_BOXES) & set(b.LIST_BOXES)
+    months = [r[0] for r in objs["LB30"]["results"][0]["rows"]]
+    assert sorted(months) == sorted(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+    queries = json.loads((POWERBI / "parity" / "dax" / f"{APP}.queries.json").read_text())
+    lb = next(q for q in queries["queries"] if q["id"] == "LB06@Origin City")
+    assert lb["query"] == "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin City]), NOT ISBLANK('Main Data'[Origin City]))"

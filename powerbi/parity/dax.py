@@ -8,7 +8,8 @@ Each expected result id gets one query:
   grain       -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2], "value", [Measure])
   table       -> EVALUATE SELECTCOLUMNS('T', "c1", 'T'[c1], ...)   (full-table parity, apps without KPIs)
 Sheet objects without expressions (parity/objects/<app>.json):
-  table/list box -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2])   (the distinct rows it shows)
+  table box      -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2])   (the distinct rows it shows)
+  list box       -> EVALUATE FILTER(SUMMARIZECOLUMNS('T'[c]), NOT ISBLANK('T'[c]))   (its non-null values)
   row count      -> EVALUATE ROW("value", COUNTROWS('T'))
 Each relationship in ``relationships.tmdl`` gets an integrity query (id ``REL:<from> -> <to>``):
 distinct many-side keys with no match on the one side, the many-side rows they cover, and
@@ -158,7 +159,10 @@ def write_queries(app: str, pbip: Path) -> str:
                 if None in cols:
                     unmapped.append({"id": r["id"], "reason": f"no column for {r['grain']}"})
                     continue
-                query = f"EVALUATE SUMMARIZECOLUMNS({', '.join(dax_col(c['table'], c['name']) for c in cols)})"
+                group = ", ".join(dax_col(c["table"], c["name"]) for c in cols)
+                query = f"EVALUATE SUMMARIZECOLUMNS({group})"
+                if o["type"] == "list box":
+                    query = f"EVALUATE FILTER(SUMMARIZECOLUMNS({group}), NOT ISBLANK({group}))"
             queries.append({"id": r["id"], "object": o["object"], "grain": r["grain"], "query": query})
     DAX.mkdir(exist_ok=True)
     out = DAX / f"{app}.queries.json"

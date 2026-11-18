@@ -47,5 +47,5 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   ADMIN), all 92 KPI expressions evaluate, and 182 DAX queries (role ADMIN) are generated.
 * Chapter 09 Airline Operations (`apps/Chapter09_Airline_Operations`, `tools/build_airline_ch09.py`, derived
   from the Chapter 15 builder): its 12 source-model tables match the inventory, the rebuilt Aircraft Types equals
-  the QVD the script stores, all 42 KPI expressions evaluate, and 85 DAX queries plus 11 relationship checks are
-  generated; the report has one page per QlikView sheet with charts.
+  the QVD the script stores, all 42 KPI expressions and 18 list boxes evaluate, and 103 DAX queries plus 11 relationship
+  checks are generated; the report has one page per QlikView sheet, list boxes rebuilt as slicers.
