@@ -1,0 +1,29 @@
+table 'Flight Types'
+	lineageTag: c1e03c8b-44b5-52c0-9b95-2e9157bafbb5
+
+	column '%Datasource ID'
+		dataType: string
+		isHidden
+		lineageTag: 48a85c8d-6c85-5fb1-9294-d07b7e104081
+		summarizeBy: none
+		sourceColumn: %Datasource ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Flight Type'
+		dataType: string
+		lineageTag: 6634e933-66ef-5dca-a51c-41e4bddf13f0
+		summarizeBy: none
+		sourceColumn: Flight Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Flight Types' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/QVDs/Flight Types.parquet"),
+				    Selected = Table.SelectColumns(Source, {"%Datasource ID", "Flight Type"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Datasource ID", type text}, {"Flight Type", type text}})
+				in
+				    Typed

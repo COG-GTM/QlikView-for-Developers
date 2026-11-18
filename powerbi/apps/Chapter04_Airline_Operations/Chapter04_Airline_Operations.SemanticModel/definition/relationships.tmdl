@@ -1,0 +1,43 @@
+relationship 4f59a388-4372-5077-b8c6-75249f88cbc4
+	fromColumn: 'Main Data'.'%Airline ID'
+	toColumn: Airlines.'%Airline ID'
+
+relationship 1c7a7080-f9a2-5794-b9ac-feac1cc715ab
+	fromColumn: 'Main Data'.'%Carrier Group ID'
+	toColumn: 'Carrier Groups'.'%Carrier Group ID'
+
+relationship 6cfd2438-d48c-50d9-8932-f38f2d07877b
+	fromColumn: 'Main Data'.'%Region Code'
+	toColumn: 'Carrier Operating Region'.'%Region Code'
+
+relationship db55390d-6832-51f3-b34a-6c0a0d1a14c2
+	fromColumn: 'Main Data'.'%Origin Airport ID'
+	toColumn: 'Origin Airports'.'%Origin Airport ID'
+
+relationship 9f8dfeca-15f7-5af4-9c82-1661164e9e39
+	fromColumn: 'Main Data'.'%Origin Airport Market ID'
+	toColumn: 'Origin Markets'.'%Origin Airport Market ID'
+
+relationship 5589d369-c38b-5f33-be48-7ae342155ff3
+	fromColumn: 'Main Data'.'%Destination Airport ID'
+	toColumn: 'Destination Airports'.'%Destination Airport ID'
+
+relationship 65408858-bd7b-50d0-8ce2-9c23c36f8400
+	fromColumn: 'Main Data'.'%Destination Airport Market ID'
+	toColumn: 'Destination Markets'.'%Destination Airport Market ID'
+
+relationship 2024ba8a-500f-5273-9879-fbea6978c126
+	fromColumn: 'Main Data'.'%Aircraft Group ID'
+	toColumn: 'Aircraft Groups'.'%Aircraft Group ID'
+
+relationship 73b9d083-93f2-53ee-b8d0-29abb82d9604
+	fromColumn: 'Main Data'.'%Aircraft Type ID'
+	toColumn: 'Aircraft Types'.'%Aircraft Type ID'
+
+relationship 7dbc3ddf-89ee-57d5-9dd5-36a08ac08469
+	fromColumn: 'Main Data'.'%Distance Group ID'
+	toColumn: 'Distance Groups'.'%Distance Group ID'
+
+relationship 8248c6e2-ee1c-56b6-a490-4990516fe1a0
+	fromColumn: 'Main Data'.'%Datasource ID'
+	toColumn: 'Flight Types'.'%Datasource ID'

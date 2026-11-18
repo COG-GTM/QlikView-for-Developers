@@ -83,6 +83,9 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 
 * Rows are matched on dimension values (numbers compared numerically, dates by ISO date,
   text exactly). Blank and 0 are equal (Qlik hides zero rows, DAX drops blank rows).
+* Rows Power BI cannot represent are listed with a reason in `parity/exceptions/<app>.json`
+  (`[{"id", "dims", "reason"}]`); a result whose only mismatches are listed is `known_difference`.
+  Example: two Qlik values that differ only in case collapse into one value in a Power BI column.
 * Full-table results must match as a multiset of rows, each cell compared like a dimension value.
 * Values: `rel_tol=1e-9`, `abs_tol=1e-6` by default (`--rel-tol`, `--abs-tol`).
 * Exit code 0 only when every evaluated result passes and no relationship check fails;
