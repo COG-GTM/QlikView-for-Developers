@@ -1,0 +1,40 @@
+{
+ "app": "Chapter10__Production Planning",
+ "pbip": "powerbi/apps/Chapter10_Production_Planning",
+ "queries": [
+  {
+   "id": "TB01@Date+Plant #+Product Line ID+Estimated Production",
+   "object": "TB01",
+   "grain": [
+    "Date",
+    "Plant #",
+    "Product Line ID",
+    "Estimated Production"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Production Planning - Legacy'[Date], 'Production Planning - Legacy'[Plant #], 'Production Planning - Legacy'[Product Line ID], 'Production Planning - Legacy'[Estimated Production])"
+  },
+  {
+   "id": "LB01@Estimated Production",
+   "object": "LB01",
+   "grain": [
+    "Estimated Production"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Production Planning - Legacy'[Estimated Production])"
+  },
+  {
+   "id": "LB02@Date",
+   "object": "LB02",
+   "grain": [
+    "Date"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Production Planning - Legacy'[Date])"
+  },
+  {
+   "id": "ROWS@Production Planning - Legacy",
+   "object": "ROWS",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", COUNTROWS('Production Planning - Legacy'))"
+  }
+ ],
+ "unmapped": []
+}

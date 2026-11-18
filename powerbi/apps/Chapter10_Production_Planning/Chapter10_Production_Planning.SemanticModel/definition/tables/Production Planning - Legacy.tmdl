@@ -1,0 +1,68 @@
+table 'Production Planning - Legacy'
+	lineageTag: a42ff037-7709-5762-9e5e-9ccc0fdea0c3
+
+	column Date
+		dataType: int64
+		formatString: 0
+		lineageTag: 41c7e6d4-9a0b-586a-b46d-022880cce4ac
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Plant #'
+		dataType: int64
+		formatString: 0
+		lineageTag: d5cf62a6-4d56-56bf-b08b-ccfaf39ecf88
+		summarizeBy: none
+		sourceColumn: Plant #
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Line ID'
+		dataType: string
+		lineageTag: 0a47aeba-9982-5128-82ca-722017452892
+		summarizeBy: none
+		sourceColumn: Product Line ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Estimated Production'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 4938f8ba-e20b-5215-bdf6-2cf539954aac
+		summarizeBy: sum
+		sourceColumn: Estimated Production
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Production Planning - Legacy' = m
+		mode: import
+		source =
+				let
+				    // FROM [Production Planning - Legacy.txt] (txt, codepage is 1252, embedded labels, delimiter is '\t', msq)
+				    Source = Csv.Document(File.Contents(SourceRoot & "Chapter10\Production Planning - Legacy.txt"),
+				        [Delimiter = "#(tab)", Columns = 8, Encoding = 1252, QuoteStyle = QuoteStyle.None]),
+				    Numbered = Table.AddIndexColumn(Source, "Row", 1, 1, Int64.Type),
+				    // Remove(Row, Pos(Top, 6)), then Pos(Top, 4), 3, 2, 1: header underline and report banner
+				    NoBanner = Table.SelectRows(Numbered, each not List.Contains({1, 2, 3, 4, 6}, [Row])),
+				    // Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'Total'))): weekly subtotals
+				    NoTotals = Table.SelectRows(NoBanner, each not Text.Contains([Column1] ?? "", "Total")),
+				    // Unwrap(Col, Pos(Top, 5)): columns 5..8 continue below columns 1..4
+				    LeftBlock = Table.SelectColumns(NoTotals, {"Column1", "Column2", "Column3", "Column4"}),
+				    RightBlock = Table.RenameColumns(Table.SelectColumns(NoTotals, {"Column5", "Column6", "Column7", "Column8"}),
+				        {{"Column5", "Column1"}, {"Column6", "Column2"}, {"Column7", "Column3"}, {"Column8", "Column4"}}),
+				    Unwrapped = Table.AddIndexColumn(Table.Combine({LeftBlock, RightBlock}), "Pos", 1, 1, Int64.Type),
+				    // Remove(Row, RowCnd(Compound, contain 'Date', Interval(Pos(Top, 2), Pos(Bottom, 1)))): second header
+				    NoRepeatedHeader = Table.SelectRows(Unwrapped, each [Pos] = 1 or not Text.Contains([Column1] ?? "", "Date")),
+				    // Replace(1, top, StrCnd(null)): an empty Date cell takes the value above it
+				    Blanks = Table.ReplaceValue(NoRepeatedHeader, "", null, Replacer.ReplaceValue, {"Column1"}),
+				    FilledDown = Table.FillDown(Blanks, {"Column1"}),
+				    // embedded labels
+				    Labeled = Table.PromoteHeaders(Table.RemoveColumns(FilledDown, {"Pos"}), [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Labeled, {"Date", "Plant #", "Product Line ID", "Estimated Production"}),
+				    // Product Line ID stays text so its labels keep the leading zero ("03")
+				    Typed = Table.TransformColumnTypes(Selected, {{"Date", Int64.Type}, {"Plant #", Int64.Type},
+				        {"Product Line ID", type text}, {"Estimated Production", Int64.Type}})
+				in
+				    Typed

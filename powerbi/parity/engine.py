@@ -62,7 +62,8 @@ class SourceModel:
     def _build(self):
         override = MODELS / f"{self.app}.sql"
         if override.exists():
-            sql = override.read_text().replace("{parquet}", (POWERBI / "data" / "parquet").as_posix())
+            sql = (override.read_text().replace("{parquet}", (POWERBI / "data" / "parquet").as_posix())
+                   .replace("{repo}", REPO.as_posix()))
             self.con.execute(sql)
             self.model_source = override.relative_to(REPO).as_posix()
             self.tables = [r[0] for r in self.con.execute(

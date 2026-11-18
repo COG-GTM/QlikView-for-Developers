@@ -5,4 +5,4 @@ target-version = "py312"
 select = ["E", "F", "W", "I"]
 
 [lint.isort]
-known-first-party = ["qvd", "qlik_script", "convert_sources", "verify_conversion", "scaffold_pbip", "qlik_expr", "engine", "harness", "dax", "compare", "conftest"]
+known-first-party = ["qvd", "qlik_script", "convert_sources", "verify_conversion", "scaffold_pbip", "qlik_expr", "engine", "harness", "dax", "compare", "conftest", "objects"]
