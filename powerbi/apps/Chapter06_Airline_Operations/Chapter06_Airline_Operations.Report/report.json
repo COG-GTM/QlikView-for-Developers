@@ -1,0 +1,37 @@
+{
+  "config": "{\"version\": \"5.59\", \"themeCollection\": {}, \"activeSectionIndex\": 0}",
+  "layoutOptimization": 0,
+  "resourcePackages": [],
+  "sections": [
+    {
+      "name": "ReportSection",
+      "displayName": "Dashboard",
+      "displayOption": 1,
+      "ordinal": 0,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 1240,
+          "height": 330,
+          "config": "{\"name\": \"e118fa48-aa64-50aa-bc24-59b318f6ec1a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 1240, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"Main Data.Year\", \"active\": true}, {\"queryRef\": \"Main Data.Month\", \"active\": true}], \"Y\": [{\"queryRef\": \"Main Data.# of Flights\"}, {\"queryRef\": \"Main Data.# of Enplanned Passengers\"}, {\"queryRef\": \"Main Data.Transported Freight\"}, {\"queryRef\": \"Main Data.Transported Mail\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Year\"}, \"Name\": \"Main Data.Year\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Month\"}, \"Name\": \"Main Data.Month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"# of Flights\"}, \"Name\": \"Main Data.# of Flights\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"# of Enplanned Passengers\"}, \"Name\": \"Main Data.# of Enplanned Passengers\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Transported Freight\"}, \"Name\": \"Main Data.Transported Freight\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Transported Mail\"}, \"Name\": \"Main Data.Transported Mail\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Traffic per Year'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 370,
+          "z": 1,
+          "width": 1240,
+          "height": 330,
+          "config": "{\"name\": \"d5217187-1496-5efe-b912-583eb19056d4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 370, \"z\": 1, \"width\": 1240, \"height\": 330}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.From - To City\"}, {\"queryRef\": \"Main Data.# of Flights\"}, {\"queryRef\": \"Main Data.# of Enplanned Passengers\"}, {\"queryRef\": \"Main Data.Transported Freight\"}, {\"queryRef\": \"Main Data.Transported Mail\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"From - To City\"}, \"Name\": \"Main Data.From - To City\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"# of Flights\"}, \"Name\": \"Main Data.# of Flights\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"# of Enplanned Passengers\"}, \"Name\": \"Main Data.# of Enplanned Passengers\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Transported Freight\"}, \"Name\": \"Main Data.Transported Freight\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Transported Mail\"}, \"Name\": \"Main Data.Transported Mail\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"# of Flights\"}}}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Top 10 Routes'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ]
+    }
+  ]
+}
