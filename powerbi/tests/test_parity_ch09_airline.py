@@ -205,3 +205,14 @@ def test_case_variant_carrier_is_a_listed_known_difference(expected):
     exceptions = json.loads((compare.EXCEPTIONS / f"{APP}.json").read_text())
     summary = compare.compare(expected, doc, exceptions=exceptions)["summary"]
     assert summary.get("known_difference") == 3 and "fail" not in summary
+
+
+def test_top_10_routes_keeps_the_ten_busiest_routes():
+    report = json.loads((PBIP / "Chapter09_Airline_Operations.Report" / "report.json").read_text())
+    v = next(v for s in report["sections"] for v in s["visualContainers"] if "'Top 10 Routes'" in v["config"])
+    (flt,) = json.loads(v["filters"])
+    assert flt["type"] == "TopN" and flt["expression"]["Column"]["Property"] == "From - To City"
+    sub = flt["filter"]["From"][0]["Expression"]["Subquery"]["Query"]
+    assert sub["Top"] == 10 and sub["OrderBy"][0]["Expression"]["Measure"]["Property"] == "# of Flights"
+    order = json.loads(v["config"])["singleVisual"]["prototypeQuery"]["OrderBy"]
+    assert order[0]["Direction"] == 2 and order[0]["Expression"]["Measure"]["Property"] == "# of Flights"

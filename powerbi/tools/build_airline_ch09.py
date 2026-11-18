@@ -21,6 +21,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_airline_base as base  # noqa: E402
 from build_airline_base import CALC_DIMS, FLIGHT_COLS, MEASURES, catalog_types, m_let, m_list, m_types, write_table  # noqa: E402
+from build_report import top_n_filter  # noqa: E402
 
 from harness import kpi_list, parity_key  # noqa: E402  (build_airline_base puts parity/ on sys.path)
 from scaffold_pbip import APPS, REPO, show, tag, tname  # noqa: E402
@@ -233,15 +234,24 @@ def visual(page: str, idx: int, vtype: str, title: str, pos: tuple[int, int, int
                   "show": {"expr": {"Literal": {"Value": "true"}}},
                   "text": {"expr": {"Literal": {"Value": "'" + title.replace("'", "''") + "'"}}}}}]},
               "drillFilterOtherVisuals": True}
+    filters = []
+    if title in TOP_N:
+        column, by, n = TOP_N[title]
+        filters = [top_n_filter(column, by, n)]
+        single["prototypeQuery"]["OrderBy"] = [{"Direction": 2, "Expression": {"Measure": {
+            "Expression": {"SourceRef": {"Source": aliases[by[0]]}}, "Property": by[1]}}}]
     if dropdown:
         single["objects"] = {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Dropdown'"}}}}}]}
     config = {"name": tag(SLUG, "visual", page, str(idx)),
               "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": idx, "width": w, "height": h}}],
               "singleVisual": single}
-    return {"x": x, "y": y, "z": idx, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
+    return {"x": x, "y": y, "z": idx, "width": w, "height": h, "config": json.dumps(config),
+            "filters": json.dumps(filters)}
 
 
 CAL, MD, FT = "Master Calendar", "Main Data", "Flight Types"
+# Charts whose dimension is limited to the top N values (QlikView 'Max number' on the dimension): (column, by, n).
+TOP_N = {"Top 10 Routes": ((MD, "From - To City"), (MD, "# of Flights"), 10)}
 # QlikView list boxes (object id -> table, field), decoded from the .qvw layout: a list box's caption is its field.
 LIST_BOXES = {
     "LB01": (MD, "Destination Country"), "LB02": (MD, "Destination State"), "LB03": (MD, "Destination City"),
