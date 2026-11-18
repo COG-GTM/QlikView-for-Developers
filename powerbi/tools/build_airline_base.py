@@ -713,13 +713,14 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hi
 def table_objects(visual: str, refs: list[str], width: int) -> dict:
     """Tables / pivots: fixed column widths that fit the visual and a flat row header. Desktop's 'Fit to content' sizes a
     stepped row header to the longest label (e.g. 1,153px of carrier groups in a 455px visual), pushing the measures
-    past the right edge."""
+    past the right edge. The widths always sum to less than the visual width (margin for padding and the vertical
+    scrollbar), however many columns a narrow visual holds, so no column scrolls out of view."""
     if visual not in ("tableEx", "pivotTable") or not refs:
         return {}
 
     def lit(v: str) -> dict:
         return {"expr": {"Literal": {"Value": v}}}
-    col = max(60, (width - 24) // len(refs))
+    col = max(1, (width - 24) // len(refs))
     objects = {"columnHeaders": [{"properties": {"autoSizeColumnWidth": lit("false"), "wordWrap": lit("true")}}],
                "values": [{"properties": {"wordWrap": lit("true")}}],
                "columnWidth": [{"properties": {"value": lit(f"{col}D")}, "selector": {"metadata": r}} for r in refs]}
