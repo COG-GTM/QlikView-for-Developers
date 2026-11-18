@@ -201,3 +201,19 @@ def test_known_differences_only_cover_the_sun_country_spelling(expected):
     assert exc and all(e["id"] in ids and "Mn" in e["reason"] for e in exc)
     assert {e["id"].split("@")[0] for e in exc} == {"CH15#2", "CH43#1", "CH44#1", "CH69#2", "CH69#3",
                                                      "CH48#1", "CH52#1", "CH53#1", "CH54#1"}
+
+
+def test_tables_have_fixed_column_widths_that_fit_the_visual():
+    tables = [(c, json.loads(c["config"])["singleVisual"]) for p in json.loads(REPORT.read_text())["sections"]
+              for c in p["visualContainers"]]
+    tables = [(c, v) for c, v in tables if v["visualType"] in ("tableEx", "pivotTable")]
+    assert tables
+    for c, v in tables:
+        o = v["objects"]
+        assert o["columnHeaders"][0]["properties"]["autoSizeColumnWidth"]["expr"]["Literal"]["Value"] == "false"
+        widths = {w["selector"]["metadata"]: float(w["properties"]["value"]["expr"]["Literal"]["Value"][:-1])
+                  for w in o["columnWidth"]}
+        assert set(widths) == {s["Name"] for s in v["prototypeQuery"]["Select"]}
+        assert sum(widths.values()) <= max(c["width"], 60 * len(widths))
+        if v["visualType"] == "pivotTable":
+            assert o["rowHeaders"][0]["properties"]["stepped"]["expr"]["Literal"]["Value"] == "false"
