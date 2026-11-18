@@ -227,10 +227,10 @@ MEASURES = {
     "86cbdcf06a0d": ("Flights in excluded years",
                      f"VAR possible = CALCULATETABLE(SUMMARIZE({MD}, {c(CAL, 'Year')}), ALLSELECTED()) "
                      f"VAR excluded = EXCEPT(ALL({c(CAL, 'Year')}), possible) "
-                     f"VAR rowYears = IF(ISFILTERED({c(EXCLUDED_YEARS, EXCLUDED_YEAR)}), "
-                     f"TREATAS(VALUES({c(EXCLUDED_YEARS, EXCLUDED_YEAR)}), {c(CAL, 'Year')}), "
-                     f"IF(ISINSCOPE({c(CAL, 'Year')}), VALUES({c(CAL, 'Year')}), excluded)) "
-                     f"VAR picked = INTERSECT(excluded, rowYears) "
+                     f"VAR byRow = ISFILTERED({c(EXCLUDED_YEARS, EXCLUDED_YEAR)}) "
+                     f"VAR inScope = ISINSCOPE({c(CAL, 'Year')}) "
+                     f"VAR picked = FILTER(excluded, IF(byRow, {c(CAL, 'Year')} IN VALUES({c(EXCLUDED_YEARS, EXCLUDED_YEAR)}), "
+                     f"IF(inScope, {c(CAL, 'Year')} IN VALUES({c(CAL, 'Year')}), TRUE()))) "
                      f"RETURN IF(NOT ISEMPTY(picked), CALCULATE({FLIGHTS}, REMOVEFILTERS(), picked))", NUM),
     "faf40071dfd3": ("YTD Flights Var %", var_pct(pit(FLIGHTS, 0, "ytd"), pit(FLIGHTS, 1, "ytd")), PCT),
     "bbaa93b98827": ("MTD Flights Var % vs LY", var_pct(pit(FLIGHTS, 0, "mtd"), pit(FLIGHTS, 1, "mtd")), PCT),

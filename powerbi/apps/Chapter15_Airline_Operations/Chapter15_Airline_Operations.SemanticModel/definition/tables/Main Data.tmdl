@@ -256,7 +256,7 @@ table 'Main Data'
 		annotation QlikExpression = Sum({$<[Carrier's Operating Region] = {'Latin America'}, Year = {2011}> + <[Carrier's Operating Region] = {'Domestic'}, Year = {2010}> - <[Carrier Group] = {'Foreign Carrier'}>} [# Departures Performed])
 		annotation QlikObjects = CH58#1
 
-	measure 'Flights in excluded years' = VAR possible = CALCULATETABLE(SUMMARIZE('Main Data', 'Master Calendar'[Year]), ALLSELECTED()) VAR excluded = EXCEPT(ALL('Master Calendar'[Year]), possible) VAR rowYears = IF(ISFILTERED('Excluded Years'[Excluded Year]), TREATAS(VALUES('Excluded Years'[Excluded Year]), 'Master Calendar'[Year]), IF(ISINSCOPE('Master Calendar'[Year]), VALUES('Master Calendar'[Year]), excluded)) VAR picked = INTERSECT(excluded, rowYears) RETURN IF(NOT ISEMPTY(picked), CALCULATE([# of Flights], REMOVEFILTERS(), picked))
+	measure 'Flights in excluded years' = VAR possible = CALCULATETABLE(SUMMARIZE('Main Data', 'Master Calendar'[Year]), ALLSELECTED()) VAR excluded = EXCEPT(ALL('Master Calendar'[Year]), possible) VAR byRow = ISFILTERED('Excluded Years'[Excluded Year]) VAR inScope = ISINSCOPE('Master Calendar'[Year]) VAR picked = FILTER(excluded, IF(byRow, 'Master Calendar'[Year] IN VALUES('Excluded Years'[Excluded Year]), IF(inScope, 'Master Calendar'[Year] IN VALUES('Master Calendar'[Year]), TRUE()))) RETURN IF(NOT ISEMPTY(picked), CALCULATE([# of Flights], REMOVEFILTERS(), picked))
 		formatString: #,0
 		lineageTag: b2f8404d-0134-5b8b-9d52-0b8341e7e89e
 
