@@ -30,7 +30,7 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
 "Power BI foundation" workflow run instead of converting locally, and unpack it so that
 `powerbi/data/parquet/` exists; point each PBIP's `DataRoot` parameter at that folder.
 
-Power BI Desktop refresh of the Airline apps that combine several Parquet sources (e.g. Chapter 13: Flight Data + Employment Statistics in one query) needs the `C:\` file source's privacy level set once per machine (File > Options > Data source settings > Global permissions > the `c:\` path > Edit Permissions > Privacy level: Organizational). Privacy levels are a per-user Desktop setting, not part of a PBIP/TMDL, so they cannot be committed; without it the refresh stops with a Formula.Firewall error.
+Power BI Desktop refresh of the Airline apps that combine several Parquet sources (e.g. Chapter 13: Flight Data + Employment Statistics in one query) needs the `C:\` file source's privacy level set once per machine (File > Options > Data source settings > Global permissions > the `c:\` path > Edit Permissions > Privacy level: Organizational). Privacy levels are a per-user Desktop setting, not part of a PBIP/TMDL, so they cannot be committed; without it the refresh stops with a Formula.Firewall error. If the first refresh then stops at "calculated objects need to be manually refreshed", run Refresh > Schema and data once (Home > Refresh dropdown); it rebuilds the calculated tables and columns, and later refreshes work normally.
 
 ## Status of the verification
 
