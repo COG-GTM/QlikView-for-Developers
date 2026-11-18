@@ -96,13 +96,13 @@ def route_slicers() -> list[tuple]:
             for state in STATES for lb, field in STATE_BOXES.items()]
 
 
-def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple]) -> list[dict]:
+def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hidden: list[tuple] = ()) -> list[dict]:
     """The base places the container list boxes on Analysis in the default state; they belong to Group A / B."""
     if sheet == "SH_Analysis":
         slicers = [x for x in slicers if x[3]["Values"][0][1] not in set(STATE_BOXES.values()) - {"Flight Type"}]
     if sheet == "SH15":
         slicers = slicers + route_slicers()
-    return _base_visual_containers(sheet, slicers, visuals)
+    return _base_visual_containers(sheet, slicers, visuals, hidden)
 
 
 def write_table(path: Path, name: str, spec: dict, measures: list[dict], calc: list[tuple], slug: str = SLUG):
