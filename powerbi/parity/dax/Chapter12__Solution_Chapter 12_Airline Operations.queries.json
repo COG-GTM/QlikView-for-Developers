@@ -1,0 +1,1293 @@
+{
+ "app": "Chapter12__Solution_Chapter 12_Airline Operations",
+ "pbip": "powerbi/apps/Chapter12_Airline_Operations",
+ "queries": [
+  {
+   "id": "CH01#1@total",
+   "measure": "# of Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights])"
+  },
+  {
+   "id": "CH01#1@Year",
+   "measure": "# of Flights",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [# of Flights])"
+  },
+  {
+   "id": "CH01#1@Year+Month",
+   "measure": "# of Flights",
+   "grain": [
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [# of Flights])"
+  },
+  {
+   "id": "CH01#2@total",
+   "measure": "# of Enplanned Passengers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH01#2@Year",
+   "measure": "# of Enplanned Passengers",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH01#2@Year+Month",
+   "measure": "# of Enplanned Passengers",
+   "grain": [
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH01#3@total",
+   "measure": "Transported Freight",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH01#3@Year",
+   "measure": "Transported Freight",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH01#3@Year+Month",
+   "measure": "Transported Freight",
+   "grain": [
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH01#4@total",
+   "measure": "Transported Mail",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH01#4@Year",
+   "measure": "Transported Mail",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH01#4@Year+Month",
+   "measure": "Transported Mail",
+   "grain": [
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH02#1@total",
+   "measure": "# of Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights])"
+  },
+  {
+   "id": "CH02#1@From - To City",
+   "measure": "# of Flights",
+   "grain": [
+    "From - To City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[From - To City], \"value\", [# of Flights])"
+  },
+  {
+   "id": "CH02#2@total",
+   "measure": "# of Enplanned Passengers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH02#2@From - To City",
+   "measure": "# of Enplanned Passengers",
+   "grain": [
+    "From - To City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[From - To City], \"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH02#3@total",
+   "measure": "Transported Freight",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH02#3@From - To City",
+   "measure": "Transported Freight",
+   "grain": [
+    "From - To City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[From - To City], \"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH02#4@total",
+   "measure": "Transported Mail",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH02#4@From - To City",
+   "measure": "Transported Mail",
+   "grain": [
+    "From - To City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[From - To City], \"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH03#1@total",
+   "measure": "# of Passengers (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH03#1@Flight Type",
+   "measure": "# of Passengers (millions)",
+   "grain": [
+    "Flight Type"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], \"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH03#2@total",
+   "measure": "# of Available Seats (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Available Seats (millions)])"
+  },
+  {
+   "id": "CH03#2@Flight Type",
+   "measure": "# of Available Seats (millions)",
+   "grain": [
+    "Flight Type"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], \"value\", [# of Available Seats (millions)])"
+  },
+  {
+   "id": "CH03#3@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH03#3@Flight Type",
+   "measure": "Load Factor",
+   "grain": [
+    "Flight Type"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH04#1@total",
+   "measure": "Transported Mail",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH04#1@Carrier Name",
+   "measure": "Transported Mail",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH04#2@total",
+   "measure": "# of Enplanned Passengers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH04#2@Carrier Name",
+   "measure": "# of Enplanned Passengers",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH04#3@total",
+   "measure": "# of Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights])"
+  },
+  {
+   "id": "CH04#3@Carrier Name",
+   "measure": "# of Flights",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [# of Flights])"
+  },
+  {
+   "id": "CH05#1@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH06#1@total",
+   "measure": "Performed vs Scheduled",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH07#1@total",
+   "measure": "Air Time %",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time %])"
+  },
+  {
+   "id": "CH08#1@total",
+   "measure": "Air Time %",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time %])"
+  },
+  {
+   "id": "CH09#1@total",
+   "measure": "Air Time %",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time %])"
+  },
+  {
+   "id": "CH11#1@total",
+   "measure": "Air Time %",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time %])"
+  },
+  {
+   "id": "CH12#1@total",
+   "measure": "Air Time %",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time %])"
+  },
+  {
+   "id": "CH13#1@total",
+   "measure": "Air Time %",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time %])"
+  },
+  {
+   "id": "CH14#1@total",
+   "measure": "Air Time %",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time %])"
+  },
+  {
+   "id": "CH15#1@total",
+   "measure": "# of Enplanned Passengers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH15#1@Carrier Name",
+   "measure": "# of Enplanned Passengers",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH15#2@total",
+   "measure": "Carrier",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Carrier])"
+  },
+  {
+   "id": "CH15#2@Carrier Name",
+   "measure": "Carrier",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [Carrier])"
+  },
+  {
+   "id": "CH21#1@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH21#1@Airline",
+   "measure": "Load Factor",
+   "grain": [
+    "Airline"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Airlines'[Airline], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH21#1@Origin Country",
+   "measure": "Load Factor",
+   "grain": [
+    "Origin Country"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin Country], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH21#1@Destination Country",
+   "measure": "Load Factor",
+   "grain": [
+    "Destination Country"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH21#2@total",
+   "measure": "Performed vs Scheduled",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH21#2@Airline",
+   "measure": "Performed vs Scheduled",
+   "grain": [
+    "Airline"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Airlines'[Airline], \"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH21#2@Origin Country",
+   "measure": "Performed vs Scheduled",
+   "grain": [
+    "Origin Country"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin Country], \"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH21#2@Destination Country",
+   "measure": "Performed vs Scheduled",
+   "grain": [
+    "Destination Country"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country], \"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH21#3@total",
+   "measure": "Air Time % (CH21)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time % (CH21)])"
+  },
+  {
+   "id": "CH21#3@Airline",
+   "measure": "Air Time % (CH21)",
+   "grain": [
+    "Airline"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Airlines'[Airline], \"value\", [Air Time % (CH21)])"
+  },
+  {
+   "id": "CH21#3@Origin Country",
+   "measure": "Air Time % (CH21)",
+   "grain": [
+    "Origin Country"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Origin Country], \"value\", [Air Time % (CH21)])"
+  },
+  {
+   "id": "CH21#3@Destination Country",
+   "measure": "Air Time % (CH21)",
+   "grain": [
+    "Destination Country"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country], \"value\", [Air Time % (CH21)])"
+  },
+  {
+   "id": "CH22#1@total",
+   "measure": "# of Passengers (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH22#1@Carrier Group+Airline+Year+Month",
+   "measure": "# of Passengers (millions)",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH22#2@total",
+   "measure": "Departures Performed (thousands)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Departures Performed (thousands)])"
+  },
+  {
+   "id": "CH22#2@Carrier Group+Airline+Year+Month",
+   "measure": "Departures Performed (thousands)",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Departures Performed (thousands)])"
+  },
+  {
+   "id": "CH24#1@total",
+   "measure": "# of Passengers (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH24#1@Month",
+   "measure": "# of Passengers (millions)",
+   "grain": [
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Month], \"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH25#1@total",
+   "measure": "# of Passengers (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH25#1@Flight Type+Year",
+   "measure": "# of Passengers (millions)",
+   "grain": [
+    "Flight Type",
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Master Calendar'[Year], \"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH26#1@total",
+   "measure": "# of Passengers (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH26#1@Year+Quarter+Flight Type",
+   "measure": "# of Passengers (millions)",
+   "grain": [
+    "Year",
+    "Quarter",
+    "Flight Type"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], 'Master Calendar'[Quarter], 'Flight Types'[Flight Type], \"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH27#1@total",
+   "measure": "# of Passengers (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH27#1@=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))",
+   "measure": "# of Passengers (millions)",
+   "grain": [
+    "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Deal Status], \"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH28#1@total",
+   "measure": "# of Passengers (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH28#1@Destination Country+Destination City",
+   "measure": "# of Passengers (millions)",
+   "grain": [
+    "Destination Country",
+    "Destination City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Destination Country], 'Main Data'[Destination City], \"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH38#1@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH38#1@Aircraft Engine Type+Aircraft Number Of Engines",
+   "measure": "Load Factor",
+   "grain": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Engine Type], 'Aircraft Types'[Aircraft Number Of Engines], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH38#2@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH38#2@Aircraft Engine Type+Aircraft Number Of Engines",
+   "measure": "Load Factor",
+   "grain": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Engine Type], 'Aircraft Types'[Aircraft Number Of Engines], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH38#3@total",
+   "measure": "Performed vs Scheduled",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH38#3@Aircraft Engine Type+Aircraft Number Of Engines",
+   "measure": "Performed vs Scheduled",
+   "grain": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Engine Type], 'Aircraft Types'[Aircraft Number Of Engines], \"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH38#4@total",
+   "measure": "Performed vs Scheduled",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH38#4@Aircraft Engine Type+Aircraft Number Of Engines",
+   "measure": "Performed vs Scheduled",
+   "grain": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Engine Type], 'Aircraft Types'[Aircraft Number Of Engines], \"value\", [Performed vs Scheduled])"
+  },
+  {
+   "id": "CH38#5@total",
+   "measure": "Air Time % (CH21)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time % (CH21)])"
+  },
+  {
+   "id": "CH38#5@Aircraft Engine Type+Aircraft Number Of Engines",
+   "measure": "Air Time % (CH21)",
+   "grain": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Engine Type], 'Aircraft Types'[Aircraft Number Of Engines], \"value\", [Air Time % (CH21)])"
+  },
+  {
+   "id": "CH38#6@total",
+   "measure": "Air Time % (CH21)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Air Time % (CH21)])"
+  },
+  {
+   "id": "CH38#6@Aircraft Engine Type+Aircraft Number Of Engines",
+   "measure": "Air Time % (CH21)",
+   "grain": [
+    "Aircraft Engine Type",
+    "Aircraft Number Of Engines"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Engine Type], 'Aircraft Types'[Aircraft Number Of Engines], \"value\", [Air Time % (CH21)])"
+  },
+  {
+   "id": "CH41#1@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH41#1@Flight Type+Month",
+   "measure": "Load Factor",
+   "grain": [
+    "Flight Type",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Master Calendar'[Month], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH42#1@total",
+   "measure": "# of Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights])"
+  },
+  {
+   "id": "CH42#1@Carrier Name",
+   "measure": "# of Flights",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [# of Flights])"
+  },
+  {
+   "id": "CH43#1@total",
+   "measure": "FTE % to Total",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [FTE % to Total])"
+  },
+  {
+   "id": "CH43#1@Carrier Name",
+   "measure": "FTE % to Total",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [FTE % to Total])"
+  },
+  {
+   "id": "CH44#1@total",
+   "measure": "FTEs",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [FTEs])"
+  },
+  {
+   "id": "CH44#1@Carrier Name",
+   "measure": "FTEs",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [FTEs])"
+  },
+  {
+   "id": "CH45#1@total",
+   "measure": "# of Flights (units)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights (units)])"
+  },
+  {
+   "id": "CH45#1@Carrier Group",
+   "measure": "# of Flights (units)",
+   "grain": [
+    "Carrier Group"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], \"value\", [# of Flights (units)])"
+  },
+  {
+   "id": "CH45#2@total",
+   "measure": "# of Flights (thousands)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights (thousands)])"
+  },
+  {
+   "id": "CH45#2@Carrier Group",
+   "measure": "# of Flights (thousands)",
+   "grain": [
+    "Carrier Group"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], \"value\", [# of Flights (thousands)])"
+  },
+  {
+   "id": "CH45#3@total",
+   "measure": "# of Flights (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights (millions)])"
+  },
+  {
+   "id": "CH45#3@Carrier Group",
+   "measure": "# of Flights (millions)",
+   "grain": [
+    "Carrier Group"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], \"value\", [# of Flights (millions)])"
+  },
+  {
+   "id": "CH46#1@total",
+   "measure": "Selected Metric",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Selected Metric])"
+  },
+  {
+   "id": "CH46#1@Carrier Group",
+   "measure": "Selected Metric",
+   "grain": [
+    "Carrier Group"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], \"value\", [Selected Metric])"
+  },
+  {
+   "id": "CH47#1@total",
+   "measure": "# of Passengers (millions)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH47#1@Carrier Group+Airline+Year+Month",
+   "measure": "# of Passengers (millions)",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [# of Passengers (millions)])"
+  },
+  {
+   "id": "CH47#2@total",
+   "measure": "Departures Performed (thousands)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Departures Performed (thousands)])"
+  },
+  {
+   "id": "CH47#2@Carrier Group+Airline+Year+Month",
+   "measure": "Departures Performed (thousands)",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Departures Performed (thousands)])"
+  },
+  {
+   "id": "CH47#3@total",
+   "measure": "Participation to the whole",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Participation to the whole])"
+  },
+  {
+   "id": "CH47#3@Carrier Group+Airline+Year+Month",
+   "measure": "Participation to the whole",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Participation to the whole])"
+  },
+  {
+   "id": "CH47#4@total",
+   "measure": "% vs the Carrier's whole",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [% vs the Carrier's whole])"
+  },
+  {
+   "id": "CH47#4@Carrier Group+Airline+Year+Month",
+   "measure": "% vs the Carrier's whole",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [% vs the Carrier's whole])"
+  },
+  {
+   "id": "CH47#5@total",
+   "measure": "% vs the Carrier's whole per year",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [% vs the Carrier's whole per year])"
+  },
+  {
+   "id": "CH47#5@Carrier Group+Airline+Year+Month",
+   "measure": "% vs the Carrier's whole per year",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [% vs the Carrier's whole per year])"
+  },
+  {
+   "id": "CH48#1@total",
+   "measure": "# of Carriers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Carriers])"
+  },
+  {
+   "id": "CH48#1@=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])",
+   "measure": "# of Carriers",
+   "grain": [
+    "=Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier State Count'[Carrier State Count], \"value\", [# of Carriers])"
+  },
+  {
+   "id": "CH49#1@total",
+   "measure": "Average Load Factor per Route",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Average Load Factor per Route])"
+  },
+  {
+   "id": "CH49#1@Carrier Name",
+   "measure": "Average Load Factor per Route",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [Average Load Factor per Route])"
+  },
+  {
+   "id": "CH49#2@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH49#2@Carrier Name",
+   "measure": "Load Factor",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH50#1@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH50#1@Carrier Name+Year+Month",
+   "measure": "Load Factor",
+   "grain": [
+    "Carrier Name",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH51#1@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH51#1@Carrier Name+Year+Month",
+   "measure": "Load Factor",
+   "grain": [
+    "Carrier Name",
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], 'Master Calendar'[Year], 'Master Calendar'[Month], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH52#1@total",
+   "measure": "# of Carriers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Carriers])"
+  },
+  {
+   "id": "CH52#1@=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')",
+   "measure": "# of Carriers",
+   "grain": [
+    "=Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier State Count Band'[Carrier State Count Band], \"value\", [# of Carriers])"
+  },
+  {
+   "id": "CH53#1@total",
+   "measure": "# of Carriers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Carriers])"
+  },
+  {
+   "id": "CH53#1@=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')",
+   "measure": "# of Carriers",
+   "grain": [
+    "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Load Factor Band'[Carrier Load Factor Band], \"value\", [# of Carriers])"
+  },
+  {
+   "id": "CH54#1@total",
+   "measure": "# of Carriers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Carriers])"
+  },
+  {
+   "id": "CH54#1@=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')",
+   "measure": "# of Carriers",
+   "grain": [
+    "=Replace(Aggr(Class($(eLoadFactor)*100, 10), [Carrier Name]), '<= x <', ' - ')"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Load Factor Band'[Carrier Load Factor Band], \"value\", [# of Carriers])"
+  },
+  {
+   "id": "CH55#1@total",
+   "measure": "Departures Performed (thousands)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Departures Performed (thousands)])"
+  },
+  {
+   "id": "CH55#1@Carrier Group+Airline+Aircraft Name",
+   "measure": "Departures Performed (thousands)",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Aircraft Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Aircraft Types'[Aircraft Name], \"value\", [Departures Performed (thousands)])"
+  },
+  {
+   "id": "CH55#2@total",
+   "measure": "Dimensionality",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Dimensionality])"
+  },
+  {
+   "id": "CH55#2@Carrier Group+Airline+Aircraft Name",
+   "measure": "Dimensionality",
+   "grain": [
+    "Carrier Group",
+    "Airline",
+    "Aircraft Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Airlines'[Airline], 'Aircraft Types'[Aircraft Name], \"value\", [Dimensionality])"
+  },
+  {
+   "id": "CH56#1@total",
+   "measure": "Avg Load Factor per Route (by level)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Avg Load Factor per Route (by level)])"
+  },
+  {
+   "id": "CH56#1@Flight Type+Carrier Group+Carrier Name",
+   "measure": "Avg Load Factor per Route (by level)",
+   "grain": [
+    "Flight Type",
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [Avg Load Factor per Route (by level)])"
+  },
+  {
+   "id": "CH56#2@total",
+   "measure": "Load Factor",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Load Factor])"
+  },
+  {
+   "id": "CH56#2@Flight Type+Carrier Group+Carrier Name",
+   "measure": "Load Factor",
+   "grain": [
+    "Flight Type",
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Flight Types'[Flight Type], 'Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [Load Factor])"
+  },
+  {
+   "id": "CH57#1@total",
+   "measure": "Foreign Carriers' flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Foreign Carriers' flights])"
+  },
+  {
+   "id": "CH57#1@Carrier Group+Carrier Name",
+   "measure": "Foreign Carriers' flights",
+   "grain": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [Foreign Carriers' flights])"
+  },
+  {
+   "id": "CH57#2@total",
+   "measure": "Domestic and Latin America (2010)",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Domestic and Latin America (2010)])"
+  },
+  {
+   "id": "CH57#2@Carrier Group+Carrier Name",
+   "measure": "Domestic and Latin America (2010)",
+   "grain": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [Domestic and Latin America (2010)])"
+  },
+  {
+   "id": "CH57#3@total",
+   "measure": "2010 Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [2010 Flights])"
+  },
+  {
+   "id": "CH57#3@Carrier Group+Carrier Name",
+   "measure": "2010 Flights",
+   "grain": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [2010 Flights])"
+  },
+  {
+   "id": "CH57#4@total",
+   "measure": "2011 Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [2011 Flights])"
+  },
+  {
+   "id": "CH57#4@Carrier Group+Carrier Name",
+   "measure": "2011 Flights",
+   "grain": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [2011 Flights])"
+  },
+  {
+   "id": "CH57#5@total",
+   "measure": "Current Year Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Current Year Flights])"
+  },
+  {
+   "id": "CH57#5@Carrier Group+Carrier Name",
+   "measure": "Current Year Flights",
+   "grain": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [Current Year Flights])"
+  },
+  {
+   "id": "CH57#6@total",
+   "measure": "Previous Year Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Previous Year Flights])"
+  },
+  {
+   "id": "CH57#6@Carrier Group+Carrier Name",
+   "measure": "Previous Year Flights",
+   "grain": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [Previous Year Flights])"
+  },
+  {
+   "id": "CH58#1@total",
+   "measure": "Latin America 2011 + Domestic 2010 excl. Foreign",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Latin America 2011 + Domestic 2010 excl. Foreign])"
+  },
+  {
+   "id": "CH58#1@Carrier Group+Carrier Name",
+   "measure": "Latin America 2011 + Domestic 2010 excl. Foreign",
+   "grain": [
+    "Carrier Group",
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group], 'Main Data'[Carrier Name], \"value\", [Latin America 2011 + Domestic 2010 excl. Foreign])"
+  },
+  {
+   "id": "CH59#1@total",
+   "measure": "Flights in excluded years",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Flights in excluded years])"
+  },
+  {
+   "id": "CH59#1@Year",
+   "measure": "Flights in excluded years",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Year], \"value\", [Flights in excluded years])"
+  },
+  {
+   "id": "CH60#1@total",
+   "measure": "YTD Flights Var %",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [YTD Flights Var %])"
+  },
+  {
+   "id": "CH61#1@total",
+   "measure": "MTD Flights Var % vs LY",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [MTD Flights Var % vs LY])"
+  },
+  {
+   "id": "CH62#1@total",
+   "measure": "MTD Flights Var % vs Previous Month",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [MTD Flights Var % vs Previous Month])"
+  },
+  {
+   "id": "CH65#1@total",
+   "measure": "YTD Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [YTD Flights])"
+  },
+  {
+   "id": "CH65#1@Carrier Name",
+   "measure": "YTD Flights",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [YTD Flights])"
+  },
+  {
+   "id": "CH65#2@total",
+   "measure": "Current Month Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Current Month Flights])"
+  },
+  {
+   "id": "CH65#2@Carrier Name",
+   "measure": "Current Month Flights",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [Current Month Flights])"
+  },
+  {
+   "id": "CH65#3@total",
+   "measure": "Flights Previous Month",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Flights Previous Month])"
+  },
+  {
+   "id": "CH65#3@Carrier Name",
+   "measure": "Flights Previous Month",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [Flights Previous Month])"
+  },
+  {
+   "id": "CH65#4@total",
+   "measure": "Flights Two Months Ago",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Flights Two Months Ago])"
+  },
+  {
+   "id": "CH65#4@Carrier Name",
+   "measure": "Flights Two Months Ago",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Carrier Name], \"value\", [Flights Two Months Ago])"
+  },
+  {
+   "id": "CH66#1@total",
+   "measure": "Group A Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Group A Flights])"
+  },
+  {
+   "id": "CH66#1@Period",
+   "measure": "Group A Flights",
+   "grain": [
+    "Period"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Group A Flights])"
+  },
+  {
+   "id": "CH66#2@total",
+   "measure": "Group B Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Group B Flights])"
+  },
+  {
+   "id": "CH66#2@Period",
+   "measure": "Group B Flights",
+   "grain": [
+    "Period"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Group B Flights])"
+  },
+  {
+   "id": "CH67#1@total",
+   "measure": "Group A Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Group A Flights])"
+  },
+  {
+   "id": "CH67#1@Period",
+   "measure": "Group A Flights",
+   "grain": [
+    "Period"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Group A Flights])"
+  },
+  {
+   "id": "CH67#2@total",
+   "measure": "Group B Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Group B Flights])"
+  },
+  {
+   "id": "CH67#2@Period",
+   "measure": "Group B Flights",
+   "grain": [
+    "Period"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Master Calendar'[Period], \"value\", [Group B Flights])"
+  }
+ ],
+ "relationships": [
+  {
+   "id": "REL:'Main Data'[%Carrier Group ID] -> 'Carrier Groups'[%Carrier Group ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Carrier Group ID]), NOT ISBLANK('Main Data'[%Carrier Group ID])), \"k\", 'Main Data'[%Carrier Group ID]), SELECTCOLUMNS(ALLNOBLANKROW('Carrier Groups'[%Carrier Group ID]), \"k\", 'Carrier Groups'[%Carrier Group ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Carrier Group ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Carrier Groups')) - COUNTROWS(ALLNOBLANKROW('Carrier Groups'[%Carrier Group ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Airline ID] -> 'Airlines'[%Airline ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Airline ID]), NOT ISBLANK('Main Data'[%Airline ID])), \"k\", 'Main Data'[%Airline ID]), SELECTCOLUMNS(ALLNOBLANKROW('Airlines'[%Airline ID]), \"k\", 'Airlines'[%Airline ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Airline ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Airlines')) - COUNTROWS(ALLNOBLANKROW('Airlines'[%Airline ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Region Code] -> 'Carrier Operating Region'[%Region Code]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Region Code]), NOT ISBLANK('Main Data'[%Region Code])), \"k\", 'Main Data'[%Region Code]), SELECTCOLUMNS(ALLNOBLANKROW('Carrier Operating Region'[%Region Code]), \"k\", 'Carrier Operating Region'[%Region Code])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Region Code])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Carrier Operating Region')) - COUNTROWS(ALLNOBLANKROW('Carrier Operating Region'[%Region Code])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Datasource ID] -> 'Flight Types'[%Datasource ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Datasource ID]), NOT ISBLANK('Main Data'[%Datasource ID])), \"k\", 'Main Data'[%Datasource ID]), SELECTCOLUMNS(ALLNOBLANKROW('Flight Types'[%Datasource ID]), \"k\", 'Flight Types'[%Datasource ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Datasource ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Flight Types')) - COUNTROWS(ALLNOBLANKROW('Flight Types'[%Datasource ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Aircraft Type ID] -> 'Aircraft Types'[%Aircraft Type ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Aircraft Type ID]), NOT ISBLANK('Main Data'[%Aircraft Type ID])), \"k\", 'Main Data'[%Aircraft Type ID]), SELECTCOLUMNS(ALLNOBLANKROW('Aircraft Types'[%Aircraft Type ID]), \"k\", 'Aircraft Types'[%Aircraft Type ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Aircraft Type ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Aircraft Types')) - COUNTROWS(ALLNOBLANKROW('Aircraft Types'[%Aircraft Type ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Distance Group ID] -> 'Distance Groups'[%Distance Group ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Distance Group ID]), NOT ISBLANK('Main Data'[%Distance Group ID])), \"k\", 'Main Data'[%Distance Group ID]), SELECTCOLUMNS(ALLNOBLANKROW('Distance Groups'[%Distance Group ID]), \"k\", 'Distance Groups'[%Distance Group ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Distance Group ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Distance Groups')) - COUNTROWS(ALLNOBLANKROW('Distance Groups'[%Distance Group ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Origin Airport ID] -> 'Origin Airports'[%Origin Airport ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Origin Airport ID]), NOT ISBLANK('Main Data'[%Origin Airport ID])), \"k\", 'Main Data'[%Origin Airport ID]), SELECTCOLUMNS(ALLNOBLANKROW('Origin Airports'[%Origin Airport ID]), \"k\", 'Origin Airports'[%Origin Airport ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Origin Airport ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Origin Airports')) - COUNTROWS(ALLNOBLANKROW('Origin Airports'[%Origin Airport ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Destination Airport ID] -> 'Destination Airports'[%Destination Airport ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Destination Airport ID]), NOT ISBLANK('Main Data'[%Destination Airport ID])), \"k\", 'Main Data'[%Destination Airport ID]), SELECTCOLUMNS(ALLNOBLANKROW('Destination Airports'[%Destination Airport ID]), \"k\", 'Destination Airports'[%Destination Airport ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Destination Airport ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Destination Airports')) - COUNTROWS(ALLNOBLANKROW('Destination Airports'[%Destination Airport ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Origin Airport Market ID] -> 'Origin Markets'[%Origin Airport Market ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Origin Airport Market ID]), NOT ISBLANK('Main Data'[%Origin Airport Market ID])), \"k\", 'Main Data'[%Origin Airport Market ID]), SELECTCOLUMNS(ALLNOBLANKROW('Origin Markets'[%Origin Airport Market ID]), \"k\", 'Origin Markets'[%Origin Airport Market ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Origin Airport Market ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Origin Markets')) - COUNTROWS(ALLNOBLANKROW('Origin Markets'[%Origin Airport Market ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Destination Airport Market ID] -> 'Destination Markets'[%Destination Airport Market ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Destination Airport Market ID]), NOT ISBLANK('Main Data'[%Destination Airport Market ID])), \"k\", 'Main Data'[%Destination Airport Market ID]), SELECTCOLUMNS(ALLNOBLANKROW('Destination Markets'[%Destination Airport Market ID]), \"k\", 'Destination Markets'[%Destination Airport Market ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Destination Airport Market ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Destination Markets')) - COUNTROWS(ALLNOBLANKROW('Destination Markets'[%Destination Airport Market ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[Period] -> 'Master Calendar'[Period]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[Period]), NOT ISBLANK('Main Data'[Period])), \"k\", 'Main Data'[Period]), SELECTCOLUMNS(ALLNOBLANKROW('Master Calendar'[Period]), \"k\", 'Master Calendar'[Period])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[Period])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Master Calendar')) - COUNTROWS(ALLNOBLANKROW('Master Calendar'[Period])))"
+  }
+ ],
+ "unmapped": []
+}

@@ -1,0 +1,38 @@
+table 'Flight Types'
+	lineageTag: 1a44ba4a-a383-5c81-b7c2-f9f5b7694020
+
+	column '%Datasource ID'
+		dataType: string
+		isHidden
+		lineageTag: 9c28eb91-a787-50d9-9611-8de2701c0d26
+		summarizeBy: none
+		sourceColumn: %Datasource ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Flight Type'
+		dataType: string
+		lineageTag: 508a2eb2-54f7-5974-acbf-39228b208400
+		summarizeBy: none
+		sourceColumn: Flight Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Deal Status' = SWITCH([Flight Type], "Domestic, US Carriers Only", "Open", "International, Foreign Carriers", "Negotiating", "Closed")
+		dataType: string
+		lineageTag: 5265d885-e328-5d2d-a03e-d995bd2eec14
+		summarizeBy: none
+
+		annotation ParityKey = caa19c70b731
+		annotation QlikDimension = =if([Flight Type]='Domestic, US Carriers Only', 'Open', if([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))
+
+	partition 'Flight Types' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(fnReadParquet("Data Files/QVDs/Flight Types.parquet"), {"%Datasource ID", "Flight Type"}),
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Datasource ID"))),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Datasource ID"])),
+				    Typed = Table.TransformColumnTypes(Kept, {{"%Datasource ID", type text}, {"Flight Type", type text}})
+				in
+				    Typed
