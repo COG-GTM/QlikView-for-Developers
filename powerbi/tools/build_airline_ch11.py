@@ -112,63 +112,15 @@ GAPS = [
     "carriers whose value falls in the segment at query time. The row-level Flight Type deal status -> calculated column.",
     "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields; "
     "$($(=eMetric)) -> SWITCH over SELECTEDVALUE(INLFED[eMetric]).",
-    "Report: pages Dashboard (its charts + list boxes), Associations and Data Consistency (list boxes) and Variables "
-    "(Metric Name list box + the metric picker / FTE charts); the other sheets' expressions are measures in the model and "
-    "their list boxes are the same linked objects as the Dashboard's. List boxes -> slicers on the field their caption "
-    "names; LB10 'Aircraft Type' and LB11 'Aircraft Group' name no field of the model (Chapter 11 drops "
-    "%Aircraft Group Type) and are not rebuilt. Multi boxes, current selections, buttons, bookmarks, input box, slider, "
-    "search object, statistics box and the Data Consistency table box map to Power BI's filter pane / bookmarks and are "
-    "not generated.",
+    "Report: one page per QlikView sheet with every chart of the sheet (base report_sections). List boxes -> slicers "
+    "on the field their caption names, each field synced on every page (hidden where the sheet had no list box for it). "
+    "MB01/MB02 multi boxes and LB10 'Aircraft Type' / LB11 'Aircraft Group' name no field of the model (Chapter 11 "
+    "drops %Aircraft Group Type) and are not rebuilt. CH02 keeps its Top 10 (by # of Flights, descending). Current "
+    "selections, buttons, bookmarks, input box, slider, search object, statistics box and table boxes map to Power BI's "
+    "filter pane / bookmarks and are not generated.",
 ]
 
-# Sheets -> pages: (Qlik object, title, visual type, (x, y, w, h), category (table, column) refs, measures). List boxes
-# (LBxx) become slicers on the field their caption names, since a QlikView list box shows its field as its caption.
-MD_NAME = "Main Data"
-CAL, FT, CG, COR = "Master Calendar", "Flight Types", "Carrier Groups", "Carrier Operating Region"
-TRAFFIC = ["# of Flights", "# of Enplanned Passengers", "Transported Freight", "Transported Mail"]
-
-
-def slicers(boxes: list[tuple[str, str, str]], y: int = 10, per_row: int = 7) -> list[tuple]:
-    """List boxes (object, table, field) -> slicer visuals in rows of `per_row` across the page."""
-    w, h = (1260 - 5 * (per_row - 1)) // per_row, 90
-    return [(oid, col, "slicer", (10 + (n % per_row) * (w + 5), y + (n // per_row) * (h + 10), w, h), [(t, col)], [])
-            for n, (oid, t, col) in enumerate(boxes)]
-
-
-PAGES = {
-    "Dashboard": slicers([("LB29", CG, "Carrier Group"), ("LB28", COR, "Carrier's Operating Region"),
-                          ("LB33", MD_NAME, "Carrier Name"), ("LB27", FT, "Flight Type"), ("LB32", CAL, "Year"),
-                          ("LB31", CAL, "Quarter"), ("LB30", CAL, "Month")]) + [
-        ("CH01", "Traffic per Year", "lineChart", (10, 110, 620, 250), [(CAL, "Year"), (CAL, "Month")], TRAFFIC),
-        ("CH02", "Top 10 Routes", "tableEx", (640, 110, 630, 250), [(MD_NAME, "From - To City")], TRAFFIC),
-        ("CH03", "# of Passengers/Available Seats (x 1 million) by Flight Type", "clusteredColumnChart",
-         (10, 370, 620, 340), [(FT, "Flight Type")],
-         ["# of Passengers (millions)", "# of Available Seats (millions)", "Load Factor"]),
-        ("CH05", "Load Factor", "card", (640, 370, 200, 100), [], ["Load Factor"]),
-        ("CH06", "Performed vs Scheduled", "card", (855, 370, 200, 100), [], ["Performed vs Scheduled"]),
-        ("CH07", "Air Time %", "card", (1070, 370, 200, 100), [], ["Air Time %"]),
-        ("CH15", "Market Share", "pieChart", (640, 480, 630, 230), [(MD_NAME, "Carrier Name")],
-         ["# of Enplanned Passengers"]),
-    ],
-    "Associations": slicers([("LB01", MD_NAME, "Destination Country"), ("LB02", MD_NAME, "Destination State"),
-                             ("LB03", MD_NAME, "Destination City"), ("LB04", MD_NAME, "Origin Country"),
-                             ("LB05", MD_NAME, "Origin State"), ("LB06", MD_NAME, "Origin City"),
-                             ("LB07", MD_NAME, "Carrier Name"), ("LB09", "Distance Groups", "Distance Interval"),
-                             ("LB12", FT, "Flight Type"), ("LB13", COR, "Carrier's Operating Region"),
-                             ("LB15", CG, "Carrier Group")], per_row=4),
-    "Data Consistency": slicers([("LB34", "Aircraft Types", "Aircraft Name"), ("LB35", CAL, "Year")], per_row=4),
-    "Variables": slicers([("LB36", "INLFED", "Metric Name")], per_row=4) + [
-        ("CH46", "# of Flights by Carrier Group", "pieChart", (10, 110, 620, 290), [(CG, "Carrier Group")],
-         ["Selected Metric"]),
-        ("CH45", "# of Flights", "tableEx", (640, 110, 630, 290), [(CG, "Carrier Group")],
-         ["# of Flights (units)", "# of Flights (thousands)", "# of Flights (millions)"]),
-        ("CH44", "FTEs", "tableEx", (10, 410, 620, 300), [(MD_NAME, "Carrier Name")], ["FTEs"]),
-        ("CH43", "FTE % to Total", "tableEx", (640, 410, 630, 300), [(MD_NAME, "Carrier Name")], ["FTE % to Total"]),
-    ],
-}
 TOP_N = {"CH02": 10}  # Qlik 'Top 10 Routes': max dimension values by the first expression
-# List boxes whose caption is not a field of the model (Chapter 11 drops %Aircraft Group Type and has no Aircraft Type)
-UNMAPPED_LIST_BOXES = {"LB10": "Aircraft Type", "LB11": "Aircraft Group"}
 
 
 def measures_for_ch11() -> dict[str, tuple]:
@@ -312,53 +264,46 @@ def top_n_filter(table: str, col: str, measure: str, n: int) -> list[dict]:
                                                         "Table": {"SourceRef": {"Source": "subquery"}}}}}]}}]
 
 
-def with_synced_slicers(pages: dict[str, list[tuple]]) -> dict[str, list[tuple]]:
+def with_synced_slicers(sections: list[dict]) -> None:
     """QlikView selections are global: every list-box field gets a slicer on every page, in one sync group (hidden
-    where the sheet had no list box for it), so a selection on any page filters every page."""
-    fields = list(dict.fromkeys(v[4][0] for page in pages.values() for v in page if v[2] == "slicer"))
-    out = {}
-    for page, visuals in pages.items():
-        shown = {v[4][0] for v in visuals if v[2] == "slicer"}
-        out[page] = visuals + [(f"sync:{t}.{col}", col, "slicer:hidden", (0, 0, 120, 60), [(t, col)], [])
-                               for t, col in fields if (t, col) not in shown]
-    return out
+    where the sheet had no list box for it), so a selection on any page filters every page's charts."""
+    slicers = {}
+    for sec in sections:
+        for vc in sec["visualContainers"]:
+            cfg = json.loads(vc["config"])
+            if cfg["singleVisual"]["visualType"] == "slicer":
+                slicers.setdefault(cfg["singleVisual"]["syncGroup"]["groupName"], cfg)
+    for sec in sections:
+        shown = {json.loads(vc["config"])["singleVisual"].get("syncGroup", {}).get("groupName")
+                 for vc in sec["visualContainers"]}
+        sheet = json.loads(sec["config"])["QlikSheet"]
+        for group, cfg in slicers.items():
+            if group in shown:
+                continue
+            pos = {"x": 0, "y": 0, "z": len(sec["visualContainers"]), "width": 120, "height": 60}
+            hidden = {**cfg, "name": tag(SLUG, "sync", sheet, group), "layouts": [{"id": 0, "position": pos}],
+                      "singleVisual": {**cfg["singleVisual"], "display": {"mode": "hidden"}}}
+            sec["visualContainers"].append({**pos, "config": json.dumps(hidden), "filters": "[]"})
 
 
-def visual(oid: str, title: str, vtype: str, pos: tuple, cats: list[tuple[str, str]], measures: list[str],
-           z: int) -> dict:
-    hidden = vtype.endswith(":hidden")
-    vtype = vtype.removesuffix(":hidden")
-    x, y, w, h = pos
-    tables = list(dict.fromkeys(([MD_NAME] if measures else []) + [t for t, _ in cats]))
-    alias = {t: f"t{i}" for i, t in enumerate(tables)}
-    select = [{"Column": {"Expression": {"SourceRef": {"Source": alias[t]}}, "Property": col}, "Name": f"{t}.{col}"}
-              for t, col in cats]
-    select += [{"Measure": {"Expression": {"SourceRef": {"Source": alias[MD_NAME]}}, "Property": mz},
-                "Name": f"{MD_NAME}.{mz}"} for mz in measures]
-    query = {"Version": 2, "From": [{"Name": alias[t], "Entity": t, "Type": 0} for t in tables], "Select": select}
-    refs = [{"queryRef": s["Name"]} for s in select]
-    if vtype == "tableEx":
-        projections = {"Values": refs}
-        query["OrderBy"] = [{"Direction": 2, "Expression": {"Measure": {
-            "Expression": {"SourceRef": {"Source": alias[MD_NAME]}}, "Property": measures[0]}}}]
-    elif vtype in ("card", "slicer"):
-        projections = {"Values": refs}
-    else:
-        projections = {"Category": [{**r, "active": True} for r in refs[:len(cats)]], "Y": refs[len(cats):]}
-    title_obj = [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}},
-                                 "text": {"expr": {"Literal": {"Value": f"'{title}'"}}}}}]
-    config = {"name": tag(SLUG, "visual", oid), "layouts": [{"id": 0, "position": {
-        "x": x, "y": y, "z": z, "width": w, "height": h}}],
-        "singleVisual": {"visualType": vtype, "projections": projections, "prototypeQuery": query,
-                         "drillFilterOtherVisuals": True, "vcObjects": {"title": title_obj}}}
-    if vtype == "slicer":
-        t, col = cats[0]
-        config["singleVisual"]["syncGroup"] = {"groupName": f"{t}.{col}", "fieldChanges": True, "filterChanges": True}
-        if hidden:
-            config["singleVisual"]["display"] = {"mode": "hidden"}
-    filters = top_n_filter(*cats[0], measures[0], TOP_N[oid]) if oid in TOP_N else []
-    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config),
-            "filters": json.dumps(filters)}
+def with_top_n(sections: list[dict]) -> None:
+    for sec in sections:
+        sheet = json.loads(sec["config"])["QlikSheet"]
+        for vc in sec["visualContainers"]:
+            cfg = json.loads(vc["config"])
+            for oid, n in TOP_N.items():
+                if cfg["name"] == tag(SLUG, "visual", sheet, oid):
+                    query = cfg["singleVisual"]["prototypeQuery"]
+                    entities = {f["Name"]: f["Entity"] for f in query["From"]}
+                    col = next(x["Column"] for x in query["Select"] if "Column" in x)
+                    measure = next(x["Measure"]["Property"] for x in query["Select"] if "Measure" in x)
+                    vc["filters"] = json.dumps(top_n_filter(entities[col["Expression"]["SourceRef"]["Source"]],
+                                                            col["Property"], measure, n))
+                    alias = next(x["Measure"]["Expression"]["SourceRef"]["Source"] for x in query["Select"]
+                                 if "Measure" in x)
+                    query["OrderBy"] = [{"Direction": 2, "Expression": {"Measure": {
+                        "Expression": {"SourceRef": {"Source": alias}}, "Property": measure}}}]
+                    vc["config"] = json.dumps(cfg)
 
 
 def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "parquet") -> Path:
@@ -379,9 +324,6 @@ def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "par
         for d in k["dims"]:
             if d.startswith("=") and d not in {x[2] for x in CALC_DIMS} | {x[2] for x in SEGMENTS}:
                 raise SystemExit(f"{k['kpi']}: no calculated column for dimension {d!r}")
-    names = {x["name"] for x in measures.values()}
-    if missing := {mz for page in PAGES.values() for v in page for mz in v[5]} - names:
-        raise SystemExit(f"report uses measures the model does not have: {sorted(missing)}")
     specs = table_specs(catalog_types(), *comments(parquet))
     for name, spec in specs.items():
         write_table(sm / "definition" / "tables", name, spec,
@@ -424,10 +366,13 @@ def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "par
     (sm / "definition.pbism").write_text(json.dumps({"version": "4.0", "settings": {}}, indent=2) + "\n")
     (rp / "definition.pbir").write_text(json.dumps(
         {"version": "4.0", "datasetReference": {"byPath": {"path": f"../{SLUG}.SemanticModel"}}}, indent=2) + "\n")
-    sections = [{"name": f"ReportSection{n}" if n else "ReportSection", "displayName": page, "displayOption": 1,
-                 "ordinal": n, "width": 1280, "height": 720, "config": "{}", "filters": "[]",
-                 "visualContainers": [visual(*v, z=i) for i, v in enumerate(visuals)]}
-                for n, (page, visuals) in enumerate(with_synced_slicers(PAGES).items())]
+    base.SLUG = SLUG  # report_sections tags pages / visuals with the module's current app slug
+    try:
+        sections, unmapped = base.report_sections(manifest, specs, measures)
+    finally:
+        base.SLUG = base.CFG.slug
+    with_top_n(sections)
+    with_synced_slicers(sections)
     (rp / "report.json").write_text(json.dumps({
         "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
         "layoutOptimization": 0, "resourcePackages": [],
@@ -445,8 +390,8 @@ def build(data_root: str = DEFAULT_ROOT, parquet: Path = POWERBI / "data" / "par
                                    for t, col, q, d, _ in CALC_DIMS]
                                   + [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q,
                                       "dax": "segment table + '# of Carriers'"} for t, col, q, _, _, _ in SEGMENTS],
-         "report_pages": {page: [v[0] for v in visuals] for page, visuals in PAGES.items()},
-         "unmapped_list_boxes": UNMAPPED_LIST_BOXES,
+         "report_pages": {s_["displayName"]: len(s_["visualContainers"]) for s_ in sections},
+         "unmapped_list_boxes": unmapped,
          "semantic_gaps": GAPS}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(measures)} measures, "
           f"{len(CALC_DIMS)} calculated columns, {len(sections)} report pages")
