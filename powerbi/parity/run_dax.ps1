@@ -59,8 +59,10 @@ Add-Type -Path (Find-Adomd)
 if (-not $Server) { $Server = Find-DesktopServer }
 $connStr = "Data Source=$Server"
 if ($Database) { $connStr += ";Initial Catalog=$Database" }
-
 $spec = Get-Content $Queries -Raw -Encoding UTF8 | ConvertFrom-Json
+# Apps with Section Access are compared as the Qlik user the source model is reduced for (the queries file's "role").
+if ($spec.role) { $connStr += ";Roles=$($spec.role)" }
+
 $conn = New-Object Microsoft.AnalysisServices.AdomdClient.AdomdConnection($connStr)
 $conn.Open()
 $results = New-Object System.Collections.Generic.List[object]
@@ -89,7 +91,7 @@ finally { $conn.Close() }
 
 $doc = [ordered]@{
     app         = $spec.app
-    produced_by = "run_dax.ps1 via ADOMD.NET on $env:COMPUTERNAME against $Server"
+    produced_by = "run_dax.ps1 via ADOMD.NET on $env:COMPUTERNAME against $Server" + $(if ($spec.role) { " as role $($spec.role)" } else { "" })
     executed_at = (Get-Date).ToUniversalTime().ToString('o')
     results     = $results
 }

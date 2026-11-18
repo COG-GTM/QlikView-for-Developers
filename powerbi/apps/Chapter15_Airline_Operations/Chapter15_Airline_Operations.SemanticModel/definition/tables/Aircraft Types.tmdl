@@ -1,0 +1,105 @@
+table 'Aircraft Types'
+	lineageTag: 16edcad7-411d-5822-8319-2f0ce354e3ae
+
+	column '%Aircraft Type ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 422094ee-95e2-5e88-8d11-16564af7b78b
+		summarizeBy: none
+		sourceColumn: %Aircraft Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Name'
+		dataType: string
+		lineageTag: d7a15174-e11a-5575-9b6e-16c6a3be9645
+		summarizeBy: none
+		sourceColumn: Aircraft Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Manufacturer'
+		dataType: string
+		lineageTag: ed656370-0c2b-583e-9616-66e14b7d8a9a
+		summarizeBy: none
+		sourceColumn: Aircraft Manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Manufacturer Country'
+		dataType: string
+		lineageTag: adb11740-3ebd-5659-8dae-d9ed7057074a
+		summarizeBy: none
+		sourceColumn: Aircraft Manufacturer Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Name Full'
+		dataType: string
+		lineageTag: 3da3445c-5ce1-5d7d-a388-81d4c367ed13
+		summarizeBy: none
+		sourceColumn: Aircraft Name Full
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Name Abbreviated'
+		dataType: string
+		lineageTag: cf5c8257-7af3-515c-9f4a-87140c012fe6
+		summarizeBy: none
+		sourceColumn: Aircraft Name Abbreviated
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Begin Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 6d767b4c-9e5e-59c5-9974-016286108576
+		summarizeBy: none
+		sourceColumn: Aircraft Begin Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft End Date'
+		dataType: int64
+		formatString: 0
+		lineageTag: 309ed169-d624-5ff6-8b72-f220cac1c59f
+		summarizeBy: none
+		sourceColumn: Aircraft End Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Age Classification'
+		dataType: string
+		lineageTag: 00cd7669-c832-5f81-aaa4-121fe667136a
+		summarizeBy: none
+		sourceColumn: Aircraft Age Classification
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Engine Type'
+		dataType: string
+		lineageTag: a2737865-c76d-5c2c-a1bf-28cf9bc8702c
+		summarizeBy: none
+		sourceColumn: Aircraft Engine Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Number Of Engines'
+		dataType: string
+		lineageTag: b50db67b-ffe9-5a31-ac48-79a2d0e61ecc
+		summarizeBy: none
+		sourceColumn: Aircraft Number Of Engines
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Aircraft Types' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(fnReadParquet("QVD/Transformed/Aircraft Types Transformed.parquet"), {"%Aircraft Type ID", "Aircraft Name", "Aircraft Manufacturer", "Aircraft Manufacturer Country", "Aircraft Name Full", "Aircraft Name Abbreviated", "Aircraft Begin Date", "Aircraft End Date", "Aircraft Age Classification", "Aircraft Engine Type", "Aircraft Number Of Engines"}),
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Aircraft Type ID"))),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [%Aircraft Type ID])),
+				    Typed = Table.TransformColumnTypes(Kept, {{"%Aircraft Type ID", Int64.Type}, {"Aircraft Name", type text}, {"Aircraft Manufacturer", type text}, {"Aircraft Manufacturer Country", type text}, {"Aircraft Name Full", type text}, {"Aircraft Name Abbreviated", type text}, {"Aircraft Begin Date", type date}, {"Aircraft End Date", Int64.Type}, {"Aircraft Age Classification", type text}, {"Aircraft Engine Type", type text}, {"Aircraft Number Of Engines", type text}})
+				in
+				    Typed

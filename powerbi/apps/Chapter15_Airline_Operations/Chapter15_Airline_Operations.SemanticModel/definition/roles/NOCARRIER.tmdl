@@ -1,0 +1,10 @@
+role NOCARRIER
+	modelPermission: read
+
+	tablePermission INLFED = INLFED[%FLIGHTTYPE] IN {"DOMESTIC_FOREIGN", "DOMESTIC_US", "INTERNATIONAL_FOREIGN", "INTERNATIONAL_US"}
+
+	tablePermission 'Main Data'
+
+		columnPermission 'Carrier Name' = none
+
+	annotation QlikSectionAccess = USERID NOCARRIER; %FLIGHTTYPE *; OMIT Carrier Name

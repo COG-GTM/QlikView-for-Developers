@@ -40,3 +40,6 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   the grand total and every chart grain, and match an independent pyqvd + pandas
   computation on the original QVD. Chapters 04, 06 and 07 (40/41) also evaluate. The DAX
   side is generated and ready to run on Windows; it has not been run yet.
+* Chapter 15 (Airline Operations base model, `apps/Chapter15_Airline_Operations`): its 14
+  source-model tables match the inventory (after reproducing Section Access reduction for
+  ADMIN), all 92 KPI expressions evaluate, and 182 DAX queries (role ADMIN) are generated.

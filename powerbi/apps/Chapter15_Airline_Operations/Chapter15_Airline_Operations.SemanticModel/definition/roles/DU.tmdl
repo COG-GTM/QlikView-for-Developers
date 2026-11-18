@@ -1,0 +1,6 @@
+role DU
+	modelPermission: read
+
+	tablePermission INLFED = INLFED[%FLIGHTTYPE] IN {"DOMESTIC_US"}
+
+	annotation QlikSectionAccess = USERID DU; %FLIGHTTYPE DOMESTIC_US

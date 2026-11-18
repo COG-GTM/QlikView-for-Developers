@@ -21,9 +21,10 @@ class Unsupported(Exception):
 
 
 AGGS = {"sum", "count", "avg", "min", "max", "only"}
-UNSUPPORTED_FUNCS = {"dimensionality", "secondarydimensionality", "pick", "match", "column", "above", "below",
+UNSUPPORTED_FUNCS = {"secondarydimensionality", "match", "column", "above", "below",
                      "before", "after", "rank", "getselectedcount", "getfieldselections", "rowno", "fieldindex",
                      "firstsortedvalue", "concat", "stdev", "median", "fractile", "e", "p"}
+ROW_FUNCS = ("if", "num", "fabs", "rangesum", "round", "alt", "dimensionality", "pick", "class", "replace")
 
 
 @dataclass
@@ -70,7 +71,7 @@ class SetModifier:
 
 @dataclass
 class SetTerm:
-    identifier: str  # '$' or '1'
+    identifier: str  # '$', '1', '0' or an alternate state name
     modifiers: list[SetModifier] = field(default_factory=list)
 
 
@@ -121,6 +122,8 @@ def expand_dollars(text: str, variables: dict[str, str], evaluate=None, depth: i
             if evaluate is None:
                 raise Unsupported(f"$(={inner[1:]}) needs evaluation")
             out.append(evaluate(inner[1:]))
+        elif not inner.strip():
+            out.append("")  # $() of a name that evaluated to null expands to nothing
         else:
             mm = re.fullmatch(r"\s*([\w.]+)\s*(?:\((.*)\))?\s*", inner, re.S)
             if not mm or mm.group(1) not in variables:
@@ -295,7 +298,7 @@ class Parser:
             while self.accept(","):
                 args.append(self.expr())
             self.expect(")")
-        if lname not in ("if", "num", "fabs", "rangesum", "round", "alt"):
+        if lname not in ROW_FUNCS:
             raise Unsupported(f"{name}() is not supported by the source evaluator")
         return Func(lname, args)
 
@@ -324,7 +327,8 @@ class Parser:
             self.next()
             identifier = v
         elif k in ("field", "ident"):
-            raise Unsupported(f"alternate state / bookmark {v} in set analysis is not supported")
+            self.next()
+            identifier = v[1:-1] if k == "field" else v
         mods = self.modifiers() if self.peek() == ("op", "<") else []
         return SetTerm(identifier, mods)
 
@@ -343,7 +347,18 @@ class Parser:
                 mods.append(SetModifier(fname, op, [], exclude_all=True))
             else:
                 if self.peek()[0] == "ident" and self.peek()[1].lower() in ("e", "p"):
-                    raise Unsupported("element functions e()/p() in set analysis are not supported")
+                    func = self.next()[1].lower()
+                    self.expect("(")
+                    inner = self.set_expression() if self.peek() == ("op", "{") else None
+                    kk, vv = self.next()
+                    if kk not in ("field", "ident"):
+                        raise Unsupported(f"bad {func}() argument near {vv!r}")
+                    self.expect(")")
+                    mods.append(SetModifier(fname, op, [(func, (vv[1:-1] if kk == "field" else vv, inner))]))
+                    if self.accept(">"):
+                        return mods
+                    self.expect(",")
+                    continue
                 self.expect("{")
                 values = []
                 while not self.accept("}"):
@@ -367,6 +382,17 @@ class Parser:
 
 def parse(text: str):
     return Parser(text).parse()
+
+
+def walk(node):
+    """Every AST node under (and including) ``node``."""
+    yield node
+    if hasattr(node, "__dataclass_fields__"):
+        for f in node.__dataclass_fields__:
+            v = getattr(node, f)
+            for x in (v if isinstance(v, list) else [v]):
+                if hasattr(x, "__dataclass_fields__"):
+                    yield from walk(x)
 
 
 def fields_in(node) -> set[str]:

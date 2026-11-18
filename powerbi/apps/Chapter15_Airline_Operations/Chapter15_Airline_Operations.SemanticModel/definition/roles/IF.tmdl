@@ -1,0 +1,6 @@
+role IF
+	modelPermission: read
+
+	tablePermission INLFED = INLFED[%FLIGHTTYPE] IN {"INTERNATIONAL_FOREIGN"}
+
+	annotation QlikSectionAccess = USERID IF; %FLIGHTTYPE INTERNATIONAL_FOREIGN

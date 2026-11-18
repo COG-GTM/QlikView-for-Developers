@@ -1,0 +1,32 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+	annotation PBI_QueryOrder = ["DataRoot", "fnReadParquet", "fnFactKeys", "Main Data", "Master Calendar", "Carrier Groups", "Airlines", "Carrier Operating Region", "Flight Types", "Aircraft Types", "Distance Groups", "Origin Airports", "Destination Airports", "Origin Markets", "Destination Markets", "INLFED", "INLFED-1", "Group A", "Group B"]
+
+ref table 'Main Data'
+ref table 'Master Calendar'
+ref table 'Carrier Groups'
+ref table Airlines
+ref table 'Carrier Operating Region'
+ref table 'Flight Types'
+ref table 'Aircraft Types'
+ref table 'Distance Groups'
+ref table 'Origin Airports'
+ref table 'Destination Airports'
+ref table 'Origin Markets'
+ref table 'Destination Markets'
+ref table INLFED
+ref table 'INLFED-1'
+ref table 'Group A'
+ref table 'Group B'
+
+ref role ADMIN
+ref role DF
+ref role DU
+ref role IF
+ref role NOCARRIER

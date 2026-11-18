@@ -121,8 +121,7 @@ def cmd_source(app: str) -> dict:
     for k in kpi_list(manifest):
         entry = {**k, "results": []}
         try:
-            if any(d.startswith("=") for d in k["dims"]):
-                raise q.Unsupported("calculated dimension")
+            calc = [ev.add_calculated_dimension(d) for d in k["dims"] if d.startswith("=")]
             node = ev.compile(k["expression"])
             for grain in k["grains"]:
                 df = ev.evaluate(node, grain)
@@ -136,6 +135,9 @@ def cmd_source(app: str) -> dict:
             entry["status"] = "ok"
         except q.Unsupported as e:
             entry.update(status="unsupported", reason=str(e), results=[])
+        finally:
+            for name in [t for t in model.tables if t.startswith("__calcdim_")]:
+                ev.drop_calculated_dimension(name)
         result["kpis"].append(entry)
     result["elapsed_s"] = round(time.time() - started, 1)
     return result

@@ -1,0 +1,64 @@
+table 'Group B'
+	lineageTag: e764e05d-5a97-53d4-975e-89388df0cd0b
+
+	column Period
+		dataType: int64
+		lineageTag: a164cd37-6a74-5588-9c89-aafccebaf975
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		lineageTag: ac7f61fe-e73a-5bde-84c1-84b174017eef
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		sortByColumn: Month__num
+		lineageTag: 9ded55a3-0813-5466-860f-a5220d393bf1
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month__num
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 65bb7887-ffc7-5500-b44d-68e6df5c7f75
+		summarizeBy: none
+		sourceColumn: Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year - Month'
+		dataType: string
+		sortByColumn: 'Year - Month__num'
+		lineageTag: 1495b2eb-d939-5a3b-8089-c42a8767d30f
+		summarizeBy: none
+		sourceColumn: Year - Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year - Month__num'
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 011e6898-c606-5d85-8269-1115366d3bf5
+		summarizeBy: none
+		sourceColumn: Year - Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Group B' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(#"Master Calendar", {"Period", "Year", "Month", "Month__num", "Year - Month", "Year - Month__num"})
+				in
+				    Source
