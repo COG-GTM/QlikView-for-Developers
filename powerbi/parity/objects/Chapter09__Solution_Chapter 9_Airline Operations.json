@@ -1,0 +1,24 @@
+{
+ "app": "Chapter09__Solution_Chapter 9_Airline Operations",
+ "source": "List boxes of Chapter09/Solution_Chapter 9_Airline Operations.qvw, field = the caption stored before each object id in the document layout. Not listed: LB10 'Aircraft Type' and LB11 'Aircraft Group' (fields the script does not load), LB15 / LB29 'Carrier Group' (QlikView's 'Unknown' value comes only from the null-key member, which the Power BI model does not load; see model.json semantic_gaps). LB30 / LB31 / LB32 / LB35 are the calendar fields.",
+ "objects": [
+  {"id": "LB01", "type": "list box", "fields": ["Destination Country"]},
+  {"id": "LB02", "type": "list box", "fields": ["Destination State"]},
+  {"id": "LB03", "type": "list box", "fields": ["Destination City"]},
+  {"id": "LB04", "type": "list box", "fields": ["Origin Country"]},
+  {"id": "LB05", "type": "list box", "fields": ["Origin State"]},
+  {"id": "LB06", "type": "list box", "fields": ["Origin City"]},
+  {"id": "LB07", "type": "list box", "fields": ["Carrier Name"]},
+  {"id": "LB09", "type": "list box", "fields": ["Distance Interval"]},
+  {"id": "LB12", "type": "list box", "fields": ["Flight Type"]},
+  {"id": "LB13", "type": "list box", "fields": ["Carrier's Operating Region"]},
+  {"id": "LB27", "type": "list box", "fields": ["Flight Type"]},
+  {"id": "LB28", "type": "list box", "fields": ["Carrier's Operating Region"]},
+  {"id": "LB30", "type": "list box", "fields": ["Month"]},
+  {"id": "LB31", "type": "list box", "fields": ["Quarter"]},
+  {"id": "LB32", "type": "list box", "fields": ["Year"]},
+  {"id": "LB33", "type": "list box", "fields": ["Carrier Name"]},
+  {"id": "LB34", "type": "list box", "fields": ["Aircraft Name"]},
+  {"id": "LB35", "type": "list box", "fields": ["Year"]}
+ ]
+}

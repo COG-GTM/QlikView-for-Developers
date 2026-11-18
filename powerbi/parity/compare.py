@@ -93,7 +93,7 @@ def compare_table(expected: dict, actual: dict | None) -> dict:
             "mismatches": len(diffs), "examples": diffs[:5]}
 
 
-def compare_rowset(expected: dict, actual: dict | None) -> dict:
+def compare_rowset(expected: dict, actual: dict | None, known=frozenset()) -> dict:
     """Table/list box: the distinct rows shown must be the same set (no measure column)."""
     if actual is None:
         return {"id": expected["id"], "status": "missing"}
@@ -108,7 +108,9 @@ def compare_rowset(expected: dict, actual: dict | None) -> dict:
     exp = {key(r) for r in expected["rows"]}
     act = {key(r) for r in actual["rows"]}
     diffs = [{"dims": list(k), "source": k in exp, "dax": k in act} for k in sorted(exp ^ act, key=str)]
-    return {"id": expected["id"], "status": "pass" if not diffs else "fail", "rows": len(exp),
+    listed = [d for d in diffs if (expected["id"], tuple(norm_dim(x) for x in d["dims"])) in known]
+    status = "pass" if not diffs else "known_difference" if len(listed) == len(diffs) else "fail"
+    return {"id": expected["id"], "status": status, "rows": len(exp),
             "mismatches": len(diffs), "examples": diffs[:5]}
 
 
@@ -131,7 +133,7 @@ def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6, relation
     for o in expected_doc.get("objects", []):
         for r in o["results"]:
             check = compare_result(r, actual.get(r["id"]), rel, abs_) if o["type"] == "row count" \
-                else compare_rowset(r, actual.get(r["id"]))
+                else compare_rowset(r, actual.get(r["id"]), known)
             out.append({"kpi": o["object"], "label": o["type"], **check})
     summary = {}
     for r in out:

@@ -1,0 +1,308 @@
+{
+ "app": "Chapter09__Solution_Chapter 9_Airline Operations",
+ "generated_by": "powerbi/tools/build_airline_ch09.py",
+ "derived_from": "powerbi/tools/build_airline_base.py (Chapter 15)",
+ "measures": [
+  {
+   "name": "# of Flights",
+   "parity_key": "1baea265cccd",
+   "kpis": [
+    "CH01#1",
+    "CH02#1",
+    "CH04#3"
+   ],
+   "dax": "SUM('Main Data'[# Departures Performed])"
+  },
+  {
+   "name": "# of Enplanned Passengers",
+   "parity_key": "7f15ad08b3bb",
+   "kpis": [
+    "CH01#2",
+    "CH02#2",
+    "CH04#2",
+    "CH15#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Passengers])"
+  },
+  {
+   "name": "Transported Freight",
+   "parity_key": "aea8a21aee5f",
+   "kpis": [
+    "CH01#3",
+    "CH02#3"
+   ],
+   "dax": "SUM('Main Data'[# Transported Freight])"
+  },
+  {
+   "name": "Transported Mail",
+   "parity_key": "e0ca719214a7",
+   "kpis": [
+    "CH01#4",
+    "CH02#4",
+    "CH04#1"
+   ],
+   "dax": "SUM('Main Data'[# Transported Mail])"
+  },
+  {
+   "name": "# of Passengers (millions)",
+   "parity_key": "0c8ca154aacf",
+   "kpis": [
+    "CH03#1",
+    "CH22#1",
+    "CH24#1",
+    "CH25#1",
+    "CH26#1",
+    "CH27#1",
+    "CH28#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), 1000000)"
+  },
+  {
+   "name": "# of Available Seats (millions)",
+   "parity_key": "8dfad31060e3",
+   "kpis": [
+    "CH03#2"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Available Seats]), 1000000)"
+  },
+  {
+   "name": "Load Factor",
+   "parity_key": "213681cc0d2a",
+   "kpis": [
+    "CH03#3",
+    "CH05#1",
+    "CH21#1",
+    "CH38#1",
+    "CH38#2",
+    "CH41#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Transported Passengers]), SUM('Main Data'[# Available Seats]))"
+  },
+  {
+   "name": "Performed vs Scheduled",
+   "parity_key": "7588bff24d2c",
+   "kpis": [
+    "CH06#1",
+    "CH21#2",
+    "CH38#3",
+    "CH38#4"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Departures Performed]), SUM('Main Data'[# Departures Scheduled]))"
+  },
+  {
+   "name": "Air Time %",
+   "parity_key": "cd4c4a3c94f4",
+   "kpis": [
+    "CH07#1",
+    "CH08#1",
+    "CH09#1",
+    "CH11#1",
+    "CH12#1",
+    "CH13#1",
+    "CH14#1"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Carrier",
+   "parity_key": "90777bd5df7f",
+   "kpis": [
+    "CH15#2"
+   ],
+   "dax": "IF(DISTINCTCOUNTNOBLANK('Main Data'[Carrier Name]) = 1, MAX('Main Data'[Carrier Name]), \"Others\")"
+  },
+  {
+   "name": "Air Time % (CH21)",
+   "parity_key": "a1ec8a2cb5ee",
+   "kpis": [
+    "CH21#3",
+    "CH38#5",
+    "CH38#6"
+   ],
+   "dax": "DIVIDE(SUM('Main Data'[# Air Time]), SUM('Main Data'[# Ramp-To-Ramp Time]))"
+  },
+  {
+   "name": "Departures Performed (thousands)",
+   "parity_key": "072410d4365a",
+   "kpis": [
+    "CH22#2"
+   ],
+   "dax": "DIVIDE([# of Flights], 1000)"
+  }
+ ],
+ "calculated_dimensions": [
+  {
+   "table": "Flight Types",
+   "column": "Deal Status",
+   "parity_key": "caa19c70b731",
+   "qlik": "=if([Flight Type]='Domestic, US Carriers Only', 'Open',\nif([Flight Type]='International, Foreign Carriers', 'Negotiating', 'Closed'))",
+   "dax": "SWITCH([Flight Type], \"Domestic, US Carriers Only\", \"Open\", \"International, Foreign Carriers\", \"Negotiating\", \"Closed\")"
+  }
+ ],
+ "report_pages": [
+  {
+   "page": "Dashboard",
+   "qlik_sheet": "SH03",
+   "visuals": [
+    "Year (LB32)",
+    "Quarter (LB31)",
+    "Month (LB30)",
+    "Flight Type (LB27)",
+    "Carrier Group (LB29)",
+    "Carrier's Operating Region (LB28)",
+    "Carrier Name (LB33)",
+    "Load Factor %",
+    "Performed vs Scheduled",
+    "Air Time %",
+    "Traffic per Year",
+    "# of Passengers/Available Seats (x 1 million) by Flight Type",
+    "Top 10 Routes",
+    "Market Share"
+   ]
+  },
+  {
+   "page": "Analysis",
+   "qlik_sheet": "SH_Analysis",
+   "visuals": [
+    "Year (LB32)",
+    "Quarter (LB31)",
+    "Month (LB30)",
+    "Flight Type (LB27)",
+    "Carrier Group (LB29)",
+    "Carrier's Operating Region (LB28)",
+    "Carrier Name (LB33)",
+    "Transported passengers vs mail"
+   ]
+  },
+  {
+   "page": "Reports",
+   "qlik_sheet": "SH05",
+   "visuals": [
+    "Year (LB32)",
+    "Quarter (LB31)",
+    "Month (LB30)",
+    "Flight Type (LB27)",
+    "Carrier Group (LB29)",
+    "Carrier's Operating Region (LB28)",
+    "Carrier Name (LB33)",
+    "KPIs per Airline",
+    "Enplaned passengers (millions)"
+   ]
+  },
+  {
+   "page": "Gauge Styles",
+   "qlik_sheet": "SH04",
+   "visuals": [
+    "Year (LB32)",
+    "Quarter (LB31)",
+    "Month (LB30)",
+    "Flight Type (LB27)",
+    "Carrier Group (LB29)",
+    "Carrier's Operating Region (LB28)",
+    "Carrier Name (LB33)",
+    "Air Time % (CH08)",
+    "Air Time % (CH09)",
+    "Air Time % (CH11)",
+    "Air Time % (CH12)",
+    "Air Time % (CH13)",
+    "Air Time % (CH14)"
+   ]
+  },
+  {
+   "page": "Associations",
+   "qlik_sheet": "SH01",
+   "visuals": [
+    "Destination Country (LB01)",
+    "Destination State (LB02)",
+    "Destination City (LB03)",
+    "Origin Country (LB04)",
+    "Origin State (LB05)",
+    "Origin City (LB06)",
+    "Carrier Name (LB07)",
+    "Distance Interval (LB09)",
+    "Flight Type (LB12)",
+    "Carrier's Operating Region (LB13)",
+    "Carrier Group (LB15)"
+   ]
+  },
+  {
+   "page": "Other Charts",
+   "qlik_sheet": "SH06",
+   "visuals": [
+    "Year (LB32)",
+    "Quarter (LB31)",
+    "Month (LB30)",
+    "Flight Type (LB27)",
+    "Carrier Group (LB29)",
+    "Carrier's Operating Region (LB28)",
+    "Carrier Name (LB33)",
+    "Traffic per Year by Flight Type",
+    "Radar Chart",
+    "Mekko Chart",
+    "Grid Chart",
+    "Funnel Chart",
+    "Block Chart"
+   ]
+  },
+  {
+   "page": "Other representations",
+   "qlik_sheet": "SH08",
+   "visuals": [
+    "Year (LB32)",
+    "Quarter (LB31)",
+    "Month (LB30)",
+    "Flight Type (LB27)",
+    "Carrier Group (LB29)",
+    "Carrier's Operating Region (LB28)",
+    "Carrier Name (LB33)",
+    "Other representations"
+   ]
+  },
+  {
+   "page": "Data Consistency",
+   "qlik_sheet": "SH09",
+   "visuals": [
+    "Year (LB35)",
+    "Aircraft Name (LB34)",
+    "Flights"
+   ]
+  }
+ ],
+ "list_boxes": {
+  "LB01": "Main Data[Destination Country]",
+  "LB02": "Main Data[Destination State]",
+  "LB03": "Main Data[Destination City]",
+  "LB04": "Main Data[Origin Country]",
+  "LB05": "Main Data[Origin State]",
+  "LB06": "Main Data[Origin City]",
+  "LB07": "Main Data[Carrier Name]",
+  "LB09": "Distance Groups[Distance Interval]",
+  "LB12": "Flight Types[Flight Type]",
+  "LB13": "Carrier Operating Region[Carrier's Operating Region]",
+  "LB15": "Carrier Groups[Carrier Group]",
+  "LB27": "Flight Types[Flight Type]",
+  "LB28": "Carrier Operating Region[Carrier's Operating Region]",
+  "LB29": "Carrier Groups[Carrier Group]",
+  "LB30": "Master Calendar[Month]",
+  "LB31": "Master Calendar[Quarter]",
+  "LB32": "Master Calendar[Year]",
+  "LB33": "Main Data[Carrier Name]",
+  "LB34": "Aircraft Types[Aircraft Name]",
+  "LB35": "Master Calendar[Year]"
+ },
+ "unmapped_list_boxes": {
+  "LB10": "field 'Aircraft Type' is not loaded by the Chapter 9 script",
+  "LB11": "field 'Aircraft Group' is not loaded by the Chapter 9 script"
+ },
+ "semantic_gaps": [
+  "Master Calendar: one row per month (36) as in QlikView; Month and Year - Month are labels sorted by hidden Month__num / Year - Month__num columns (QlikView duals).",
+  "Null-key 'Unknown' members the script adds for null fact keys (Carrier Groups, Carrier Operating Region, Origin / Destination Markets) are not loaded: they associate with nothing in QlikView and would wrongly match blank keys in Power BI. Dimension row counts are therefore one lower than QlikView's where [Main Data] has null keys; measures are unaffected.",
+  "Aircraft Types: empty CSV fields are null in Power BI (QlikView stores an empty string, e.g. the manufacturer of aircraft type 91); ApplyMap's default 'Unknown' applies to both.",
+  "COMMENT TABLES / FIELDS USING Comments.xls -> TMDL descriptions on the table and on every column of that name (QlikView comments a field in every table).",
+  "STORE [Aircraft Types] INTO 'Aircraft Types Transformed.qvd' is an ETL side effect and is not migrated; IF $(vLoadMainData) = 'Y' always loads.",
+  "Calculated dimension (Flight Type deal status, Funnel Chart CH27) -> calculated column on Flight Types.",
+  "Drill-down group Time (Year > Month) and cyclic group Airline_Origin_Destination -> parity at every level; in the report as a Year > Month hierarchy and separate visuals.",
+  "List boxes -> slicers on the page of their sheet (field = the list box caption decoded from the .qvw): the linked list boxes of the chart sheets (Year, Quarter, Month, Flight Type, Carrier Group, Carrier's Operating Region, Carrier Name) are a dropdown slicer column on each chart page; Associations and Data Consistency get their own pages. LB10 'Aircraft Type' and LB11 'Aircraft Group' are not migrated: Chapter 9's script loads no such fields (the list boxes are empty in the .qvw too). Carrier Group slicers lack QlikView's 'Unknown' value, which only the null-key member carries (see above), so LB15/LB29 have no parity check.",
+  "QlikView-only objects (multi boxes MB01/MB02, search object, buttons, bookmark object, current selections, container, statistics box SB01, table box TB01, text objects) are not migrated; the Gauge Styles sheet's six gauges (CH08-CH14) are six native gauges (QlikView's styles are not reproduced). Only native visuals are used: the Radar Chart (CH24) is a line chart, the Grid Chart (CH26) a matrix and the Mekko Chart (CH25) a 100% stacked column chart."
+ ]
+}
