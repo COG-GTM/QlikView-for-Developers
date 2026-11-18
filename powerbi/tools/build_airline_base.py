@@ -252,10 +252,11 @@ GAPS = [
     "Master Calendar: QlikView keeps one row per day (1,065) because the script's LOAD DISTINCTs sit under a non-distinct "
     "preceding Load *; Power BI keeps one row per month (36) so Period can be the one side of the relationship. Measures "
     "over Main Data are unaffected; counts over calendar rows would differ.",
-    "Dimension rows: RLS filters Main Data only, so a slicer on a dimension lists rows the role's facts do not use "
-    "(QlikView's reduction removes them, e.g. Airlines 336 under ADMIN vs 337 in the model). Null-key 'Unknown' members "
-    "the script adds for null fact keys are not loaded: they associate with nothing in QlikView and would wrongly match "
-    "blank keys in Power BI.",
+    "Dimension rows: each role also filters the aircraft, distance, airport and market dimensions and the calendars to "
+    "the keys its facts use, as QlikView's reduction does. Carrier Groups, Airlines and Carrier Operating Region stay "
+    "unfiltered (their member names are visible to every role, e.g. Airlines 337 vs 336 in QlikView under ADMIN): 12 "
+    "flight rows have null keys there and a role filter on those tables would hide them. Null-key 'Unknown' members the script adds for null fact "
+    "keys are not loaded: they associate with nothing in QlikView and would wrongly match blank keys in Power BI.",
     "Set analysis value modifiers use KEEPFILTERS: identical to QlikView with no selections (the parity baseline); with a "
     "slicer selection on the same field Power BI intersects where QlikView replaces the selection.",
     "Point-in-time sets (vSetYTD, vSetLYYTD, vSetMTD, vSetLYMTD, vSetPreviousMonth, vSetPreviousNMonth) are defined in "
@@ -413,6 +414,18 @@ def role_tmdl(user: str) -> str:
     allowed = sorted(FLIGHT_TYPES) if "*" in values else sorted(set(values))
     filt = "INLFED[%FLIGHTTYPE] IN {" + ", ".join(f'"{v}"' for v in allowed) + "}"
     lines = [f"role {tname(user)}", "\tmodelPermission: read", "", f"\ttablePermission INLFED = {filt}", ""]
+    # QlikView's reduction also drops dimension rows no surviving fact row uses; relationships only filter
+    # dimension -> fact, so each dimension gets its own filter on the keys of the role's facts.
+    scope = "{" + ", ".join(f'"{FLIGHT_TYPES[v]}"' for v in allowed) + "}"
+    # Not Carrier Groups / Airlines / Carrier Operating Region: 12 flight rows have null keys there, and a filtered
+    # dimension hides fact rows on its blank member, which QlikView's reduction keeps.
+    keyed = [(name, key, key) for name, _, key, _, _ in DIMENSIONS
+             if name not in ("Flight Types", "Carrier Groups", "Airlines", "Carrier Operating Region")]
+    keyed += [("Master Calendar", "Period", "Period"), ("Group A", "Group A Period", "Period"),
+              ("Group B", "Group B Period", "Period")]
+    for table, col, key in keyed:
+        lines += [f"\ttablePermission {tname(table)} = {c(table, col)} IN CALCULATETABLE(VALUES({m(key)}), "
+                  f"'Flight Types'[Flight Type] IN {scope})", ""]
     if omit:
         lines += [f"\ttablePermission {MD}", "", f"\t\tcolumnPermission {tname(omit)} = none", ""]
     lines += [f"\tannotation QlikSectionAccess = USERID {user}; %FLIGHTTYPE {', '.join(values)}"

@@ -3,4 +3,22 @@ role DF
 
 	tablePermission INLFED = INLFED[%FLIGHTTYPE] IN {"DOMESTIC_FOREIGN"}
 
+	tablePermission 'Aircraft Types' = 'Aircraft Types'[%Aircraft Type ID] IN CALCULATETABLE(VALUES('Main Data'[%Aircraft Type ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Distance Groups' = 'Distance Groups'[%Distance Group ID] IN CALCULATETABLE(VALUES('Main Data'[%Distance Group ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Origin Airports' = 'Origin Airports'[%Origin Airport ID] IN CALCULATETABLE(VALUES('Main Data'[%Origin Airport ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Destination Airports' = 'Destination Airports'[%Destination Airport ID] IN CALCULATETABLE(VALUES('Main Data'[%Destination Airport ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Origin Markets' = 'Origin Markets'[%Origin Airport Market ID] IN CALCULATETABLE(VALUES('Main Data'[%Origin Airport Market ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Destination Markets' = 'Destination Markets'[%Destination Airport Market ID] IN CALCULATETABLE(VALUES('Main Data'[%Destination Airport Market ID]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Master Calendar' = 'Master Calendar'[Period] IN CALCULATETABLE(VALUES('Main Data'[Period]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Group A' = 'Group A'[Group A Period] IN CALCULATETABLE(VALUES('Main Data'[Period]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
+	tablePermission 'Group B' = 'Group B'[Group B Period] IN CALCULATETABLE(VALUES('Main Data'[Period]), 'Flight Types'[Flight Type] IN {"Domestic, Foreign Carriers"})
+
 	annotation QlikSectionAccess = USERID DF; %FLIGHTTYPE DOMESTIC_FOREIGN

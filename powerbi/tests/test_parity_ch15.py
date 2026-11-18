@@ -124,6 +124,10 @@ def test_roles_reproduce_section_access():
     assert all(allowed(roles[u]) == [ft] for u, ft in USERS.items())
     assert "columnPermission 'Carrier Name' = none" in roles["NOCARRIER"]
     assert all("columnPermission" not in roles[u] for u in roles if u != "NOCARRIER")
+    for text in roles.values():  # reduction also restricts dimension rows, as in QlikView
+        assert {"'Aircraft Types'", "'Origin Markets'", "'Master Calendar'", "'Group A'"} <= \
+            set(re.findall(r"^\ttablePermission ('[^']+'|\w+) = ", text, re.M))
+    assert "'Flight Types'[Flight Type] IN {\"Domestic, US Carriers Only\"}" in roles["DU"]
     assert "PASSWORD" not in "".join(roles.values()) and "123" not in "".join(roles.values())
 
 
