@@ -1,0 +1,80 @@
+table 'Master Calendar'
+	lineageTag: d3f14f3e-ed25-5397-991b-b61e159835bd
+
+	column Period
+		dataType: int64
+		lineageTag: 99f2d840-1501-50ff-8906-612f26686eb9
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		lineageTag: f3328694-2287-5643-842b-40bfa7b835c7
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		sortByColumn: Month__num
+		lineageTag: 2584b508-774a-5b6e-a13f-1bede51c2895
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month__num
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 50ce5d21-de03-5b7d-99c1-6dd1b88cab46
+		summarizeBy: none
+		sourceColumn: Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year - Month'
+		dataType: string
+		sortByColumn: 'Year - Month__num'
+		lineageTag: d7081f63-5486-5ad4-8127-84c0a23d2f08
+		summarizeBy: none
+		sourceColumn: Year - Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year - Month__num'
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 4a296b36-7974-5f42-8562-e5be2d3946c6
+		summarizeBy: none
+		sourceColumn: Year - Month__num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: c8d3e475-6476-59ab-81bc-e576001766ff
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Master Calendar' = m
+		mode: import
+		source =
+				let
+				    Periods = List.RemoveNulls(fnFactKeys("Period")),
+				    MinDate = #date(Number.IntegerDivide(List.Min(Periods), 100), Number.Mod(List.Min(Periods), 100), 1),
+				    MaxDate = #date(Number.IntegerDivide(List.Max(Periods), 100), Number.Mod(List.Max(Periods), 100), 1),
+				    Months = List.Generate(() => MinDate, each _ <= MaxDate, each Date.AddMonths(_, 1)),
+				    Base = Table.FromList(Months, Splitter.SplitByNothing(), {"MonthStart"}),
+				    Cols = Table.AddColumn(Base, "Fields", each [Period = Date.Year([MonthStart]) * 100 + Date.Month([MonthStart]), Year = Date.Year([MonthStart]), Month = Date.ToText([MonthStart], "MMM", "en-US"), Month__num = Date.Month([MonthStart]), #"Year - Month" = Date.ToText([MonthStart], "yyyy-MM", "en-US"), #"Year - Month__num" = Number.From([MonthStart]), Quarter = "Q" & Text.From(Number.RoundUp(Date.Month([MonthStart]) / 3))]),
+				    Expanded = Table.ExpandRecordColumn(Cols, "Fields", {"Period", "Year", "Month", "Month__num", "Year - Month", "Year - Month__num", "Quarter"}),
+				    Selected = Table.SelectColumns(Expanded, {"Period", "Year", "Month", "Month__num", "Year - Month", "Year - Month__num", "Quarter"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"Period", Int64.Type}, {"Year", Int64.Type}, {"Month", type text}, {"Month__num", type number}, {"Year - Month", type text}, {"Year - Month__num", type number}, {"Quarter", type text}})
+				in
+				    Typed
