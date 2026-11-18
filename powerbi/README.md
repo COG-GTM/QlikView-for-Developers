@@ -49,3 +49,6 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
   from the Chapter 15 builder): its 12 source-model tables match the inventory, the rebuilt Aircraft Types equals
   the QVD the script stores, all 42 KPI expressions and 18 list boxes evaluate, and 103 DAX queries plus 11 relationship
   checks are generated; the report has one page per QlikView sheet, list boxes rebuilt as slicers.
+* Chapter 09 Concatenated tables (`apps/Chapter09_Concatenated_tables`, derived from the
+  Chapter 15 base): its 11 source-model tables match the inventory, all 42 KPI expressions
+  evaluate, and 85 DAX queries are generated.
