@@ -117,6 +117,6 @@ def test_report_pages_list_boxes_as_synced_slicers_and_a_visual_per_chart():
 def test_known_differences_only_cover_the_sun_country_spelling(expected):
     exc = json.loads((POWERBI / "parity" / "exceptions" / f"{APP}.json").read_text())
     ids = {r["id"] for k in expected["kpis"] for r in k["results"]}
-    assert exc and all(e["id"] in ids and "Sun Country" in e["reason"] for e in exc)
+    assert exc and all(e["id"] in ids and "'Mn'" in e["reason"] for e in exc)
     assert {e["id"].split("@")[0] for e in exc} == {"CH15#2", "CH43#1", "CH44#1", "CH69#2", "CH69#3",
                                                      "CH48#1", "CH52#1", "CH53#1", "CH54#1"}
