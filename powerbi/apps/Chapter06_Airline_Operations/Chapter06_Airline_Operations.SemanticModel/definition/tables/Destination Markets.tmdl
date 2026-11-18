@@ -1,0 +1,30 @@
+table 'Destination Markets'
+	lineageTag: 2404d68f-238e-51bf-92d7-ae59ed5e9f92
+
+	column '%Destination Airport Market ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 32b862b3-d170-535b-8b24-3508b55cdf46
+		summarizeBy: none
+		sourceColumn: %Destination Airport Market ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Destination Market'
+		dataType: string
+		lineageTag: 909ac162-4257-50ab-97ae-113b793166e8
+		summarizeBy: none
+		sourceColumn: Destination Market
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Destination Markets' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/CSVs/Destination Markets.parquet"),
+				    Selected = Table.SelectColumns(Source, {"%Destination Airport Market ID", "Destination Market"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Destination Airport Market ID", Int64.Type}, {"Destination Market", type text}})
+				in
+				    Typed

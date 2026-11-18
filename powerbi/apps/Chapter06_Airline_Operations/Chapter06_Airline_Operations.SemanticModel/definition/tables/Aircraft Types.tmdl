@@ -1,0 +1,30 @@
+table 'Aircraft Types'
+	lineageTag: a9b1b51f-ac88-58b1-b571-3106dfae89aa
+
+	column '%Aircraft Type ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5eb273b0-2e3d-513f-b196-291a79899fad
+		summarizeBy: none
+		sourceColumn: %Aircraft Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aircraft Type'
+		dataType: string
+		lineageTag: 88b2b677-fd63-5b37-8596-ea964ad021ce
+		summarizeBy: none
+		sourceColumn: Aircraft Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Aircraft Types' = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/QVDs/Aircraft Types.parquet"),
+				    Selected = Table.SelectColumns(Source, {"%Aircraft Type ID", "Aircraft Type"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Aircraft Type ID", Int64.Type}, {"Aircraft Type", type text}})
+				in
+				    Typed
