@@ -29,6 +29,7 @@ table 'Carrier Groups'
 				    Missing = List.Difference(FactKeys, Table.Column(Kept, "%Carrier Group ID")),
 				    Unknown = Table.FromColumns({Missing, List.Repeat({"Unknown"}, List.Count(Missing))}, {"%Carrier Group ID", "Carrier Group"}),
 				    Combined = Table.Combine({Kept, Unknown}),
-				    Typed = Table.TransformColumnTypes(Combined, {{"%Carrier Group ID", Int64.Type}, {"Carrier Group", type text}})
+				    WithPlaceholder = Table.Combine({Combined, #table({"%Carrier Group ID", "Carrier Group"}, {{-1, null}})}),
+				    Typed = Table.TransformColumnTypes(WithPlaceholder, {{"%Carrier Group ID", Int64.Type}, {"Carrier Group", type text}})
 				in
 				    Typed
