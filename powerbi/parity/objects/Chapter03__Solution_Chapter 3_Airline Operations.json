@@ -1,0 +1,26 @@
+{
+ "app": "Chapter03__Solution_Chapter 3_Airline Operations",
+ "source": "List boxes of sheets Main (SH01) and Dashboard (SH02) of Chapter03/Solution_Chapter 3_Airline Operations.qvw: object ids and field names read from the document layout; CH01/CH02 are covered as KPIs",
+ "objects": [
+  {"id": "LB01", "type": "list box", "fields": ["Destination Country"]},
+  {"id": "LB02", "type": "list box", "fields": ["Destination State"]},
+  {"id": "LB03", "type": "list box", "fields": ["Destination City"]},
+  {"id": "LB04", "type": "list box", "fields": ["Origin Country"]},
+  {"id": "LB05", "type": "list box", "fields": ["Origin State"]},
+  {"id": "LB06", "type": "list box", "fields": ["Origin City"]},
+  {"id": "LB07", "type": "list box", "fields": ["Carrier Name"]},
+  {"id": "LB09", "type": "list box", "fields": ["Distance Interval"]},
+  {"id": "LB10", "type": "list box", "fields": ["Aircraft Type"]},
+  {"id": "LB11", "type": "list box", "fields": ["Aircraft Group"]},
+  {"id": "LB12", "type": "list box", "fields": ["Flight Type"]},
+  {"id": "LB13", "type": "list box", "fields": ["Carrier's Operating Region"]},
+  {"id": "LB15", "type": "list box", "fields": ["Carrier Group"]},
+  {"id": "LB26", "type": "list box", "fields": ["Aircraft Group"]},
+  {"id": "LB27", "type": "list box", "fields": ["Flight Type"]},
+  {"id": "LB28", "type": "list box", "fields": ["Carrier's Operating Region"]},
+  {"id": "LB29", "type": "list box", "fields": ["Carrier Group"]},
+  {"id": "LB30", "type": "list box", "fields": ["Month"]},
+  {"id": "LB31", "type": "list box", "fields": ["Quarter"]},
+  {"id": "LB32", "type": "list box", "fields": ["Year"]}
+ ]
+}
