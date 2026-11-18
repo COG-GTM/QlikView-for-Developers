@@ -1,0 +1,21 @@
+{
+ "app": "Chapter09__Solution_Dimensionless Facts",
+ "pbip": "powerbi/apps/Chapter09_Dimensionless_Facts",
+ "queries": [
+  {
+   "id": "CH01#1@total",
+   "measure": "Flights by Group",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Flights by Group])"
+  },
+  {
+   "id": "CH01#1@Aircraft Group",
+   "measure": "Flights by Group",
+   "grain": [
+    "Aircraft Group"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Aircrafts'[Aircraft Group], \"value\", [Flights by Group])"
+  }
+ ],
+ "unmapped": []
+}
