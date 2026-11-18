@@ -8,7 +8,9 @@ chapter versions + 5 Chapter 09/10 demos).
 | `inventory/` | Per-app manifests (sources, model, keys, KPIs with variables expanded), recovered load scripts, gap list, known row-count exceptions |
 | `tools/convert_sources.py` | Converts every QVD, the Access database, Excel workbooks and CSVs to Parquet under `data/parquet/` (generated, not committed) and writes `data/catalog.json` |
 | `tools/verify_conversion.py` | Row-count verification against each source and against the inventory → `data/conversion_report.md` |
+| `tools/build_ch03_airline.py` | Builds the full Chapter 3 Airline Operations PBIP (model + Main/Dashboard pages) from the Ch15 base |
 | `tools/scaffold_pbip.py` | Generates a PBIP (TMDL) skeleton for an app per [docs/CONVENTIONS.md](docs/CONVENTIONS.md) |
+| `tools/build_report.py` | Writes report pages (slicers, charts with Top N filters) for a scaffolded plain-load app from its sheet layout and the PBIP's `ParityKey` measures |
 | `apps/` | One PBIP folder per migrated app (Chapter 03 scaffold is the reference layout) |
 | `parity/` | Parity harness: recomputes every KPI/chart expression from source, generates DAX queries, compares — see [docs/PARITY.md](docs/PARITY.md) |
 | `tests/` | `python -m pytest` (run from `powerbi/`) |
@@ -52,3 +54,9 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
 * Chapter 09 Concatenated tables (`apps/Chapter09_Concatenated_tables`, derived from the
   Chapter 15 base): its 11 source-model tables match the inventory, all 42 KPI expressions
   evaluate, and 85 DAX queries are generated.
+* Chapter 04 (`apps/Chapter04_Airline_Operations`): scaffolded plain-load model (12 tables,
+  11 relationships, 4 measures) with Main and Dashboard report pages (all 20 list boxes
+  as slicers, from captions in the .qvw; the search object SO01 has no equivalent); all 8 KPI expressions
+  match pyqvd + pandas on the original QVD, and 20 DAX queries plus 11 relationship checks
+  are generated. Origin/Destination Airports differ from the inventory only by the
+  documented superset exceptions.

@@ -8,8 +8,7 @@ Each expected result id gets one query:
   grain       -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2], "value", [Measure])
   table       -> EVALUATE SELECTCOLUMNS('T', "c1", 'T'[c1], ...)   (full-table parity, apps without KPIs)
 Sheet objects without expressions (parity/objects/<app>.json):
-  table box      -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2])   (the distinct rows it shows)
-  list box       -> EVALUATE FILTER(SUMMARIZECOLUMNS('T'[c]), NOT ISBLANK('T'[c]))   (its non-null values)
+  table/list box -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2])   (the distinct rows it shows)
   row count      -> EVALUATE ROW("value", COUNTROWS('T'))
 Each relationship in ``relationships.tmdl`` gets an integrity query (id ``REL:<from> -> <to>``):
 distinct many-side keys with no match on the one side, the many-side rows they cover, and
@@ -159,10 +158,10 @@ def write_queries(app: str, pbip: Path) -> str:
                 if None in cols:
                     unmapped.append({"id": r["id"], "reason": f"no column for {r['grain']}"})
                     continue
-                group = ", ".join(dax_col(c["table"], c["name"]) for c in cols)
-                query = f"EVALUATE SUMMARIZECOLUMNS({group})"
-                if o["type"] == "list box":
-                    query = f"EVALUATE FILTER(SUMMARIZECOLUMNS({group}), NOT ISBLANK({group}))"
+                refs = [dax_col(c["table"], c["name"]) for c in cols]
+                query = f"EVALUATE SUMMARIZECOLUMNS({', '.join(refs)})"
+                if o["type"] == "list box":  # a list box never shows null, e.g. the blank member of unmatched keys
+                    query = f"EVALUATE FILTER(SUMMARIZECOLUMNS({refs[0]}), NOT ISBLANK({refs[0]}))"
             queries.append({"id": r["id"], "object": o["object"], "grain": r["grain"], "query": query})
     DAX.mkdir(exist_ok=True)
     out = DAX / f"{app}.queries.json"

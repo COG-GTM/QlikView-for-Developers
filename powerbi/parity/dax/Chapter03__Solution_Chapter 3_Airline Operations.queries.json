@@ -1,0 +1,352 @@
+{
+ "app": "Chapter03__Solution_Chapter 3_Airline Operations",
+ "pbip": "powerbi/apps/Chapter03_Airline_Operations",
+ "queries": [
+  {
+   "id": "CH01#1@total",
+   "measure": "# of Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights])"
+  },
+  {
+   "id": "CH01#1@Year",
+   "measure": "# of Flights",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], \"value\", [# of Flights])"
+  },
+  {
+   "id": "CH01#1@Year+Month",
+   "measure": "# of Flights",
+   "grain": [
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], 'Main Data'[Month], \"value\", [# of Flights])"
+  },
+  {
+   "id": "CH01#2@total",
+   "measure": "# of Enplanned Passengers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH01#2@Year",
+   "measure": "# of Enplanned Passengers",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], \"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH01#2@Year+Month",
+   "measure": "# of Enplanned Passengers",
+   "grain": [
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], 'Main Data'[Month], \"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH01#3@total",
+   "measure": "Transported Freight",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH01#3@Year",
+   "measure": "Transported Freight",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], \"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH01#3@Year+Month",
+   "measure": "Transported Freight",
+   "grain": [
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], 'Main Data'[Month], \"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH01#4@total",
+   "measure": "Transported Mail",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH01#4@Year",
+   "measure": "Transported Mail",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], \"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH01#4@Year+Month",
+   "measure": "Transported Mail",
+   "grain": [
+    "Year",
+    "Month"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[Year], 'Main Data'[Month], \"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH02#1@total",
+   "measure": "# of Flights",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Flights])"
+  },
+  {
+   "id": "CH02#1@From - To City",
+   "measure": "# of Flights",
+   "grain": [
+    "From - To City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[From - To City], \"value\", [# of Flights])"
+  },
+  {
+   "id": "CH02#2@total",
+   "measure": "# of Enplanned Passengers",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH02#2@From - To City",
+   "measure": "# of Enplanned Passengers",
+   "grain": [
+    "From - To City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[From - To City], \"value\", [# of Enplanned Passengers])"
+  },
+  {
+   "id": "CH02#3@total",
+   "measure": "Transported Freight",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH02#3@From - To City",
+   "measure": "Transported Freight",
+   "grain": [
+    "From - To City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[From - To City], \"value\", [Transported Freight])"
+  },
+  {
+   "id": "CH02#4@total",
+   "measure": "Transported Mail",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Transported Mail])"
+  },
+  {
+   "id": "CH02#4@From - To City",
+   "measure": "Transported Mail",
+   "grain": [
+    "From - To City"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('Main Data'[From - To City], \"value\", [Transported Mail])"
+  },
+  {
+   "id": "LB01@Destination Country",
+   "object": "LB01",
+   "grain": [
+    "Destination Country"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination Country]), NOT ISBLANK('Main Data'[Destination Country]))"
+  },
+  {
+   "id": "LB02@Destination State",
+   "object": "LB02",
+   "grain": [
+    "Destination State"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination State]), NOT ISBLANK('Main Data'[Destination State]))"
+  },
+  {
+   "id": "LB03@Destination City",
+   "object": "LB03",
+   "grain": [
+    "Destination City"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Destination City]), NOT ISBLANK('Main Data'[Destination City]))"
+  },
+  {
+   "id": "LB04@Origin Country",
+   "object": "LB04",
+   "grain": [
+    "Origin Country"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin Country]), NOT ISBLANK('Main Data'[Origin Country]))"
+  },
+  {
+   "id": "LB05@Origin State",
+   "object": "LB05",
+   "grain": [
+    "Origin State"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin State]), NOT ISBLANK('Main Data'[Origin State]))"
+  },
+  {
+   "id": "LB06@Origin City",
+   "object": "LB06",
+   "grain": [
+    "Origin City"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin City]), NOT ISBLANK('Main Data'[Origin City]))"
+  },
+  {
+   "id": "LB07@Carrier Name",
+   "object": "LB07",
+   "grain": [
+    "Carrier Name"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Carrier Name]), NOT ISBLANK('Main Data'[Carrier Name]))"
+  },
+  {
+   "id": "LB09@Distance Interval",
+   "object": "LB09",
+   "grain": [
+    "Distance Interval"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Distance Groups'[Distance Interval]), NOT ISBLANK('Distance Groups'[Distance Interval]))"
+  },
+  {
+   "id": "LB10@Aircraft Type",
+   "object": "LB10",
+   "grain": [
+    "Aircraft Type"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Aircraft Types'[Aircraft Type]), NOT ISBLANK('Aircraft Types'[Aircraft Type]))"
+  },
+  {
+   "id": "LB11@Aircraft Group",
+   "object": "LB11",
+   "grain": [
+    "Aircraft Group"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Aircraft Groups'[Aircraft Group]), NOT ISBLANK('Aircraft Groups'[Aircraft Group]))"
+  },
+  {
+   "id": "LB12@Flight Type",
+   "object": "LB12",
+   "grain": [
+    "Flight Type"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Flight Types'[Flight Type]), NOT ISBLANK('Flight Types'[Flight Type]))"
+  },
+  {
+   "id": "LB13@Carrier's Operating Region",
+   "object": "LB13",
+   "grain": [
+    "Carrier's Operating Region"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Operating Region'[Carrier's Operating Region]), NOT ISBLANK('Carrier Operating Region'[Carrier's Operating Region]))"
+  },
+  {
+   "id": "LB15@Carrier Group",
+   "object": "LB15",
+   "grain": [
+    "Carrier Group"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group]), NOT ISBLANK('Carrier Groups'[Carrier Group]))"
+  },
+  {
+   "id": "LB26@Aircraft Group",
+   "object": "LB26",
+   "grain": [
+    "Aircraft Group"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Aircraft Groups'[Aircraft Group]), NOT ISBLANK('Aircraft Groups'[Aircraft Group]))"
+  },
+  {
+   "id": "LB27@Flight Type",
+   "object": "LB27",
+   "grain": [
+    "Flight Type"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Flight Types'[Flight Type]), NOT ISBLANK('Flight Types'[Flight Type]))"
+  },
+  {
+   "id": "LB28@Carrier's Operating Region",
+   "object": "LB28",
+   "grain": [
+    "Carrier's Operating Region"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Operating Region'[Carrier's Operating Region]), NOT ISBLANK('Carrier Operating Region'[Carrier's Operating Region]))"
+  },
+  {
+   "id": "LB29@Carrier Group",
+   "object": "LB29",
+   "grain": [
+    "Carrier Group"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Carrier Groups'[Carrier Group]), NOT ISBLANK('Carrier Groups'[Carrier Group]))"
+  },
+  {
+   "id": "LB30@Month",
+   "object": "LB30",
+   "grain": [
+    "Month"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Month]), NOT ISBLANK('Main Data'[Month]))"
+  },
+  {
+   "id": "LB31@Quarter",
+   "object": "LB31",
+   "grain": [
+    "Quarter"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Quarter]), NOT ISBLANK('Main Data'[Quarter]))"
+  },
+  {
+   "id": "LB32@Year",
+   "object": "LB32",
+   "grain": [
+    "Year"
+   ],
+   "query": "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Year]), NOT ISBLANK('Main Data'[Year]))"
+  }
+ ],
+ "relationships": [
+  {
+   "id": "REL:'Main Data'[%Carrier Group ID] -> 'Carrier Groups'[%Carrier Group ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Carrier Group ID]), NOT ISBLANK('Main Data'[%Carrier Group ID])), \"k\", 'Main Data'[%Carrier Group ID]), SELECTCOLUMNS(ALLNOBLANKROW('Carrier Groups'[%Carrier Group ID]), \"k\", 'Carrier Groups'[%Carrier Group ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Carrier Group ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Carrier Groups')) - COUNTROWS(ALLNOBLANKROW('Carrier Groups'[%Carrier Group ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Airline ID] -> 'Airlines'[%Airline ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Airline ID]), NOT ISBLANK('Main Data'[%Airline ID])), \"k\", 'Main Data'[%Airline ID]), SELECTCOLUMNS(ALLNOBLANKROW('Airlines'[%Airline ID]), \"k\", 'Airlines'[%Airline ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Airline ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Airlines')) - COUNTROWS(ALLNOBLANKROW('Airlines'[%Airline ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Region Code] -> 'Carrier Operating Region'[%Region Code]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Region Code]), NOT ISBLANK('Main Data'[%Region Code])), \"k\", 'Main Data'[%Region Code]), SELECTCOLUMNS(ALLNOBLANKROW('Carrier Operating Region'[%Region Code]), \"k\", 'Carrier Operating Region'[%Region Code])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Region Code])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Carrier Operating Region')) - COUNTROWS(ALLNOBLANKROW('Carrier Operating Region'[%Region Code])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Datasource ID] -> 'Flight Types'[%Datasource ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Datasource ID]), NOT ISBLANK('Main Data'[%Datasource ID])), \"k\", 'Main Data'[%Datasource ID]), SELECTCOLUMNS(ALLNOBLANKROW('Flight Types'[%Datasource ID]), \"k\", 'Flight Types'[%Datasource ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Datasource ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Flight Types')) - COUNTROWS(ALLNOBLANKROW('Flight Types'[%Datasource ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Aircraft Group ID] -> 'Aircraft Groups'[%Aircraft Group ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Aircraft Group ID]), NOT ISBLANK('Main Data'[%Aircraft Group ID])), \"k\", 'Main Data'[%Aircraft Group ID]), SELECTCOLUMNS(ALLNOBLANKROW('Aircraft Groups'[%Aircraft Group ID]), \"k\", 'Aircraft Groups'[%Aircraft Group ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Aircraft Group ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Aircraft Groups')) - COUNTROWS(ALLNOBLANKROW('Aircraft Groups'[%Aircraft Group ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Aircraft Type ID] -> 'Aircraft Types'[%Aircraft Type ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Aircraft Type ID]), NOT ISBLANK('Main Data'[%Aircraft Type ID])), \"k\", 'Main Data'[%Aircraft Type ID]), SELECTCOLUMNS(ALLNOBLANKROW('Aircraft Types'[%Aircraft Type ID]), \"k\", 'Aircraft Types'[%Aircraft Type ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Aircraft Type ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Aircraft Types')) - COUNTROWS(ALLNOBLANKROW('Aircraft Types'[%Aircraft Type ID])))"
+  },
+  {
+   "id": "REL:'Main Data'[%Distance Group ID] -> 'Distance Groups'[%Distance Group ID]",
+   "active": true,
+   "query": "DEFINE VAR missing = EXCEPT(SELECTCOLUMNS(FILTER(ALLNOBLANKROW('Main Data'[%Distance Group ID]), NOT ISBLANK('Main Data'[%Distance Group ID])), \"k\", 'Main Data'[%Distance Group ID]), SELECTCOLUMNS(ALLNOBLANKROW('Distance Groups'[%Distance Group ID]), \"k\", 'Distance Groups'[%Distance Group ID])) EVALUATE ROW(\"unmatched_keys\", COUNTROWS(missing) + 0, \"unmatched_rows\", CALCULATE(COUNTROWS('Main Data'), REMOVEFILTERS(), TREATAS(missing, 'Main Data'[%Distance Group ID])) + 0, \"duplicate_keys\", COUNTROWS(ALLNOBLANKROW('Distance Groups')) - COUNTROWS(ALLNOBLANKROW('Distance Groups'[%Distance Group ID])))"
+  }
+ ],
+ "unmapped": []
+}

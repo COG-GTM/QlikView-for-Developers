@@ -1,0 +1,30 @@
+table Airlines
+	lineageTag: e5eacb8c-c961-5258-87f1-6c8b690af5a3
+
+	column '%Airline ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ad02e499-c3e6-544b-9151-72082b6f629f
+		summarizeBy: none
+		sourceColumn: %Airline ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Airline
+		dataType: string
+		lineageTag: 09b49210-6c52-57fa-96bc-911b665e95ad
+		summarizeBy: none
+		sourceColumn: Airline
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Airlines = m
+		mode: import
+		source =
+				let
+				    Source = fnReadParquet("Data Files/QVDs/Airlines.parquet"),
+				    Selected = Table.SelectColumns(Source, {"%Airline ID", "Airline"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"%Airline ID", Int64.Type}, {"Airline", type text}})
+				in
+				    Typed

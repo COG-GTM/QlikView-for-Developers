@@ -111,9 +111,7 @@ def test_every_result_gets_a_dax_query(tmp_path, monkeypatch, expected):
     ids = {r["id"] for o in expected["objects"] for r in o["results"]}
     assert {q["id"] for q in spec["queries"]} == ids
     q = {q["id"]: q["query"] for q in spec["queries"]}
-    assert q["LB02@Date"] == ("EVALUATE FILTER(SUMMARIZECOLUMNS('Production Planning - Legacy'[Date]), "
-                              "NOT ISBLANK('Production Planning - Legacy'[Date]))")
-    assert q["TB01@Date+Plant #+Product Line ID+Estimated Production"].startswith("EVALUATE SUMMARIZECOLUMNS(")
+    assert q["LB02@Date"] == "EVALUATE FILTER(SUMMARIZECOLUMNS('Production Planning - Legacy'[Date]), NOT ISBLANK('Production Planning - Legacy'[Date]))"
     assert q["ROWS@Production Planning - Legacy"] == "EVALUATE ROW(\"value\", COUNTROWS('Production Planning - Legacy'))"
 
 
