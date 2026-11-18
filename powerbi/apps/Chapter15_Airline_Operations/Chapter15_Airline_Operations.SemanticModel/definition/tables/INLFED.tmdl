@@ -1,0 +1,26 @@
+table INLFED
+	lineageTag: d483a429-ed0d-5182-a438-2352ecf94a9c
+
+	column 'Flight Type'
+		dataType: string
+		lineageTag: 5f894987-a77d-511d-85ee-d0acd283c3f4
+		summarizeBy: none
+		sourceColumn: Flight Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column '%FLIGHTTYPE'
+		dataType: string
+		lineageTag: 50fefa81-1592-5762-bf9c-21b000c2c62a
+		summarizeBy: none
+		sourceColumn: %FLIGHTTYPE
+
+		annotation SummarizationSetBy = Automatic
+
+	partition INLFED = m
+		mode: import
+		source =
+				let
+				    Source = #table(type table [#"Flight Type" = text, #"%FLIGHTTYPE" = text], {{"Domestic, Foreign Carriers", "DOMESTIC_FOREIGN"}, {"Domestic, US Carriers Only", "DOMESTIC_US"}, {"International, Foreign Carriers", "INTERNATIONAL_FOREIGN"}, {"International, US Carriers Only", "INTERNATIONAL_US"}})
+				in
+				    Source

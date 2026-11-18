@@ -52,6 +52,8 @@ class SourceModel:
         self.manifest = json.loads((INVENTORY / "manifests" / f"{app}.json").read_text())
         self.con = duckdb.connect()
         self.table_check: list[dict] = []
+        overlay = MODELS / f"{app}.overlay.json"
+        self.overlay = json.loads(overlay.read_text()) if overlay.exists() else {}
         self._build()
         self.columns = {t: [r[0] for r in self.con.execute(f"DESCRIBE {qi(t)}").fetchall()] for t in self.tables}
         self.rows = {t: self.con.execute(f"SELECT count(*) FROM {qi(t)}").fetchone()[0] for t in self.tables}
@@ -67,7 +69,8 @@ class SourceModel:
             self.con.execute(sql)
             self.model_source = override.relative_to(REPO).as_posix()
             self.tables = [r[0] for r in self.con.execute(
-                "SELECT table_name FROM information_schema.tables WHERE table_type='VIEW' OR table_type='BASE TABLE'"
+                "SELECT table_name FROM information_schema.tables WHERE table_schema = 'main' "
+                "AND table_type IN ('VIEW', 'BASE TABLE')"
             ).fetchall()]
             return
         catalog = json.loads(CATALOG.read_text())
@@ -121,7 +124,7 @@ class SourceModel:
                 keys = sorted(set(self.columns[prev]) & set(self.columns[t]))
                 a_prev, a_new = f"t{joined.index(prev)}", f"t{len(joined)}"
                 on = " AND ".join(f"{a_new}.{qi(k)} = {a_prev}.{qi(k)}" for k in keys)
-                sql += f" LEFT JOIN {qi(t)} AS {a_new} ON {on}"
+                sql += f" LEFT JOIN (SELECT DISTINCT * FROM {qi(t)}) AS {a_new} ON {on}"
                 joined.append(t)
         colmap = {}
         for f in fields:
@@ -157,10 +160,13 @@ class Evaluator:
         self.m = model
         self.variables = {v["name"]: v.get("definition", v.get("value", "")) for v in model.manifest.get("variables", [])
                           if v.get("name")}
+        self.variables.update({k: v["definition"] for k, v in model.overlay.get("variables", {}).items()})
 
     # ------------------------------------------------------------ public
     def compile(self, text: str):
         expanded = q.expand_dollars(text, self.variables, self.scalar_text)
+        if not expanded.strip():
+            return q.Num(float("nan"))  # e.g. $() of a variable name that evaluated to null: Qlik shows no value
         return q.parse(expanded)
 
     def scalar_text(self, text: str) -> str:
@@ -168,6 +174,27 @@ class Evaluator:
         if v is None or (isinstance(v, float) and math.isnan(v)):
             return ""
         return str(int(v)) if isinstance(v, (int, float)) and float(v).is_integer() else str(v)
+
+    def add_calculated_dimension(self, text: str) -> str:
+        """Materialise a calculated dimension ('=expr') as a table keyed by the fields it depends on (the Aggr()
+        dimensions, else the fields it references), so it joins like any other field. Returns its field name."""
+        node = self.compile(text[1:])
+        aggrs = [n for n in q.walk(node) if isinstance(n, q.Aggr)]
+        keys = list(dict.fromkeys(d for a in aggrs for d in a.dims)) if aggrs else sorted(q.fields_in(node))
+        if not keys:
+            raise q.Unsupported("calculated dimension without fields")
+        df = self.evaluate(node, keys).rename(columns={"value": text})
+        name = f"__calcdim_{len(self.m.tables)}"
+        self.m.con.register(name, df[keys + [text]])
+        self.m.tables.append(name)
+        self.m.columns[name] = keys + [text]
+        self.m.rows[name] = len(df)
+        return name
+
+    def drop_calculated_dimension(self, name: str):
+        self.m.con.unregister(name)
+        self.m.tables.remove(name)
+        del self.m.columns[name], self.m.rows[name]
 
     def evaluate(self, node, dims: list[str]) -> pd.DataFrame:
         frame = self.frame(dims, q.fields_in(node))
@@ -206,11 +233,15 @@ class Evaluator:
             a, b = self.ev(node.left, dims, frame), self.ev(node.right, dims, frame)
             return binop(node.op, a, b)
         if isinstance(node, q.Func):
+            if node.name == "dimensionality":
+                return len(dims)
             args = [self.ev(a, dims, frame) for a in node.args]
             return func(node.name, args, frame)
         if isinstance(node, q.Agg):
             return self.agg(node, dims, frame)
         if isinstance(node, q.Aggr):
+            if set(node.dims) == set(dims):  # e.g. a calculated dimension evaluated at its own Aggr() grain
+                return self.ev(node.expr, dims, frame)
             raise q.Unsupported("Aggr() outside an aggregation function")
         raise q.Unsupported(f"cannot evaluate {type(node).__name__}")
 
@@ -222,6 +253,8 @@ class Evaluator:
             inner_dims = list(dict.fromkeys(group + node.arg.dims))
             inner = self.evaluate(node.arg.expr, inner_dims)
             inner = inner.dropna(subset=["value"])
+            # fixed row order: float sums / means must not depend on DuckDB's parallel scan order
+            inner = inner.sort_values(inner_dims + ["value"], kind="mergesort", na_position="last").reset_index(drop=True)
             fn = {"sum": "sum", "avg": "mean", "min": "min", "max": "max", "count": "count"}.get(node.func)
             if fn is None:
                 raise q.Unsupported(f"{node.func}(Aggr())")
@@ -232,6 +265,8 @@ class Evaluator:
         frm, cols = self.m.from_clause(fields)
         arg = row_sql(node.arg, cols)
         f = node.func
+        if f in ("min", "max") and isinstance(node.arg, q.FieldRef) and f"{node.arg.name}__num" in cols:
+            arg = cols[f"{node.arg.name}__num"]  # dual field: Min/Max work on the number
         if f == "only":
             agg = f"CASE WHEN COUNT(DISTINCT {arg}) = 1 THEN MIN({arg}) END"
         elif f == "count":
@@ -273,11 +308,28 @@ def func(name, args, frame):
         return args[0]
     if name == "fabs":
         return ser(args[0]).abs()
+    if name == "pick":
+        n = args[0]
+        if isinstance(n, pd.Series):
+            return pd.Series([ser(args[int(i)]).iloc[k] if pd.notna(i) and 1 <= i < len(args) else None
+                              for k, i in enumerate(n)], index=idx)
+        return ser(args[int(n)]) if 1 <= n < len(args) else ser(None)
+    if name == "class":
+        width = args[1]
+        return ser(args[0]).map(lambda x: None if pd.isna(x) else
+                                f"{_qnum(math.floor(x / width) * width)} <= x < {_qnum(math.floor(x / width) * width + width)}")
+    if name == "replace":
+        return ser(args[0]).map(lambda x: None if x is None or (isinstance(x, float) and math.isnan(x))
+                                else str(x).replace(str(args[1]), str(args[2])))
     if name in ("rangesum", "alt"):
         if name == "alt":
             return ser(args[0]).combine_first(ser(args[1]))
         return sum(ser(a).fillna(0) for a in args)
     raise q.Unsupported(name)
+
+
+def _qnum(v: float) -> str:
+    return str(int(v)) if float(v).is_integer() else repr(float(v))
 
 
 def row_sql(node, cols) -> str:
@@ -322,6 +374,19 @@ def _value_pred(col: str, num_col: str | None, kind: str, value) -> str:
     return f"CAST({col} AS VARCHAR) = {ql(value)}"
 
 
+def _element_pred(col: str, kind: str, arg, model: SourceModel) -> str:
+    """p(<set> F) / e(<set> F): the values of F possible (or excluded) in that set; no set = the current
+    selection state, which in the no-selections baseline is every row."""
+    fld, inner = arg
+    frm, icols = model.from_clause({fld} | (q.fields_in(inner) if inner is not None else set()))
+    where = set_sql(inner, icols, model) if inner is not None else "TRUE"
+    possible = f"SELECT DISTINCT {icols[fld]} FROM {frm} WHERE {where} AND {icols[fld]} IS NOT NULL"
+    if kind == "p":
+        return f"{col} IN ({possible})"
+    afrm, acols = model.from_clause({fld})
+    return f"{col} IN (SELECT DISTINCT {acols[fld]} FROM {afrm} WHERE {acols[fld]} IS NOT NULL EXCEPT {possible})"
+
+
 def set_sql(node, cols, model: SourceModel) -> str:
     if isinstance(node, q.SetOp):
         a, b = set_sql(node.left, cols, model), set_sql(node.right, cols, model)
@@ -329,12 +394,18 @@ def set_sql(node, cols, model: SourceModel) -> str:
                 "/": f"(({a}) <> ({b}))"}[node.op]
     if node.identifier == "0":
         return "FALSE"
+    if node.identifier not in ("$", "1") and node.identifier not in model.overlay.get("alternate_states", []):
+        raise q.Unsupported(f"bookmark / undeclared alternate state {node.identifier} in set analysis")
+    # '$', '1' and alternate states are all the full data set in the no-selections baseline
     preds = []
     for mod in node.modifiers:
         if mod.exclude_all:
             continue
         col = cols[mod.field]
         num_col = cols.get(f"{mod.field}__num")
-        any_of = " OR ".join(_value_pred(col, num_col, k, v) for k, v in mod.values) or "FALSE"
+        if mod.values and mod.values[0][0] in ("e", "p"):
+            any_of = _element_pred(col, *mod.values[0], model)
+        else:
+            any_of = " OR ".join(_value_pred(col, num_col, k, v) for k, v in mod.values) or "FALSE"
         preds.append(f"NOT COALESCE(({any_of}), FALSE)" if mod.op == "-=" else f"COALESCE(({any_of}), FALSE)")
     return " AND ".join(preds) or "TRUE"

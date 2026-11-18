@@ -20,7 +20,8 @@ import json
 import re
 from pathlib import Path
 
-from harness import DAX, load_expected, show
+from engine import MODELS
+from harness import DAX, load_expected, parity_key, show
 
 
 def unquote_tmdl(name: str) -> str:
@@ -98,6 +99,9 @@ def relationship_query(rel: dict) -> dict:
 
 
 def column_for(model: dict, field: str) -> dict | None:
+    if field.startswith("="):  # Qlik calculated dimension -> calculated column annotated with its ParityKey
+        hits = [c for c in model["columns"] if parity_key(field) in c.get("keys", [])]
+        return hits[0] if hits else None
     hits = [c for c in model["columns"] if (c["source"] or c["name"]) == field or c["name"] == field]
     hits.sort(key=lambda c: c["hidden"])
     return hits[0] if hits else None
@@ -158,8 +162,11 @@ def write_queries(app: str, pbip: Path) -> str:
             queries.append({"id": r["id"], "object": o["object"], "grain": r["grain"], "query": query})
     DAX.mkdir(exist_ok=True)
     out = DAX / f"{app}.queries.json"
+    overlay = MODELS / f"{app}.overlay.json"
+    role = json.loads(overlay.read_text()).get("parity_role") if overlay.exists() else None
     relationships = [relationship_query(r) for r in read_relationships(pbip)]
-    out.write_text(json.dumps({"app": app, "pbip": show(pbip), "queries": queries, "relationships": relationships,
+    out.write_text(json.dumps({"app": app, "pbip": show(pbip), **({"role": role} if role else {}), "queries": queries,
+                               "relationships": relationships,
                                "unmapped": unmapped}, indent=1, ensure_ascii=False) + "\n")
     return (f"{len(queries)} DAX queries, {len(relationships)} relationship checks, "
             f"{len(unmapped)} unmapped -> {show(out)}")

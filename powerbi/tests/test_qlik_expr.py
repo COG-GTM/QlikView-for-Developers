@@ -18,10 +18,20 @@ def test_total_and_aggr():
     assert isinstance(node.arg, q.Aggr) and node.arg.dims == ["Airline", "From - To Airport ID"]
 
 
-@pytest.mark.parametrize("expr", ["Dimensionality()", "Sum({[Group A] * $} x)", "Sum({1<Year = e(Year)>} x)"])
+@pytest.mark.parametrize("expr", ["Above(Sum(x))", "Rank(Sum(x))", "Concat(x, ',')"])
 def test_unsupported_is_reported_not_guessed(expr):
     with pytest.raises(q.Unsupported):
         q.parse(expr)
+
+
+def test_alternate_states_element_functions_and_dimensionality():
+    node = q.parse("Sum({[Group A] * $} x)")
+    assert node.set_expr.left.identifier == "Group A" and node.set_expr.right.identifier == "$"
+    mod = q.parse("Sum({1<Year = e(Year)>} x)").set_expr.modifiers[0]
+    assert mod.field == "Year" and mod.values == [("e", ("Year", None))]
+    node = q.parse("Pick(Dimensionality() + 1, Sum(a), Sum(b))")
+    assert node.name == "pick" and node.args[0].left.name == "dimensionality"
+    assert q.expand_dollars("$($(=eMetric))", {}, lambda e: "") == ""
 
 
 def test_dollar_expansion():

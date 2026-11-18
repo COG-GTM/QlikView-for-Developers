@@ -63,6 +63,7 @@ if (-not $Role -and $spec.PSObject.Properties['role'] -and $spec.role) { $Role =
 $connStr = "Data Source=$Server"
 if ($Database) { $connStr += ";Initial Catalog=$Database" }
 if ($Role) { $connStr += ";Roles=$Role" }
+
 $conn = New-Object Microsoft.AnalysisServices.AdomdClient.AdomdConnection($connStr)
 $conn.Open()
 $results = New-Object System.Collections.Generic.List[object]

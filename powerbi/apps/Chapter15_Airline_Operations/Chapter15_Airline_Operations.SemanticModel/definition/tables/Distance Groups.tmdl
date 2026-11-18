@@ -1,0 +1,31 @@
+table 'Distance Groups'
+	lineageTag: 6ac204d1-824d-5405-b756-8d9d6cb93385
+
+	column '%Distance Group ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 77c5e149-ca37-57ce-8033-6db6c9cb4d69
+		summarizeBy: none
+		sourceColumn: %Distance Group ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Distance Interval'
+		dataType: string
+		lineageTag: ca494b22-bb9d-5354-93ab-af0cd0135478
+		summarizeBy: none
+		sourceColumn: Distance Interval
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Distance Groups' = m
+		mode: import
+		source =
+				let
+				    Source = Table.SelectColumns(fnReadParquet("QVD/Source/Distance Groups.parquet"), {"%Distance Group ID", "Distance Interval"}),
+				    FactKeys = List.Buffer(List.RemoveNulls(fnFactKeys("%Distance Group ID"))),
+				    Kept = Table.SelectRows(Source, each List.Contains(FactKeys, [#"%Distance Group ID"])),
+				    Typed = Table.TransformColumnTypes(Kept, {{"%Distance Group ID", Int64.Type}, {"Distance Interval", type text}})
+				in
+				    Typed

@@ -1,0 +1,22 @@
+table 'Carrier State Count'
+	lineageTag: 1e16e55e-7c8e-5db8-a690-8d52e0d7f5c0
+
+	column 'Carrier State Count'
+		dataType: int64
+		formatString: 0
+		lineageTag: f43d861b-6cc1-530e-8b42-40363be00ca8
+		summarizeBy: none
+		sourceColumn: Carrier State Count
+
+		annotation SummarizationSetBy = Automatic
+		annotation ParityKey = 32b8cdc84f9b
+		annotation QlikDimension = =Aggr(Count(DISTINCT [From - To State Code]), [Carrier Name])
+
+	partition 'Carrier State Count' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromList(List.Numbers(0, 5001), Splitter.SplitByNothing(), {"Carrier State Count"}),
+				    Typed = Table.TransformColumnTypes(Source, {{"Carrier State Count", Int64.Type}})
+				in
+				    Typed
