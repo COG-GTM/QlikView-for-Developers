@@ -60,5 +60,6 @@
    "query": "EVALUATE SUMMARIZECOLUMNS('Sheet1$'[Department], \"value\", [Sales Count])"
   }
  ],
+ "relationships": [],
  "unmapped": []
 }

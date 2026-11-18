@@ -5,6 +5,8 @@ Results file contract (written by run_dax.ps1, or any tool that can run DAX):
 Each row is the grain's dimension values in grain order followed by the measure value.
 Blank and 0 are treated as equal (Qlik suppresses zero rows; DAX drops blank rows), dimension
 values are compared as numbers when both parse as numbers and dates by their ISO date.
+Relationship checks (result ids starting ``REL:``) fail on duplicated one-side keys and warn on
+many-side keys with no match (those rows sit under the blank member, as in Qlik).
 """
 from __future__ import annotations
 
@@ -63,6 +65,13 @@ def compare_result(expected: dict, actual: dict | None, rel: float, abs_: float)
             "mismatches": len(diffs), "examples": diffs[:5]}
 
 
+def check_relationship(result: dict) -> dict:
+    row = dict(zip([c.strip("[]") for c in result["columns"]], result["rows"][0])) if result.get("rows") else {}
+    counts = {k: int(row.get(k) or 0) for k in ("unmatched_keys", "unmatched_rows", "duplicate_keys")}
+    status = "fail" if not row or counts["duplicate_keys"] else "warn" if counts["unmatched_keys"] else "pass"
+    return {"id": result["id"], "status": status, **counts}
+
+
 def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6) -> dict:
     if results_doc.get("app") != expected_doc["app"]:
         raise ValueError(f"results are for app {results_doc.get('app')!r}, expected {expected_doc['app']!r}")
@@ -78,8 +87,12 @@ def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6) -> dict:
     summary = {}
     for r in out:
         summary[r["status"]] = summary.get(r["status"], 0) + 1
+    rels = [check_relationship(r) for r in results_doc.get("results", []) if str(r.get("id", "")).startswith("REL:")]
+    rel_summary = {}
+    for r in rels:
+        rel_summary[r["status"]] = rel_summary.get(r["status"], 0) + 1
     return {"app": expected_doc["app"], "produced_by": results_doc.get("produced_by"), "summary": summary,
-            "results": out}
+            "results": out, "relationship_summary": rel_summary, "relationships": rels}
 
 
 def compare_files(app: str, results: Path, rel: float, abs_: float) -> int:
@@ -92,7 +105,15 @@ def compare_files(app: str, results: Path, rel: float, abs_: float) -> int:
              "| Result | KPI | Status | Rows | Mismatches |", "|---|---|---|---:|---:|"]
     for r in report["results"]:
         lines.append(f"| {r['id']} | {r['label']} | {r['status']} | {r.get('rows', '')} | {r.get('mismatches', '')} |")
+    if report["relationships"]:
+        lines += ["", "Relationships: " + ", ".join(f"{k}: {v}" for k, v in sorted(report["relationship_summary"].items())),
+                  "", "| Relationship | Status | Unmatched keys | Unmatched rows | Duplicate keys |",
+                  "|---|---|---:|---:|---:|"]
+        for r in report["relationships"]:
+            lines.append(f"| {r['id'][4:]} | {r['status']} | {r['unmatched_keys']} | {r['unmatched_rows']} "
+                         f"| {r['duplicate_keys']} |")
     md = REPORTS / f"{app}.md"
     md.write_text("\n".join(lines) + "\n")
-    print(f"{report['summary']} -> {show(md)}")
-    return 0 if set(report["summary"]) <= {"pass", "unsupported", "model_unavailable"} else 1
+    print(f"{report['summary']} relationships {report['relationship_summary']} -> {show(md)}")
+    ok = set(report["summary"]) <= {"pass", "unsupported", "model_unavailable"}
+    return 0 if ok and "fail" not in report["relationship_summary"] else 1

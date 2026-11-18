@@ -26,7 +26,8 @@ param(
     [Parameter(Mandatory = $true)][string]$Out,
     [string]$Server,
     [string]$Database,
-    [string]$AdomdPath
+    [string]$AdomdPath,
+    [string]$Role
 )
 $ErrorActionPreference = 'Stop'
 
@@ -57,15 +58,16 @@ function Find-DesktopServer {
 
 Add-Type -Path (Find-Adomd)
 if (-not $Server) { $Server = Find-DesktopServer }
+$spec = Get-Content $Queries -Raw -Encoding UTF8 | ConvertFrom-Json
+if (-not $Role -and $spec.PSObject.Properties['role'] -and $spec.role) { $Role = [string]$spec.role }
 $connStr = "Data Source=$Server"
 if ($Database) { $connStr += ";Initial Catalog=$Database" }
-
-$spec = Get-Content $Queries -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($Role) { $connStr += ";Roles=$Role" }
 $conn = New-Object Microsoft.AnalysisServices.AdomdClient.AdomdConnection($connStr)
 $conn.Open()
 $results = New-Object System.Collections.Generic.List[object]
 try {
-    foreach ($q in $spec.queries) {
+    foreach ($q in @(@($spec.queries) + @($spec.relationships) | Where-Object { $_ })) {
         $cmd = $conn.CreateCommand()
         $cmd.CommandText = $q.query
         $reader = $cmd.ExecuteReader()
@@ -89,7 +91,8 @@ finally { $conn.Close() }
 
 $doc = [ordered]@{
     app         = $spec.app
-    produced_by = "run_dax.ps1 via ADOMD.NET on $env:COMPUTERNAME against $Server"
+    produced_by = "run_dax.ps1 via ADOMD.NET on $env:COMPUTERNAME against $Server" + $(if ($Role) { " as role $Role" } else { "" })
+    role        = $(if ($Role) { $Role } else { $null })
     executed_at = (Get-Date).ToUniversalTime().ToString('o')
     results     = $results
 }
