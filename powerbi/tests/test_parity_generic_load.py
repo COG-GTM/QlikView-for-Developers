@@ -122,3 +122,10 @@ def test_count_column_does_not_collide_with_a_grouped_column(tmp_path, monkeypat
         grouped = {c.lower() for c in re.findall(r"'GenericDB'\[(\w+)\]", q["query"].split(", \"__rows\"")[0])}
         names = {n.lower() for n in re.findall(r', "(\w+)", SUMX', q["query"])}
         assert names and not names & grouped, q["query"]
+
+
+def test_committed_dax_queries_are_current(tmp_path, monkeypatch):
+    committed = (dax.DAX / f"{APP}.queries.json").read_text()
+    monkeypatch.setattr(dax, "DAX", tmp_path)
+    dax.write_queries(APP, PBIP)
+    assert (tmp_path / f"{APP}.queries.json").read_text() == committed
