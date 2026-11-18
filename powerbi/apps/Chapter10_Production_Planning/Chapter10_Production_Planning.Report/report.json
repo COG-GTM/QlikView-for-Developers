@@ -1,0 +1,46 @@
+{
+  "config": "{\"version\": \"5.59\", \"themeCollection\": {}, \"activeSectionIndex\": 0}",
+  "layoutOptimization": 0,
+  "resourcePackages": [],
+  "sections": [
+    {
+      "name": "ReportSection",
+      "displayName": "Main",
+      "displayOption": 1,
+      "ordinal": 0,
+      "width": 1280,
+      "height": 720,
+      "config": "{}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 640,
+          "height": 680,
+          "config": "{\"name\": \"TB01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 640, \"height\": 680}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"Production Planning - Legacy.Date\"}, {\"queryRef\": \"Production Planning - Legacy.Plant #\"}, {\"queryRef\": \"Production Planning - Legacy.Product Line ID\"}, {\"queryRef\": \"Production Planning - Legacy.Estimated Production\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"Production Planning - Legacy\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Date\"}, \"Name\": \"Production Planning - Legacy.Date\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Plant #\"}, \"Name\": \"Production Planning - Legacy.Plant #\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Product Line ID\"}, \"Name\": \"Production Planning - Legacy.Product Line ID\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Estimated Production\"}, \"Name\": \"Production Planning - Legacy.Estimated Production\"}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 680,
+          "y": 20,
+          "z": 0,
+          "width": 260,
+          "height": 680,
+          "config": "{\"name\": \"LB01\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 680, \"y\": 20, \"z\": 0, \"width\": 260, \"height\": 680}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Production Planning - Legacy.Estimated Production\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"Production Planning - Legacy\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Estimated Production\"}, \"Name\": \"Production Planning - Legacy.Estimated Production\"}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 960,
+          "y": 20,
+          "z": 0,
+          "width": 260,
+          "height": 680,
+          "config": "{\"name\": \"LB02\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 960, \"y\": 20, \"z\": 0, \"width\": 260, \"height\": 680}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Production Planning - Legacy.Date\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"p\", \"Entity\": \"Production Planning - Legacy\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"p\"}}, \"Property\": \"Date\"}, \"Name\": \"Production Planning - Legacy.Date\"}]}}}",
+          "filters": "[]"
+        }
+      ]
+    }
+  ]
+}

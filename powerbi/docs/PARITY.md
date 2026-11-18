@@ -31,6 +31,10 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
   calculated dimensions, variables defined only in missing include files) are listed as
   `unsupported` with the reason instead of being guessed; extend `qlik_expr.py`/`engine.py`
   when an app needs them.
+* Table boxes and list boxes (rows shown, no measure; complements `checks` above, which need a measure)
+  are listed in `parity/objects/<app>.json` (`objects.py`): a table box yields the distinct
+  rows of its fields, a list box the distinct non-null values of its field, and a
+  `row count` entry the table's row count. Ids: `<object>@<field+field>`, `<object>@<table>`.
 * Result ids: `<object>#<n>@<grain>` (e.g. `CH01#1@Year+Month`). Output is gzip JSON,
   byte-reproducible (CI checks the committed Chapter 03 file).
 
@@ -39,7 +43,9 @@ PBIP (TMDL)   ──► harness.py queries ─► dax/<app>.queries.json
 * `queries` reads the app's TMDL: KPI → measure by `annotation ParityKey`; Qlik field →
   column by `sourceColumn`. Each result id becomes
   `EVALUATE ROW("value", [M])` or `EVALUATE SUMMARIZECOLUMNS('T'[c1], …, "value", [M])`.
-  KPIs without an annotated measure are listed under `unmapped`.
+  KPIs without an annotated measure are listed under `unmapped`. Sheet objects become
+  `EVALUATE SUMMARIZECOLUMNS('T'[c1], …)` (compared as a set of rows) and row counts
+  `EVALUATE ROW("value", COUNTROWS('T'))`.
 * `run_dax.ps1` (Windows PowerShell 5.1+) runs the queries with ADOMD.NET against the model
   open in Power BI Desktop (port from `msmdsrv.port.txt` under
   `%LOCALAPPDATA%\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces`), or against any

@@ -6,6 +6,9 @@ and a Qlik field maps to the column whose ``sourceColumn`` (or name) is that fie
 Each expected result id gets one query:
   grand total -> EVALUATE ROW("value", [Measure])
   grain       -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2], "value", [Measure])
+Sheet objects without expressions (parity/objects/<app>.json):
+  table/list box -> EVALUATE SUMMARIZECOLUMNS('T'[c1], 'T'[c2])   (the distinct rows it shows)
+  row count      -> EVALUATE ROW("value", COUNTROWS('T'))
 """
 from __future__ import annotations
 
@@ -89,6 +92,20 @@ def write_queries(app: str, pbip: Path) -> str:
                 group = ", ".join(dax_col(c["table"], c["name"]) for c in cols)
                 query = f'EVALUATE SUMMARIZECOLUMNS({group}, "value", {mref})'
             queries.append({"id": r["id"], "measure": measure["name"], "grain": r["grain"], "query": query})
+    for o in expected.get("objects", []):
+        for r in o["results"]:
+            if o["type"] == "row count":
+                if not any(c["table"] == o["table"] for c in model["columns"]):
+                    unmapped.append({"id": r["id"], "reason": f"no table {o['table']!r}"})
+                    continue
+                query = f'EVALUATE ROW("value", COUNTROWS({dax_table(o["table"])}))'
+            else:
+                cols = [column_for(model, f) for f in r["grain"]]
+                if None in cols:
+                    unmapped.append({"id": r["id"], "reason": f"no column for {r['grain']}"})
+                    continue
+                query = f"EVALUATE SUMMARIZECOLUMNS({', '.join(dax_col(c['table'], c['name']) for c in cols)})"
+            queries.append({"id": r["id"], "object": o["object"], "grain": r["grain"], "query": query})
     DAX.mkdir(exist_ok=True)
     out = DAX / f"{app}.queries.json"
     out.write_text(json.dumps({"app": app, "pbip": show(pbip), "queries": queries,

@@ -63,6 +63,25 @@ def compare_result(expected: dict, actual: dict | None, rel: float, abs_: float)
             "mismatches": len(diffs), "examples": diffs[:5]}
 
 
+def compare_rowset(expected: dict, actual: dict | None) -> dict:
+    """Table/list box: the distinct rows shown must be the same set (no measure column)."""
+    if actual is None:
+        return {"id": expected["id"], "status": "missing"}
+    n = len(expected["grain"])
+    # A column the source holds as text (e.g. Product Line ID '03') is compared as text, so a
+    # label that lost its leading zero ('3') fails instead of matching numerically.
+    text = [any(isinstance(r[i], str) for r in expected["rows"]) for i in range(n)]
+
+    def key(r):
+        return tuple(str(x) if t and x is not None else norm_dim(x) for x, t in zip(r[:n], text))
+
+    exp = {key(r) for r in expected["rows"]}
+    act = {key(r) for r in actual["rows"]}
+    diffs = [{"dims": list(k), "source": k in exp, "dax": k in act} for k in sorted(exp ^ act, key=str)]
+    return {"id": expected["id"], "status": "pass" if not diffs else "fail", "rows": len(exp),
+            "mismatches": len(diffs), "examples": diffs[:5]}
+
+
 def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6) -> dict:
     if results_doc.get("app") != expected_doc["app"]:
         raise ValueError(f"results are for app {results_doc.get('app')!r}, expected {expected_doc['app']!r}")
@@ -75,6 +94,11 @@ def compare(expected_doc: dict, results_doc: dict, rel=1e-9, abs_=1e-6) -> dict:
             continue
         for r in k["results"]:
             out.append({"kpi": k["kpi"], "label": k["label"], **compare_result(r, actual.get(r["id"]), rel, abs_)})
+    for o in expected_doc.get("objects", []):
+        for r in o["results"]:
+            check = compare_result(r, actual.get(r["id"]), rel, abs_) if o["type"] == "row count" \
+                else compare_rowset(r, actual.get(r["id"]))
+            out.append({"kpi": o["object"], "label": o["type"], **check})
     summary = {}
     for r in out:
         summary[r["status"]] = summary.get(r["status"], 0) + 1
