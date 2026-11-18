@@ -1,0 +1,87 @@
+{
+ "app": "Chapter10__Generic Load",
+ "pbip": "powerbi/apps/Chapter10_Generic_Load",
+ "queries": [
+  {
+   "id": "CHK01#1@total",
+   "measure": "Color Count",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Color Count])"
+  },
+  {
+   "id": "CHK01#1@Object+Color",
+   "measure": "Color Count",
+   "grain": [
+    "Object",
+    "Color"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('GenericDB'[Object], 'GenericDB'[Color], \"value\", [Color Count])"
+  },
+  {
+   "id": "CHK02#1@total",
+   "measure": "Weight Count",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Weight Count])"
+  },
+  {
+   "id": "CHK02#1@Object+Weight",
+   "measure": "Weight Count",
+   "grain": [
+    "Object",
+    "Weight"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('GenericDB'[Object], 'GenericDB'[Weight], \"value\", [Weight Count])"
+  },
+  {
+   "id": "CHK03#1@total",
+   "measure": "Diameter Count",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Diameter Count])"
+  },
+  {
+   "id": "CHK03#1@Object+Diameter",
+   "measure": "Diameter Count",
+   "grain": [
+    "Object",
+    "Diameter"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('GenericDB'[Object], 'GenericDB'[Diameter], \"value\", [Diameter Count])"
+  },
+  {
+   "id": "CHK04#1@total",
+   "measure": "Total Value",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Total Value])"
+  },
+  {
+   "id": "CHK04#1@Object",
+   "measure": "Total Value",
+   "grain": [
+    "Object"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('GenericDB'[Object], \"value\", [Total Value])"
+  },
+  {
+   "id": "CHK05#1@total",
+   "measure": "Thickness Count",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Thickness Count])"
+  },
+  {
+   "id": "CHK05#1@Object+Thickness",
+   "measure": "Thickness Count",
+   "grain": [
+    "Object",
+    "Thickness"
+   ],
+   "query": "EVALUATE SUMMARIZECOLUMNS('GenericDB'[Object], 'GenericDB'[Thickness], \"value\", [Thickness Count])"
+  },
+  {
+   "id": "CHK06#1@total",
+   "measure": "Objects",
+   "grain": [],
+   "query": "EVALUATE ROW(\"value\", [Objects])"
+  }
+ ],
+ "unmapped": []
+}
