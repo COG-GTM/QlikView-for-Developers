@@ -214,6 +214,6 @@ def test_tables_have_fixed_column_widths_that_fit_the_visual():
         widths = {w["selector"]["metadata"]: float(w["properties"]["value"]["expr"]["Literal"]["Value"][:-1])
                   for w in o["columnWidth"]}
         assert set(widths) == {s["Name"] for s in v["prototypeQuery"]["Select"]}
-        assert sum(widths.values()) <= max(c["width"], 60 * len(widths))
+        assert sum(widths.values()) <= c["width"] - 40
         if v["visualType"] == "pivotTable":
             assert o["rowHeaders"][0]["properties"]["stepped"]["expr"]["Literal"]["Value"] == "false"

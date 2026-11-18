@@ -710,6 +710,9 @@ def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple], hi
     return out
 
 
+TABLE_CHROME = 44  # px of a table visual's width taken by padding, borders and the vertical scrollbar
+
+
 def table_objects(visual: str, refs: list[str], width: int) -> dict:
     """Tables / pivots: fixed column widths that fit the visual and a flat row header. Desktop's 'Fit to content' sizes a
     stepped row header to the longest label (e.g. 1,153px of carrier groups in a 455px visual), pushing the measures
@@ -719,7 +722,7 @@ def table_objects(visual: str, refs: list[str], width: int) -> dict:
 
     def lit(v: str) -> dict:
         return {"expr": {"Literal": {"Value": v}}}
-    col = max(60, (width - 24) // len(refs))
+    col = (width - TABLE_CHROME) // len(refs)  # every column fits: no horizontal scroll, whatever the column count
     objects = {"columnHeaders": [{"properties": {"autoSizeColumnWidth": lit("false"), "wordWrap": lit("true")}}],
                "values": [{"properties": {"wordWrap": lit("true")}}],
                "columnWidth": [{"properties": {"value": lit(f"{col}D")}, "selector": {"metadata": r}} for r in refs]}
