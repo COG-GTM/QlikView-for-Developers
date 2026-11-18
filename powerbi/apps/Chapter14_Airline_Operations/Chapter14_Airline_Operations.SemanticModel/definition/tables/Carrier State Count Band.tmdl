@@ -1,0 +1,33 @@
+table 'Carrier State Count Band'
+	lineageTag: e1226d5f-1673-5d64-ab80-fb9002b534c9
+
+	column 'Carrier State Count Band'
+		dataType: string
+		sortByColumn: Low
+		lineageTag: d67f95f6-789b-5b20-90f3-8924b54835bd
+		summarizeBy: none
+		sourceColumn: Carrier State Count Band
+
+		annotation SummarizationSetBy = Automatic
+		annotation ParityKey = 7cf1cba465ab
+		annotation QlikDimension = =Replace(Aggr(Class(Count(DISTINCT [From - To State Code]), 100), [Carrier Name]), '<= x <', ' - ')
+
+	column Low
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6814fd0b-6416-5243-8fa1-8f73b4ff8ba8
+		summarizeBy: none
+		sourceColumn: Low
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Carrier State Count Band' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromList(List.Numbers(0, 51, 100), Splitter.SplitByNothing(), {"Low"}),
+				    Labeled = Table.AddColumn(Source, "Carrier State Count Band", each Text.From([Low]) & "  -  " & Text.From([Low] + 100)),
+				    Typed = Table.TransformColumnTypes(Labeled, {{"Carrier State Count Band", type text}, {"Low", Int64.Type}})
+				in
+				    Typed

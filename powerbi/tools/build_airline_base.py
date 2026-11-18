@@ -5,11 +5,11 @@ members, inline tables, Section Access), so scaffold_pbip.py cannot generate it.
 PBIP layout with hand-written Power Query, relationships, RLS/OLS roles and DAX measures. Every measure carries
 the ParityKey of the Qlik expression(s) it replaces; build() fails if a KPI with source-side parity has none.
 
-Chapter 13 has the same script without the hidden Section Access script: no roles, no INLFED %FLIGHTTYPE table
+Chapters 13 and 14 have the same script without the hidden Section Access script: no roles, no INLFED %FLIGHTTYPE table
 (its metric picker is then the first inline table, INLFED), and the unreduced model. It also gets one report page
 per QlikView sheet, with a visual per chart bound to the measures and fields the chart's KPIs use.
 
-    python powerbi/tools/build_airline_base.py [--app Chapter15|Chapter13|all] [--data-root C:\\path\\to\\parquet\\]
+    python powerbi/tools/build_airline_base.py [--app Chapter15|Chapter13|Chapter14|all] [--data-root C:\\path\\to\\parquet\\]
 """
 from __future__ import annotations
 
@@ -42,7 +42,9 @@ CH15 = AirlineApp("Chapter15__Solution_Chapter 15_Airline Operations", "Chapter1
                   "INLFED-1", False)
 CH13 = AirlineApp("Chapter13__Solution_Chapter 13_Airline Operations", "Chapter13_Airline_Operations", False,
                   "INLFED", True)
-AIRLINE_APPS = {"Chapter15": CH15, "Chapter13": CH13}
+CH14 = AirlineApp("Chapter14__Solution_Chapter 14_Airline Operations", "Chapter14_Airline_Operations", False,
+                  "INLFED", True)
+AIRLINE_APPS = {"Chapter15": CH15, "Chapter13": CH13, "Chapter14": CH14}
 CFG = CH15
 APP, SLUG = CFG.app, CFG.slug
 DEFAULT_ROOT = "C:\\QlikView-for-Developers\\powerbi\\data\\parquet\\"
