@@ -81,8 +81,9 @@ GAPS = [
     "such fields (the list boxes are empty in the .qvw too). Carrier Group slicers lack QlikView's 'Unknown' value, "
     "which only the null-key member carries (see above), so LB15/LB29 have no parity check.",
     "QlikView-only objects (multi boxes MB01/MB02, search object, buttons, bookmark object, current selections, "
-    "container, statistics box SB01, table box TB01, text objects) are not migrated; gauge styles (CH07-CH14) are one "
-    "gauge. Only native visuals are used: the Radar Chart (CH24) is a line chart, the Grid Chart (CH26) a matrix and "
+    "container, statistics box SB01, table box TB01, text objects) are not migrated; the Gauge Styles sheet's six "
+    "gauges (CH08-CH14) are six native gauges (QlikView's styles are not reproduced). "
+    "Only native visuals are used: the Radar Chart (CH24) is a line chart, the Grid Chart (CH26) a matrix and "
     "the Mekko Chart (CH25) a 100% stacked column chart.",
 ]
 
@@ -297,6 +298,10 @@ PAGES = [
          {"Rows": [col("Carrier Groups", "Carrier Group"), col("Airlines", "Airline")],
           "Columns": [col(CAL, "Year"), col(CAL, "Month")],
           "Values": [meas("# of Passengers (millions)"), meas("Departures Performed (thousands)")]}),
+    ]),
+    ("Gauge Styles", "SH04", True, [
+        ("gauge", f"Air Time % ({ch})", (10 + (i % 3) * 420, 10 + (i // 3) * 355, 410, 345), {"Y": [meas("Air Time %")]})
+        for i, ch in enumerate(["CH08", "CH09", "CH11", "CH12", "CH13", "CH14"])
     ]),
     ("Associations", "SH01", False, [
         (*slicer(lb)[:2], (10 + (i % 6) * 210, 10 + (i // 6) * 355, 200, 345), *slicer(lb)[3:])

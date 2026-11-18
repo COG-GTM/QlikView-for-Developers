@@ -190,6 +190,25 @@
    ]
   },
   {
+   "page": "Gauge Styles",
+   "qlik_sheet": "SH04",
+   "visuals": [
+    "Year (LB32)",
+    "Quarter (LB31)",
+    "Month (LB30)",
+    "Flight Type (LB27)",
+    "Carrier Group (LB29)",
+    "Carrier's Operating Region (LB28)",
+    "Carrier Name (LB33)",
+    "Air Time % (CH08)",
+    "Air Time % (CH09)",
+    "Air Time % (CH11)",
+    "Air Time % (CH12)",
+    "Air Time % (CH13)",
+    "Air Time % (CH14)"
+   ]
+  },
+  {
    "page": "Associations",
    "qlik_sheet": "SH01",
    "visuals": [
@@ -284,6 +303,6 @@
   "Calculated dimension (Flight Type deal status, Funnel Chart CH27) -> calculated column on Flight Types.",
   "Drill-down group Time (Year > Month) and cyclic group Airline_Origin_Destination -> parity at every level; in the report as a Year > Month hierarchy and separate visuals.",
   "List boxes -> slicers on the page of their sheet (field = the list box caption decoded from the .qvw): the linked list boxes of the chart sheets (Year, Quarter, Month, Flight Type, Carrier Group, Carrier's Operating Region, Carrier Name) are a dropdown slicer column on each chart page; Associations and Data Consistency get their own pages. LB10 'Aircraft Type' and LB11 'Aircraft Group' are not migrated: Chapter 9's script loads no such fields (the list boxes are empty in the .qvw too). Carrier Group slicers lack QlikView's 'Unknown' value, which only the null-key member carries (see above), so LB15/LB29 have no parity check.",
-  "QlikView-only objects (multi boxes MB01/MB02, search object, buttons, bookmark object, current selections, container, statistics box SB01, table box TB01, text objects) are not migrated; gauge styles (CH07-CH14) are one gauge. Only native visuals are used: the Radar Chart (CH24) is a line chart, the Grid Chart (CH26) a matrix and the Mekko Chart (CH25) a 100% stacked column chart."
+  "QlikView-only objects (multi boxes MB01/MB02, search object, buttons, bookmark object, current selections, container, statistics box SB01, table box TB01, text objects) are not migrated; the Gauge Styles sheet's six gauges (CH08-CH14) are six native gauges (QlikView's styles are not reproduced). Only native visuals are used: the Radar Chart (CH24) is a line chart, the Grid Chart (CH26) a matrix and the Mekko Chart (CH25) a 100% stacked column chart."
  ]
 }

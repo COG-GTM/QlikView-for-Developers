@@ -319,10 +319,139 @@
       ]
     },
     {
+      "name": "f6d61f75531e514898f0",
+      "displayName": "Gauge Styles",
+      "displayOption": 1,
+      "ordinal": 3,
+      "width": 1280,
+      "height": 720,
+      "config": "{\"objects\": {}, \"QlikSheet\": \"SH04\"}",
+      "filters": "[]",
+      "visualContainers": [
+        {
+          "x": 10,
+          "y": 10,
+          "z": 0,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"c9c222cf-3148-521c-97d0-58684f8f1f27\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 10, \"z\": 0, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Year\"}, \"Name\": \"Master Calendar.Year\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Year'\"}}}}}]}, \"drillFilterOtherVisuals\": true, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 10,
+          "y": 110,
+          "z": 1,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"97f4f291-041c-57a8-aa74-f881efbc7fe6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 110, \"z\": 1, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Quarter\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Quarter\"}, \"Name\": \"Master Calendar.Quarter\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Quarter'\"}}}}}]}, \"drillFilterOtherVisuals\": true, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 10,
+          "y": 210,
+          "z": 2,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"b0ba6f13-45b1-5e5a-8591-381f1625975c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 210, \"z\": 2, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Master Calendar.Month\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Master Calendar\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Month\"}, \"Name\": \"Master Calendar.Month\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Month'\"}}}}}]}, \"drillFilterOtherVisuals\": true, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 10,
+          "y": 310,
+          "z": 3,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"a8ea9efd-fd1b-59ca-8854-9c7f0890afa4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 310, \"z\": 3, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Flight Types.Flight Type\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Flight Types\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Flight Type\"}, \"Name\": \"Flight Types.Flight Type\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Flight Type'\"}}}}}]}, \"drillFilterOtherVisuals\": true, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 10,
+          "y": 410,
+          "z": 4,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"cecac71d-7f18-5022-b4bc-69d6357c311d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 410, \"z\": 4, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Groups.Carrier Group\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Groups\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Group\"}, \"Name\": \"Carrier Groups.Carrier Group\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Carrier Group'\"}}}}}]}, \"drillFilterOtherVisuals\": true, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 10,
+          "y": 510,
+          "z": 5,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"52a71a44-85a5-5991-8770-5f0801377a2e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 510, \"z\": 5, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Carrier Operating Region\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier's Operating Region\"}, \"Name\": \"Carrier Operating Region.Carrier's Operating Region\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Carrier''s Operating Region'\"}}}}}]}, \"drillFilterOtherVisuals\": true, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 10,
+          "y": 610,
+          "z": 6,
+          "width": 140,
+          "height": 90,
+          "config": "{\"name\": \"b56cee5a-19bc-50d9-81bc-cf8a7540aeca\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 10, \"y\": 610, \"z\": 6, \"width\": 140, \"height\": 90}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"Main Data.Carrier Name\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Carrier Name\"}, \"Name\": \"Main Data.Carrier Name\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Carrier Name'\"}}}}}]}, \"drillFilterOtherVisuals\": true, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 169,
+          "y": 10,
+          "z": 7,
+          "width": 361,
+          "height": 345,
+          "config": "{\"name\": \"27b62215-9deb-5ff7-9ae3-0703fc4da1e0\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 169, \"y\": 10, \"z\": 7, \"width\": 361, \"height\": 345}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Air Time % (CH08)'\"}}}}}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 539,
+          "y": 10,
+          "z": 8,
+          "width": 361,
+          "height": 345,
+          "config": "{\"name\": \"f50b795a-d801-50b8-8dcc-cb21f32e87db\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 539, \"y\": 10, \"z\": 8, \"width\": 361, \"height\": 345}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Air Time % (CH09)'\"}}}}}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 909,
+          "y": 10,
+          "z": 9,
+          "width": 361,
+          "height": 345,
+          "config": "{\"name\": \"4a4b85f3-b786-50b8-bafe-1be84bd00117\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 909, \"y\": 10, \"z\": 9, \"width\": 361, \"height\": 345}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Air Time % (CH11)'\"}}}}}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 169,
+          "y": 365,
+          "z": 10,
+          "width": 361,
+          "height": 345,
+          "config": "{\"name\": \"4f8e3343-517c-5308-a181-a5761e9844e5\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 169, \"y\": 365, \"z\": 10, \"width\": 361, \"height\": 345}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Air Time % (CH12)'\"}}}}}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 539,
+          "y": 365,
+          "z": 11,
+          "width": 361,
+          "height": 345,
+          "config": "{\"name\": \"a3bb1316-02d9-5307-b860-dc25ee9b8aa1\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 539, \"y\": 365, \"z\": 11, \"width\": 361, \"height\": 345}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Air Time % (CH13)'\"}}}}}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        },
+        {
+          "x": 909,
+          "y": 365,
+          "z": 12,
+          "width": 361,
+          "height": 345,
+          "config": "{\"name\": \"998d7a21-1556-5a7c-a109-a9140ac8e1df\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 909, \"y\": 365, \"z\": 12, \"width\": 361, \"height\": 345}}], \"singleVisual\": {\"visualType\": \"gauge\", \"projections\": {\"Y\": [{\"queryRef\": \"Main Data.Air Time %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t0\", \"Entity\": \"Main Data\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t0\"}}, \"Property\": \"Air Time %\"}, \"Name\": \"Main Data.Air Time %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Air Time % (CH14)'\"}}}}}]}, \"drillFilterOtherVisuals\": true}}",
+          "filters": "[]"
+        }
+      ]
+    },
+    {
       "name": "76ffe55b795c5d0a9d4f",
       "displayName": "Associations",
       "displayOption": 1,
-      "ordinal": 3,
+      "ordinal": 4,
       "width": 1280,
       "height": 720,
       "config": "{\"objects\": {}, \"QlikSheet\": \"SH01\"}",
@@ -433,7 +562,7 @@
       "name": "53bb0f3d8e3250f9b3d7",
       "displayName": "Other Charts",
       "displayOption": 1,
-      "ordinal": 4,
+      "ordinal": 5,
       "width": 1280,
       "height": 720,
       "config": "{\"objects\": {}, \"QlikSheet\": \"SH06\"}",
@@ -562,7 +691,7 @@
       "name": "945b22c376db568993e0",
       "displayName": "Other representations",
       "displayOption": 1,
-      "ordinal": 5,
+      "ordinal": 6,
       "width": 1280,
       "height": 720,
       "config": "{\"objects\": {}, \"QlikSheet\": \"SH08\"}",
@@ -646,7 +775,7 @@
       "name": "5b501b137908544b9eab",
       "displayName": "Data Consistency",
       "displayOption": 1,
-      "ordinal": 6,
+      "ordinal": 7,
       "width": 1280,
       "height": 720,
       "config": "{\"objects\": {}, \"QlikSheet\": \"SH09\"}",

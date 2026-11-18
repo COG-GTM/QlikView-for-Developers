@@ -14,7 +14,7 @@ Chapter 9's script and sheets contain (do not edit the TMDL by hand; change the 
 | `COMMENT TABLES / FIELDS USING` Comments.xls | TMDL descriptions |
 | Calculated dimension (deal status, CH27) | calculated column `Flight Types[Deal Status]` |
 | 42 chart expressions (12 distinct) | 12 measures with `annotation ParityKey` |
-| Sheets Dashboard, Analysis, Reports, Associations, Other Charts, Other representations, Data Consistency | report pages of the same names |
+| Sheets Dashboard, Analysis, Reports, Gauge Styles, Associations, Other Charts, Other representations, Data Consistency | report pages of the same names |
 | List boxes (field = caption decoded from the .qvw) | slicers; the chart sheets' linked list boxes as a dropdown column; LB10/LB11 unmapped (fields not loaded) |
 
 No Section Access, alternate states or include-file variables in this chapter, so no roles or overlay.

@@ -112,7 +112,7 @@ def test_report_visuals_use_model_fields():
     model = read_tmdl(PBIP)
     fields = {(c["table"], c["name"]) for c in model["columns"]} | {(m["table"], m["name"]) for m in model["measures"]}
     report = json.loads((PBIP / "Chapter09_Airline_Operations.Report" / "report.json").read_text())
-    assert [s["displayName"] for s in report["sections"]] == ["Dashboard", "Analysis", "Reports", "Associations",
+    assert [s["displayName"] for s in report["sections"]] == ["Dashboard", "Analysis", "Reports", "Gauge Styles", "Associations",
                                                               "Other Charts", "Other representations", "Data Consistency"]
     for s in report["sections"]:
         for v in s["visualContainers"]:
@@ -156,7 +156,8 @@ def test_list_boxes_become_slicers_and_parity_objects(expected):
     for page, ref in slicers:
         by_page.setdefault(page, set()).add(ref)
     panel = {".".join(b.LIST_BOXES[lb]) for lb in b.FILTER_PANEL}
-    assert all(by_page[p] == panel for p in ("Dashboard", "Analysis", "Reports", "Other Charts", "Other representations"))
+    assert all(by_page[p] == panel for p in ("Dashboard", "Analysis", "Reports", "Gauge Styles", "Other Charts",
+                                              "Other representations"))
     assert by_page["Associations"] == {".".join(b.LIST_BOXES[lb]) for lb in
                                        ("LB01", "LB02", "LB03", "LB04", "LB05", "LB06", "LB07", "LB09", "LB12", "LB13",
                                         "LB15")}
@@ -174,3 +175,12 @@ def test_list_boxes_become_slicers_and_parity_objects(expected):
     queries = json.loads((POWERBI / "parity" / "dax" / f"{APP}.queries.json").read_text())
     lb = next(q for q in queries["queries"] if q["id"] == "LB06@Origin City")
     assert lb["query"] == "EVALUATE FILTER(SUMMARIZECOLUMNS('Main Data'[Origin City]), NOT ISBLANK('Main Data'[Origin City]))"
+
+
+def test_every_sheet_chart_is_a_visual_on_its_page():
+    manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
+    report = json.loads((PBIP / "Chapter09_Airline_Operations.Report" / "report.json").read_text())
+    titles = {json.loads(v["config"])["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]
+              ["Value"].strip("'").replace("''", "'") for s in report["sections"] for v in s["visualContainers"]}
+    for ch in manifest["charts"]:
+        assert ch["caption"] in titles or f"{ch['caption']} ({ch['id']})" in titles, ch["id"]
