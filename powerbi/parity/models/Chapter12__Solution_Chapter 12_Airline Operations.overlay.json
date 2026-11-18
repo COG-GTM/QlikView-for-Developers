@@ -1,0 +1,33 @@
+{
+ "description": "Chapter 12 uses the same point-in-time set variables (from ..\\0.Includes\\SetVariables.txt, not in the repo) and alternate states as Chapter 15; they are reconstructed identically. No Section Access, so no parity role.",
+ "alternate_states": [
+  "Group A",
+  "Group B"
+ ],
+ "variables": {
+  "vSetYTD": {
+   "definition": "Year={$(=Max(Year))}, Month={\"<=$(=Max(Month))\"}, PeriodID=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetLYYTD": {
+   "definition": "Year={$(=Max(Year) - 1)}, Month={\"<=$(=Max(Month))\"}, PeriodID=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetMTD": {
+   "definition": "Year={$(=Max(Year))}, Month={$(=Max(Month))}, PeriodID=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetLYMTD": {
+   "definition": "Year={$(=Max(Year) - 1)}, Month={$(=Max(Month))}, PeriodID=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetPreviousMonth": {
+   "definition": "PeriodID={$(=Max(PeriodID) - 1)}, Year=, Month=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  },
+  "vSetPreviousNMonth": {
+   "definition": "PeriodID={$(=Max(PeriodID) - $1)}, Year=, Month=, Quarter=, [Year - Month]=, Period=, QuarterID=",
+   "source": "reconstructed"
+  }
+ }
+}

@@ -1,0 +1,26 @@
+table INLFED
+	lineageTag: d03289b6-f7e8-5448-a6ab-142c7e3b2b5c
+
+	column 'Metric Name'
+		dataType: string
+		lineageTag: 45cedcd4-4c51-5682-8add-eb8a15d1f15f
+		summarizeBy: none
+		sourceColumn: Metric Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column eMetric
+		dataType: string
+		lineageTag: e17b1928-3d06-5be3-93ad-178eded1a68a
+		summarizeBy: none
+		sourceColumn: eMetric
+
+		annotation SummarizationSetBy = Automatic
+
+	partition INLFED = m
+		mode: import
+		source =
+				let
+				    Source = #table(type table [#"Metric Name" = text, eMetric = text], {{"# of Flights", "eDeparturesPerformed"}, {"Enplaned Passengers", "eEnplanedPassengers"}, {"Air Time", "eAirTime"}})
+				in
+				    Source

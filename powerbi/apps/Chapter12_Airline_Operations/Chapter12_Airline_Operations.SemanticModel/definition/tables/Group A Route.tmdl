@@ -1,0 +1,91 @@
+table 'Group A Route'
+	lineageTag: bbf47440-1588-5eb0-bdf0-bf6cefe10d0a
+
+	column 'Group A Origin Country'
+		dataType: string
+		lineageTag: e30c7f68-8a74-5b30-86b8-447e5dcdca5c
+		summarizeBy: none
+		sourceColumn: Group A Origin Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group A Origin State Code'
+		dataType: string
+		lineageTag: e4547aa1-219a-51b8-a69f-008dee592074
+		summarizeBy: none
+		sourceColumn: Group A Origin State Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group A Origin City'
+		dataType: string
+		lineageTag: aad0bc74-1868-5fea-8666-aaf85a3cb141
+		summarizeBy: none
+		sourceColumn: Group A Origin City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group A Destination Country'
+		dataType: string
+		lineageTag: daa62546-0d79-5d6d-8408-c36ed0d4c24f
+		summarizeBy: none
+		sourceColumn: Group A Destination Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group A Destination State Code'
+		dataType: string
+		lineageTag: 74e4270e-b6b5-5914-aa0d-08c77ae7ae82
+		summarizeBy: none
+		sourceColumn: Group A Destination State Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group A Destination City'
+		dataType: string
+		lineageTag: 24a2fcc9-578a-5db2-bbb3-e28e1aa8c628
+		summarizeBy: none
+		sourceColumn: Group A Destination City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group A Origin Airport'
+		dataType: string
+		lineageTag: ca02498c-84d8-551d-97ff-e7d528763211
+		summarizeBy: none
+		sourceColumn: Group A Origin Airport
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group A Destination Airport'
+		dataType: string
+		lineageTag: 994fa3a7-5764-5f6d-a639-cec12bb97f05
+		summarizeBy: none
+		sourceColumn: Group A Destination Airport
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group A Flight Type'
+		dataType: string
+		lineageTag: a69d0f8b-4c6d-5645-8ccb-65a4439eb8fa
+		summarizeBy: none
+		sourceColumn: Group A Flight Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Group A Route' = m
+		mode: import
+		source =
+				let
+				    Source = Table.Distinct(Table.SelectColumns(#"Main Data", {"%Origin Airport ID", "%Destination Airport ID", "%Datasource ID", "Origin Country", "Origin State Code", "Origin City", "Destination Country", "Destination State Code", "Destination City"})),
+				    J0 = Table.NestedJoin(Source, {"%Origin Airport ID"}, #"Origin Airports", {"%Origin Airport ID"}, "D0", JoinKind.LeftOuter),
+				    E0 = Table.ExpandTableColumn(J0, "D0", {"Origin Airport"}),
+				    J1 = Table.NestedJoin(E0, {"%Destination Airport ID"}, #"Destination Airports", {"%Destination Airport ID"}, "D1", JoinKind.LeftOuter),
+				    E1 = Table.ExpandTableColumn(J1, "D1", {"Destination Airport"}),
+				    J2 = Table.NestedJoin(E1, {"%Datasource ID"}, #"Flight Types", {"%Datasource ID"}, "D2", JoinKind.LeftOuter),
+				    E2 = Table.ExpandTableColumn(J2, "D2", {"Flight Type"}),
+				    Selected = Table.Distinct(Table.SelectColumns(E2, {"Origin Country", "Origin State Code", "Origin City", "Destination Country", "Destination State Code", "Destination City", "Origin Airport", "Destination Airport", "Flight Type"})),
+				    Renamed = Table.RenameColumns(Selected, {{"Origin Country", "Group A Origin Country"}, {"Origin State Code", "Group A Origin State Code"}, {"Origin City", "Group A Origin City"}, {"Destination Country", "Group A Destination Country"}, {"Destination State Code", "Group A Destination State Code"}, {"Destination City", "Group A Destination City"}, {"Origin Airport", "Group A Origin Airport"}, {"Destination Airport", "Group A Destination Airport"}, {"Flight Type", "Group A Flight Type"}}),
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Group A Origin Country", type text}, {"Group A Origin State Code", type text}, {"Group A Origin City", type text}, {"Group A Destination Country", type text}, {"Group A Destination State Code", type text}, {"Group A Destination City", type text}, {"Group A Origin Airport", type text}, {"Group A Destination Airport", type text}, {"Group A Flight Type", type text}})
+				in
+				    Typed
