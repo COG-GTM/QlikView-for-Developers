@@ -92,7 +92,7 @@ def slicer(lb: str, table: str, field: str, x: int, y: int, z: int) -> dict:
                                                                          "Property": field}, "Name": ref}]},
                                "objects": {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": "'Basic'"}}}}}]},
                                "vcObjects": {"title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}},
-                                                                       "text": {"expr": {"Literal": {"Value": f"'{field}'"}}}}}]}}}
+                                                                       "text": {"expr": {"Literal": {"Value": "'" + field.replace("'", "''") + "'"}}}}}]}}}
     return {"x": x, "y": y, "z": z, "width": 200, "height": 160, "config": json.dumps(config), "filters": "[]"}
 
 

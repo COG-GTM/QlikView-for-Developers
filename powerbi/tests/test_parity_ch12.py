@@ -120,3 +120,5 @@ def test_report_pages_rebuild_list_boxes_as_slicers():
             (sel,) = v["singleVisual"]["prototypeQuery"]["Select"]
             entity = v["singleVisual"]["prototypeQuery"]["From"][0]["Entity"]
             assert (entity, sel["Column"]["Property"]) in fields
+            title = v["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"]
+            assert title == "'" + sel["Column"]["Property"].replace("'", "''") + "'"
