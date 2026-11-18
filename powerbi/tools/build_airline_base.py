@@ -18,11 +18,12 @@ import json
 import math
 import re
 import sys
+import zlib
 from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from scaffold_pbip import APPS, CATALOG, POWERBI, TYPE_MAP, show, tag, tname  # noqa: E402
+from scaffold_pbip import APPS, CATALOG, POWERBI, REPO, TYPE_MAP, show, tag, tname  # noqa: E402
 
 sys.path.insert(0, str(POWERBI / "parity"))
 from harness import kpi_list, parity_key  # noqa: E402
@@ -477,20 +478,48 @@ VISUALS = {
 }
 
 
-def sheet_charts(manifest: dict) -> dict[str, list[str]]:
-    """Chart ids per sheet id: the .qvw lists each sheet's objects after the sheet (leading ones: first sheet)."""
-    sheets = [sh["id"] for sh in manifest["sheets"]]
-    out, current = {sh: [] for sh in sheets}, sheets[0]
-    charts = {ch["id"].split(" ")[0] for ch in manifest["charts"]}
-    for oid in manifest["objects"]["ids"]:
-        if oid in out:
-            current = oid
-        elif oid in charts:
-            out[current].append(oid)
+def qvw_doc(manifest: dict) -> bytes:
+    """The .qvw's document block (sheet and object definitions; script and inventory come from the manifest)."""
+    return zlib.decompressobj().decompress((REPO / manifest["path"]).read_bytes()[23:])
+
+
+def sheet_objects(manifest: dict, doc: bytes) -> dict[str, list[str]]:
+    """Object ids per sheet id. Each sheet's definition (its caption, then Document\\<id>) is followed by the ids of
+    the objects on it (linked objects appear on several sheets). Objects on no sheet are inside a container (the
+    document block does not list container children readably): they go to the first sheet that has a container."""
+    known = set(manifest["objects"]["ids"])
+    out = {}
+    for sh in manifest["sheets"]:
+        out[sh["id"]] = []
+        for m in re.finditer(re.escape(b"Document\\" + sh["id"].encode()), doc):
+            before = re.findall(rb"[\x20-\x7e]{3,}", doc[max(0, m.start() - 120):m.start()])
+            if not before or not sh["name"].startswith(before[-1].decode("latin-1")):
+                continue
+            for text in re.findall(rb"[\x20-\x7e]{3,}", doc[m.end():m.end() + 2000]):
+                hit = max((k for k in known if text.decode("latin-1").startswith(k)), key=len, default=None)
+                if not hit:
+                    break
+                out[sh["id"]].append(hit)
+            break
+    placed = {o for ids in out.values() for o in ids}
+    host = next((sh for sh, ids in out.items() if any(o.startswith("CT") for o in ids)), manifest["sheets"][0]["id"])
+    out[host] += [o for o in manifest["objects"]["ids"] if o not in placed and not o.startswith("SH")]
     return out
 
 
-def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> list[dict]:
+def list_box_captions(doc: bytes) -> dict[str, str]:
+    """List box / multi box id -> caption. The manifest does not keep list box fields; in the .qvw's document block
+    each box's definition starts with its caption (for a list box, normally its field name) right before its id."""
+    out = {}
+    for oid in sorted(set(re.findall(rb"Document\\((?:LB|MB)\d+)", doc))):
+        m = re.search(rb"(?<![\\A-Za-z0-9])" + oid + rb"(?![0-9])", doc)
+        strings = re.findall(rb"[\x20-\x7e]{3,}", doc[max(0, m.start() - 300):m.start()])
+        out[oid.decode()] = strings[-1].decode("latin-1") if strings else ""
+    return out
+
+
+def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> tuple[list[dict], dict[str, str]]:
+    """One page per sheet; returns the pages and the list / multi boxes that have no model field (id -> caption)."""
     fields = {}
     for name, spec in specs.items():
         for col, _ in spec["cols"]:
@@ -501,22 +530,30 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> l
     kpis = kpi_list(manifest)
     captions = {ch["id"].split(" ")[0]: ch.get("caption") or ch["id"].split(" \u2014 ", 1)[-1] for ch in manifest["charts"]}
     types = {ch["id"].split(" ")[0]: ch.get("type") for ch in manifest["charts"]}
-    sections = []
-    for ordinal, (sheet, chart_ids) in enumerate(sheet_charts(manifest).items()):
+    doc = qvw_doc(manifest)
+    boxes = list_box_captions(doc)
+    sections, unmapped = [], {}
+    for ordinal, (sheet, object_ids) in enumerate(sheet_objects(manifest, doc).items()):
         sheet_name = next(sh["name"] for sh in manifest["sheets"] if sh["id"] == sheet)
-        visuals = []
-        for cid in chart_ids:
-            ks = [k for k in kpis if k["kpi"].split("#")[0] == cid]
+        visuals, slicers = [], []
+        for oid in object_ids:
+            if oid in boxes:
+                if boxes[oid] in fields and fields[boxes[oid]] not in [r["Values"][0] for _, _, _, r, _ in slicers]:
+                    slicers.append((oid, boxes[oid], "slicer", {"Values": [fields[boxes[oid]]]}, set()))
+                elif boxes[oid] not in fields:
+                    unmapped[oid] = boxes[oid]
+                continue
+            ks = [k for k in kpis if k["kpi"].split("#")[0] == oid]
             if not ks:
                 continue
             grain = max(ks[0]["grains"], key=len)  # drill groups: deepest level; cyclic groups: first field
             dims = []
             for d in grain:
                 if d not in fields:
-                    raise SystemExit(f"{cid}: no model field for dimension {d!r}")
+                    raise SystemExit(f"{oid}: no model field for dimension {d!r}")
                 dims.append(fields[d])
             names = list(dict.fromkeys(measures[k["parity_key"]]["name"] for k in ks))
-            visual, drole, mrole, most = VISUALS.get(types[cid], ("tableEx", "Values", "Values", None))
+            visual, drole, mrole, most = VISUALS.get(types[oid], ("tableEx", "Values", "Values", None))
             if most and len(names) > most:
                 visual, drole, mrole = "clusteredColumnChart", "Category", "Y"
             if not dims and visual not in ("gauge",):
@@ -526,27 +563,36 @@ def report_sections(manifest: dict, specs: dict, measures: dict[str, dict]) -> l
                 roles.update({r: [("Main Data", n)] for r, n in zip(("X", "Y", "Size"), names)})
             else:
                 roles.setdefault(mrole, []).extend(("Main Data", n) for n in names)
-            visuals.append((cid, captions[cid], visual, roles, set(names)))
-        if not visuals:  # sheets of list boxes / table boxes only: slicers and the row-level table they filter
-            visuals = [(f"{sheet}-{col}", col, "slicer", {"Values": [fields[col]]}, set())
-                       for col in ("Year", "Flight Type", "Carrier Group")]
+            visuals.append((oid, captions[oid], visual, roles, set(names)))
+        daxes = " ".join(mz["dax"] for mz in measures.values() if any(mz["name"] in v[4] for v in visuals))
+        for state in ("Group A", "Group B"):  # the state's list boxes sit in containers: its period slicer
+            if f"'{state}'" in daxes:
+                slicers.append((f"{sheet}-{state}", f"{state} Year - Month", "slicer",
+                                {"Values": [(state, f"{state} Year - Month")]}, set()))
+        if not visuals:  # sheets of list boxes / table boxes only: the row-level table the slicers filter
             visuals.append((f"{sheet}-table", sheet_name, "tableEx",
                             {"Values": [fields["Carrier Group"], fields["Carrier Name"], ("Main Data", "# of Flights")]},
                             {"# of Flights"}))
         sections.append({"name": "ReportSection" + tag(SLUG, "page", sheet).replace("-", "")[:20],
                          "displayName": sheet_name, "displayOption": 1, "ordinal": ordinal, "width": 1280,
                          "height": 720, "config": json.dumps({"QlikSheet": sheet}), "filters": "[]",
-                         "visualContainers": visual_containers(sheet, visuals)})
-    return sections
+                         "visualContainers": visual_containers(sheet, slicers, visuals)})
+    return sections, unmapped
 
 
-def visual_containers(sheet: str, visuals: list[tuple]) -> list[dict]:
-    cols = min(len(visuals), 3 if len(visuals) <= 6 else 4)
-    rows = math.ceil(len(visuals) / cols)
-    w, h = (1280 - 10 * (cols + 1)) // cols, (720 - 10 * (rows + 1)) // rows
+def grid(items: list, x0: int, width: int, cols: int) -> list[tuple]:
+    rows = math.ceil(len(items) / cols)
+    w, h = (width - 10 * (cols + 1)) // cols, (720 - 10 * (rows + 1)) // rows
+    return [(item, x0 + 10 + (i % cols) * (w + 10), 10 + (i // cols) * (h + 10), w, h) for i, item in enumerate(items)]
+
+
+def visual_containers(sheet: str, slicers: list[tuple], visuals: list[tuple]) -> list[dict]:
+    """Slicers in a left panel (up to 6 per column), the charts in a grid filling the rest of the page."""
+    panel = 170 * math.ceil(len(slicers) / 6) if slicers else 0
+    placed = grid(slicers, 0, panel + 10, max(1, math.ceil(len(slicers) / 6))) if slicers else []
+    placed += grid(visuals, panel, 1280 - panel, min(len(visuals), 3 if len(visuals) <= 6 else 4))
     out = []
-    for z, (vid, title, visual, roles, measure_names) in enumerate(visuals):
-        x, y = 10 + (z % cols) * (w + 10), 10 + (z // cols) * (h + 10)
+    for z, ((vid, title, visual, roles, measure_names), x, y, w, h) in enumerate(placed):
         aliases, select, projections = {}, [], {}
         for role, refs in roles.items():
             for table, col in refs:
@@ -661,13 +707,13 @@ def build(data_root: str = DEFAULT_ROOT, cfg: AirlineApp = CH15) -> Path:
     (sm / "definition.pbism").write_text(json.dumps({"version": "4.0", "settings": {}}, indent=2) + "\n")
     (rp / "definition.pbir").write_text(json.dumps(
         {"version": "4.0", "datasetReference": {"byPath": {"path": f"../{SLUG}.SemanticModel"}}}, indent=2) + "\n")
+    sections, unmapped_boxes = report_sections(manifest, specs, measures) if cfg.report_pages else ([
+        {"name": "ReportSection", "displayName": "Page 1", "displayOption": 1, "ordinal": 0,
+         "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": []}], {})
     (rp / "report.json").write_text(json.dumps({
         "config": json.dumps({"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0}),
         "layoutOptimization": 0, "resourcePackages": [],
-        "sections": report_sections(manifest, specs, measures) if cfg.report_pages else [
-            {"name": "ReportSection", "displayName": "Page 1", "displayOption": 1, "ordinal": 0,
-             "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": []}]},
-        indent=2) + "\n")
+        "sections": sections}, indent=2) + "\n")
     (root / f"{SLUG}.pbip").write_text(json.dumps(
         {"version": "1.0", "artifacts": [{"report": {"path": f"{SLUG}.Report"}}], "settings": {"enableAutoRecovery": True}},
         indent=2) + "\n")
@@ -681,7 +727,14 @@ def build(data_root: str = DEFAULT_ROOT, cfg: AirlineApp = CH15) -> Path:
                                   + [{"table": t, "column": col, "parity_key": parity_key(q), "qlik": q,
                                       "dax": "segment table + '# of Carriers'"} for t, col, q, _, _, _ in SEGMENTS],
          "roles": {u: {"flight_types": v, "omit": o} for u, (v, o) in roles.items()},
-         "semantic_gaps": gaps()}, indent=1, ensure_ascii=False) + "\n")
+         **({"unmapped_list_boxes": unmapped_boxes} if cfg.report_pages else {}),
+         "semantic_gaps": gaps() + ([
+             "List boxes -> slicers on the field named by the box caption, on the page of the box's sheet (one per field "
+             "and page). Boxes whose caption is no model field are not rebuilt (see unmapped_list_boxes): "
+             + "; ".join(f"{k} {v!r}" for k, v in unmapped_boxes.items())
+             + ". Their captions name no model field (multi boxes list several fields under one caption). Objects "
+             "inside containers (on no sheet's object list) are placed on the first sheet with a container."]
+             if cfg.report_pages else [])}, indent=1, ensure_ascii=False) + "\n")
     print(f"{show(root)}: {len(specs)} tables, {len(rels) // 4} relationships, {len(roles)} roles, "
           f"{len(measures)} measures, {len(CALC_DIMS)} calculated columns")
     return root

@@ -59,4 +59,6 @@ On a Windows machine without WSL, download the `powerbi-parquet` artifact of the
 * Chapter 13 (Airline Operations, `apps/Chapter13_Airline_Operations`, built from the Chapter 15
   base by `tools/build_airline_base.py`): no Section Access, so its 13 source-model tables match
   the unreduced inventory (Main Data keeps the Employment Statistics rows), all 92 KPI expressions
-  evaluate, 182 DAX queries are generated, and the report has one page per QlikView sheet (14).
+  evaluate, 182 DAX queries are generated, and the report has one page per QlikView sheet (14)
+  with a visual per chart and slicers for the list boxes (4 boxes without a model field are listed
+  in `model.json`).

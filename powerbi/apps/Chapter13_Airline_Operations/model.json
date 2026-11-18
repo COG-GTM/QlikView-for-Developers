@@ -462,6 +462,12 @@
   }
  ],
  "roles": {},
+ "unmapped_list_boxes": {
+  "MB01": "Flight Information",
+  "MB02": "Aircraft",
+  "LB10": "Aircraft Type",
+  "LB11": "Aircraft Group"
+ },
  "semantic_gaps": [
   "Master Calendar: QlikView keeps one row per day (1,065) because the script's LOAD DISTINCTs sit under a non-distinct preceding Load *; Power BI keeps one row per month (36) so Period can be the one side of the relationship. Measures over Main Data are unaffected; counts over calendar rows would differ.",
   "Dimension rows: no Section Access, so nothing is reduced (Main Data keeps the Employment Statistics rows; Airlines 337, Carrier Operating Region 8 as in QlikView). Null-key 'Unknown' members the script adds for null fact keys are not loaded: they associate with nothing in QlikView and would wrongly match blank keys in Power BI.",
@@ -470,6 +476,7 @@
   "Alternate states Group A / Group B -> disconnected 'Group A' / 'Group B' period tables used as slicers; the measures intersect the main selection with the group's periods ({[Group A] * $}).",
   "Calculated dimensions: the Aggr()/Class() carrier buckets -> disconnected segment tables; '# of Carriers' counts the carriers whose value falls in the segment at query time, so RLS and selections apply as in QlikView. The row-level Flight Type deal status -> calculated column on Flight Types.",
   "Dimensionality()/Pick(Dimensionality()+1, ...) -> ISINSCOPE() over the chart's dimension fields.",
-  "$($(=eMetric)) -> SWITCH over SELECTEDVALUE(INLFED[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion."
+  "$($(=eMetric)) -> SWITCH over SELECTEDVALUE(INLFED[eMetric]); blank without a single Metric Name selected, like QlikView's empty expansion.",
+  "List boxes -> slicers on the field named by the box caption, on the page of the box's sheet (one per field and page). Boxes whose caption is no model field are not rebuilt (see unmapped_list_boxes): MB01 'Flight Information'; MB02 'Aircraft'; LB10 'Aircraft Type'; LB11 'Aircraft Group'. Their captions name no model field (multi boxes list several fields under one caption). Objects inside containers (on no sheet's object list) are placed on the first sheet with a container."
  ]
 }

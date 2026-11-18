@@ -14,6 +14,7 @@ import pytest
 import harness
 from dax import read_tmdl
 from engine import SourceModel
+from scaffold_pbip import tag
 
 APP = "Chapter13__Solution_Chapter 13_Airline Operations"
 POWERBI = Path(__file__).resolve().parents[1]
@@ -141,3 +142,27 @@ def test_report_has_one_page_per_sheet_bound_to_model_fields():
             titles.append(visual["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"])
     assert "'Enplaned passengers (millions)'" in titles  # Chapter 13's caption (Chapter 15 renamed it)
     assert sum(len(p["visualContainers"]) for p in pages) >= 50
+
+
+def test_list_boxes_become_slicers_and_every_chart_has_a_visual():
+    manifest = json.loads((POWERBI / "inventory" / "manifests" / f"{APP}.json").read_text())
+    pages = {p["displayName"]: [json.loads(c["config"]) for c in p["visualContainers"]]
+             for p in json.loads(REPORT.read_text())["sections"]}
+
+    def slicers(page):
+        return {v["singleVisual"]["projections"]["Values"][0]["queryRef"] for v in pages[page]
+                if v["singleVisual"]["visualType"] == "slicer"}
+    assert {"Main Data.Carrier Name", "Main Data.Origin Country", "Distance Groups.Distance Interval",
+            "Flight Types.Flight Type"} <= slicers("Associations")
+    assert slicers("Data Consistency") == {"Aircraft Types.Aircraft Name", "Master Calendar.Year"}
+    assert "INLFED.Metric Name" in slicers("Variables")  # drives 'Selected Metric'
+    assert {"Group A.Group A Year - Month", "Group B.Group B Year - Month"} <= slicers("Comparative Analysis")
+    model = json.loads((PBIP / "model.json").read_text())
+    assert model["unmapped_list_boxes"] == {"MB01": "Flight Information", "MB02": "Aircraft",
+                                            "LB10": "Aircraft Type", "LB11": "Aircraft Group"}
+    assert any("unmapped_list_boxes" in g for g in model["semantic_gaps"])
+    charts = {c["id"].split(" ")[0] for c in manifest["charts"]}
+    names = {v["name"] for vs in pages.values() for v in vs}
+    placed = {cid for page in manifest["sheets"] for cid in charts
+              if tag(PBIP.name, "visual", page["id"], cid) in names}
+    assert placed == charts

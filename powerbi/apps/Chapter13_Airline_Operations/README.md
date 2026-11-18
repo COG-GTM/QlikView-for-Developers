@@ -12,6 +12,7 @@ base:
 | No Section Access | no RLS/OLS roles; nothing reduced (Main Data 1,258,763 rows incl. Employment Statistics, Airlines 337) |
 | Metric picker is the only inline table (`INLFED`) | `INLFED` + `Selected Metric` (SWITCH on `SELECTEDVALUE(INLFED[eMetric])`) |
 | 14 sheets, 50 charts (92 expressions, 48 distinct) | one report page per sheet, a visual per chart; 48 measures with `annotation ParityKey` |
+| 32 list boxes (fields read from their captions in the .qvw) | slicers on their sheets; unmappable boxes in `model.json` `unmapped_list_boxes` |
 
 Everything else (Main Data, Master Calendar, `WHERE Exists` + `'Unknown'` members, Group A / Group B, calculated
 dimensions) is the Chapter 15 base. Semantic differences are listed in `model.json` (`semantic_gaps`). Parity:
