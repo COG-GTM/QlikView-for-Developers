@@ -6,7 +6,7 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
-	annotation PBI_QueryOrder = ["DataRoot", "fnReadParquet", "fnFactKeys", "Main Data", "Master Calendar", "Carrier Groups", "Airlines", "Carrier Operating Region", "Flight Types", "Aircraft Types", "Distance Groups", "Origin Airports", "Destination Airports", "Origin Markets", "Destination Markets", "INLFED", "INLFED-1", "Carrier State Count", "Carrier State Count Band", "Carrier Load Factor Band", "Group A", "Group B"]
+	annotation PBI_QueryOrder = ["DataRoot", "fnReadParquet", "fnFactKeys", "Main Data", "Master Calendar", "Carrier Groups", "Airlines", "Carrier Operating Region", "Flight Types", "Aircraft Types", "Distance Groups", "Origin Airports", "Destination Airports", "Origin Markets", "Destination Markets", "INLFED", "INLFED-1", "Carrier State Count", "Carrier State Count Band", "Carrier Load Factor Band", "Group A", "Group B", "Excluded Years"]
 
 ref table 'Main Data'
 ref table 'Master Calendar'
@@ -27,6 +27,7 @@ ref table 'Carrier State Count Band'
 ref table 'Carrier Load Factor Band'
 ref table 'Group A'
 ref table 'Group B'
+ref table 'Excluded Years'
 
 ref role ADMIN
 ref role DF
